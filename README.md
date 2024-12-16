@@ -1,7 +1,8 @@
 # Anonbar Bot
 
 Anonbar is one of the most useful tips and tricks platforms in Bangladesh. The Anonbar Bot is designed to help users easily access and share useful information, tips, and tricks from the Anonbar platform.
-![1000004082](https://github.com/user-attachments/assets/6c942479-126f-42ea-8928-0dcf8d9d681e)
+
+![1000004086](https://github.com/user-attachments/assets/0e1fad27-2b16-4ee4-8da8-b410ccfd8cfc)
 
 
 ## Features

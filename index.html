@@ -1,285 +1,224 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ই-কমার্স প্রোডাক্ট পোস্ট জেনারেটর</title>
-<style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    max-width: 800px;
-    margin: 20px auto;
-    background: #f8f9fa;
-    padding: 20px;
-    color: #333;
-  }
-  h1, h2, h3 {
-    color: #2c3e50;
-  }
-  label {
-    display: block;
-    margin: 15px 0 5px;
-    font-weight: 600;
-  }
-  input[type=text], input[type=number], input[type=url], select, textarea {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-    font-size: 15px;
-  }
-  textarea {
-    resize: vertical;
-  }
-  button {
-    margin-top: 20px;
-    padding: 12px 20px;
-    font-size: 16px;
-    background: #27ae60;
-    border: none;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  button:hover {
-    background: #219150;
-  }
-  pre {
-    background: #222;
-    color: #eee;
-    padding: 15px;
-    white-space: pre-wrap;
-    word-break: break-word;
-    max-height: 400px;
-    overflow-y: auto;
-    border-radius: 5px;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>E-Post - পণ্য পোস্ট HTML জেনারেটর</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+      color: #222;
+    }
+    .container {
+      max-width: 720px;
+      margin: auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1, h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    label {
+      font-weight: 600;
+      margin-top: 10px;
+      display: block;
+      margin-bottom: 5px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 15px;
+    }
+    .image-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .image-group input {
+      flex: 1;
+    }
+    .add-btn {
+      padding: 8px 12px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #27ae60;
+      color: #fff;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    button:hover, .add-btn:hover {
+      opacity: 0.9;
+    }
+    textarea#htmlOutput {
+      height: 200px;
+      font-family: monospace;
+    }
+    .preview {
+      border-top: 1px solid #ccc;
+      margin-top: 20px;
+      padding-top: 15px;
+    }
+    .product-preview {
+      background: #fafafa;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    .slider img {
+      max-width: 100px;
+      margin: 5px;
+      border-radius: 5px;
+    }
+    .badge {
+      display: inline-block;
+      background: crimson;
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+    .price {
+      font-size: 18px;
+      font-weight: bold;
+      color: green;
+    }
+    .discount {
+      text-decoration: line-through;
+      color: red;
+      margin-left: 10px;
+      font-size: 15px;
+    }
+    @media (max-width: 600px) {
+      .container { padding: 15px; }
+    }
+  </style>
 </head>
 <body>
+  <div class="container">
+    <h1>E-Post 🔧</h1>
+    <p style="text-align:center; margin-top: -10px;">একাধিক ছবি + সুন্দর UI সহ পণ্য পোস্ট জেনারেটর</p>
 
-<h1>ই-কমার্স প্রোডাক্ট পোস্ট HTML জেনারেটর</h1>
+    <label>পণ্যের ছবি URL</label>
+    <div id="imageInputs" class="image-group">
+      <input type="text" placeholder="https://example.com/image1.jpg" />
+    </div>
+    <button type="button" class="add-btn" onclick="addImageInput()">➕ ছবি যুক্ত করুন</button>
 
-<form id="productForm">
+    <label>মূল্য</label>
+    <input type="number" id="price" />
 
-  <label>পণ্যের নাম (Product Name):</label>
-  <input type="text" id="productName" placeholder="পণ্যের নাম লিখুন" required />
+    <label>ডিসকাউন্ট মূল্য (ঐচ্ছিক)</label>
+    <input type="number" id="discount" />
 
-  <label>ব্র্যান্ড (Brand):</label>
-  <input type="text" id="productBrand" placeholder="ব্র্যান্ডের নাম লিখুন" />
+    <label>ব্যাজ (যেমন: হট ডিল)</label>
+    <input type="text" id="badge" />
 
-  <label>ক্যাটাগরি (Category):</label>
-  <input type="text" id="productCategory" placeholder="যেমন: ইলেকট্রনিক্স, পোশাক" />
+    <label>ক্যাটাগরি</label>
+    <input type="text" id="category" placeholder="যেমন: ফ্যাশন, ইলেকট্রনিক্স" />
 
-  <label>মডেল নম্বর (Model Number):</label>
-  <input type="text" id="modelNumber" placeholder="মডেল নম্বর লিখুন" />
+    <label>ছোট বিবরণ</label>
+    <textarea id="shortDesc" rows="2"></textarea>
 
-  <label>SKU / ইউনিক আইডি (SKU / Unique ID):</label>
-  <input type="text" id="productSKU" placeholder="SKU নম্বর" />
+    <label>বড় বিবরণ</label>
+    <textarea id="longDesc" rows="4"></textarea>
 
-  <label>মূল্য (Price in ৳):</label>
-  <input type="number" id="productPrice" placeholder="মূল্য লিখুন" required />
+    <label>WhatsApp নাম্বার (8801xxxxxxx)</label>
+    <input type="text" id="whatsapp" />
 
-  <label>ডিসকাউন্ট মূল্য (Discount Price in ৳):</label>
-  <input type="number" id="discountPrice" placeholder="ডিসকাউন্ট মূল্য (ঐচ্ছিক)" />
+    <button onclick="generateHTML()">🔧 HTML কোড জেনারেট করুন</button>
 
-  <label>স্টক স্ট্যাটাস:</label>
-  <select id="stockStatus">
-    <option value="Ready Stock">Ready Stock</option>
-    <option value="Out of Stock">Out of Stock</option>
-    <option value="Preorder">Preorder</option>
-  </select>
+    <h2>📋 HTML কোড</h2>
+    <textarea id="htmlOutput"></textarea>
 
-  <label>ওজন (Weight):</label>
-  <input type="text" id="productWeight" placeholder="যেমন: 500 গ্রাম, 1 কেজি" />
+    <div class="preview">
+      <h2>👁️ লাইভ প্রিভিউ</h2>
+      <div id="livePreview" class="product-preview"></div>
+    </div>
+  </div>
 
-  <label>সাইজ/মাপ (Size/Dimensions):</label>
-  <input type="text" id="productSize" placeholder="যেমন: 10x15 cm" />
-
-  <label>রঙ (Color):</label>
-  <input type="text" id="productColor" placeholder="যেমন: কালো, নীল" />
-
-  <label>প্রধান ছবি URL (Main Image URL):</label>
-  <input type="url" id="productImage" placeholder="https://example.com/image1.jpg" required />
-
-  <label>অতিরিক্ত ছবি URL (Additional Images, comma separated URLs):</label>
-  <textarea id="additionalImages" rows="2" placeholder="https://example.com/image2.jpg, https://example.com/image3.jpg"></textarea>
-
-  <label>পণ্যের সংক্ষিপ্ত বর্ণনা (Short Description):</label>
-  <textarea id="shortDesc" rows="3" placeholder="সংক্ষিপ্ত বর্ণনা দিন" required></textarea>
-
-  <label>পণ্যের বিস্তারিত বর্ণনা (Detailed Description):</label>
-  <textarea id="detailedDesc" rows="6" placeholder="বিস্তারিত বর্ণনা দিন" required></textarea>
-
-  <label>স্পেসিফিকেশন (Product Specifications) (বুলেট পয়েন্ট):</label>
-  <textarea id="productSpecs" rows="4" placeholder="প্রতিটি স্পেসিফিকেশন আলাদা লাইনে লিখুন"></textarea>
-
-  <label>রেটিং (Rating) (1 থেকে 5 পর্যন্ত):</label>
-  <input type="number" id="productRating" min="1" max="5" step="0.5" placeholder="রেটিং দিন" />
-
-  <label>স্পেশাল অফার / ডিসকাউন্ট ট্যাগ (Special Offer / Discount Tag):</label>
-  <input type="text" id="specialOffer" placeholder="যেমন: ২০% ছাড়, নতুন পণ্য" />
-
-  <label>ব্র্যান্ড লোগো URL (Brand Logo URL):</label>
-  <input type="url" id="brandLogo" placeholder="https://example.com/brandlogo.png" />
-
-  <label>ওর্ডার করার WhatsApp নাম্বার (Whatsapp Number for Order) (ফরম্যাট: countrycode+number):</label>
-  <input type="text" id="whatsappNumber" placeholder="যেমন: 8801712345678" required />
-
-  <label>অতিরিক্ত তথ্য / FAQ (প্রত্যেক প্রশ্ন আলাদা লাইনে লিখুন):</label>
-  <textarea id="faqList" rows="5" placeholder="প্রশ্ন ১\nপ্রশ্ন ২\nপ্রশ্ন ৩"></textarea>
-
-  <label>সোশ্যাল শেয়ার বাটন দেখাবেন?</label>
-  <select id="showSocial">
-    <option value="yes">হ্যাঁ</option>
-    <option value="no">না</option>
-  </select>
-
-  <button type="submit">HTML কোড জেনারেট করুন</button>
-</form>
-
-<h2>জেনারেটেড HTML কোড:</h2>
-<pre id="output"></pre>
-
-<script>
-document.getElementById('productForm').addEventListener('submit', function(e){
-  e.preventDefault();
-
-  // ইনপুট ডেটা নিন
-  const name = document.getElementById('productName').value.trim();
-  const brand = document.getElementById('productBrand').value.trim();
-  const category = document.getElementById('productCategory').value.trim();
-  const model = document.getElementById('modelNumber').value.trim();
-  const sku = document.getElementById('productSKU').value.trim();
-  const price = document.getElementById('productPrice').value.trim();
-  const discount = document.getElementById('discountPrice').value.trim();
-  const stock = document.getElementById('stockStatus').value;
-  const weight = document.getElementById('productWeight').value.trim();
-  const size = document.getElementById('productSize').value.trim();
-  const color = document.getElementById('productColor').value.trim();
-  const mainImage = document.getElementById('productImage').value.trim();
-  const addImages = document.getElementById('additionalImages').value.trim();
-  const shortDesc = document.getElementById('shortDesc').value.trim();
-  const detailedDesc = document.getElementById('detailedDesc').value.trim();
-  const specsRaw = document.getElementById('productSpecs').value.trim();
-  const rating = document.getElementById('productRating').value.trim();
-  const specialOffer = document.getElementById('specialOffer').value.trim();
-  const brandLogo = document.getElementById('brandLogo').value.trim();
-  const whatsapp = document.getElementById('whatsappNumber').value.trim();
-  const faqRaw = document.getElementById('faqList').value.trim();
-  const showSocial = document.getElementById('showSocial').value;
-
-  // স্পেসিফিকেশন ও FAQ লিস্ট তৈরি
-  const specs = specsRaw ? specsRaw.split('\n').map(s => s.trim()).filter(s => s.length > 0) : [];
-  const faqs = faqRaw ? faqRaw.split('\n').map(q => q.trim()).filter(q => q.length > 0) : [];
-
-  // HTML জেনারেশন শুরু
-  let html = `<div class="product-post" style="font-family: Arial, sans-serif; color:#333;">\n`;
-
-  // ব্র্যান্ড লোগো
-  if(brandLogo){
-    html += `<div style="text-align:center; margin-bottom:15px;"><img src="${brandLogo}" alt="${brand}" style="max-height:60px; object-fit:contain;"></div>\n`;
-  }
-
-  // পণ্যের নাম ও ক্যাটাগরি
-  html += `<h1 style="color:#2c3e50;">${name}</h1>\n`;
-  if(category) html += `<p><strong>ক্যাটাগরি:</strong> ${category}</p>\n`;
-  if(brand) html += `<p><strong>ব্র্যান্ড:</strong> ${brand}</p>\n`;
-  if(model) html += `<p><strong>মডেল নম্বর:</strong> ${model}</p>\n`;
-  if(sku) html += `<p><strong>SKU:</strong> ${sku}</p>\n`;
-
-  // ছবি
-  html += `<div style="text-align:center; margin: 20px 0;">\n`;
-  html += `<img src="${mainImage}" alt="${name}" style="max-width:100%; height:auto; border:1px solid #ddd; border-radius:5px;">\n`;
-  if(addImages){
-    const imgs = addImages.split(',').map(i => i.trim());
-    imgs.forEach(url => {
-      if(url) html += `<img src="${url}" alt="${name}" style="max-width:100px; margin:5px; border:1px solid #ddd; border-radius:5px;">\n`;
-    });
-  }
-  html += `</div>\n`;
-
-  // দাম ও ডিসকাউন্ট
-  if(discount && discount < price){
-    html += `<p><strong>মূল্য:</strong> <del>৳${price}</del> <span style="color:red; font-weight:bold;">৳${discount}</span></p>\n`;
-  } else {
-    html += `<p><strong>মূল্য:</strong> ৳${price}</p>\n`;
-  }
-
-  // স্টক, ওজন, সাইজ, রঙ
-  html += `<p><strong>স্টক স্ট্যাটাস:</strong> ${stock}</p>\n`;
-  if(weight) html += `<p><strong>ওজন:</strong> ${weight}</p>\n`;
-  if(size) html += `<p><strong>সাইজ/মাপ:</strong> ${size}</p>\n`;
-  if(color) html += `<p><strong>রঙ:</strong> ${color}</p>\n`;
-
-  // রেটিং
-  if(rating){
-    const starFull = '★';
-    const starEmpty = '☆';
-    let stars = '';
-    let r = parseFloat(rating);
-    for(let i=1; i<=5; i++){
-      if(r >= i) stars += starFull;
-      else if(r > i-1 && r < i) stars += '⯪'; // আধা স্টার হিসেবে (ঐচ্ছিক)
-      else stars += starEmpty;
+  <script>
+    function addImageInput() {
+      const input = document.createElement("input");
+      input.type = "text";
+      input.placeholder = "https://example.com/image.jpg";
+      document.getElementById("imageInputs").appendChild(input);
     }
-    html += `<p><strong>রেটিং:</strong> <span style="color:gold; font-size:18px;">${stars}</span> (${rating})</p>\n`;
-  }
 
-  // সংক্ষিপ্ত বর্ণনা
-  html += `<h3>সংক্ষিপ্ত বর্ণনা</h3>\n<p>${shortDesc.replace(/\n/g, '<br>')}</p>\n`;
+    function generateHTML() {
+      const imageInputs = document.querySelectorAll("#imageInputs input");
+      const images = Array.from(imageInputs).map(input => input.value.trim()).filter(Boolean);
 
-  // বিস্তারিত বর্ণনা
-  html += `<h3>বিস্তারিত বর্ণনা</h3>\n<p>${detailedDesc.replace(/\n/g, '<br>')}</p>\n`;
+      const price = document.getElementById("price").value;
+      const discount = document.getElementById("discount").value;
+      const badge = document.getElementById("badge").value;
+      const category = document.getElementById("category").value;
+      const shortDesc = document.getElementById("shortDesc").value;
+      const longDesc = document.getElementById("longDesc").value;
+      const whatsapp = document.getElementById("whatsapp").value;
 
-  // স্পেসিফিকেশন
-  if(specs.length > 0){
-    html += `<h3>পণ্যের স্পেসিফিকেশন</h3>\n<ul>\n`;
-    specs.forEach(item => {
-      html += `<li>${item}</li>\n`;
-    });
-    html += `</ul>\n`;
-  }
+      if (!images.length || !price || !shortDesc || !whatsapp) {
+        alert("দয়া করে সব প্রয়োজনীয় তথ্য দিন।");
+        return;
+      }
 
-  // স্পেশাল অফার / ডিসকাউন্ট ট্যাগ
-  if(specialOffer){
-    html += `<p style="background:#e74c3c; color:#fff; padding:8px 12px; display:inline-block; border-radius:5px; font-weight:bold;">${specialOffer}</p>\n`;
-  }
+      let html = `<div class="product-item" data-category="${category}">`;
+      if (badge) html += `<div class="badge">${badge}</div>`;
 
-  // অর্ডার বাটন (WhatsApp)
-  html += `<p style="margin-top: 25px; font-size: 18px;">\n`;
-  html += `<a href="https://wa.me/${whatsapp}" target="_blank" style="background:#25d366; color:white; padding:12px 20px; text-decoration:none; border-radius: 5px; font-weight: bold;">WhatsApp এ অর্ডার করুন</a>\n`;
-  html += `</p>\n`;
+      html += `<div class="slider">`;
+      images.forEach(url => {
+        html += `<img src="${url}" alt="product image" />`;
+      });
+      html += `</div>`;
 
-  // সোশ্যাল শেয়ার বাটন (সরল লিংক)
-  if(showSocial === 'yes'){
-    const currentUrl = window.location.href;
-    html += `<div style="margin-top:30px;">\n`;
-    html += `<p>শেয়ার করুন:</p>\n`;
-    html += `<a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}" target="_blank" style="margin-right:10px;">Facebook</a>\n`;
-    html += `<a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}" target="_blank" style="margin-right:10px;">Twitter</a>\n`;
-    html += `<a href="https://wa.me/?text=${encodeURIComponent(currentUrl)}" target="_blank">WhatsApp</a>\n`;
-    html += `</div>\n`;
-  }
+      html += `<div class="price">৳${discount || price}`;
+      if (discount) html += `<span class="discount">৳${price}</span>`;
+      html += `</div>`;
 
-  // FAQ সেকশন
-  if(faqs.length > 0){
-    html += `<h3>সাধারণ প্রশ্নোত্তর (FAQ)</h3>\n<dl>\n`;
-    faqs.forEach(q => {
-      html += `<dt style="font-weight:bold; margin-top:10px;">${q}</dt>\n`;
-      html += `<dd>উত্তর এখানে লিখুন...</dd>\n`;
-    });
-    html += `</dl>\n`;
-  }
+      html += `<p>${shortDesc}</p><p>${longDesc}</p>`;
+      html += `<button onclick="openOrderPopup()">অর্ডার করুন</button>`;
+      html += `</div>`;
 
-  html += `</div>`;
+      document.getElementById("htmlOutput").value = html;
+      document.getElementById("livePreview").innerHTML = html;
+    }
 
-  // আউটপুট দেখান
-  document.getElementById('output').textContent = html;
+    function openOrderPopup() {
+      const name = prompt("আপনার নাম লিখুন:");
+      const address = prompt("আপনার ঠিকানা লিখুন:");
+      const qty = prompt("পণ্যের পরিমাণ:");
+      const link = window.location.href;
+      const phone = document.getElementById("whatsapp").value;
 
-});
-</script>
+      if (!name || !address || !qty) {
+        alert("সব তথ্য পূরণ করুন।");
+        return;
+      }
 
+      const message = `🛍️ নতুন অর্ডার!\n👤 নাম: ${name}\n📍 ঠিকানা: ${address}\n🔢 পরিমাণ: ${qty}\n🔗 প্রোডাক্ট: ${link}`;
+      const waLink = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+      window.open(waLink, "_blank");
+    }
+  </script>
 </body>
 </html>

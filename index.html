@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8" />
+<title>ই-কমার্স পোস্ট টুল</title>
+<style>
+  body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; background:#f9f9f9; }
+  label { display: block; margin-top: 15px; }
+  input, textarea { width: 100%; padding: 8px; margin-top: 5px; }
+  button { margin-top: 20px; padding: 10px 15px; }
+  pre { background: #eee; padding: 10px; white-space: pre-wrap; word-wrap: break-word; }
+</style>
+</head>
+<body>
+
+<h2>ই-কমার্স পোস্ট টেমপ্লেট জেনারেটর</h2>
+
+<form id="productForm">
+  <label>পণ্যের নাম:
+    <input type="text" id="productName" required />
+  </label>
+
+  <label>দাম (TK):
+    <input type="number" id="productPrice" required />
+  </label>
+
+  <label>পণ্যের বিবরণ:
+    <textarea id="productDesc" rows="4" required></textarea>
+  </label>
+
+  <label>ছবির URL:
+    <input type="url" id="productImage" placeholder="https://example.com/image.jpg" />
+  </label>
+
+  <label>স্টক স্ট্যাটাস:
+    <select id="stockStatus">
+      <option value="Ready Stock">Ready Stock</option>
+      <option value="Out of Stock">Out of Stock</option>
+    </select>
+  </label>
+
+  <button type="submit">টেমপ্লেট জেনারেট করুন</button>
+</form>
+
+<h3>আপনার পোস্টের HTML কোড:</h3>
+<pre id="output"></pre>
+
+<script>
+  document.getElementById('productForm').addEventListener('submit', function(e){
+    e.preventDefault();
+
+    const name = document.getElementById('productName').value.trim();
+    const price = document.getElementById('productPrice').value.trim();
+    const desc = document.getElementById('productDesc').value.trim();
+    const image = document.getElementById('productImage').value.trim();
+    const stock = document.getElementById('stockStatus').value;
+
+    let html = `<h2>${name}</h2>\n`;
+    html += `<p><strong>দাম:</strong> ৳${price}</p>\n`;
+    html += `<p><strong>স্টক স্ট্যাটাস:</strong> ${stock}</p>\n`;
+    if(image) {
+      html += `<img src="${image}" alt="${name}" style="max-width:100%;height:auto;" />\n`;
+    }
+    html += `<p>${desc.replace(/\n/g, '<br>')}</p>\n`;
+
+    html += `<p><strong>অর্ডার করতে হোয়াটসঅ্যাপ করুন:</strong> <a href="https://wa.me/আপনার-নাম্বার" target="_blank">WhatsApp</a></p>\n`;
+
+    document.getElementById('output').textContent = html;
+  });
+</script>
+
+</body>
+</html>

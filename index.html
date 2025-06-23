@@ -1,241 +1,173 @@
-<!DOCTYPE html><html lang="bn">
+<!DOCTYPE html>
+<html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>G9 Tool – Full Product Post Generator</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>G9 Tool – Blogger Product Generator</title>
   <style>
     body {
-      margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: #f4f6f8;
+      margin: 0;
+      padding: 20px;
+      background: #f7f7f7;
       color: #333;
-      transition: background 0.3s, color 0.3s;
+      transition: 0.3s;
     }
-    .dark body {
+    body.dark {
       background: #1e1e1e;
-      color: #f0f0f0;
+      color: #fff;
     }
     .container {
       max-width: 800px;
-      margin: 30px auto;
-      padding: 30px;
+      margin: auto;
       background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    }
-    .dark .container {
-      background: #2b2b2b;
-      color: #fff;
-    }
-    h1 {
-      text-align: center;
-      color: #1976d2;
-    }
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: 600;
-    }
-    input, textarea, select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      margin-top: 5px;
-    }
-    input:invalid {
-      border-color: red;
-    }
-    button {
-      background: #1976d2;
-      color: white;
-      padding: 12px;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-    #output, #preview {
-      background: #f9f9f9;
-      white-space: pre-wrap;
-      border: 1px solid #ddd;
       padding: 20px;
       border-radius: 8px;
-      margin-top: 30px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     }
-    .btn-group {
-      margin-top: 20px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+    .dark .container {
+      background: #2a2a2a;
     }
-    .btn-group button {
-      flex: 1;
-    }
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #25d366;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 5px;
-      display: none;
-      font-weight: bold;
-    }
-    .theme-toggle {
-      text-align: center;
-      margin: 20px auto;
-    }
-    .image-preview {
-      margin-top: 10px;
-      max-width: 100%;
-      height: auto;
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
       border: 1px solid #ccc;
-      border-radius: 6px;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      background: #d32f2f;
+      border: none;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .dark button {
+      background: #4caf50;
+    }
+    #output {
+      white-space: pre-wrap;
+      background: #f4f4f4;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+    img#preview {
+      max-width: 100%;
+      margin-top: 10px;
+      border-radius: 8px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>G9 Tool – Smart Blogger Post Generator</h1>
-    <form id="g9Form">
-      <label>Product Title</label>
-      <input type="text" id="title" required><label>Price (৳)</label>
-  <input type="number" id="price" required>
+<div class="container">
+  <h2>G9 Tool – Blogger Product Generator</h2>
+  <form id="g9Form">
+    <input type="text" id="title" placeholder="প্রোডাক্টের নাম" required>
+    <input type="text" id="sku" placeholder="SKU / কোড">
+    <input type="number" id="price" placeholder="অফার প্রাইস (৳)" required>
+    <input type="number" id="oldPrice" placeholder="মূল প্রাইস (৳)">
+    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
+    <select id="stock">
+      <option>In Stock</option>
+      <option>Out of Stock</option>
+      <option>Limited Stock</option>
+    </select>
+    <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: জামদানি)">
+    <textarea id="description" rows="4" placeholder="প্রোডাক্ট ডেসক্রিপশন"></textarea>
+    <input type="url" id="image" placeholder="ছবির URL">
+    <input type="text" id="whatsapp" placeholder="এডমিন WhatsApp নম্বর (8801XXXXXXXXX)" required>
+    <button type="submit">✅ Generate</button>
+    <button type="button" onclick="copyOutput()">📋 Copy</button>
+    <button type="button" onclick="downloadOutput()">⬇ Download</button>
+    <button type="button" onclick="toggleTheme()">🌗 Theme</button>
+    <img id="preview" src="" alt="">
+  </form>
+  <div id="output"></div>
+</div>
 
-  <label>Original Price (৳)</label>
-  <input type="number" id="oldPrice" required>
+<script>
+function toggleTheme() {
+  document.body.classList.toggle("dark");
+}
 
-  <label>SKU Code</label>
-  <input type="text" id="sku" required>
+document.getElementById("image").addEventListener("input", function () {
+  document.getElementById("preview").src = this.value;
+});
 
-  <label>Delivery Estimate</label>
-  <input type="text" id="delivery" required>
+function escapeHTML(str) {
+  return str.replace(/[&<>"']/g, function (m) {
+    return ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+    })[m];
+  });
+}
 
-  <label>Stock Status</label>
-  <select id="stock">
-    <option value="In Stock">In Stock</option>
-    <option value="Out of Stock">Out of Stock</option>
-    <option value="Limited">Limited</option>
-  </select>
+document.getElementById("g9Form").addEventListener("submit", function (e) {
+  e.preventDefault();
+  const title = escapeHTML(document.getElementById("title").value);
+  const sku = escapeHTML(document.getElementById("sku").value);
+  const price = +document.getElementById("price").value;
+  const oldPrice = +document.getElementById("oldPrice").value;
+  const delivery = escapeHTML(document.getElementById("delivery").value);
+  const stock = escapeHTML(document.getElementById("stock").value);
+  const category = escapeHTML(document.getElementById("category").value);
+  const desc = escapeHTML(document.getElementById("description").value);
+  const image = escapeHTML(document.getElementById("image").value);
+  const whatsapp = escapeHTML(document.getElementById("whatsapp").value);
+  const discount = (oldPrice && price) ? Math.round((1 - price / oldPrice) * 100) : 0;
+  const postUrl = location.href;
 
-  <label>Product Category</label>
-  <select id="category">
-    <option value="jamdani">Jamdani</option>
-    <option value="gadgets">Gadget</option>
-    <option value="cosmetics">Cosmetics</option>
-    <option value="food">Food</option>
-    <option value="other">Other</option>
-  </select>
+  const message = `আমি একটি পণ্য অর্ডার করতে চাই:\n\nপণ্যের নাম: ${title}\nমূল্য: ৳${price}\nস্টক: ${stock}\nলিংক: ${postUrl}\n\nদয়া করে বিস্তারিত জানান।`;
 
-  <label>Image URL</label>
-  <input type="text" id="imageUrl" required oninput="previewImage()">
-  <img id="imgPreview" class="image-preview" style="display:none;">
-
-  <label>WhatsApp Number</label>
-  <input type="text" id="whatsapp" required>
-
-  <label>Product Description (Use *bold*, - bullet points)</label>
-  <textarea id="description" rows="4"></textarea>
-
-  <div class="btn-group">
-    <button type="submit">Generate Post</button>
-    <button type="button" onclick="copyToClipboard()">Copy</button>
-    <button type="button" onclick="downloadHTML()">Download</button>
-  </div>
-</form>
-
-<div id="preview"></div>
-<div id="output" style="display:none;"></div>
-<div id="toast" class="toast">Copied to clipboard!</div>
-
-  </div>  <div class="theme-toggle">
-    <button onclick="toggleTheme()">🌓 Toggle Dark Mode</button>
-  </div>  <script>
-    function escapeHTML(str) {
-      return str.replace(/[&<>"']/g, tag => {
-        const chars = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
-        return chars[tag] || tag;
-      });
-    }
-
-    function toggleTheme() {
-      document.body.classList.toggle('dark');
-    }
-
-    function previewImage() {
-      const url = document.getElementById('imageUrl').value;
-      const img = document.getElementById('imgPreview');
-      if (url) {
-        img.src = url;
-        img.style.display = 'block';
-      } else {
-        img.style.display = 'none';
-      }
-    }
-
-    function downloadHTML() {
-      const content = document.getElementById('output').textContent;
-      const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "product-post.txt";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-    function copyToClipboard() {
-      const code = document.getElementById('output').textContent;
-      navigator.clipboard.writeText(code).then(() => {
-        const toast = document.getElementById('toast');
-        toast.style.display = 'block';
-        setTimeout(() => toast.style.display = 'none', 2500);
-      }, err => {
-        alert("Failed to copy text.");
-      });
-    }
-
-    document.getElementById('g9Form').addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      const title = escapeHTML(document.getElementById('title').value);
-      const price = parseFloat(document.getElementById('price').value);
-      const oldPrice = parseFloat(document.getElementById('oldPrice').value);
-      const sku = escapeHTML(document.getElementById('sku').value);
-      const delivery = escapeHTML(document.getElementById('delivery').value);
-      const stock = escapeHTML(document.getElementById('stock').value);
-      const category = escapeHTML(document.getElementById('category').value);
-      const imageUrl = escapeHTML(document.getElementById('imageUrl').value);
-      const whatsapp = escapeHTML(document.getElementById('whatsapp').value);
-      const description = escapeHTML(document.getElementById('description').value).replace(/\n/g, '<br>');
-      const postLink = window.location.href;
-      const discount = oldPrice > price ? Math.round(((oldPrice - price) / oldPrice) * 100) : 0;
-
-      const code = `
-<!-- Product Post Start -->
-<img src="${imageUrl}" alt="${title}" style="max-width:100%; border-radius:8px;" />
-<h2>${title}</h2>
-<p><strong>Category:</strong> ${category}</p>
-<p><strong>Price:</strong> ৳${price} <del>৳${oldPrice}</del> <span style="color:red;font-weight:bold;">${discount}% OFF</span></p>
-<p><strong>SKU:</strong> ${sku}</p>
-<p><strong>Delivery:</strong> ${delivery}</p>
-<p><strong>Status:</strong> ${stock}</p>
-<p>${description}</p>
-<p>
-  <a href="https://wa.me/${whatsapp}?text=${encodeURIComponent(`আমি একটি পণ্য অর্ডার করতে চাই:\n\nপণ্যের নাম: ${title}\nমূল্য: ৳${price}\nলিংক: ${postLink}\n\nদয়া করে বিস্তারিত জানান।`)}"
-     style="display:inline-block;background:#25D366;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:bold;">
-    অর্ডার করুন WhatsApp-এ
+  const html = `
+<!-- Shortcode Hidden -->
+<p style="display:none;">
+  <a href="#">
+    {{getProduct}} $button={{Price}} $price={{৳${price}}} $sale={{৳${oldPrice || ''}}} $icon={{cart}} $style={{1}}
   </a>
 </p>
-<!-- Product Post End -->`;
 
-      document.getElementById('output').textContent = code;
-      document.getElementById('output').style.display = 'block';
-      document.getElementById('preview').innerHTML = code;
-    });
-  </script></body>
+<!-- WhatsApp Button -->
+<p>
+  <a href="https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}" target="_blank"
+     style="background:#25D366;color:#fff;padding:10px 20px;display:inline-block;border-radius:6px;text-decoration:none;">
+    📲 অর্ডার করুন WhatsApp এ
+  </a>
+</p>
+
+<!-- Product Display -->
+<img src="${image}" alt="${title}" style="width:100%;border-radius:10px;margin-top:10px;">
+<h2>${title}</h2>
+<p><strong>মূল্য:</strong> ৳${price} ${oldPrice ? `<del>৳${oldPrice}</del>` : ''} ${discount ? `<span style="color:green;">${discount}% OFF</span>` : ''}</p>
+<p><strong>স্টক:</strong> ${stock}</p>
+<p><strong>ডেলিভারি:</strong> ${delivery}</p>
+<p><strong>ক্যাটাগরি:</strong> ${category}</p>
+<p>${desc}</p>
+`;
+
+  document.getElementById("output").textContent = html;
+});
+
+function copyOutput() {
+  const output = document.getElementById("output");
+  navigator.clipboard.writeText(output.textContent).then(() => {
+    alert("✅ Copied to clipboard!");
+  });
+}
+
+function downloadOutput() {
+  const content = document.getElementById("output").textContent;
+  const blob = new Blob([content], {{ type: 'text/plain' }});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "g9-post.txt";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
 </html>

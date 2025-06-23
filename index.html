@@ -1,8 +1,9 @@
-<!DOCTYPE html><html lang="bn">
+<!DOCTYPE html>
+<html lang="bn">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>G9 Tool – Full Product Post Generator</title>
+  <title>G9 Tool – Blogger Product Post Generator</title>
   <style>
     body {
       margin: 0;
@@ -34,6 +35,9 @@
       border-radius: 6px;
       margin-top: 5px;
     }
+    input:invalid {
+      border-color: red;
+    }
     button {
       background: #1976d2;
       color: white;
@@ -61,6 +65,18 @@
     .btn-group button {
       flex: 1;
     }
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #25d366;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      display: none;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -68,42 +84,47 @@
     <h1>G9 Tool – Smart Blogger Post Generator</h1>
     <form id="g9Form">
       <label>Product Title</label>
-      <input type="text" id="title" required><label>Price (৳)</label>
-  <input type="text" id="price" required>
+      <input type="text" id="title" required>
 
-  <label>Original Price (৳)</label>
-  <input type="text" id="oldPrice" required>
+      <label>Price (৳)</label>
+      <input type="text" id="price" required>
 
-  <label>SKU Code</label>
-  <input type="text" id="sku" required>
+      <label>Original Price (৳)</label>
+      <input type="text" id="oldPrice" required>
 
-  <label>Delivery Estimate</label>
-  <input type="text" id="delivery" required>
+      <label>SKU Code</label>
+      <input type="text" id="sku" required>
 
-  <label>Stock Status</label>
-  <select id="stock">
-    <option value="In Stock">In Stock</option>
-    <option value="Out of Stock">Out of Stock</option>
-  </select>
+      <label>Delivery Estimate</label>
+      <input type="text" id="delivery" required>
 
-  <label>Image URL</label>
-  <input type="text" id="imageUrl" required>
+      <label>Stock Status</label>
+      <select id="stock">
+        <option value="In Stock">In Stock</option>
+        <option value="Out of Stock">Out of Stock</option>
+        <option value="Limited">Limited</option>
+      </select>
 
-  <label>WhatsApp Number</label>
-  <input type="text" id="whatsapp" required>
+      <label>Image URL</label>
+      <input type="text" id="imageUrl" required>
 
-  <label>Product Description</label>
-  <textarea id="description" rows="4"></textarea>
+      <label>WhatsApp Number</label>
+      <input type="text" id="whatsapp" required>
 
-  <div class="btn-group">
-    <button type="submit">Generate Post</button>
-    <button type="button" onclick="copyToClipboard()">Copy</button>
+      <label>Product Description (You can use *bold*, - bullet)</label>
+      <textarea id="description" rows="4"></textarea>
+
+      <div class="btn-group">
+        <button type="submit">Generate Post</button>
+        <button type="button" onclick="copyToClipboard()">Copy</button>
+      </div>
+    </form>
+
+    <div id="output"></div>
+    <div id="toast" class="toast">Copied to clipboard!</div>
   </div>
-</form>
 
-<div id="output"></div>
-
-  </div>  <script>
+  <script>
     function escapeHTML(str) {
       return str.replace(/[&<>"']/g, tag => {
         const chars = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
@@ -122,7 +143,7 @@
       const stock = escapeHTML(document.getElementById('stock').value);
       const imageUrl = escapeHTML(document.getElementById('imageUrl').value);
       const whatsapp = escapeHTML(document.getElementById('whatsapp').value);
-      const description = escapeHTML(document.getElementById('description').value);
+      const description = escapeHTML(document.getElementById('description').value).replace(/\n/g, '<br>');
       const postLink = window.location.href;
 
       const code = `
@@ -148,10 +169,13 @@
     function copyToClipboard() {
       const code = document.getElementById('output').textContent;
       navigator.clipboard.writeText(code).then(() => {
-        alert("Copied to clipboard!");
+        const toast = document.getElementById('toast');
+        toast.style.display = 'block';
+        setTimeout(() => toast.style.display = 'none', 2500);
       }, err => {
         alert("Failed to copy text.");
       });
     }
-  </script></body>
+  </script>
+</body>
 </html>

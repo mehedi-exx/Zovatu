@@ -1,224 +1,132 @@
-<!DOCTYPE html>
-<html lang="bn">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>E-Post - পণ্য পোস্ট HTML জেনারেটর</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blogger Product Post Generator</title>
   <style>
-    * { box-sizing: border-box; }
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f4f6f8;
-      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
       padding: 20px;
-      color: #222;
+      color: #333;
     }
     .container {
-      max-width: 720px;
+      max-width: 700px;
       margin: auto;
       background: #fff;
-      padding: 25px;
+      padding: 20px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
-    h1, h2 {
+    h2 {
       text-align: center;
-      color: #2c3e50;
+      color: #1976d2;
     }
     label {
-      font-weight: 600;
-      margin-top: 10px;
+      font-weight: bold;
       display: block;
-      margin-bottom: 5px;
+      margin-top: 15px;
     }
-    input, textarea {
+    input, textarea, select {
       width: 100%;
       padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 15px;
-    }
-    .image-group {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .image-group input {
-      flex: 1;
-    }
-    .add-btn {
-      padding: 8px 12px;
-      background: #3498db;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
     }
     button {
-      width: 100%;
-      padding: 12px;
-      background: #27ae60;
-      color: #fff;
-      font-size: 16px;
+      background: #1976d2;
+      color: white;
       border: none;
-      border-radius: 5px;
-      margin-top: 10px;
-      cursor: pointer;
-    }
-    button:hover, .add-btn:hover {
-      opacity: 0.9;
-    }
-    textarea#htmlOutput {
-      height: 200px;
-      font-family: monospace;
-    }
-    .preview {
-      border-top: 1px solid #ccc;
+      padding: 12px 20px;
       margin-top: 20px;
-      padding-top: 15px;
+      cursor: pointer;
+      border-radius: 6px;
+      font-size: 16px;
     }
-    .product-preview {
-      background: #fafafa;
-      padding: 15px;
-      border-radius: 8px;
+    #output {
+      white-space: pre-wrap;
+      background: #f1f1f1;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 30px;
     }
-    .slider img {
-      max-width: 100px;
-      margin: 5px;
-      border-radius: 5px;
+    .copy-btn, .download-btn {
+      background: #4caf50;
+      margin-right: 10px;
     }
-    .badge {
-      display: inline-block;
-      background: crimson;
-      color: #fff;
-      padding: 4px 10px;
-      border-radius: 20px;
-      margin-bottom: 10px;
-      font-size: 12px;
-    }
-    .price {
-      font-size: 18px;
-      font-weight: bold;
-      color: green;
-    }
-    .discount {
-      text-decoration: line-through;
-      color: red;
-      margin-left: 10px;
-      font-size: 15px;
-    }
-    @media (max-width: 600px) {
-      .container { padding: 15px; }
+    .download-btn {
+      background: #ff9800;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>E-Post 🔧</h1>
-    <p style="text-align:center; margin-top: -10px;">একাধিক ছবি + সুন্দর UI সহ পণ্য পোস্ট জেনারেটর</p>
+    <h2>🛍️ Blogger Product Post Generator</h2><label>Product Title</label>
+<input type="text" id="title" placeholder="e.g., Traditional Red Jamdani Saree" />
 
-    <label>পণ্যের ছবি URL</label>
-    <div id="imageInputs" class="image-group">
-      <input type="text" placeholder="https://example.com/image1.jpg" />
-    </div>
-    <button type="button" class="add-btn" onclick="addImageInput()">➕ ছবি যুক্ত করুন</button>
+<label>Image URL</label>
+<input type="text" id="image" placeholder="Direct image link (jpg/png)" />
 
-    <label>মূল্য</label>
-    <input type="number" id="price" />
+<label>Product Price</label>
+<input type="text" id="price" placeholder="e.g., ৳1999" />
 
-    <label>ডিসকাউন্ট মূল্য (ঐচ্ছিক)</label>
-    <input type="number" id="discount" />
+<label>Old Price (for discount)</label>
+<input type="text" id="oldPrice" placeholder="e.g., ৳2499" />
 
-    <label>ব্যাজ (যেমন: হট ডিল)</label>
-    <input type="text" id="badge" />
+<label>Product Link (Post URL)</label>
+<input type="text" id="link" placeholder="Full blog post URL" />
 
-    <label>ক্যাটাগরি</label>
-    <input type="text" id="category" placeholder="যেমন: ফ্যাশন, ইলেকট্রনিক্স" />
+<label>Category</label>
+<input type="text" id="category" placeholder="e.g., Sarees, Accessories, Kurtis..." />
 
-    <label>ছোট বিবরণ</label>
-    <textarea id="shortDesc" rows="2"></textarea>
+<label>Description</label>
+<textarea id="desc" rows="4" placeholder="Short product description..."></textarea>
 
-    <label>বড় বিবরণ</label>
-    <textarea id="longDesc" rows="4"></textarea>
+<button onclick="generatePost()">Generate Post</button>
 
-    <label>WhatsApp নাম্বার (8801xxxxxxx)</label>
-    <input type="text" id="whatsapp" />
+<div id="output"></div>
+<button class="copy-btn" onclick="copyCode()">📋 Copy</button>
+<button class="download-btn" onclick="downloadCode()">⬇️ Download</button>
 
-    <button onclick="generateHTML()">🔧 HTML কোড জেনারেট করুন</button>
+  </div>  <script>
+    function generatePost() {
+      const title = document.getElementById('title').value;
+      const img = document.getElementById('image').value;
+      const price = document.getElementById('price').value;
+      const oldPrice = document.getElementById('oldPrice').value;
+      const link = document.getElementById('link').value;
+      const category = document.getElementById('category').value;
+      const desc = document.getElementById('desc').value;
 
-    <h2>📋 HTML কোড</h2>
-    <textarea id="htmlOutput"></textarea>
+      const shortcode = `<div style="display: none; visibility: hidden; height: 0; overflow: hidden;">
+  <a href="#">
+    {getProduct} $button={Price} $price={${price}} $sale={${oldPrice}} $icon={cart} $style={1}
+  </a>
+</div>`;
 
-    <div class="preview">
-      <h2>👁️ লাইভ প্রিভিউ</h2>
-      <div id="livePreview" class="product-preview"></div>
-    </div>
-  </div>
+      const output = `<!-- ✅ Product Image -->\n<img src="${img}" alt="${title}" style="display:block; margin:20px auto; max-width:100%; border-radius:10px;" />\n\n<!-- ✅ Price -->\n<div style="text-align:center; margin-bottom:20px;">\n  <div style="font-size:26px; font-weight:bold; color:#d32f2f;">${price}</div>\n  <div style="font-size:16px; color:#777; text-decoration: line-through;">${oldPrice}</div>\n  <div style="font-size:14px; background:#e0f2f1; color:#388e3c; padding:4px 10px; display:inline-block; margin-top:5px; border-radius:4px;">\n    Special Discount\n  </div>\n</div>\n\n<!-- ✅ WhatsApp Order Button -->\n<p style="text-align: center;">\n  <a href="https://wa.me/8801627647776?text=আমি%20একটি%20পণ্য%20অর্ডার%20করতে%20চাই%3A%0A%0Aপণ্যের%20নাম%3A%20${encodeURIComponent(title)}%0Aমূল্য%3A%20${encodeURIComponent(price)}%0Aলিংক%3A%20${encodeURIComponent(link)}%0A%0Aদয়া%20করে%20বিস্তারিত%20জানান।"
+     target="_blank" style="display:inline-block; background:#25D366; color:white; padding:12px 25px; border-radius:6px; font-weight:bold; text-decoration:none; font-size:16px;">
+    WhatsApp-এ অর্ডার করুন
+  </a>
+</p>\n\n${shortcode}\n\n<!-- ✅ Title -->\n<h1 style="text-align:center; color:#c62828;">${title}</h1>\n\n<!-- ✅ Description -->\n<p style="text-align:justify;">${desc}</p>\n\n<blockquote style="border-left:4px solid #4caf50; padding:10px; background:#f1f8e9;">Limited stock available for this ${category} item. Order now!</blockquote>`;
 
-  <script>
-    function addImageInput() {
-      const input = document.createElement("input");
-      input.type = "text";
-      input.placeholder = "https://example.com/image.jpg";
-      document.getElementById("imageInputs").appendChild(input);
+      document.getElementById('output').textContent = output;
     }
 
-    function generateHTML() {
-      const imageInputs = document.querySelectorAll("#imageInputs input");
-      const images = Array.from(imageInputs).map(input => input.value.trim()).filter(Boolean);
-
-      const price = document.getElementById("price").value;
-      const discount = document.getElementById("discount").value;
-      const badge = document.getElementById("badge").value;
-      const category = document.getElementById("category").value;
-      const shortDesc = document.getElementById("shortDesc").value;
-      const longDesc = document.getElementById("longDesc").value;
-      const whatsapp = document.getElementById("whatsapp").value;
-
-      if (!images.length || !price || !shortDesc || !whatsapp) {
-        alert("দয়া করে সব প্রয়োজনীয় তথ্য দিন।");
-        return;
-      }
-
-      let html = `<div class="product-item" data-category="${category}">`;
-      if (badge) html += `<div class="badge">${badge}</div>`;
-
-      html += `<div class="slider">`;
-      images.forEach(url => {
-        html += `<img src="${url}" alt="product image" />`;
-      });
-      html += `</div>`;
-
-      html += `<div class="price">৳${discount || price}`;
-      if (discount) html += `<span class="discount">৳${price}</span>`;
-      html += `</div>`;
-
-      html += `<p>${shortDesc}</p><p>${longDesc}</p>`;
-      html += `<button onclick="openOrderPopup()">অর্ডার করুন</button>`;
-      html += `</div>`;
-
-      document.getElementById("htmlOutput").value = html;
-      document.getElementById("livePreview").innerHTML = html;
+    function copyCode() {
+      const code = document.getElementById('output').textContent;
+      navigator.clipboard.writeText(code);
+      alert('Copied to clipboard!');
     }
 
-    function openOrderPopup() {
-      const name = prompt("আপনার নাম লিখুন:");
-      const address = prompt("আপনার ঠিকানা লিখুন:");
-      const qty = prompt("পণ্যের পরিমাণ:");
-      const link = window.location.href;
-      const phone = document.getElementById("whatsapp").value;
-
-      if (!name || !address || !qty) {
-        alert("সব তথ্য পূরণ করুন।");
-        return;
-      }
-
-      const message = `🛍️ নতুন অর্ডার!\n👤 নাম: ${name}\n📍 ঠিকানা: ${address}\n🔢 পরিমাণ: ${qty}\n🔗 প্রোডাক্ট: ${link}`;
-      const waLink = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
-      window.open(waLink, "_blank");
+    function downloadCode() {
+      const code = document.getElementById('output').textContent;
+      const blob = new Blob([code], { type: 'text/html' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'blogger-product-post.html';
+      link.click();
     }
-  </script>
-</body>
+  </script></body>
 </html>

@@ -10,6 +10,7 @@
       background: #eef1f5;
       padding: 20px;
       color: #333;
+      transition: background 0.3s, color 0.3s;
     }
     .container {
       max-width: 720px;
@@ -37,7 +38,7 @@
       font-weight: 600;
       color: #444;
     }
-    input, textarea {
+    input, textarea, select {
       width: 100%;
       padding: 10px 12px;
       margin-top: 6px;
@@ -46,7 +47,7 @@
       font-size: 15px;
       transition: 0.3s;
     }
-    input:focus, textarea:focus {
+    input:focus, textarea:focus, select:focus {
       outline: none;
       border-color: #1976d2;
       box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
@@ -62,17 +63,16 @@
       cursor: pointer;
       transition: 0.2s;
     }
-    .generate-btn {
-      background-color: #1976d2;
-      color: white;
-    }
-    .copy-btn, .download-btn {
-      width: 48%;
+    .generate-btn { background-color: #1976d2; color: white; }
+    .copy-btn, .download-btn, .print-btn {
+      width: 31%;
       margin-top: 16px;
+      display: inline-block;
     }
     .copy-btn { background: #4caf50; color: white; }
-    .download-btn { background: #ff9800; color: white; float: right; }
-    #output {
+    .download-btn { background: #ff9800; color: white; }
+    .print-btn { background: #607d8b; color: white; }
+    #output, #preview {
       white-space: pre-wrap;
       background: #f7f9fc;
       padding: 20px;
@@ -81,11 +81,16 @@
       border: 1px solid #dbe2ea;
       font-size: 14px;
     }
+    #imagePreview {
+      max-width: 100%;
+      display: block;
+      margin-top: 10px;
+      border-radius: 8px;
+    }
     @media (max-width: 600px) {
-      .copy-btn, .download-btn {
+      .copy-btn, .download-btn, .print-btn {
         width: 100%;
         margin-bottom: 10px;
-        float: none;
       }
     }
   </style>
@@ -99,13 +104,26 @@
     <input type="text" id="title" placeholder="e.g., হিমসাগর গিফটবক্স (৫ কেজি)" required />
 
     <label>🖼️ Image URL *</label>
-    <input type="text" id="image" placeholder="Direct image link (jpg/png)" required />
+    <input type="text" id="image" placeholder="Direct image link (jpg/png)" oninput="updateImagePreview()" required />
+    <img id="imagePreview" alt="Image Preview" />
+
+    <label>📦 Product Code / SKU *</label>
+    <input type="text" id="sku" placeholder="e.g., MNG-5005" required />
 
     <label>💰 Product Price *</label>
     <input type="text" id="price" placeholder="e.g., 900" required />
 
     <label>💸 Old Price *</label>
     <input type="text" id="oldPrice" placeholder="e.g., 1200" required />
+
+    <label>🔖 Stock Status *</label>
+    <select id="stock">
+      <option value="In Stock">In Stock</option>
+      <option value="Out of Stock">Out of Stock</option>
+    </select>
+
+    <label>📅 Delivery Time *</label>
+    <input type="text" id="delivery" placeholder="e.g., 3-5 days" required />
 
     <label>🗂️ Category *</label>
     <input type="text" id="category" placeholder="e.g., Mango Box" required />
@@ -122,36 +140,47 @@
     <button class="generate-btn" onclick="generatePost()">✅ Generate HTML</button>
 
     <div id="output"></div>
+    <div id="preview"></div>
 
     <button class="copy-btn" onclick="copyCode()">📋 Copy Code</button>
-    <button class="download-btn" onclick="downloadCode()">⬇️ Download</button>
+    <button class="download-btn" onclick="downloadCode()">⬇️ Download HTML</button>
+    <button class="print-btn" onclick="window.print()">🖨️ Print</button>
   </div>
 
   <script>
+    function updateImagePreview() {
+      const url = document.getElementById('image').value;
+      document.getElementById('imagePreview').src = url;
+    }
+
     function generatePost() {
       const title = document.getElementById('title').value.trim();
       const img = document.getElementById('image').value.trim();
+      const sku = document.getElementById('sku').value.trim();
       const price = document.getElementById('price').value.trim();
       const oldPrice = document.getElementById('oldPrice').value.trim();
+      const stock = document.getElementById('stock').value;
+      const delivery = document.getElementById('delivery').value.trim();
       const category = document.getElementById('category').value.trim();
       const desc = document.getElementById('desc').value.trim();
       const phone = document.getElementById('whatsapp').value.trim();
       const postUrl = document.getElementById('posturl').value.trim();
 
-      if (!title || !img || !price || !oldPrice || !category || !desc || !phone || !postUrl) {
+      if (!title || !img || !sku || !price || !oldPrice || !stock || !delivery || !category || !desc || !phone || !postUrl) {
         alert('⚠️ দয়া করে সব বাধ্যতামূলক ঘর পূরণ করুন।');
         return;
       }
 
       const shortcode = `<div style="display: none; visibility: hidden; height: 0; overflow: hidden;">\n  <a href=\"#\">\n    {getProduct} $button={Price} $price={${price}} $sale={${oldPrice}} $icon={cart} $style={1}\n  </a>\n</div>`;
 
-      const message = `আমি একটি পণ্য অর্ডার করতে চাই:%0A%0Aপণ্যের নাম: ${encodeURIComponent(title)}%0Aমূল্য: ${encodeURIComponent(price)}%0Aলিংক: ${encodeURIComponent(postUrl)}%0A%0Aদয়া করে বিস্তারিত জানান।`;
+      const message = `আমি একটি পণ্য অর্ডার করতে চাই:%0A%0Aপণ্যের নাম: ${encodeURIComponent(title)}%0Aপ্রোডাক্ট কোড: ${encodeURIComponent(sku)}%0Aমূল্য: ${encodeURIComponent(price)}%0Aস্ট্যাটাস: ${encodeURIComponent(stock)}%0Aডেলিভারি টাইম: ${encodeURIComponent(delivery)}%0Aলিংক: ${encodeURIComponent(postUrl)}%0A%0Aদয়া করে বিস্তারিত জানান।`;
 
       const waLink = `https://wa.me/${phone}?text=${message}`;
 
-      const html = `<!-- ✅ Product Image -->\n<img src=\"${img}\" alt=\"${title}\" style=\"display:block; margin:20px auto; max-width:100%; border-radius:10px;\" />\n\n<!-- ✅ Price Section -->\n<div style=\"text-align:center; margin-bottom:20px;\">\n  <div style=\"font-size:26px; font-weight:bold; color:#d32f2f;\">${price}</div>\n  <div style=\"font-size:16px; color:#777; text-decoration: line-through;\">${oldPrice}</div>\n  <div style=\"font-size:14px; background:#e0f2f1; color:#388e3c; padding:4px 10px; display:inline-block; margin-top:5px; border-radius:4px;\">২০% ছাড়</div>\n</div>\n\n<!-- ✅ WhatsApp Order -->\n<p style=\"text-align: center;\">\n  <a href=\"${waLink}\" target=\"_blank\" style=\"display:inline-block; background:#25D366; color:white; padding:12px 25px; border-radius:6px; font-weight:bold; text-decoration:none; font-size:16px;\">WhatsApp-এ অর্ডার করুন</a>\n</p>\n\n${shortcode}\n\n<!-- ✅ Title -->\n<h1 style=\"text-align:center; color:#c62828;\">${title}</h1>\n\n<!-- ✅ Description -->\n<p style=\"text-align:justify;\">${desc}</p>\n\n<blockquote style=\"border-left:4px solid #4caf50; padding:10px; background:#f1f8e9;\">এই ${category} পণ্যের মজুদ সীমিত। এখনই অর্ডার করুন!</blockquote>`;
+      const html = `<!-- ✅ Product Image -->\n<img src=\"${img}\" alt=\"${title}\" style=\"display:block; margin:20px auto; max-width:100%; border-radius:10px;\" />\n\n<!-- ✅ Price Section -->\n<div style=\"text-align:center; margin-bottom:20px;\">\n  <div style=\"font-size:26px; font-weight:bold; color:#d32f2f;\">${price}</div>\n  <div style=\"font-size:16px; color:#777; text-decoration: line-through;\">${oldPrice}</div>\n  <div style=\"font-size:14px; background:#e0f2f1; color:#388e3c; padding:4px 10px; display:inline-block; margin-top:5px; border-radius:4px;\">${stock}</div>\n</div>\n\n<!-- ✅ WhatsApp Order -->\n<p style=\"text-align: center;\">\n  <a href=\"${waLink}\" target=\"_blank\" style=\"display:inline-block; background:#25D366; color:white; padding:12px 25px; border-radius:6px; font-weight:bold; text-decoration:none; font-size:16px;\">WhatsApp-এ অর্ডার করুন</a>\n</p>\n\n${shortcode}\n\n<!-- ✅ Title -->\n<h1 style=\"text-align:center; color:#c62828;\">${title}</h1>\n<p style=\"text-align:center; color:#555;\">SKU: ${sku} | Delivery: ${delivery}</p>\n\n<!-- ✅ Description -->\n<p style=\"text-align:justify;\">${desc}</p>\n\n<blockquote style=\"border-left:4px solid #4caf50; padding:10px; background:#f1f8e9;\">এই ${category} পণ্যের মজুদ সীমিত। এখনই অর্ডার করুন!</blockquote>`;
 
       document.getElementById('output').textContent = html;
+      document.getElementById('preview').innerHTML = html;
     }
 
     function copyCode() {

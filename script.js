@@ -1,31 +1,56 @@
+// 🌙 Theme Toggle & Persistence
 function toggleTheme() {
   const body = document.body;
-  const btn = document.getElementById("themeToggle");
+  const toggle = document.getElementById("themeToggle");
+
   body.classList.toggle("light");
-  btn.textContent = body.classList.contains("light") ? "☀️" : "🌙";
+
+  const mode = body.classList.contains("light") ? "light" : "dark";
+  localStorage.setItem("g9Theme", mode);
+  toggle.textContent = mode === "light" ? "☀️" : "🌙";
 }
 
+// 🧠 Load saved theme from localStorage
+function applySavedTheme() {
+  const savedTheme = localStorage.getItem("g9Theme");
+  const body = document.body;
+  const toggle = document.getElementById("themeToggle");
+
+  if (savedTheme === "light") {
+    body.classList.add("light");
+    toggle.textContent = "☀️";
+  } else {
+    body.classList.remove("light");
+    toggle.textContent = "🌙";
+  }
+}
+
+// 📁 Show/hide menu
 function toggleMenu() {
   document.getElementById("menu").classList.toggle("show");
 }
 
-document.getElementById("g9Form").addEventListener("submit", function (e) {
-  e.preventDefault();
+// ✅ Form Submit → Generate Product Code
+document.addEventListener("DOMContentLoaded", function () {
+  applySavedTheme();
 
-  const name = document.getElementById("name").value;
-  const sku = document.getElementById("sku").value;
-  const price = document.getElementById("price").value;
-  const offer = document.getElementById("offer").value || price;
-  const delivery = document.getElementById("delivery").value || "২-৫ দিন";
-  const stock = document.getElementById("stock").value;
-  const category = document.getElementById("category").value;
-  const desc = document.getElementById("description").value;
-  const image = document.getElementById("image").value;
-  const wp = document.getElementById("whatsapp").value;
+  document.getElementById("g9Form").addEventListener("submit", function (e) {
+    e.preventDefault();
 
-  const message = `📦 আমি একটি পণ্য অর্ডার করতে আগ্রহী:\n\n🛍️ *পণ্যের নাম:* _${name}_\n💰 *মূল্য:* _৳${offer}_\n🔢 *প্রোডাক্ট কোড:* _${sku}_\n\n📞 দয়া করে বিস্তারিত জানান।`;
+    const name = document.getElementById("name").value;
+    const sku = document.getElementById("sku").value;
+    const price = document.getElementById("price").value;
+    const offer = document.getElementById("offer").value || price;
+    const delivery = document.getElementById("delivery").value || "২-৫ দিন";
+    const stock = document.getElementById("stock").value;
+    const category = document.getElementById("category").value;
+    const desc = document.getElementById("description").value;
+    const image = document.getElementById("image").value;
+    const wp = document.getElementById("whatsapp").value;
 
-  const html = `
+    const message = `📦 আমি একটি পণ্য অর্ডার করতে আগ্রহী:\n\n🛍️ *পণ্যের নাম:* _${name}_\n💰 *মূল্য:* _৳${offer}_\n🔢 *প্রোডাক্ট কোড:* _${sku}_\n\n📞 দয়া করে বিস্তারিত জানান।`;
+
+    const html = `
 <img src="${image}" alt="${name}" style="max-width:100%;border-radius:10px;margin-bottom:10px;" />
 <h2 style="text-align:center;margin:5px 0;">${name}</h2>
 <p style="text-align:center;font-size:16px;">৳${price} → <strong style="color:#ff5252;">৳${offer}</strong></p>
@@ -47,6 +72,7 @@ document.getElementById("g9Form").addEventListener("submit", function (e) {
 </ul>
 <p>${desc}</p>
 
+<!-- ✅ Hidden Shortcode -->
 <p style="display:none;">
   <a href="#">
     {getProduct} $button={Price} $price={৳${offer}} $sale={৳${price}} $icon={cart} $style={1}
@@ -54,9 +80,11 @@ document.getElementById("g9Form").addEventListener("submit", function (e) {
 </p>
 `;
 
-  document.getElementById("output").textContent = html;
+    document.getElementById("output").textContent = html;
+  });
 });
 
+// 📋 Copy button
 function copyOutput() {
   const content = document.getElementById("output").textContent;
   navigator.clipboard.writeText(content).then(() => {
@@ -64,6 +92,7 @@ function copyOutput() {
   });
 }
 
+// 📥 Download button
 function downloadOutput() {
   const content = document.getElementById("output").textContent;
   const blob = new Blob([content], { type: "text/html" });

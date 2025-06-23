@@ -1,14 +1,8 @@
 function toggleTheme() {
   const body = document.body;
-  const toggle = document.getElementById("themeToggle");
-
-  if (body.classList.contains("light")) {
-    body.classList.remove("light");
-    toggle.textContent = "🌙";
-  } else {
-    body.classList.add("light");
-    toggle.textContent = "☀️";
-  }
+  const btn = document.getElementById("themeToggle");
+  body.classList.toggle("light");
+  btn.textContent = body.classList.contains("light") ? "☀️" : "🌙";
 }
 
 function toggleMenu() {
@@ -21,7 +15,7 @@ document.getElementById("g9Form").addEventListener("submit", function (e) {
   const name = document.getElementById("name").value;
   const sku = document.getElementById("sku").value;
   const price = document.getElementById("price").value;
-  const offer = document.getElementById("offer").value;
+  const offer = document.getElementById("offer").value || price;
   const delivery = document.getElementById("delivery").value || "২-৫ দিন";
   const stock = document.getElementById("stock").value;
   const category = document.getElementById("category").value;
@@ -53,7 +47,6 @@ document.getElementById("g9Form").addEventListener("submit", function (e) {
 </ul>
 <p>${desc}</p>
 
-<!-- ✅ Hidden Shortcode -->
 <p style="display:none;">
   <a href="#">
     {getProduct} $button={Price} $price={৳${offer}} $sale={৳${price}} $icon={cart} $style={1}

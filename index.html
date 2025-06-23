@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="bn">
+<!DOCTYPE html>
+<html lang="bn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -6,189 +7,179 @@
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/892/892781.png" type="image/png">
   <style>
     :root {
-      --bg-color: #f2f5f9;
-      --text-color: #111827;
-      --container-bg: #ffffff;
-      --primary: #3b82f6;
-      --secondary: #10b981;
+      --bg-color: #f4f6f8;
+      --text-color: #222;
+      --container-bg: #fff;
+      --primary: #1a73e8;
+      --secondary: #00c853;
+      --border: #e0e0e0;
     }
     body.dark {
       --bg-color: #121212;
-      --text-color: #e5e7eb;
-      --container-bg: #1f2937;
+      --text-color: #f1f1f1;
+      --container-bg: #1f1f1f;
+      --border: #333;
     }
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: var(--bg-color);
-      color: var(--text-color);
       margin: 0;
-      padding: 0;
-      transition: all 0.3s ease;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: background 0.3s ease, color 0.3s ease;
     }
     header, footer {
       background: var(--primary);
       color: #fff;
+      padding: 20px;
       text-align: center;
-      padding: 16px 20px;
-    }
-    header h1 {
-      font-size: 24px;
-      margin: 0;
-    }
-    header p {
-      margin: 4px 0 0;
-      font-size: 14px;
     }
     nav {
-      background: #2563eb;
+      background: #0f5ec7;
       display: flex;
-      justify-content: center;
       flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
       padding: 10px;
     }
     nav a {
-      color: white;
+      color: #fff;
       text-decoration: none;
-      margin: 6px 12px;
-      font-size: 15px;
-    }
-    nav a:hover {
-      text-decoration: underline;
+      font-weight: 600;
     }
     .notification {
-      background: #facc15;
+      background: #ffc107;
+      color: #000;
+      padding: 8px;
       text-align: center;
-      padding: 8px 14px;
       font-weight: bold;
-      font-size: 14px;
     }
     .container {
-      max-width: 760px;
-      margin: 25px auto;
       background: var(--container-bg);
+      max-width: 768px;
+      margin: 30px auto;
       padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
     }
-    .toolbar {
+    h1, h2 {
+      margin: 0 0 20px;
+      text-align: center;
+    }
+    h1 {
+      color: var(--primary);
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 20px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 15px;
+      margin-top: 5px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #fff;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+      background: var(--primary);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .action-buttons {
       display: flex;
       justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .action-buttons button {
+      flex: 1 1 30%;
+    }
+    #output, #preview {
+      background: #f9fafb;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 30px;
+      white-space: pre-wrap;
+    }
+    #imagePreview {
+      display: block;
+      margin: 10px auto;
+      max-width: 100%;
+      border-radius: 8px;
+    }
+    .toolbar {
+      text-align: center;
       margin-bottom: 20px;
     }
     .toolbar button {
       padding: 8px 16px;
-      background: #d1d5db;
       border: none;
-      border-radius: 6px;
-      font-size: 14px;
+      margin: 5px;
+      border-radius: 5px;
       cursor: pointer;
-    }
-    label {
       font-weight: 600;
-      display: block;
-      margin-top: 20px;
-    }
-    input, textarea, select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      font-size: 15px;
-      background: #fff;
-    }
-    input:focus, textarea:focus, select:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-    }
-    .generate-btn {
-      width: 100%;
-      background: var(--primary);
-      color: white;
-      padding: 14px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: bold;
-      margin-top: 25px;
-      cursor: pointer;
-    }
-    .btn-group {
-      margin-top: 20px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .btn-group button {
-      flex: 1;
-      padding: 12px;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      color: white;
-    }
-    .copy-btn { background: var(--secondary); }
-    .download-btn { background: #f97316; }
-    .print-btn { background: #6b7280; }
-    #imagePreview {
-      margin-top: 12px;
-      max-width: 100%;
-      border-radius: 10px;
-      display: none;
-    }
-    #output, #preview {
-      background: #f1f5f9;
-      padding: 20px;
-      border-radius: 12px;
-      border: 1px solid #dbeafe;
-      margin-top: 30px;
-      font-size: 14px;
-      white-space: pre-wrap;
     }
     @media (max-width: 600px) {
-      .toolbar {
-        flex-direction: column;
-        gap: 10px;
-      }
-      nav {
-        flex-direction: column;
-      }
-      .btn-group {
+      .action-buttons {
         flex-direction: column;
       }
     }
   </style>
-  <script>
-    function toggleTheme() {
-      document.body.classList.toggle('dark');
-    }
-    function toggleLang() {
-      const btn = document.getElementById("langToggle");
-      btn.textContent = btn.textContent === '🌐 EN' ? '🌐 বাংলা' : '🌐 EN';
-    }
-  </script>
 </head>
 <body>
   <header>
-    <h1>G9 Product Post Builder</h1>
-    <p>Smart Blogger Tool – Fast & Professional HTML Generator</p>
+    <h1>G9 Tool</h1>
+    <p>Professional Blogger Product Post Generator</p>
   </header>
-  <div class="notification">🆕 মোবাইল ফ্রেন্ডলি ডিজাইন | WhatsApp মেসেজে অটো Blogger URL | Live Preview + UX Update</div>
-  <nav>
-    <a href="#">🏠 Home</a>
-    <a href="#">🧰 Generator</a>
-    <a href="#">📄 Guide</a>
-    <a href="#">📞 Contact</a>
-  </nav>  <div class="container">
-    <div class="toolbar">
-      <button onclick="toggleTheme()">🌗 Theme</button>
-      <button onclick="toggleLang()" id="langToggle">🌐 EN</button>
-    </div><!-- Input fields, image preview, and dynamic generation will be added here -->
 
-  </div>  <footer>
-    <p>&copy; 2025 G9 Tool. Built with ❤️ in Bangladesh. Crafted for creators and sellers.</p>
+  <div class="notification">📦 নতুন ফিচার: SKU, Delivery Time, Dark Mode ও আরও অনেক কিছু!</div>
+
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Generator</a>
+    <a href="#">Guide</a>
+    <a href="#">Contact</a>
+  </nav>
+
+  <div class="container">
+    <div class="toolbar">
+      <button onclick="toggleTheme()">🌓 Theme</button>
+      <button onclick="toggleLang()" id="langToggle">🌐 EN</button>
+    </div>
+
+    <label for="sku">Product Code / SKU</label>
+    <input type="text" id="sku" placeholder="Eg: JAMDANI-RED-001" />
+
+    <label for="delivery">Estimated Delivery</label>
+    <input type="text" id="delivery" placeholder="Eg: 2-3 Days" />
+
+    <!-- Add more form fields as needed -->
+  </div>
+
+  <footer>
+    <p>&copy; 2025 G9 Tool. Built with ❤️ in Bangladesh. All rights reserved.</p>
   </footer>
+
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
+    }
+    function toggleLang() {
+      const toggle = document.getElementById("langToggle");
+      toggle.textContent = toggle.textContent.includes("EN") ? "🌐 BN" : "🌐 EN";
+    }
+  </script>
 </body>
 </html>

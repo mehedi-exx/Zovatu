@@ -1,5 +1,14 @@
 function toggleTheme() {
-  document.body.classList.toggle('dark');
+  const body = document.body;
+  const toggle = document.getElementById("themeToggle");
+
+  if (body.classList.contains("light")) {
+    body.classList.remove("light");
+    toggle.textContent = "🌙";
+  } else {
+    body.classList.add("light");
+    toggle.textContent = "☀️";
+  }
 }
 
 function toggleMenu() {
@@ -21,8 +30,6 @@ document.getElementById("g9Form").addEventListener("submit", function (e) {
   const wp = document.getElementById("whatsapp").value;
 
   const message = `📦 আমি একটি পণ্য অর্ডার করতে আগ্রহী:\n\n🛍️ *পণ্যের নাম:* _${name}_\n💰 *মূল্য:* _৳${offer}_\n🔢 *প্রোডাক্ট কোড:* _${sku}_\n\n📞 দয়া করে বিস্তারিত জানান।`;
-
-  const discount = Math.round(((price - offer) / price) * 100);
 
   const html = `
 <img src="${image}" alt="${name}" style="max-width:100%;border-radius:10px;margin-bottom:10px;" />
@@ -46,7 +53,7 @@ document.getElementById("g9Form").addEventListener("submit", function (e) {
 </ul>
 <p>${desc}</p>
 
-<!-- ✅ Hidden Shortcode for Amazen -->
+<!-- ✅ Hidden Shortcode -->
 <p style="display:none;">
   <a href="#">
     {getProduct} $button={Price} $price={৳${offer}} $sale={৳${price}} $icon={cart} $style={1}

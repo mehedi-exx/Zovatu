@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>G9Tool – Product Post Generator</title>
+  <title>G9Tool – Blogger Product Generator</title>
   <style>
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: sans-serif;
@@ -12,62 +13,48 @@
       color: #222;
       transition: 0.3s;
     }
-    body.dark {
-      background: #121212;
-      color: #eee;
-    }
+    body.dark { background: #121212; color: #eee; }
     header {
-      background: #c62828;
+      background: #d32f2f;
       color: white;
-      padding: 10px 15px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 12px 16px;
     }
-    header h1 {
-      font-size: 18px;
-      margin: 0;
-    }
-    .menu-toggle, .theme-toggle {
-      font-size: 20px;
-      cursor: pointer;
-      background: none;
-      border: none;
-      color: white;
-    }
+    header h1 { font-size: 18px; margin: 0; }
+    .toggle, .menu { font-size: 20px; cursor: pointer; background: none; border: none; color: white; }
     nav {
       display: none;
       background: #ffe0b2;
-      padding: 10px;
+      padding: 10px 16px;
+      font-size: 14px;
     }
-    nav.show {
-      display: block;
-    }
+    nav.show { display: block; }
     form {
       max-width: 600px;
       margin: 20px auto;
       background: white;
       padding: 20px;
-      border-radius: 10px;
+      border-radius: 8px;
     }
-    .dark form {
-      background: #1e1e1e;
-    }
+    .dark form { background: #1e1e1e; }
     input, textarea, select {
       width: 100%;
       padding: 10px;
       margin: 10px 0;
-      border-radius: 5px;
+      border-radius: 6px;
       border: 1px solid #ccc;
+      font-size: 15px;
     }
     button {
-      padding: 10px 15px;
-      margin-right: 10px;
+      padding: 10px 16px;
+      margin: 8px 4px 0 0;
       border: none;
-      background: #c62828;
+      border-radius: 5px;
+      background: #d32f2f;
       color: white;
       font-weight: bold;
-      border-radius: 5px;
       cursor: pointer;
     }
     .output {
@@ -79,41 +66,38 @@
       white-space: pre-wrap;
       word-break: break-word;
     }
-    .dark .output {
-      background: #1a1a1a;
-      color: #fff;
-    }
+    .dark .output { background: #2c2c2c; color: white; }
   </style>
 </head>
 <body>
 
 <header>
-  <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+  <button class="menu" onclick="toggleMenu()">☰</button>
   <h1>📦 G9Tool</h1>
-  <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+  <button class="toggle" onclick="toggleTheme()">🌙</button>
 </header>
 
 <nav id="menu">
-  <p>✅ WhatsApp অর্ডার, 📋 কপি, ⬇ ডাউনলোড, 🌙 ডার্ক মোড, 🔐 Shortcode</p>
+  ✅ WhatsApp অর্ডার • Copy • Download • HTML Output • Dark Mode
 </nav>
 
 <form id="g9Form">
-  <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required />
-  <input type="text" id="sku" placeholder="SKU কোড" />
-  <input type="number" id="offer" placeholder="অফার প্রাইস (৳)" required />
-  <input type="number" id="price" placeholder="মূল্য প্রাইস (৳)" required />
-  <input type="text" id="delivery" placeholder="ডেলিভারি টাইম" />
+  <input id="name" placeholder="প্রোডাক্ট নাম" required />
+  <input id="sku" placeholder="SKU কোড" />
+  <input id="offer" placeholder="অফার প্রাইস (৳)" type="number" required />
+  <input id="price" placeholder="মূল্য প্রাইস (৳)" type="number" required />
+  <input id="delivery" placeholder="ডেলিভারি টাইম" />
   <select id="stock">
     <option>In Stock</option>
     <option>Out of Stock</option>
   </select>
-  <input type="text" id="category" placeholder="ক্যাটাগরি" />
+  <input id="category" placeholder="ক্যাটাগরি" />
   <textarea id="description" placeholder="প্রোডাক্টের ডেসক্রিপশন"></textarea>
-  <input type="url" id="image" placeholder="ছবির লিংক" required />
-  <input type="text" id="whatsapp" placeholder="Admin WhatsApp নম্বর (8801XXXXXXX)" required />
-  <button type="submit">Generate</button>
-  <button type="button" onclick="copyOutput()">Copy</button>
-  <button type="button" onclick="downloadOutput()">Download</button>
+  <input id="image" placeholder="ছবির লিংক" type="url" required />
+  <input id="whatsapp" placeholder="Admin WhatsApp নম্বর (8801XXXXXXXXX)" required />
+  <button type="submit">🔄 Generate</button>
+  <button type="button" onclick="copyOutput()">📋 Copy</button>
+  <button type="button" onclick="downloadOutput()">⬇️ Download</button>
 </form>
 
 <div id="output" class="output"></div>
@@ -134,7 +118,7 @@
     const sku = document.getElementById("sku").value;
     const offer = document.getElementById("offer").value;
     const price = document.getElementById("price").value;
-    const delivery = document.getElementById("delivery").value;
+    const delivery = document.getElementById("delivery").value || "২৪-৭২ ঘণ্টা";
     const stock = document.getElementById("stock").value;
     const category = document.getElementById("category").value;
     const desc = document.getElementById("description").value;
@@ -146,7 +130,7 @@
 
     const html = `
 <!-- ✅ Product Image -->
-<img src="${image}" alt="${name}" style="max-width:100%;border-radius:8px;margin-bottom:10px;" />
+<img src="${image}" alt="${name}" style="max-width:100%;border-radius:10px;margin-bottom:10px;" />
 <div style="text-align:center;">
   <h2>${name}</h2>
   <p style="font-size:24px;color:#d32f2f;"><strong>৳${offer}</strong></p>
@@ -157,16 +141,17 @@
 <p>${desc}</p>
 <blockquote>SKU: ${sku} | ক্যাটাগরি: ${category}</blockquote>
 
-<!-- ✅ WhatsApp Button -->
+<!-- ✅ WhatsApp Order Button -->
 <p style="text-align:center;">
-  <a href="https://wa.me/${wp}?text=${encodeURIComponent(`আমি একটি পণ্য অর্ডার করতে চাই:\n\nপণ্যের নাম: ${name}\nমূল্য: ৳${offer}\nলিংক: ${link}\n\nদয়া করে বিস্তারিত জানাবেন।`)}"
-     target="_blank"
+  <a href="https://wa.me/${wp}?text=${encodeURIComponent(
+      `আমি একটি পণ্য অর্ডার করতে চাই:\n\nপণ্যের নাম: ${name}\nমূল্য: ৳${offer}\nলিংক: ${link}\n\nদয়া করে বিস্তারিত জানান।`
+    )}" target="_blank"
      style="display:inline-block;background:#25D366;color:#fff;padding:10px 20px;border-radius:6px;font-weight:bold;text-decoration:none;">
     অর্ডার করুন WhatsApp এ
   </a>
 </p>
 
-<!-- ✅ Hidden getProduct Shortcode -->
+<!-- ✅ Hidden Shortcode (Amazen Theme) -->
 <p style="display:none;">
   <a href="#">
     {getProduct} $button={Price} $price={৳${offer}} $sale={৳${price}} $icon={cart} $style={1}
@@ -187,10 +172,10 @@
   function downloadOutput() {
     const content = document.getElementById("output").textContent;
     const blob = new Blob([content], { type: "text/html" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "product-post.html";
-    link.click();
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "product-post.html";
+    a.click();
   }
 </script>
 

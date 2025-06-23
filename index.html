@@ -4,209 +4,45 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>G9Tool – Blogger Product Generator</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #f0f0f0;
-      color: #111;
-      transition: background 0.3s, color 0.3s;
-    }
-    body.dark {
-      background: #121212;
-      color: #f0f0f0;
-    }
-    header {
-      background: #d32f2f;
-      color: white;
-      padding: 14px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-radius: 0 0 12px 12px;
-    }
-    header h1 {
-      font-size: 18px;
-      margin: 0;
-      font-weight: 600;
-    }
-    .toggle, .menu {
-      font-size: 22px;
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-    }
-    nav {
-      display: none;
-      padding: 12px 18px;
-      background: #ffe0b2;
-      font-size: 14px;
-    }
-    nav.show { display: block; }
-    form {
-      max-width: 600px;
-      margin: 20px auto;
-      background: white;
-      border-radius: 16px;
-      padding: 25px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    }
-    .dark form { background: #1e1e1e; }
-    input, textarea, select {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      font-size: 15px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      background: #fafafa;
-    }
-    .dark input, .dark textarea, .dark select {
-      background: #2a2a2a;
-      border-color: #444;
-      color: #eee;
-    }
-    button {
-      padding: 10px 18px;
-      margin-top: 12px;
-      margin-right: 8px;
-      border: none;
-      border-radius: 8px;
-      background: #d32f2f;
-      color: white;
-      font-weight: bold;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    .output {
-      max-width: 600px;
-      margin: 20px auto;
-      background: #f9f9f9;
-      padding: 18px;
-      border-radius: 12px;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-    .dark .output {
-      background: #1f1f1f;
-      color: white;
-    }
-    @media screen and (max-width: 640px) {
-      form, .output { margin: 15px 10px; }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
+  <meta name="description" content="Generate WhatsApp-ready product HTML code for your Blogger website with G9Tool. Fully responsive and dark mode supported.">
 </head>
-<body>
+<body class="dark">
+  <header>
+    <button class="menu" onclick="toggleMenu()">☰</button>
+    <h1>📦 G9Tool</h1>
+    <button class="toggle" onclick="toggleTheme()">🌙</button>
+  </header>
 
-<header>
-  <button class="menu" onclick="toggleMenu()">☰</button>
-  <h1>📦 G9Tool</h1>
-  <button class="toggle" onclick="toggleTheme()">🌙</button>
-</header>
+  <nav id="menu">
+    <strong>📘 কিভাবে Blogger-এ পোস্ট করবেন:</strong><br>
+    ১. Blogger ড্যাশবোর্ডে যান → <b>New Post</b> ক্লিক করুন<br>
+    ২. Editor-এর উপরে <b>HTML</b> অপশন নির্বাচন করুন<br>
+    ৩. এখানে Generate করা কোড কপি করে সেখানে paste করুন<br>
+    ৪. Preview & Publish করুন ✅
+  </nav>
 
-<nav id="menu">
-  ✅ WhatsApp অর্ডার • 📋 কপি • ⬇️ ডাউনলোড • 🎨 ডার্ক/লাইট মোড
-</nav>
+  <form id="g9Form">
+    <input id="name" placeholder="প্রোডাক্ট নাম" required />
+    <input id="sku" placeholder="প্রোডাক্ট কোড" />
+    <input id="price" placeholder="মূল্য প্রাইস (৳)" type="number" required />
+    <input id="offer" placeholder="অফার প্রাইস (৳)" type="number" required />
+    <input id="delivery" placeholder="ডেলিভারি টাইম (যেমন: ২-৫ দিন)" />
+    <select id="stock">
+      <option>In Stock</option>
+      <option>Out of Stock</option>
+    </select>
+    <input id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)" />
+    <textarea id="description" placeholder="প্রোডাক্টের ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
+    <input id="image" placeholder="ছবির লিংক (Image URL)" type="url" required />
+    <input id="whatsapp" placeholder="এডমিন WhatsApp নম্বর (8801XXXXXXXXX)" required />
+    <button type="submit">🔄 Generate</button>
+    <button type="button" onclick="copyOutput()">📋 Copy</button>
+    <button type="button" onclick="downloadOutput()">⬇️ Download</button>
+  </form>
 
-<form id="g9Form">
-  <input id="name" placeholder="প্রোডাক্ট নাম" required />
-  <input id="sku" placeholder="প্রোডাক্ট কোড" />
-  <input id="offer" placeholder="অফার প্রাইস (৳)" type="number" required />
-  <input id="price" placeholder="মূল্য প্রাইস (৳)" type="number" required />
-  <input id="delivery" placeholder="ডেলিভারি টাইম (যেমন: ২-৫ দিন)" />
-  <select id="stock">
-    <option>In Stock</option>
-    <option>Out of Stock</option>
-  </select>
-  <input id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)" />
-  <textarea id="description" placeholder="প্রোডাক্টের ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
-  <input id="image" placeholder="ছবির লিংক (Image URL)" type="url" required />
-  <input id="whatsapp" placeholder="এডমিন WhatsApp নম্বর (8801XXXXXXXXX)" required />
-  <button type="submit">🔄 Generate</button>
-  <button type="button" onclick="copyOutput()">📋 Copy</button>
-  <button type="button" onclick="downloadOutput()">⬇️ Download</button>
-</form>
+  <div id="output" class="output"></div>
 
-<div id="output" class="output"></div>
-
-<script>
-  function toggleTheme() {
-    document.body.classList.toggle('dark');
-  }
-
-  function toggleMenu() {
-    document.getElementById("menu").classList.toggle("show");
-  }
-
-  document.getElementById("g9Form").addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const name = document.getElementById("name").value;
-    const sku = document.getElementById("sku").value;
-    const offer = document.getElementById("offer").value;
-    const price = document.getElementById("price").value;
-    const delivery = document.getElementById("delivery").value || "২৪-৭২ ঘণ্টা";
-    const stock = document.getElementById("stock").value;
-    const category = document.getElementById("category").value;
-    const desc = document.getElementById("description").value;
-    const image = document.getElementById("image").value;
-    const wp = document.getElementById("whatsapp").value;
-
-    const discount = Math.round(((price - offer) / price) * 100);
-
-    const message = `📦 আমি একটি পণ্য অর্ডার করতে আগ্রহী:\n\n🛍️ *পণ্যের নাম:* _${name}_\n💰 *মূল্য:* _৳${offer}_\n🔢 *প্রোডাক্ট কোড:* _${sku}_\n\n📞 দয়া করে বিস্তারিত জানান।`;
-
-    const html = `
-<!-- ✅ Product Image -->
-<img src="${image}" alt="${name}" style="max-width:100%;border-radius:10px;margin-bottom:10px;" />
-<div style="text-align:center;">
-  <h2>${name}</h2>
-  <p style="font-size:24px;color:#d32f2f;"><strong>৳${offer}</strong></p>
-  <p style="text-decoration:line-through;color:#777;">৳${price}</p>
-  <p style="color:green;">স্ট্যাটাস: ${stock} | ডেলিভারি: ${delivery}</p>
-  <p style="background:#e0f7fa;display:inline-block;padding:4px 10px;border-radius:5px;">${discount}% ছাড়</p>
-</div>
-<p>${desc}</p>
-<blockquote>প্রোডাক্ট কোড: ${sku} | ক্যাটাগরি: ${category}</blockquote>
-
-<!-- ✅ WhatsApp Button -->
-<p style="text-align:center;">
-  <a href="https://wa.me/${wp}?text=${encodeURIComponent(message)}"
-     target="_blank"
-     style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;font-size:16px;">
-    📲 অর্ডার করুন WhatsApp এ
-  </a>
-</p>
-
-<!-- ✅ Hidden Shortcode (Amazen Theme) -->
-<p style="display:none;">
-  <a href="#">
-    {getProduct} $button={Price} $price={৳${offer}} $sale={৳${price}} $icon={cart} $style={1}
-  </a>
-</p>
-`;
-
-    document.getElementById("output").textContent = html;
-  });
-
-  function copyOutput() {
-    const output = document.getElementById("output").textContent;
-    navigator.clipboard.writeText(output).then(() => {
-      alert("✅ কোড কপি হয়েছে!");
-    });
-  }
-
-  function downloadOutput() {
-    const content = document.getElementById("output").textContent;
-    const blob = new Blob([content], { type: "text/html" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "product-post.html";
-    a.click();
-  }
-</script>
-
+  <script src="script.js"></script>
 </body>
 </html>

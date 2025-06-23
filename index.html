@@ -1,8 +1,9 @@
-<!DOCTYPE html><html lang="bn">
+<!DOCTYPE html>
+<html lang="bn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>G9 Tool - Blogger Product Post Generator</title>
+  <title>G9 Product Post Builder – Smart Blogger Tool</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -18,10 +19,17 @@
       border-radius: 12px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.07);
     }
-    h2 {
+    h1 {
       text-align: center;
       color: #1976d2;
-      margin-bottom: 20px;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+    h2 {
+      text-align: center;
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 30px;
     }
     label {
       display: block;
@@ -84,38 +92,42 @@
 </head>
 <body>
   <div class="container">
-    <h2>📦 G9 Tool - Blogger Product Post Generator</h2><label>🔹 Product Title *</label>
-<input type="text" id="title" placeholder="e.g., হিমসাগর গিফটবক্স (৫ কেজি)" required />
+    <h1>🚀 G9 Product Post Builder</h1>
+    <h2>Smart HTML Code Generator for Blogger Product Listings</h2>
 
-<label>🖼️ Image URL *</label>
-<input type="text" id="image" placeholder="Direct image link (jpg/png)" required />
+    <label>🔹 Product Title *</label>
+    <input type="text" id="title" placeholder="e.g., হিমসাগর গিফটবক্স (৫ কেজি)" required />
 
-<label>💰 Product Price *</label>
-<input type="text" id="price" placeholder="e.g., 900" required />
+    <label>🖼️ Image URL *</label>
+    <input type="text" id="image" placeholder="Direct image link (jpg/png)" required />
 
-<label>💸 Old Price *</label>
-<input type="text" id="oldPrice" placeholder="e.g., 1200" required />
+    <label>💰 Product Price *</label>
+    <input type="text" id="price" placeholder="e.g., 900" required />
 
-<label>🗂️ Category *</label>
-<input type="text" id="category" placeholder="e.g., Mango Box" required />
+    <label>💸 Old Price *</label>
+    <input type="text" id="oldPrice" placeholder="e.g., 1200" required />
 
-<label>✍️ Description *</label>
-<textarea id="desc" rows="4" placeholder="Short product description..." required></textarea>
+    <label>🗂️ Category *</label>
+    <input type="text" id="category" placeholder="e.g., Mango Box" required />
 
-<label>📞 Admin WhatsApp Number (without +) *</label>
-<input type="text" id="whatsapp" placeholder="e.g., 8801XXXXXXXXX" required />
+    <label>✍️ Description *</label>
+    <textarea id="desc" rows="4" placeholder="Short product description..." required></textarea>
 
-<label>🔗 Blogger Post URL *</label>
-<input type="text" id="posturl" placeholder="e.g., https://yourblog.com/2025/06/product-name.html" required />
+    <label>📞 Admin WhatsApp Number (without +) *</label>
+    <input type="text" id="whatsapp" placeholder="e.g., 8801XXXXXXXXX" required />
 
-<button class="generate-btn" onclick="generatePost()">🚀 Generate Post</button>
+    <label>🔗 Blogger Post URL *</label>
+    <input type="text" id="posturl" placeholder="e.g., https://yourblog.com/2025/06/product-name.html" required />
 
-<div id="output"></div>
+    <button class="generate-btn" onclick="generatePost()">✅ Generate HTML</button>
 
-<button class="copy-btn" onclick="copyCode()">📋 Copy</button>
-<button class="download-btn" onclick="downloadCode()">⬇️ Download</button>
+    <div id="output"></div>
 
-  </div>  <script>
+    <button class="copy-btn" onclick="copyCode()">📋 Copy Code</button>
+    <button class="download-btn" onclick="downloadCode()">⬇️ Download</button>
+  </div>
+
+  <script>
     function generatePost() {
       const title = document.getElementById('title').value.trim();
       const img = document.getElementById('image').value.trim();
@@ -163,5 +175,6 @@
       link.download = 'blogger-product-post.html';
       link.click();
     }
-  </script></body>
+  </script>
+</body>
 </html>

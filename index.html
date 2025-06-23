@@ -1,15 +1,19 @@
-<!DOCTYPE html>
-<html lang="bn">
+<!DOCTYPE html><html lang="bn">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>G9 Tool – Blogger Product Post Generator</title>
+  <title>G9 Tool – Full Product Post Generator</title>
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
       background: #f4f6f8;
       color: #333;
+      transition: background 0.3s, color 0.3s;
+    }
+    .dark body {
+      background: #1e1e1e;
+      color: #f0f0f0;
     }
     .container {
       max-width: 800px;
@@ -18,6 +22,10 @@
       background: #fff;
       border-radius: 10px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .dark .container {
+      background: #2b2b2b;
+      color: #fff;
     }
     h1 {
       text-align: center;
@@ -48,7 +56,7 @@
       cursor: pointer;
       margin-top: 20px;
     }
-    #output {
+    #output, #preview {
       background: #f9f9f9;
       white-space: pre-wrap;
       border: 1px solid #ddd;
@@ -77,6 +85,17 @@
       display: none;
       font-weight: bold;
     }
+    .theme-toggle {
+      text-align: center;
+      margin: 20px auto;
+    }
+    .image-preview {
+      margin-top: 10px;
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
   </style>
 </head>
 <body>
@@ -84,47 +103,58 @@
     <h1>G9 Tool – Smart Blogger Post Generator</h1>
     <form id="g9Form">
       <label>Product Title</label>
-      <input type="text" id="title" required>
+      <input type="text" id="title" required><label>Price (৳)</label>
+  <input type="number" id="price" required>
 
-      <label>Price (৳)</label>
-      <input type="text" id="price" required>
+  <label>Original Price (৳)</label>
+  <input type="number" id="oldPrice" required>
 
-      <label>Original Price (৳)</label>
-      <input type="text" id="oldPrice" required>
+  <label>SKU Code</label>
+  <input type="text" id="sku" required>
 
-      <label>SKU Code</label>
-      <input type="text" id="sku" required>
+  <label>Delivery Estimate</label>
+  <input type="text" id="delivery" required>
 
-      <label>Delivery Estimate</label>
-      <input type="text" id="delivery" required>
+  <label>Stock Status</label>
+  <select id="stock">
+    <option value="In Stock">In Stock</option>
+    <option value="Out of Stock">Out of Stock</option>
+    <option value="Limited">Limited</option>
+  </select>
 
-      <label>Stock Status</label>
-      <select id="stock">
-        <option value="In Stock">In Stock</option>
-        <option value="Out of Stock">Out of Stock</option>
-        <option value="Limited">Limited</option>
-      </select>
+  <label>Product Category</label>
+  <select id="category">
+    <option value="jamdani">Jamdani</option>
+    <option value="gadgets">Gadget</option>
+    <option value="cosmetics">Cosmetics</option>
+    <option value="food">Food</option>
+    <option value="other">Other</option>
+  </select>
 
-      <label>Image URL</label>
-      <input type="text" id="imageUrl" required>
+  <label>Image URL</label>
+  <input type="text" id="imageUrl" required oninput="previewImage()">
+  <img id="imgPreview" class="image-preview" style="display:none;">
 
-      <label>WhatsApp Number</label>
-      <input type="text" id="whatsapp" required>
+  <label>WhatsApp Number</label>
+  <input type="text" id="whatsapp" required>
 
-      <label>Product Description (You can use *bold*, - bullet)</label>
-      <textarea id="description" rows="4"></textarea>
+  <label>Product Description (Use *bold*, - bullet points)</label>
+  <textarea id="description" rows="4"></textarea>
 
-      <div class="btn-group">
-        <button type="submit">Generate Post</button>
-        <button type="button" onclick="copyToClipboard()">Copy</button>
-      </div>
-    </form>
-
-    <div id="output"></div>
-    <div id="toast" class="toast">Copied to clipboard!</div>
+  <div class="btn-group">
+    <button type="submit">Generate Post</button>
+    <button type="button" onclick="copyToClipboard()">Copy</button>
+    <button type="button" onclick="downloadHTML()">Download</button>
   </div>
+</form>
 
-  <script>
+<div id="preview"></div>
+<div id="output" style="display:none;"></div>
+<div id="toast" class="toast">Copied to clipboard!</div>
+
+  </div>  <div class="theme-toggle">
+    <button onclick="toggleTheme()">🌓 Toggle Dark Mode</button>
+  </div>  <script>
     function escapeHTML(str) {
       return str.replace(/[&<>"']/g, tag => {
         const chars = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
@@ -132,25 +162,65 @@
       });
     }
 
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+    }
+
+    function previewImage() {
+      const url = document.getElementById('imageUrl').value;
+      const img = document.getElementById('imgPreview');
+      if (url) {
+        img.src = url;
+        img.style.display = 'block';
+      } else {
+        img.style.display = 'none';
+      }
+    }
+
+    function downloadHTML() {
+      const content = document.getElementById('output').textContent;
+      const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "product-post.txt";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function copyToClipboard() {
+      const code = document.getElementById('output').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        const toast = document.getElementById('toast');
+        toast.style.display = 'block';
+        setTimeout(() => toast.style.display = 'none', 2500);
+      }, err => {
+        alert("Failed to copy text.");
+      });
+    }
+
     document.getElementById('g9Form').addEventListener('submit', function (e) {
       e.preventDefault();
 
       const title = escapeHTML(document.getElementById('title').value);
-      const price = escapeHTML(document.getElementById('price').value);
-      const oldPrice = escapeHTML(document.getElementById('oldPrice').value);
+      const price = parseFloat(document.getElementById('price').value);
+      const oldPrice = parseFloat(document.getElementById('oldPrice').value);
       const sku = escapeHTML(document.getElementById('sku').value);
       const delivery = escapeHTML(document.getElementById('delivery').value);
       const stock = escapeHTML(document.getElementById('stock').value);
+      const category = escapeHTML(document.getElementById('category').value);
       const imageUrl = escapeHTML(document.getElementById('imageUrl').value);
       const whatsapp = escapeHTML(document.getElementById('whatsapp').value);
       const description = escapeHTML(document.getElementById('description').value).replace(/\n/g, '<br>');
       const postLink = window.location.href;
+      const discount = oldPrice > price ? Math.round(((oldPrice - price) / oldPrice) * 100) : 0;
 
       const code = `
 <!-- Product Post Start -->
 <img src="${imageUrl}" alt="${title}" style="max-width:100%; border-radius:8px;" />
 <h2>${title}</h2>
-<p><strong>Price:</strong> ৳${price} <del>৳${oldPrice}</del></p>
+<p><strong>Category:</strong> ${category}</p>
+<p><strong>Price:</strong> ৳${price} <del>৳${oldPrice}</del> <span style="color:red;font-weight:bold;">${discount}% OFF</span></p>
 <p><strong>SKU:</strong> ${sku}</p>
 <p><strong>Delivery:</strong> ${delivery}</p>
 <p><strong>Status:</strong> ${stock}</p>
@@ -164,18 +234,8 @@
 <!-- Product Post End -->`;
 
       document.getElementById('output').textContent = code;
+      document.getElementById('output').style.display = 'block';
+      document.getElementById('preview').innerHTML = code;
     });
-
-    function copyToClipboard() {
-      const code = document.getElementById('output').textContent;
-      navigator.clipboard.writeText(code).then(() => {
-        const toast = document.getElementById('toast');
-        toast.style.display = 'block';
-        setTimeout(() => toast.style.display = 'none', 2500);
-      }, err => {
-        alert("Failed to copy text.");
-      });
-    }
-  </script>
-</body>
+  </script></body>
 </html>

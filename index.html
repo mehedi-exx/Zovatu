@@ -6,7 +6,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f9f9f9;
+      background: #f5f7fa;
       padding: 20px;
       color: #333;
     }
@@ -14,35 +14,48 @@
       max-width: 700px;
       margin: auto;
       background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     }
     h2 {
       text-align: center;
       color: #1976d2;
+      margin-bottom: 20px;
     }
     label {
       font-weight: bold;
-      display: block;
       margin-top: 15px;
+      display: block;
     }
-    input, textarea, select {
+    input, textarea {
       width: 100%;
       padding: 10px;
       margin-top: 5px;
       border: 1px solid #ccc;
       border-radius: 6px;
+      font-size: 14px;
     }
     button {
-      background: #1976d2;
-      color: white;
-      border: none;
       padding: 12px 20px;
       margin-top: 20px;
-      cursor: pointer;
+      border: none;
       border-radius: 6px;
       font-size: 16px;
+      cursor: pointer;
+    }
+    .generate-btn {
+      background: #1976d2;
+      color: white;
+      width: 100%;
+    }
+    .copy-btn, .download-btn {
+      background: #4caf50;
+      color: white;
+      margin-right: 10px;
+    }
+    .download-btn {
+      background: #ff9800;
     }
     #output {
       white-space: pre-wrap;
@@ -50,78 +63,79 @@
       padding: 20px;
       border-radius: 10px;
       margin-top: 30px;
+      font-size: 14px;
     }
-    .copy-btn, .download-btn {
-      background: #4caf50;
-      margin-right: 10px;
-    }
-    .download-btn {
-      background: #ff9800;
+    .button-group {
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>🛍️ Blogger Product Post Generator</h2><label>Product Title</label>
-<input type="text" id="title" placeholder="e.g., Traditional Red Jamdani Saree" />
+    <h2>🛍️ Blogger Product Post Generator</h2><label>Product Title *</label>
+<input type="text" id="title" placeholder="e.g., Traditional Red Jamdani Saree" required />
 
-<label>Image URL</label>
-<input type="text" id="image" placeholder="Direct image link (jpg/png)" />
+<label>Image URL *</label>
+<input type="text" id="image" placeholder="Direct image link (jpg/png)" required />
 
-<label>Product Price</label>
-<input type="text" id="price" placeholder="e.g., ৳1999" />
+<label>Product Price *</label>
+<input type="text" id="price" placeholder="e.g., ৳1999" required />
 
-<label>Old Price (for discount)</label>
-<input type="text" id="oldPrice" placeholder="e.g., ৳2499" />
+<label>Old Price (for discount) *</label>
+<input type="text" id="oldPrice" placeholder="e.g., ৳2499" required />
 
-<label>Product Link (Post URL)</label>
-<input type="text" id="link" placeholder="Full blog post URL" />
+<label>Category *</label>
+<input type="text" id="category" placeholder="e.g., Sarees, Accessories, Kurtis..." required />
 
-<label>Category</label>
-<input type="text" id="category" placeholder="e.g., Sarees, Accessories, Kurtis..." />
+<label>Description *</label>
+<textarea id="desc" rows="4" placeholder="Short product description..." required></textarea>
 
-<label>Description</label>
-<textarea id="desc" rows="4" placeholder="Short product description..."></textarea>
-
-<button onclick="generatePost()">Generate Post</button>
+<button class="generate-btn" onclick="generatePost()">Generate Post</button>
 
 <div id="output"></div>
-<button class="copy-btn" onclick="copyCode()">📋 Copy</button>
-<button class="download-btn" onclick="downloadCode()">⬇️ Download</button>
+
+<div class="button-group">
+  <button class="copy-btn" onclick="copyCode()">📋 Copy</button>
+  <button class="download-btn" onclick="downloadCode()">⬇️ Download</button>
+</div>
 
   </div>  <script>
     function generatePost() {
-      const title = document.getElementById('title').value;
-      const img = document.getElementById('image').value;
-      const price = document.getElementById('price').value;
-      const oldPrice = document.getElementById('oldPrice').value;
-      const link = document.getElementById('link').value;
-      const category = document.getElementById('category').value;
-      const desc = document.getElementById('desc').value;
+      const title = document.getElementById('title').value.trim();
+      const img = document.getElementById('image').value.trim();
+      const price = document.getElementById('price').value.trim();
+      const oldPrice = document.getElementById('oldPrice').value.trim();
+      const category = document.getElementById('category').value.trim();
+      const desc = document.getElementById('desc').value.trim();
+      const pageUrl = window.location.href;
 
-      const shortcode = `<div style="display: none; visibility: hidden; height: 0; overflow: hidden;">
-  <a href="#">
-    {getProduct} $button={Price} $price={${price}} $sale={${oldPrice}} $icon={cart} $style={1}
-  </a>
-</div>`;
+      if (!title || !img || !price || !oldPrice || !category || !desc) {
+        alert('❗ Please fill in all required fields marked with *');
+        return;
+      }
 
-      const output = `<!-- ✅ Product Image -->\n<img src="${img}" alt="${title}" style="display:block; margin:20px auto; max-width:100%; border-radius:10px;" />\n\n<!-- ✅ Price -->\n<div style="text-align:center; margin-bottom:20px;">\n  <div style="font-size:26px; font-weight:bold; color:#d32f2f;">${price}</div>\n  <div style="font-size:16px; color:#777; text-decoration: line-through;">${oldPrice}</div>\n  <div style="font-size:14px; background:#e0f2f1; color:#388e3c; padding:4px 10px; display:inline-block; margin-top:5px; border-radius:4px;">\n    Special Discount\n  </div>\n</div>\n\n<!-- ✅ WhatsApp Order Button -->\n<p style="text-align: center;">\n  <a href="https://wa.me/8801627647776?text=আমি%20একটি%20পণ্য%20অর্ডার%20করতে%20চাই%3A%0A%0Aপণ্যের%20নাম%3A%20${encodeURIComponent(title)}%0Aমূল্য%3A%20${encodeURIComponent(price)}%0Aলিংক%3A%20${encodeURIComponent(link)}%0A%0Aদয়া%20করে%20বিস্তারিত%20জানান।"
-     target="_blank" style="display:inline-block; background:#25D366; color:white; padding:12px 25px; border-radius:6px; font-weight:bold; text-decoration:none; font-size:16px;">
-    WhatsApp-এ অর্ডার করুন
-  </a>
-</p>\n\n${shortcode}\n\n<!-- ✅ Title -->\n<h1 style="text-align:center; color:#c62828;">${title}</h1>\n\n<!-- ✅ Description -->\n<p style="text-align:justify;">${desc}</p>\n\n<blockquote style="border-left:4px solid #4caf50; padding:10px; background:#f1f8e9;">Limited stock available for this ${category} item. Order now!</blockquote>`;
+      const shortcode = `<div style="display: none; visibility: hidden; height: 0; overflow: hidden;">\n  <a href=\"#\">\n    {getProduct} $button={Price} $price={${price}} $sale={${oldPrice}} $icon={cart} $style={1}\n  </a>\n</div>`;
+
+      const output = `<!-- ✅ Product Image -->\n<img src=\"${img}\" alt=\"${title}\" style=\"display:block; margin:20px auto; max-width:100%; border-radius:10px;\" />\n\n<!-- ✅ Price -->\n<div style=\"text-align:center; margin-bottom:20px;\">\n  <div style=\"font-size:26px; font-weight:bold; color:#d32f2f;\">${price}</div>\n  <div style=\"font-size:16px; color:#777; text-decoration: line-through;\">${oldPrice}</div>\n  <div style=\"font-size:14px; background:#e0f2f1; color:#388e3c; padding:4px 10px; display:inline-block; margin-top:5px; border-radius:4px;\">\n    Special Discount\n  </div>\n</div>\n\n<!-- ✅ WhatsApp Order Button -->\n<p style=\"text-align: center;\">\n  <a href=\"https://wa.me/8801627647776?text=আমি%20একটি%20পণ্য%20অর্ডার%20করতে%20চাই%3A%0A%0Aপণ্যের%20নাম%3A%20${encodeURIComponent(title)}%0Aমূল্য%3A%20${encodeURIComponent(price)}%0Aলিংক%3A%20${encodeURIComponent(pageUrl)}%0A%0Aদয়া%20করে%20বিস্তারিত%20জানান।\" target=\"_blank\" style=\"display:inline-block; background:#25D366; color:white; padding:12px 25px; border-radius:6px; font-weight:bold; text-decoration:none; font-size:16px;\">\n    WhatsApp-এ অর্ডার করুন\n  </a>\n</p>\n\n${shortcode}\n\n<!-- ✅ Title -->\n<h1 style=\"text-align:center; color:#c62828;\">${title}</h1>\n\n<!-- ✅ Description -->\n<p style=\"text-align:justify;\">${desc}</p>\n\n<blockquote style=\"border-left:4px solid #4caf50; padding:10px; background:#f1f8e9;\">Limited stock available for this ${category} item. Order now!</blockquote>`;
 
       document.getElementById('output').textContent = output;
     }
 
     function copyCode() {
-      const code = document.getElementById('output').textContent;
-      navigator.clipboard.writeText(code);
-      alert('Copied to clipboard!');
+      const code = document.getElementById('output');
+      if (!code.textContent) return alert('❗ No code to copy. Generate first.');
+      const range = document.createRange();
+      range.selectNode(code);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      document.execCommand('copy');
+      alert('✅ HTML code copied to clipboard!');
     }
 
     function downloadCode() {
       const code = document.getElementById('output').textContent;
+      if (!code) return alert('❗ Nothing to download. Generate the code first.');
       const blob = new Blob([code], { type: 'text/html' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);

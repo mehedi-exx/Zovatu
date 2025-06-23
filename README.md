@@ -1,5 +1,4 @@
-# 📦 G9Tool – Blogger Product Post Generator
-
+# G9Tool
 **G9Tool** is a responsive, mobile-friendly HTML code generator tool specially designed for **Blogger** e-commerce users. It allows you to create professional product post code with WhatsApp ordering support in seconds.
 
 ---
@@ -18,5 +17,3 @@
 - 🔎 SEO-ready meta setup (title + description)
 
 ---
-
-## 📂 Folder Structure

@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>G9 Tool – Blogger Product Generator</title>
+  <title>G9Tool – Blogger Post Generator</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      padding: 20px;
+      padding: 0;
       background: #f7f7f7;
       color: #333;
       transition: 0.3s;
@@ -17,13 +17,48 @@
       background: #1e1e1e;
       color: #fff;
     }
+    header {
+      background: #d32f2f;
+      color: white;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .logo {
+      font-weight: bold;
+      font-size: 22px;
+    }
+    .menu {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .menu button {
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+    }
+    nav {
+      background: #eee;
+      padding: 10px;
+      text-align: center;
+    }
+    nav a {
+      margin: 0 10px;
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
     .container {
       max-width: 800px;
-      margin: auto;
+      margin: 20px auto;
       background: #fff;
       padding: 20px;
       border-radius: 8px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     }
     .dark .container {
       background: #2a2a2a;
@@ -34,13 +69,14 @@
       margin: 8px 0;
       border: 1px solid #ccc;
       border-radius: 5px;
+      font-size: 1em;
     }
     button {
       padding: 10px 20px;
       margin: 5px;
-      background: #d32f2f;
       border: none;
-      color: #fff;
+      background: #d32f2f;
+      color: white;
       border-radius: 5px;
       cursor: pointer;
     }
@@ -51,78 +87,97 @@
       white-space: pre-wrap;
       background: #f4f4f4;
       padding: 10px;
-      border-radius: 5px;
       margin-top: 20px;
+      border-radius: 6px;
     }
     img#preview {
       max-width: 100%;
       margin-top: 10px;
       border-radius: 8px;
     }
+    @media (max-width: 600px) {
+      header, nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
   </style>
 </head>
 <body>
-<div class="container">
-  <h2>G9 Tool – Blogger Product Generator</h2>
-  <form id="g9Form">
-    <input type="text" id="title" placeholder="প্রোডাক্টের নাম" required>
-    <input type="text" id="sku" placeholder="SKU / কোড">
-    <input type="number" id="price" placeholder="অফার প্রাইস (৳)" required>
-    <input type="number" id="oldPrice" placeholder="মূল প্রাইস (৳)">
-    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
-    <select id="stock">
-      <option>In Stock</option>
-      <option>Out of Stock</option>
-      <option>Limited Stock</option>
-    </select>
-    <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: জামদানি)">
-    <textarea id="description" rows="4" placeholder="প্রোডাক্ট ডেসক্রিপশন"></textarea>
-    <input type="url" id="image" placeholder="ছবির URL">
-    <input type="text" id="whatsapp" placeholder="এডমিন WhatsApp নম্বর (8801XXXXXXXXX)" required>
-    <button type="submit">✅ Generate</button>
-    <button type="button" onclick="copyOutput()">📋 Copy</button>
-    <button type="button" onclick="downloadOutput()">⬇ Download</button>
-    <button type="button" onclick="toggleTheme()">🌗 Theme</button>
-    <img id="preview" src="" alt="">
-  </form>
-  <div id="output"></div>
-</div>
 
-<script>
-function toggleTheme() {
-  document.body.classList.toggle("dark");
-}
+  <header>
+    <div class="logo">📦 G9Tool</div>
+    <div class="menu">
+      <button onclick="toggleTheme()">🌗</button>
+    </div>
+  </header>
 
-document.getElementById("image").addEventListener("input", function () {
-  document.getElementById("preview").src = this.value;
-});
+  <nav>
+    <a href="#">🏠 Home</a>
+    <a href="#">📁 Templates</a>
+    <a href="#">📌 Tips</a>
+    <a href="#">📞 Contact</a>
+  </nav>
 
-function escapeHTML(str) {
-  return str.replace(/[&<>"']/g, function (m) {
-    return ({
-      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
-    })[m];
-  });
-}
+  <div class="container">
+    <form id="g9Form">
+      <input type="text" id="title" placeholder="প্রোডাক্টের নাম" required>
+      <input type="text" id="sku" placeholder="SKU / কোড">
+      <input type="number" id="price" placeholder="অফার প্রাইস (৳)" required>
+      <input type="number" id="oldPrice" placeholder="মূল প্রাইস (৳)">
+      <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
+      <select id="stock">
+        <option>In Stock</option>
+        <option>Out of Stock</option>
+        <option>Limited Stock</option>
+      </select>
+      <input type="text" id="category" placeholder="কাস্টম ক্যাটাগরি (যেমন: জামদানি)">
+      <textarea id="description" rows="4" placeholder="প্রোডাক্ট ডেসক্রিপশন"></textarea>
+      <input type="url" id="image" placeholder="ছবির লিংক দিন">
+      <input type="text" id="whatsapp" placeholder="এডমিন WhatsApp নম্বর (8801XXXXXXXXX)" required>
+      <button type="submit">✅ Generate</button>
+      <button type="button" onclick="copyOutput()">📋 Copy</button>
+      <button type="button" onclick="downloadOutput()">⬇ Download</button>
+      <img id="preview" src="" alt="">
+    </form>
+    <div id="output"></div>
+  </div>
 
-document.getElementById("g9Form").addEventListener("submit", function (e) {
-  e.preventDefault();
-  const title = escapeHTML(document.getElementById("title").value);
-  const sku = escapeHTML(document.getElementById("sku").value);
-  const price = +document.getElementById("price").value;
-  const oldPrice = +document.getElementById("oldPrice").value;
-  const delivery = escapeHTML(document.getElementById("delivery").value);
-  const stock = escapeHTML(document.getElementById("stock").value);
-  const category = escapeHTML(document.getElementById("category").value);
-  const desc = escapeHTML(document.getElementById("description").value);
-  const image = escapeHTML(document.getElementById("image").value);
-  const whatsapp = escapeHTML(document.getElementById("whatsapp").value);
-  const discount = (oldPrice && price) ? Math.round((1 - price / oldPrice) * 100) : 0;
-  const postUrl = location.href;
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
+    }
 
-  const message = `আমি একটি পণ্য অর্ডার করতে চাই:\n\nপণ্যের নাম: ${title}\nমূল্য: ৳${price}\nস্টক: ${stock}\nলিংক: ${postUrl}\n\nদয়া করে বিস্তারিত জানান।`;
+    document.getElementById("image").addEventListener("input", function () {
+      document.getElementById("preview").src = this.value;
+    });
 
-  const html = `
+    function escapeHTML(str) {
+      return str.replace(/[&<>"']/g, function (m) {
+        return ({
+          '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+        })[m];
+      });
+    }
+
+    document.getElementById("g9Form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const title = escapeHTML(document.getElementById("title").value);
+      const sku = escapeHTML(document.getElementById("sku").value);
+      const price = +document.getElementById("price").value;
+      const oldPrice = +document.getElementById("oldPrice").value;
+      const delivery = escapeHTML(document.getElementById("delivery").value);
+      const stock = escapeHTML(document.getElementById("stock").value);
+      const category = escapeHTML(document.getElementById("category").value);
+      const desc = escapeHTML(document.getElementById("description").value);
+      const image = escapeHTML(document.getElementById("image").value);
+      const whatsapp = escapeHTML(document.getElementById("whatsapp").value);
+      const discount = (oldPrice && price) ? Math.round((1 - price / oldPrice) * 100) : 0;
+      const postUrl = location.href;
+
+      const message = `আমি একটি পণ্য অর্ডার করতে চাই:\n\nপণ্যের নাম: ${title}\nমূল্য: ৳${price}\nস্টক: ${stock}\nলিংক: ${postUrl}\n\nদয়া করে বিস্তারিত জানান।`;
+
+      const html = `
 <!-- Shortcode Hidden -->
 <p style="display:none;">
   <a href="#">
@@ -147,27 +202,26 @@ document.getElementById("g9Form").addEventListener("submit", function (e) {
 <p><strong>ক্যাটাগরি:</strong> ${category}</p>
 <p>${desc}</p>
 `;
+      document.getElementById("output").textContent = html;
+    });
 
-  document.getElementById("output").textContent = html;
-});
+    function copyOutput() {
+      const output = document.getElementById("output");
+      navigator.clipboard.writeText(output.textContent).then(() => {
+        alert("✅ Copied to clipboard!");
+      });
+    }
 
-function copyOutput() {
-  const output = document.getElementById("output");
-  navigator.clipboard.writeText(output.textContent).then(() => {
-    alert("✅ Copied to clipboard!");
-  });
-}
-
-function downloadOutput() {
-  const content = document.getElementById("output").textContent;
-  const blob = new Blob([content], {{ type: 'text/plain' }});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "g9-post.txt";
-  a.click();
-  URL.revokeObjectURL(url);
-}
-</script>
+    function downloadOutput() {
+      const content = document.getElementById("output").textContent;
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "g9-post.txt";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
 </body>
 </html>

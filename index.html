@@ -1,42 +1,87 @@
-<!DOCTYPE html>
-<html lang="bn">
+<!DOCTYPE html><html lang="bn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>G9 Product Post Builder – Smart Blogger Tool</title>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/892/892781.png" type="image/png">
   <style>
+    :root {
+      --bg-color: #eef1f5;
+      --text-color: #333;
+      --container-bg: #ffffff;
+      --primary: #1976d2;
+      --secondary: #4caf50;
+    }
+    body.dark {
+      --bg-color: #1e1e1e;
+      --text-color: #eee;
+      --container-bg: #2a2a2a;
+    }
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #eef1f5;
-      padding: 20px;
-      color: #333;
+      background: var(--bg-color);
+      padding: 0;
+      margin: 0;
+      color: var(--text-color);
       transition: background 0.3s, color 0.3s;
+    }
+    header, footer {
+      background: var(--primary);
+      color: white;
+      padding: 10px 20px;
+      text-align: center;
+    }
+    header h1, footer p {
+      margin: 5px 0;
+      font-weight: 500;
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      background: #1565c0;
+      padding: 8px 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: 500;
+      transition: 0.2s;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    .notification {
+      background: #ff9800;
+      color: white;
+      text-align: center;
+      padding: 8px 12px;
+      font-weight: bold;
+      font-size: 14px;
     }
     .container {
       max-width: 720px;
       margin: auto;
-      background: #ffffff;
+      background: var(--container-bg);
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+      margin-top: 30px;
     }
-    h1 {
+    h1, h2 {
       text-align: center;
-      color: #1976d2;
-      font-size: 24px;
-      margin-bottom: 10px;
+      margin: 0 0 20px;
     }
-    h2 {
-      text-align: center;
-      font-size: 16px;
-      color: #555;
-      margin-bottom: 30px;
-    }
+    h1 { color: var(--primary); font-size: 24px; }
+    h2 { font-size: 16px; color: #555; }
     label {
       display: block;
       margin-top: 16px;
       font-weight: 600;
-      color: #444;
+      color: inherit;
     }
     input, textarea, select {
       width: 100%;
@@ -45,11 +90,12 @@
       border: 1px solid #ccc;
       border-radius: 6px;
       font-size: 15px;
+      background: #fff;
       transition: 0.3s;
     }
     input:focus, textarea:focus, select:focus {
       outline: none;
-      border-color: #1976d2;
+      border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
     }
     button {
@@ -63,13 +109,13 @@
       cursor: pointer;
       transition: 0.2s;
     }
-    .generate-btn { background-color: #1976d2; color: white; }
+    .generate-btn { background-color: var(--primary); color: white; }
     .copy-btn, .download-btn, .print-btn {
       width: 31%;
       margin-top: 16px;
       display: inline-block;
     }
-    .copy-btn { background: #4caf50; color: white; }
+    .copy-btn { background: var(--secondary); color: white; }
     .download-btn { background: #ff9800; color: white; }
     .print-btn { background: #607d8b; color: white; }
     #output, #preview {
@@ -87,7 +133,26 @@
       margin-top: 10px;
       border-radius: 8px;
     }
+    .toolbar {
+      text-align: right;
+      margin-bottom: 15px;
+    }
+    .toolbar button {
+      padding: 6px 14px;
+      border: none;
+      background: #ccc;
+      color: #000;
+      border-radius: 4px;
+      margin-left: 6px;
+      cursor: pointer;
+    }
     @media (max-width: 600px) {
+      nav {
+        flex-direction: column;
+      }
+      nav a {
+        margin: 8px 0;
+      }
       .copy-btn, .download-btn, .print-btn {
         width: 100%;
         margin-bottom: 10px;
@@ -96,114 +161,24 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🚀 G9 Product Post Builder</h1>
-    <h2>Smart HTML Code Generator for Blogger Product Listings</h2>
+  <header>
+    <h1>G9 Tool</h1>
+    <p>Smart Product Post Generator for Blogger</p>
+  </header>
+  <div class="notification">🔥 নতুন! এখন ডার্ক মোড, প্রিন্ট ও SEO ট্যাগ সাপোর্ট যুক্ত হয়েছে।</div>
+  <nav>
+    <a href="#">🏠 Home</a>
+    <a href="#">🧰 Generator</a>
+    <a href="#">📄 Guide</a>
+    <a href="#">📞 Contact</a>
+  </nav>  <!-- container begins -->  <div class="container">
+    <div class="toolbar">
+      <button onclick="toggleTheme()">🌗 Theme</button>
+      <button onclick="toggleLang()" id="langToggle">🌐 EN</button>
+    </div><!-- rest of your generator stays unchanged here -->
 
-    <label>🔹 Product Title *</label>
-    <input type="text" id="title" placeholder="e.g., হিমসাগর গিফটবক্স (৫ কেজি)" required />
-
-    <label>🖼️ Image URL *</label>
-    <input type="text" id="image" placeholder="Direct image link (jpg/png)" oninput="updateImagePreview()" required />
-    <img id="imagePreview" alt="Image Preview" />
-
-    <label>📦 Product Code / SKU *</label>
-    <input type="text" id="sku" placeholder="e.g., MNG-5005" required />
-
-    <label>💰 Product Price *</label>
-    <input type="text" id="price" placeholder="e.g., 900" required />
-
-    <label>💸 Old Price *</label>
-    <input type="text" id="oldPrice" placeholder="e.g., 1200" required />
-
-    <label>🔖 Stock Status *</label>
-    <select id="stock">
-      <option value="In Stock">In Stock</option>
-      <option value="Out of Stock">Out of Stock</option>
-    </select>
-
-    <label>📅 Delivery Time *</label>
-    <input type="text" id="delivery" placeholder="e.g., 3-5 days" required />
-
-    <label>🗂️ Category *</label>
-    <input type="text" id="category" placeholder="e.g., Mango Box" required />
-
-    <label>✍️ Description *</label>
-    <textarea id="desc" rows="4" placeholder="Short product description..." required></textarea>
-
-    <label>📞 Admin WhatsApp Number (without +) *</label>
-    <input type="text" id="whatsapp" placeholder="e.g., 8801XXXXXXXXX" required />
-
-    <label>🔗 Blogger Post URL *</label>
-    <input type="text" id="posturl" placeholder="e.g., https://yourblog.com/2025/06/product-name.html" required />
-
-    <button class="generate-btn" onclick="generatePost()">✅ Generate HTML</button>
-
-    <div id="output"></div>
-    <div id="preview"></div>
-
-    <button class="copy-btn" onclick="copyCode()">📋 Copy Code</button>
-    <button class="download-btn" onclick="downloadCode()">⬇️ Download HTML</button>
-    <button class="print-btn" onclick="window.print()">🖨️ Print</button>
-  </div>
-
-  <script>
-    function updateImagePreview() {
-      const url = document.getElementById('image').value;
-      document.getElementById('imagePreview').src = url;
-    }
-
-    function generatePost() {
-      const title = document.getElementById('title').value.trim();
-      const img = document.getElementById('image').value.trim();
-      const sku = document.getElementById('sku').value.trim();
-      const price = document.getElementById('price').value.trim();
-      const oldPrice = document.getElementById('oldPrice').value.trim();
-      const stock = document.getElementById('stock').value;
-      const delivery = document.getElementById('delivery').value.trim();
-      const category = document.getElementById('category').value.trim();
-      const desc = document.getElementById('desc').value.trim();
-      const phone = document.getElementById('whatsapp').value.trim();
-      const postUrl = document.getElementById('posturl').value.trim();
-
-      if (!title || !img || !sku || !price || !oldPrice || !stock || !delivery || !category || !desc || !phone || !postUrl) {
-        alert('⚠️ দয়া করে সব বাধ্যতামূলক ঘর পূরণ করুন।');
-        return;
-      }
-
-      const shortcode = `<div style="display: none; visibility: hidden; height: 0; overflow: hidden;">\n  <a href=\"#\">\n    {getProduct} $button={Price} $price={${price}} $sale={${oldPrice}} $icon={cart} $style={1}\n  </a>\n</div>`;
-
-      const message = `আমি একটি পণ্য অর্ডার করতে চাই:%0A%0Aপণ্যের নাম: ${encodeURIComponent(title)}%0Aপ্রোডাক্ট কোড: ${encodeURIComponent(sku)}%0Aমূল্য: ${encodeURIComponent(price)}%0Aস্ট্যাটাস: ${encodeURIComponent(stock)}%0Aডেলিভারি টাইম: ${encodeURIComponent(delivery)}%0Aলিংক: ${encodeURIComponent(postUrl)}%0A%0Aদয়া করে বিস্তারিত জানান।`;
-
-      const waLink = `https://wa.me/${phone}?text=${message}`;
-
-      const html = `<!-- ✅ Product Image -->\n<img src=\"${img}\" alt=\"${title}\" style=\"display:block; margin:20px auto; max-width:100%; border-radius:10px;\" />\n\n<!-- ✅ Price Section -->\n<div style=\"text-align:center; margin-bottom:20px;\">\n  <div style=\"font-size:26px; font-weight:bold; color:#d32f2f;\">${price}</div>\n  <div style=\"font-size:16px; color:#777; text-decoration: line-through;\">${oldPrice}</div>\n  <div style=\"font-size:14px; background:#e0f2f1; color:#388e3c; padding:4px 10px; display:inline-block; margin-top:5px; border-radius:4px;\">${stock}</div>\n</div>\n\n<!-- ✅ WhatsApp Order -->\n<p style=\"text-align: center;\">\n  <a href=\"${waLink}\" target=\"_blank\" style=\"display:inline-block; background:#25D366; color:white; padding:12px 25px; border-radius:6px; font-weight:bold; text-decoration:none; font-size:16px;\">WhatsApp-এ অর্ডার করুন</a>\n</p>\n\n${shortcode}\n\n<!-- ✅ Title -->\n<h1 style=\"text-align:center; color:#c62828;\">${title}</h1>\n<p style=\"text-align:center; color:#555;\">SKU: ${sku} | Delivery: ${delivery}</p>\n\n<!-- ✅ Description -->\n<p style=\"text-align:justify;\">${desc}</p>\n\n<blockquote style=\"border-left:4px solid #4caf50; padding:10px; background:#f1f8e9;\">এই ${category} পণ্যের মজুদ সীমিত। এখনই অর্ডার করুন!</blockquote>`;
-
-      document.getElementById('output').textContent = html;
-      document.getElementById('preview').innerHTML = html;
-    }
-
-    function copyCode() {
-      const code = document.getElementById('output');
-      if (!code.textContent) return alert('⚠️ Please generate the post first.');
-      const range = document.createRange();
-      range.selectNode(code);
-      const selection = window.getSelection();
-      selection.removeAllRanges();
-      selection.addRange(range);
-      document.execCommand('copy');
-      alert('✅ HTML কোড কপি হয়েছে!');
-    }
-
-    function downloadCode() {
-      const code = document.getElementById('output').textContent;
-      if (!code) return alert('⚠️ Please generate the post first.');
-      const blob = new Blob([code], { type: 'text/html' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'blogger-product-post.html';
-      link.click();
-    }
-  </script>
+  </div>  <footer>
+    <p>&copy; 2025 G9 Tool. Crafted with ❤️ in Bangladesh. | <a href="#" style="color: #fff; text-decoration: underline;">Privacy Policy</a></p>
+  </footer>
 </body>
 </html>

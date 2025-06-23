@@ -2,64 +2,75 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Blogger Product Post Generator</title>
+  <title>G9 Tool - Blogger Product Post Generator</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #f0f2f5;
+      background: #eef1f5;
       padding: 20px;
       color: #333;
     }
     .container {
       max-width: 720px;
       margin: auto;
-      background: #fff;
-      padding: 25px 30px;
-      border-radius: 10px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.07);
     }
     h2 {
       text-align: center;
       color: #1976d2;
+      margin-bottom: 20px;
     }
     label {
       display: block;
-      margin-top: 15px;
-      font-weight: bold;
+      margin-top: 16px;
+      font-weight: 600;
+      color: #444;
     }
     input, textarea {
       width: 100%;
-      padding: 10px;
+      padding: 10px 12px;
       margin-top: 6px;
       border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 14px;
+      border-radius: 6px;
+      font-size: 15px;
+      transition: 0.3s;
+    }
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #1976d2;
+      box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
     }
     button {
-      margin-top: 20px;
-      padding: 12px;
+      margin-top: 24px;
+      padding: 14px;
       width: 100%;
       border: none;
       font-size: 16px;
+      font-weight: 600;
       border-radius: 6px;
       cursor: pointer;
+      transition: 0.2s;
     }
     .generate-btn {
       background-color: #1976d2;
       color: white;
     }
     .copy-btn, .download-btn {
-      margin-top: 10px;
       width: 48%;
+      margin-top: 16px;
     }
     .copy-btn { background: #4caf50; color: white; }
     .download-btn { background: #ff9800; color: white; float: right; }
     #output {
       white-space: pre-wrap;
-      background: #f9f9f9;
+      background: #f7f9fc;
       padding: 20px;
       border-radius: 10px;
       margin-top: 30px;
+      border: 1px solid #dbe2ea;
       font-size: 14px;
     }
     @media (max-width: 600px) {
@@ -73,26 +84,29 @@
 </head>
 <body>
   <div class="container">
-    <h2>📦 Blogger Product Post Generator</h2><label>🔹 Product Title *</label>
-<input type="text" id="title" placeholder="e.g., Jamdani Saree" required />
+    <h2>📦 G9 Tool - Blogger Product Post Generator</h2><label>🔹 Product Title *</label>
+<input type="text" id="title" placeholder="e.g., হিমসাগর গিফটবক্স (৫ কেজি)" required />
 
 <label>🖼️ Image URL *</label>
 <input type="text" id="image" placeholder="Direct image link (jpg/png)" required />
 
 <label>💰 Product Price *</label>
-<input type="text" id="price" placeholder="e.g., ৳1999" required />
+<input type="text" id="price" placeholder="e.g., 900" required />
 
 <label>💸 Old Price *</label>
-<input type="text" id="oldPrice" placeholder="e.g., ৳2499" required />
+<input type="text" id="oldPrice" placeholder="e.g., 1200" required />
 
 <label>🗂️ Category *</label>
-<input type="text" id="category" placeholder="e.g., Sarees, Oils..." required />
+<input type="text" id="category" placeholder="e.g., Mango Box" required />
 
 <label>✍️ Description *</label>
 <textarea id="desc" rows="4" placeholder="Short product description..." required></textarea>
 
 <label>📞 Admin WhatsApp Number (without +) *</label>
 <input type="text" id="whatsapp" placeholder="e.g., 8801XXXXXXXXX" required />
+
+<label>🔗 Blogger Post URL *</label>
+<input type="text" id="posturl" placeholder="e.g., https://yourblog.com/2025/06/product-name.html" required />
 
 <button class="generate-btn" onclick="generatePost()">🚀 Generate Post</button>
 
@@ -110,10 +124,10 @@
       const category = document.getElementById('category').value.trim();
       const desc = document.getElementById('desc').value.trim();
       const phone = document.getElementById('whatsapp').value.trim();
-      const postUrl = '<!--POST-LINK-->';
+      const postUrl = document.getElementById('posturl').value.trim();
 
-      if (!title || !img || !price || !oldPrice || !category || !desc || !phone) {
-        alert('⚠️ Please fill in all required fields.');
+      if (!title || !img || !price || !oldPrice || !category || !desc || !phone || !postUrl) {
+        alert('⚠️ দয়া করে সব বাধ্যতামূলক ঘর পূরণ করুন।');
         return;
       }
 
@@ -137,7 +151,7 @@
       selection.removeAllRanges();
       selection.addRange(range);
       document.execCommand('copy');
-      alert('✅ HTML code copied to clipboard!');
+      alert('✅ HTML কোড কপি হয়েছে!');
     }
 
     function downloadCode() {

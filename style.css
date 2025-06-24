@@ -254,3 +254,63 @@ body.light-mode .output-box {
     font-size: 18px;
   }
 }
+.toggle-mode,
+.menu-btn {
+  width: 35px;
+  height: 35px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--primary);
+  color: #000;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.light-mode .toggle-mode,
+body.light-mode .menu-btn {
+  background-color: #333;
+  color: var(--primary);
+}
+button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--btn-radius);
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  color: #fff;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+button.generate {
+  background-color: var(--accent);
+  color: #fff;
+}
+
+button.copy {
+  background-color: #4285f4;
+  color: #fff;
+}
+
+button.download {
+  background-color: var(--danger);
+  color: #fff;
+}
+
+body.light-mode button {
+  color: #fff;
+}
+
+button:hover {
+  opacity: 0.9;
+}

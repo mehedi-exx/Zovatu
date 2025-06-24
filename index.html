@@ -16,7 +16,7 @@
       background: #f9f9f9;
       color: #000;
     }
-    header {
+    header, footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -24,7 +24,7 @@
       background: #000;
       color: #fff;
     }
-    body.light header {
+    body.light header, body.light footer {
       background: #fff;
       color: #000;
     }
@@ -53,9 +53,6 @@
       transition: 0.3s;
       z-index: 999;
     }
-    body.light nav {
-      background: #fff;
-    }
     nav.active {
       left: 0;
     }
@@ -72,14 +69,12 @@
       max-width: 600px;
       margin: 30px auto;
       padding: 20px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      background: #1c1c1c;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
     .form-group {
       margin-bottom: 15px;
-      width: 100%;
     }
     input, select, textarea {
       width: 100%;
@@ -100,7 +95,7 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      margin-top: 10px;
+      margin: 5px 5px 15px 0;
     }
     .generate-btn { background: #28a745; color: #fff; }
     .copy-btn { background: #007bff; color: #fff; }
@@ -141,6 +136,7 @@
       <li>🅱️ ফুল টিউটোরিয়াল</li>
     </ul>
   </nav>
+
   <div class="container">
     <div class="form-group"><input id="pname" type="text" placeholder="প্রোডাক্ট নাম"></div>
     <div class="form-group"><input id="pcode" type="text" placeholder="প্রোডাক্ট কোড"></div>
@@ -163,6 +159,11 @@
     <div id="copied-msg">✅ কোড কপি হয়েছে!</div>
     <div class="preview" id="preview"></div>
   </div>
+
+  <footer>
+    <p>© 2025 G9Tool. All rights reserved.</p>
+  </footer>
+
   <script>
     function toggleMenu() {
       document.getElementById("sidebar").classList.toggle("active");
@@ -187,34 +188,26 @@
         return;
       }
 
+      const priceHTML = offer ? `<del>৳${price}</del> <strong style="color:#ff5252;">৳${offer}</strong>` : `৳${price}`;
+
       const html = `
-<!-- ✅ Product Image & Title -->
 <div style="text-align:center;">
   <img src="${imgurl}" style="max-width:100%;border-radius:10px;margin-bottom:10px;" alt="${name}" />
   <h2 style="margin:5px 0;">${name}</h2>
-  <p style="font-size:16px;">৳${price}</p>
+  <p style="font-size:16px;">${priceHTML}</p>
 </div>
-
-<!-- ✅ WhatsApp Order Button -->
 <p style="text-align:center;margin:10px 0;">
-  <a href="https://wa.me/${wa}?text=📦 আমি একটি পণ্য অর্ডার করতে চাই:%0A🔖 প্রোডাক্ট: ${name}%0A💰 মূল্য: ৳${price}%0A🧾 কোড: ${code}%0A📁 ক্যাটাগরি: ${category}%0A🚚 ডেলিভারি টাইম: ${delivery}" target="_blank"
-    style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
+  <a href="https://wa.me/${wa}?text=📦 আমি একটি পণ্য অর্ডার করতে চাই:%0A🔖 প্রোডাক্ট: ${name}%0A💰 মূল্য: ৳${offer || price}%0A🧾 কোড: ${code}%0A📁 ক্যাটাগরি: ${category}%0A🚚 ডেলিভারি টাইম: ${delivery}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
     📲 অর্ডার করুন WhatsApp এ
   </a>
 </p>
-
-<!-- ✅ Details List -->
 <ul>
   <li>🔢 কোড: ${code}</li>
   <li>📦 স্ট্যাটাস: ${stock}</li>
   <li>📁 ক্যাটাগরি: ${category}</li>
   <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
 </ul>
-
-<!-- ✅ Description -->
 <p>${desc}</p>
-
-<!-- ✅ Hidden Shortcode (Amazen Theme Support) -->
 <p style="display:none;">
   <a href="#">
     {getProduct} $button={Price} $price={৳${price}} $sale={৳${offer || price}} $icon={cart} $style={1}

@@ -1,210 +1,238 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>G9Tool</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --bg-color: #fff;
-      --text-color: #000;
-      --input-bg: #f1f1f1;
-      --border: #ccc;
-    }
-    [data-theme="dark"] {
-      --bg-color: #121212;
-      --text-color: #fff;
-      --input-bg: #1f1f1f;
-      --border: #444;
-    }
     body {
-      font-family: 'Noto Sans Bengali', sans-serif;
-      background: var(--bg-color);
-      color: var(--text-color);
+      font-family: Arial, sans-serif;
       margin: 0;
-      padding: 0;
+      background: #121212;
+      color: #fff;
+      transition: background 0.3s, color 0.3s;
     }
-    header, footer {
-      background: var(--bg-color);
-      border-bottom: 1px solid var(--border);
+    body.light {
+      background: #f9f9f9;
+      color: #000;
+    }
+    header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.5rem 1rem;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      padding: 10px 15px;
+      background: #000;
+      color: #fff;
     }
-    .logo {
-      display: flex;
-      align-items: center;
-      font-weight: bold;
-      font-size: 1.2rem;
+    body.light header {
+      background: #fff;
+      color: #000;
     }
-    .logo span {
-      margin-left: 0.5rem;
-    }
-    .theme-toggle {
-      background: var(--input-bg);
+    .menu-btn, .close-btn, .mode-toggle {
+      background: #333;
       border: none;
+      color: #fff;
       border-radius: 50%;
       width: 36px;
       height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      font-size: 18px;
       cursor: pointer;
     }
-    .menu-toggle {
-      background: var(--input-bg);
-      border: none;
-      border-radius: 50%;
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
+    body.light .menu-btn, body.light .close-btn, body.light .mode-toggle {
+      background: #ddd;
+      color: #000;
     }
     nav {
-      background: var(--bg-color);
+      background: #1e1e1e;
       position: fixed;
       top: 0;
       left: -100%;
-      width: 200px;
+      width: 250px;
       height: 100%;
-      padding-top: 60px;
-      transition: left 0.3s;
+      padding: 20px;
+      transition: 0.3s;
       z-index: 999;
     }
-    nav.active { left: 0; }
-    nav ul { list-style: none; padding: 0; }
-    nav ul li { padding: 1rem; border-bottom: 1px solid var(--border); }
-    nav ul li a { color: var(--text-color); text-decoration: none; display: flex; align-items: center; }
-    nav ul li a span { margin-left: 0.5rem; }
-    main {
-      padding: 1rem;
+    body.light nav {
+      background: #fff;
+    }
+    nav.active {
+      left: 0;
+    }
+    nav ul {
+      list-style: none;
+      padding: 0;
+    }
+    nav li {
+      padding: 10px 0;
+      font-size: 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .container {
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
     .form-group {
-      margin-bottom: 1rem;
-    }
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
+      margin-bottom: 15px;
       width: 100%;
-      padding: 0.5rem;
-      background: var(--input-bg);
-      border: 1px solid var(--border);
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
       border-radius: 10px;
-      color: var(--text-color);
+      border: none;
+      outline: none;
+      background: #2a2a2a;
+      color: #fff;
+    }
+    body.light input, body.light select, body.light textarea {
+      background: #fff;
+      color: #000;
+      border: 1px solid #ccc;
     }
     .btn {
-      padding: 0.5rem 1rem;
-      background: #008744;
-      color: #fff;
+      padding: 10px 20px;
       border: none;
       border-radius: 10px;
       cursor: pointer;
+      margin-top: 10px;
     }
-    .output-box {
-      background: var(--input-bg);
-      padding: 1rem;
+    .generate-btn { background: #28a745; color: #fff; }
+    .copy-btn { background: #007bff; color: #fff; }
+    .preview {
+      margin-top: 20px;
+      padding: 10px;
+      background: #333;
       border-radius: 10px;
+      word-wrap: break-word;
       white-space: pre-wrap;
-      margin-top: 1rem;
     }
-    .copy-btn {
-      margin-top: 0.5rem;
-      background: #555;
+    body.light .preview {
+      background: #eee;
+      color: #000;
+    }
+    #copied-msg {
+      display: none;
+      margin-top: 10px;
+      color: limegreen;
+      font-weight: bold;
+      text-align: center;
     }
   </style>
 </head>
-<body data-theme="light">
+<body>
   <header>
-    <button class="menu-toggle">☰</button>
-    <div class="logo">📦 <span>G9Tool</span></div>
-    <button class="theme-toggle">🌙</button>
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <h1>📦 G9Tool</h1>
+    <button class="mode-toggle" onclick="toggleMode()">🌙</button>
   </header>
-
   <nav id="sidebar">
+    <button class="close-btn" onclick="toggleMenu()">✕</button>
     <ul>
-      <li><a href="#"><span>🏠 হোম</span></a></li>
-      <li><a href="#"><span>ℹ️ এবাউট</span></a></li>
-      <li><a href="#"><span>📞 কন্টাক্টস</span></a></li>
-      <li><a href="#"><span>📃 প্রাইভেসি পলিসি</span></a></li>
-      <li><a href="#"><span>🅱️ ফুল টিউটোরিয়াল</span></a></li>
+      <li>🏠 হোম</li>
+      <li>ℹ️ এবাউট</li>
+      <li>📞 কন্টাক্টস</li>
+      <li>📃 প্রাইভেসি পলিসি</li>
+      <li>🅱️ ফুল টিউটোরিয়াল</li>
     </ul>
   </nav>
-
-  <main>
-    <div class="form-group"><input type="text" id="productName" placeholder="প্রোডাক্ট নাম"></div>
-    <div class="form-group"><input type="text" id="productCode" placeholder="প্রোডাক্ট কোড"></div>
-    <div class="form-group"><input type="text" id="price" placeholder="মূল্য প্রাইস (৳)"></div>
-    <div class="form-group"><input type="text" id="offerPrice" placeholder="অফার প্রাইস (ঐচ্ছিক)"></div>
-    <div class="form-group"><input type="text" id="deliveryTime" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)"></div>
+  <div class="container">
+    <div class="form-group"><input id="pname" type="text" placeholder="প্রোডাক্ট নাম"></div>
+    <div class="form-group"><input id="pcode" type="text" placeholder="প্রোডাক্ট কোড"></div>
+    <div class="form-group"><input id="price" type="text" placeholder="মূল্য প্রাইস (৳)"></div>
+    <div class="form-group"><input id="offer" type="text" placeholder="অফার প্রাইস (ঐচ্ছিক)"></div>
+    <div class="form-group"><input id="delivery" type="text" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)"></div>
     <div class="form-group">
-      <select id="stockStatus">
-        <option value="In Stock">In Stock</option>
-        <option value="Out of Stock">Out of Stock</option>
+      <select id="stock">
+        <option value="">স্ট্যাটাস নির্বাচন করুন</option>
+        <option>In Stock</option>
+        <option>Out of Stock</option>
       </select>
     </div>
-    <div class="form-group"><input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)"></div>
-    <div class="form-group"><textarea id="description" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea></div>
-    <div class="form-group"><input type="text" id="imageUrl" placeholder="ছবির লিংক (Image URL)"></div>
-    <div class="form-group"><input type="text" id="whatsapp" placeholder="Admin WhatsApp নম্বর (8801XXXXXXXXX)"></div>
-    <button class="btn" onclick="generateCode()">🔧 কোড জেনারেট করুন</button>
-
-    <div class="output-box" id="output"></div>
+    <div class="form-group"><input id="category" type="text" placeholder="ক্যাটাগরি (যেমন: শাড়ি)"></div>
+    <div class="form-group"><textarea id="desc" rows="3" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea></div>
+    <div class="form-group"><input id="imgurl" type="text" placeholder="ছবির লিংক (Image URL)"></div>
+    <div class="form-group"><input id="wa" type="text" placeholder="Admin WhatsApp নম্বর (8801XXXXXXXXX)"></div>
+    <button class="btn generate-btn" onclick="generateCode()">✅ কোড জেনারেট করুন</button>
     <button class="btn copy-btn" onclick="copyCode()">📋 কপি করুন</button>
-  </main>
-
+    <div id="copied-msg">✅ কোড কপি হয়েছে!</div>
+    <div class="preview" id="preview"></div>
+  </div>
   <script>
-    const themeToggle = document.querySelector('.theme-toggle');
-    themeToggle.addEventListener('click', () => {
-      const body = document.body;
-      const isDark = body.getAttribute('data-theme') === 'dark';
-      body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-      themeToggle.textContent = isDark ? '🌙' : '☀️';
-    });
-
-    document.querySelector('.menu-toggle').addEventListener('click', () => {
-      document.getElementById('sidebar').classList.toggle('active');
-    });
-
+    function toggleMenu() {
+      document.getElementById("sidebar").classList.toggle("active");
+    }
+    function toggleMode() {
+      document.body.classList.toggle("light");
+    }
     function generateCode() {
-      const name = document.getElementById('productName').value;
-      const code = document.getElementById('productCode').value;
+      const name = document.getElementById('pname').value;
+      const code = document.getElementById('pcode').value;
       const price = document.getElementById('price').value;
-      const offer = document.getElementById('offerPrice').value;
-      const delivery = document.getElementById('deliveryTime').value;
-      const stock = document.getElementById('stockStatus').value;
+      const offer = document.getElementById('offer').value;
+      const delivery = document.getElementById('delivery').value;
+      const stock = document.getElementById('stock').value;
       const category = document.getElementById('category').value;
-      const desc = document.getElementById('description').value;
-      const img = document.getElementById('imageUrl').value;
-      const wa = document.getElementById('whatsapp').value;
+      const desc = document.getElementById('desc').value;
+      const imgurl = document.getElementById('imgurl').value;
+      const wa = document.getElementById('wa').value;
 
-      const codeBlock = `
-<!-- G9Tool Generated -->
-<div class="product-box">
-  <img src="${img}" alt="${name}"/>
-  <h2>${name}</h2>
-  <p>কোড: ${code}</p>
-  <p>মূল্য: ৳${price}${offer ? ` (অফার: ৳${offer})` : ''}</p>
-  <p>ডেলিভারি টাইম: ${delivery}</p>
-  <p>স্ট্যাটাস: ${stock}</p>
-  <p>ক্যাটাগরি: ${category}</p>
-  <p>${desc}</p>
-  <a href="https://wa.me/${wa}?text=প্রোডাক্ট: ${name}" target="_blank">WhatsApp Order</a>
-</div>`;
+      if (!name || !code || !price || !stock || !category || !imgurl || !wa) {
+        alert("⚠️ সকল প্রয়োজনীয় ঘর পূরণ করুন।");
+        return;
+      }
 
-      document.getElementById('output').innerText = codeBlock;
+      const html = `
+<!-- ✅ Product Image & Title -->
+<div style="text-align:center;">
+  <img src="${imgurl}" style="max-width:100%;border-radius:10px;margin-bottom:10px;" alt="${name}" />
+  <h2 style="margin:5px 0;">${name}</h2>
+  <p style="font-size:16px;">৳${price}</p>
+</div>
+
+<!-- ✅ WhatsApp Order Button -->
+<p style="text-align:center;margin:10px 0;">
+  <a href="https://wa.me/${wa}?text=📦 আমি একটি পণ্য অর্ডার করতে চাই:%0A🔖 প্রোডাক্ট: ${name}%0A💰 মূল্য: ৳${price}%0A🧾 কোড: ${code}%0A📁 ক্যাটাগরি: ${category}%0A🚚 ডেলিভারি টাইম: ${delivery}" target="_blank"
+    style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
+    📲 অর্ডার করুন WhatsApp এ
+  </a>
+</p>
+
+<!-- ✅ Details List -->
+<ul>
+  <li>🔢 কোড: ${code}</li>
+  <li>📦 স্ট্যাটাস: ${stock}</li>
+  <li>📁 ক্যাটাগরি: ${category}</li>
+  <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
+</ul>
+
+<!-- ✅ Description -->
+<p>${desc}</p>
+
+<!-- ✅ Hidden Shortcode (Amazen Theme Support) -->
+<p style="display:none;">
+  <a href="#">
+    {getProduct} $button={Price} $price={৳${price}} $sale={৳${offer || price}} $icon={cart} $style={1}
+  </a>
+</p>
+`;
+
+      document.getElementById('preview').innerText = html;
+      document.getElementById('copied-msg').style.display = "none";
     }
 
     function copyCode() {
-      const output = document.getElementById('output');
-      navigator.clipboard.writeText(output.innerText).then(() => {
-        alert("✅ কপি সম্পন্ন হয়েছে!");
+      const code = document.getElementById("preview").innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        document.getElementById('copied-msg').style.display = "block";
+        setTimeout(() => {
+          document.getElementById('copied-msg').style.display = "none";
+        }, 3000);
       });
     }
   </script>

@@ -1,54 +1,44 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>G9Tool</title>
+  <title>G9Tool - Blogger Product Generator</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="dark">
-
-  <!-- Header -->
-  <header class="header">
-    <button id="menu-toggle" class="circle-btn">☰</button>
-    <div class="logo"><span>📦 <strong>G9Tool</strong></span></div>
-    <button id="theme-toggle" class="circle-btn">🌙</button>
+  <header>
+    <button class="menu-btn" onclick="toggleMenu()">☰</button>
+    <div class="logo">📦 G9Tool</div>
+    <button class="toggle-mode" onclick="toggleMode()">🌙</button>
   </header>
 
-  <!-- Sidebar -->
-  <nav id="sidebar" class="sidebar hidden">
-    <a href="#">📘 গাইডলাইন</a>
-    <a href="#">📞 যোগাযোগ</a>
-  </nav>
+  <aside class="sidebar" id="sidebar">
+    <a href="#">📘 How to Post on Blogger</a>
+    <a href="#">📌 Instructions</a>
+    <a href="#">🛠️ Support</a>
+  </aside>
 
-  <!-- Main -->
-  <main class="container">
-    <h1>🛠️ Blogger Product Generator</h1>
-
-    <form id="product-form">
-      <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required />
-      <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required />
-      <input type="number" id="price" placeholder="মূল্য প্রাইস (৳)" required />
-      <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)" />
-      <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)" />
-      <select id="stock">
-        <option>In Stock</option>
-        <option>Out of Stock</option>
-      </select>
-      <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)" />
-      <textarea id="desc" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
-      <input type="url" id="image" placeholder="ছবির লিংক (Image URL)" />
-      <input type="text" id="admin" placeholder="Admin WhatsApp নম্বর (8801XXXXXXXXX)" required />
-
-      <div class="buttons">
-        <button type="button" id="generate">✅ Generate</button>
-        <button type="button" id="copy">📋 Copy</button>
-        <button type="button" id="download">⬇️ Download</button>
-      </div>
+  <main>
+    <h1>Product Post Generator</h1>
+    <form id="productForm">
+      <input type="text" id="title" placeholder="Product Name" required />
+      <input type="text" id="price" placeholder="Product Price" required />
+      <input type="text" id="offer" placeholder="Offer Price (optional)" />
+      <input type="text" id="code" placeholder="Product Code (SKU)" required />
+      <input type="text" id="category" placeholder="Product Category" required />
+      <input type="text" id="stock" placeholder="Stock Status" required />
+      <input type="text" id="delivery" placeholder="Delivery Time (optional)" />
+      <textarea id="desc" placeholder="Short Product Description" required></textarea>
     </form>
 
-    <!-- Output Preview -->
-    <div id="output" class="output-box"></div>
+    <div class="buttons">
+      <button class="generate" onclick="generateCode()">Generate</button>
+      <button class="copy" onclick="copyCode()">Copy</button>
+      <button class="download" onclick="downloadCode()">Download</button>
+    </div>
+
+    <div class="output-box" id="outputBox"></div>
   </main>
 
   <script src="script.js"></script>

@@ -1,165 +1,174 @@
 <!DOCTYPE html>
 <html lang="bn">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>G9Tool - Blogger Product Generator</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <title>G9Tool</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap">
   <style>
-    :root {
-      --bg-light: #ffffff;
-      --bg-dark: #121212;
-      --text-light: #000000;
-      --text-dark: #ffffff;
-      --primary: #f0f0f0;
-      --button: #eeeeee;
-    }
-
-    body {
-      font-family: 'Segoe UI', sans-serif;
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      background-color: var(--bg-light);
-      color: var(--text-light);
-      transition: 0.3s;
+      font-family: 'Noto Sans Bengali', sans-serif;
     }
-
+    body {
+      background-color: #f9f9f9;
+      color: #111;
+      transition: all 0.3s ease;
+    }
     body.dark {
-      background-color: var(--bg-dark);
-      color: var(--text-dark);
+      background-color: #111;
+      color: #f9f9f9;
     }
-
     header {
-      background: #000;
-      color: #fff;
-      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #fff;
+      border-bottom: 1px solid #ccc;
+    }
+    body.dark header {
+      background-color: #1c1c1c;
+      border-color: #333;
+    }
+    .logo {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 1000;
-    }
-
-    .menu-btn, .theme-toggle {
-      background: #333;
-      color: #fff;
-      padding: 10px;
-      border: none;
-      border-radius: 50%;
-      font-size: 18px;
-      cursor: pointer;
-    }
-
-    .logo {
-      font-size: 20px;
+      gap: 8px;
       font-weight: bold;
     }
-
-    aside {
+    .logo-icon {
+      font-size: 20px;
+    }
+    .menu-icon, .theme-toggle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background-color: #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    body.dark .menu-icon, body.dark .theme-toggle {
+      background-color: #333;
+    }
+    .theme-toggle::before {
+      content: '\1F319';
+      font-size: 18px;
+    }
+    .sidebar {
       position: fixed;
-      top: 60px;
+      top: 0;
       left: -260px;
       width: 250px;
+      height: 100vh;
       background: #222;
-      height: 100%;
-      color: #fff;
-      padding-top: 20px;
-      transition: left 0.3s;
+      color: white;
+      padding-top: 60px;
+      transition: left 0.3s ease;
+      z-index: 1000;
     }
-
-    aside.active {
+    .sidebar.active {
       left: 0;
     }
-
-    aside a {
+    .sidebar a {
       display: block;
-      color: #fff;
-      text-decoration: none;
       padding: 12px 20px;
+      text-decoration: none;
+      color: white;
       border-bottom: 1px solid #333;
     }
-
-    aside a i {
-      margin-right: 8px;
+    .sidebar a:hover {
+      background-color: #333;
     }
-
-    main {
-      padding: 90px 20px 30px;
-      max-width: 600px;
+    .form-container {
+      padding: 20px;
+      max-width: 500px;
       margin: auto;
     }
-
-    input, textarea, select, button {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      font-size: 16px;
+    .form-group {
+      margin-bottom: 15px;
     }
-
-    .btn-group button {
-      margin-top: 10px;
-      background: var(--button);
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+    body.dark input, body.dark select, body.dark textarea {
+      background: #1f1f1f;
+      color: white;
+      border-color: #444;
+    }
+    .button-group {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
       border: none;
+      border-radius: 8px;
+      background-color: #333;
+      color: white;
       cursor: pointer;
     }
-
-    .btn-group button:hover {
-      opacity: 0.9;
+    button:hover {
+      background-color: #555;
     }
   </style>
 </head>
-
 <body>
+  <div class="sidebar" id="sidebar">
+    <a href="#">🏠 হোম</a>
+    <a href="#">ℹ️ এবাউট</a>
+    <a href="#">📞 কন্টাক্টস</a>
+    <a href="#">📃 প্রাইভেসি পলিসি</a>
+    <a href="#">🅱️ ফুল টিউটোরিয়াল</a>
+  </div>
   <header>
-    <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
-    <div class="logo"><i class="fas fa-box"></i> G9Tool</div>
-    <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+    <div class="menu-icon" onclick="toggleMenu()">☰</div>
+    <div class="logo"><span class="logo-icon">📦</span> G9Tool</div>
+    <div class="theme-toggle" onclick="toggleTheme()"></div>
   </header>
-
-  <aside id="sidebar">
-    <a href="#"><i class="fas fa-home"></i> হোম</a>
-    <a href="#"><i class="fas fa-info-circle"></i> এবাউট</a>
-    <a href="#"><i class="fas fa-phone"></i> কন্টাক্টস</a>
-    <a href="#"><i class="fas fa-file-alt"></i> প্রাইভেসি পলিসি</a>
-    <a href="#"><i class="fab fa-blogger"></i> ফুল টিউটোরিয়াল</a>
-  </aside>
-
-  <main>
-    <h2>🛠️ Blogger Product Generator</h2>
-    <input type="text" placeholder="প্রোডাক্ট নাম" />
-    <input type="text" placeholder="প্রোডাক্ট কোড" />
-    <input type="text" placeholder="মূল্য প্রাইস (৳)" />
-    <input type="text" placeholder="অফার প্রাইস (ঐচ্ছিক)" />
-    <input type="text" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)" />
-    <select>
-      <option>In Stock</option>
-      <option>Out of Stock</option>
-    </select>
-    <input type="text" placeholder="ক্যাটাগরি (যেমন: শাড়ি)" />
-    <textarea placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
-    <input type="text" placeholder="ছবির লিংক (Image URL)" />
-    <input type="text" placeholder="Admin WhatsApp নম্বর (8801XXXXXXXXXX)" />
-    <div class="btn-group">
-      <button>✅ Generate</button>
-      <button>📋 Copy</button>
-      <button>⬇️ Download</button>
+  <main class="form-container">
+    <div class="form-group"><input type="text" placeholder="প্রোডাক্ট নাম"></div>
+    <div class="form-group"><input type="text" placeholder="প্রোডাক্ট কোড"></div>
+    <div class="form-group"><input type="text" placeholder="মূল্য প্রাইস (৳)"></div>
+    <div class="form-group"><input type="text" placeholder="অফার প্রাইস (ঐচ্ছিক)"></div>
+    <div class="form-group"><input type="text" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)"></div>
+    <div class="form-group">
+      <select>
+        <option>স্ট্যাটাস নির্বাচন করুন</option>
+        <option>In Stock</option>
+        <option>Out of Stock</option>
+      </select>
+    </div>
+    <div class="form-group"><input type="text" placeholder="ক্যাটাগরি (যেমন: শাড়ি)"></div>
+    <div class="form-group"><textarea placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea></div>
+    <div class="form-group"><input type="text" placeholder="ছবির লিংক (Image URL)"></div>
+    <div class="form-group"><input type="text" placeholder="Admin WhatsApp নম্বর (8801XXXXXXXXX)"></div>
+    <div class="button-group">
+      <button>Generate</button>
+      <button>Copy</button>
+      <button>Download</button>
     </div>
   </main>
-
   <script>
+    const body = document.body;
+    const sidebar = document.getElementById('sidebar');
     function toggleMenu() {
-      document.getElementById("sidebar").classList.toggle("active");
+      sidebar.classList.toggle('active');
     }
     function toggleTheme() {
-      document.body.classList.toggle("dark");
+      body.classList.toggle('dark');
     }
   </script>
 </body>
-
 </html>

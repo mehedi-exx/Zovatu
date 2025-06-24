@@ -1,77 +1,72 @@
-document.getElementById("themeToggle").addEventListener("click", () => {
-  document.body.classList.toggle("light");
-  document.body.classList.contains("light")
-    ? (themeToggle.textContent = "☀️")
-    : (themeToggle.textContent = "🌙");
+// Load saved theme
+if (localStorage.getItem('theme') === 'light') {
+  document.body.classList.remove('dark');
+  document.body.classList.add('light');
+  document.getElementById('themeToggle').textContent = '☀️';
+}
+
+document.getElementById('themeToggle').addEventListener('click', () => {
+  document.body.classList.toggle('light');
+  const isLight = document.body.classList.contains('light');
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  document.getElementById('themeToggle').textContent = isLight ? '☀️' : '🌙';
 });
 
-document.getElementById("g9Form").addEventListener("submit", (e) => {
+document.getElementById('menuBtn').addEventListener('click', () => {
+  document.getElementById('menu').classList.toggle('hidden');
+});
+
+document.getElementById('productForm').addEventListener('submit', function (e) {
   e.preventDefault();
-  const name = g9Form.name.value.trim();
-  const code = g9Form.code.value.trim();
-  const price = g9Form.price.value.trim();
-  const offer = g9Form.offer.value.trim();
-  const delivery = g9Form.delivery.value.trim();
-  const stock = g9Form.stock.value;
-  const category = g9Form.category.value.trim();
-  const desc = g9Form.description.value.trim();
-  const img = g9Form.image.value.trim();
-  const admin = g9Form.admin.value.trim();
 
-  if (!name || !code || !price || !img || !admin) {
-    alert("অনুগ্রহ করে প্রয়োজনীয় ফিল্ড পূরণ করুন।");
-    return;
-  }
+  const productName = document.getElementById('productName').value;
+  const productCode = document.getElementById('productCode').value;
+  const price = document.getElementById('price').value;
+  const offerPrice = document.getElementById('offerPrice').value;
+  const delivery = document.getElementById('deliveryTime').value;
+  const stock = document.getElementById('stock').value;
+  const category = document.getElementById('category').value;
+  const desc = document.getElementById('description').value;
+  const image = document.getElementById('imageUrl').value;
+  const admin = document.getElementById('adminPhone').value;
 
-  const finalPrice = offer ? `৳${offer} → <strong style="color:#ff5252;">৳${price}</strong>` : `৳${price}`;
-  const details = `
-<img src="${img}" alt="${name}" style="max-width:100%;border-radius:10px;margin-bottom:10px;" />
-<h2 style="text-align:center;margin:5px 0;">${name}</h2>
-<p style="text-align:center;font-size:16px;">${finalPrice}</p>
+  const waMessage = `📦 আমি একটি পণ্য অর্ডার করতে চাই:\n\n📌 পণ্যের নাম: ${productName}\n💰 মূল্য: ৳${price}${offerPrice ? ` (অফার: ৳${offerPrice})` : ""}\n🧾 কোড: ${productCode}\n\n📞 বিস্তারিত জানান।`;
 
-<p style="text-align:center;margin:10px 0;">
-  <a href="https://wa.me/${admin}?text=${encodeURIComponent(`📦 আমি একটি পণ্য অর্ডার করতে চাই:
+  const output = `
+<img src="${image}" style="max-width:100%;border-radius:10px;" />
+<h2 style="text-align:center;">${productName}</h2>
+<p style="text-align:center;">৳${offerPrice || price} ${offerPrice ? `→ <del>৳${price}</del>` : ""}</p>
 
-🛍️ পণ্যের নাম: _${name}_
-💰 মূল্য: _৳${price}_
-🆔 প্রোডাক্ট কোড: _${code}_
-
-📝 দয়া করে বিস্তারিত জানান।`)}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
+<p style="text-align:center;">
+  <a href="https://wa.me/${admin}?text=${encodeURIComponent(waMessage)}"
+     style="background:#25D366;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:bold;">
     📲 অর্ডার করুন WhatsApp এ
   </a>
 </p>
 
-<h3>🧵 প্রোডাক্ট বিস্তারিত:</h3>
 <ul>
-  <li>🔢 কোড: ${code}</li>
+  <li>🔢 কোড: ${productCode}</li>
   <li>📦 স্ট্যাটাস: ${stock}</li>
   <li>📁 ক্যাটাগরি: ${category}</li>
-  ${delivery ? `<li>🚚 ডেলিভারি টাইম: ${delivery}</li>` : ""}
+  ${delivery ? `<li>🚚 ডেলিভারি: ${delivery}</li>` : ""}
 </ul>
-${desc ? `<p>${desc}</p>` : ""}
 
-<!-- ✅ Hidden Shortcode -->
-<p style="display:none;">
-  <a href="#">
-    {getProduct} $button={Price} $price={৳${price}} ${offer ? `$sale={৳${offer}}` : ""} $icon={cart} $style={1}
-  </a>
-</p>
+${desc ? `<p>${desc}</p>` : ""}
+<p style="display:none;"><a href="#"> {getProduct} $button={Price} $price={৳${offerPrice || price}} $sale={৳${price}} $icon={cart} $style={1} </a></p>
 `;
 
-  document.getElementById("output").innerText = finalPrice;
-  document.getElementById("output").innerHTML = details;
+  document.getElementById('output').textContent = output;
 });
 
-document.getElementById("copyBtn").addEventListener("click", () => {
-  const code = document.getElementById("output").innerHTML;
-  navigator.clipboard.writeText(code).then(() => alert("✅ কোড কপি হয়েছে"));
+document.getElementById('copyBtn').addEventListener('click', () => {
+  navigator.clipboard.writeText(document.getElementById('output').textContent);
+  alert("✅ কপি হয়ে গেছে!");
 });
 
-document.getElementById("downloadBtn").addEventListener("click", () => {
-  const code = document.getElementById("output").innerHTML;
-  const blob = new Blob([code], { type: "text/html" });
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  const blob = new Blob([document.getElementById('output').textContent], { type: "text/plain" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  link.download = "product.html";
+  link.download = "product-code.html";
   link.click();
 });

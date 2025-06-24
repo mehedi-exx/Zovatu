@@ -1,5 +1,5 @@
 :root {
-  --bg-light: #f9f9f9;
+  --bg-light: #f5f5f5;
   --bg-dark: #121212;
   --text-light: #1c1c1c;
   --text-dark: #f1f1f1;
@@ -7,64 +7,79 @@
   --accent: #25d366;
   --danger: #ff5252;
   --btn-radius: 12px;
-  --header-height: 58px;
+  --header-height: 60px;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 body {
-  margin: 0;
   font-family: 'Segoe UI', sans-serif;
-  background: var(--bg-dark);
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-dark);
   color: var(--text-dark);
-  transition: 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 
-body.light {
-  background: var(--bg-light);
+body.light-mode {
+  background-color: var(--bg-light);
   color: var(--text-light);
 }
 
 /* Header */
 header {
-  height: var(--header-height);
-  background: #000;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 8px 16px;
+  justify-content: space-between;
+  background-color: #000;
+  padding: 10px 20px;
   position: sticky;
   top: 0;
-  z-index: 999;
+  z-index: 1000;
+  height: var(--header-height);
+  box-shadow: var(--shadow);
 }
 
 .logo {
-  color: var(--primary);
-  font-weight: bold;
   font-size: 20px;
+  font-weight: bold;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .menu-btn,
 .toggle-mode {
   width: 35px;
   height: 35px;
-  background: #2e2e2e;
   border: none;
+  border-radius: 50%;
+  background-color: #2e2e2e;
   color: var(--primary);
   font-size: 18px;
-  border-radius: 50%;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s ease;
+}
+
+.menu-btn:hover,
+.toggle-mode:hover {
+  background-color: #444;
 }
 
 /* Sidebar */
 .sidebar {
   position: fixed;
   top: 0;
-  left: -250px;
+  left: -240px;
+  width: 220px;
+  height: 100vh;
   background: #1a1a1a;
-  width: 230px;
-  height: 100%;
-  padding: 60px 15px;
-  transition: 0.3s ease;
-  z-index: 1000;
+  padding: 60px 20px;
+  transition: left 0.3s ease;
+  z-index: 999;
 }
 
 .sidebar.show {
@@ -72,77 +87,106 @@ header {
 }
 
 .sidebar a {
-  color: white;
-  text-decoration: none;
-  padding: 10px;
+  color: #fff;
+  padding: 12px;
   display: block;
-  margin-bottom: 5px;
+  text-decoration: none;
+  font-size: 15px;
   border-bottom: 1px solid #333;
+}
+
+.sidebar a:hover {
+  background: #333;
 }
 
 /* Main */
 main {
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 15px;
-  background: #1f1f1f;
-  border-radius: 12px;
+  max-width: 650px;
+  margin: 30px auto;
+  padding: 20px;
+  background-color: #1f1f1f;
+  border-radius: 14px;
+  box-shadow: var(--shadow);
 }
 
-body.light main {
-  background: #fff;
+body.light-mode main {
+  background-color: #fff;
 }
 
-/* Form */
+h1 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 25px;
+}
+
 form input,
 form select,
 form textarea {
   width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  background: #2c2c2c;
-  color: white;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  background-color: #2c2c2c;
+  color: #fff;
   border: 1px solid #444;
   border-radius: 10px;
-  font-size: 16px;
+  font-size: 15px;
+  transition: border-color 0.2s;
 }
 
-body.light form input,
-body.light form textarea {
-  background: #f5f5f5;
+form input:focus,
+form textarea:focus {
+  border-color: var(--primary);
+  outline: none;
+}
+
+body.light-mode form input,
+body.light-mode form select,
+body.light-mode form textarea {
+  background-color: #f9f9f9;
   color: #000;
   border: 1px solid #ccc;
 }
 
-/* Buttons */
+form textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+/* Button Area */
 .buttons {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
-  flex-wrap: wrap;
   margin-top: 20px;
 }
 
 button {
-  padding: 10px 18px;
-  font-weight: bold;
-  font-size: 15px;
-  color: white;
+  padding: 12px 22px;
+  font-size: 16px;
+  font-weight: 600;
   border: none;
   border-radius: var(--btn-radius);
   cursor: pointer;
+  color: #fff;
   transition: 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 button.generate {
-  background: var(--accent);
+  background-color: var(--accent);
 }
+
 button.copy {
-  background: #4285f4;
+  background-color: #4285f4;
 }
+
 button.download {
-  background: var(--danger);
+  background-color: var(--danger);
 }
+
 button:hover {
   opacity: 0.9;
 }
@@ -151,26 +195,46 @@ button:hover {
 .output-box {
   background: #000;
   color: #0f0;
-  padding: 15px;
-  margin-top: 20px;
+  padding: 18px;
+  margin-top: 25px;
   border-radius: 10px;
   font-family: monospace;
+  font-size: 15px;
   white-space: pre-wrap;
+  word-break: break-word;
   display: none;
-  min-height: 100px;
 }
+
 .output-box.show {
   display: block;
 }
-body.light .output-box {
-  background: #f1f1f1;
-  color: #222;
+
+body.light-mode .output-box {
+  background: #f0f0f0;
+  color: #333;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
+  main {
+    margin: 20px 10px;
+    padding: 15px;
+  }
+
+  .logo {
+    font-size: 18px;
+  }
+
+  button {
+    font-size: 15px;
+  }
+
+  form input,
+  form textarea {
+    font-size: 14px;
+  }
+
   .buttons {
     flex-direction: column;
-    align-items: stretch;
   }
 }

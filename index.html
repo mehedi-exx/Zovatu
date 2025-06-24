@@ -2,41 +2,51 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>G9Tool</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="dark">
   <header>
-    <button id="menuBtn" class="circle-btn">☰</button>
-    <h1>📦 <span id="logoText">G9Tool</span></h1>
-    <button id="themeToggle" class="circle-btn">🌙</button>
+    <div class="header-left">
+      <button id="menuBtn">☰</button>
+      <span class="logo">📦 <strong>G9Tool</strong></span>
+    </div>
+    <button id="themeToggle">🌙</button>
   </header>
 
+  <nav id="menu" class="hidden">
+    <ul>
+      <li><a href="#">গাইডলাইন</a></li>
+      <li><a href="#">যোগাযোগ</a></li>
+    </ul>
+  </nav>
+
   <main>
-    <form id="g9Form">
-      <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required />
-      <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required />
+    <h1>🛠️ Blogger Product Generator</h1>
+    <form id="productForm">
+      <input type="text" id="productName" placeholder="প্রোডাক্ট নাম" required />
+      <input type="text" id="productCode" placeholder="প্রোডাক্ট কোড" required />
       <input type="number" id="price" placeholder="মূল্য প্রাইস (৳)" required />
-      <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)" />
-      <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)" />
+      <input type="number" id="offerPrice" placeholder="অফার প্রাইস (ঐচ্ছিক)" />
+      <input type="text" id="deliveryTime" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)" />
       <select id="stock">
         <option value="In Stock">In Stock</option>
         <option value="Out of Stock">Out of Stock</option>
       </select>
-      <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)" required />
+      <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)" />
       <textarea id="description" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
-      <input type="url" id="image" placeholder="ছবির লিংক (Image URL)" required />
-      <input type="tel" id="admin" placeholder="Admin WhatsApp নম্বর (8801XXXXXXXXXX)" required />
+      <input type="url" id="imageUrl" placeholder="ছবির লিংক (Image URL)" />
+      <input type="text" id="adminPhone" placeholder="Admin WhatsApp নম্বর (8801XXXXXXXXX)" required />
 
-      <div class="actions">
+      <div class="btn-group">
         <button type="submit">✅ Generate</button>
         <button type="button" id="copyBtn">📋 Copy</button>
-        <button type="button" id="downloadBtn">⬇️ Download</button>
+        <button type="button" id="downloadBtn">⬇ Download</button>
       </div>
     </form>
 
-    <div id="output"></div>
+    <section id="output" contenteditable="true"></section>
   </main>
 
   <script src="script.js"></script>

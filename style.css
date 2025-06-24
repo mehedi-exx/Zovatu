@@ -1,115 +1,106 @@
-// Theme toggle
-function toggleTheme() {
-  const body = document.body;
-  const themeToggle = document.getElementById("themeToggle");
-  body.classList.toggle("light");
-  const isLight = body.classList.contains("light");
-  themeToggle.textContent = isLight ? "☀️" : "🌙";
-  localStorage.setItem("theme", isLight ? "light" : "dark");
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  transition: background 0.3s, color 0.3s;
 }
 
-// Load saved theme
-window.onload = () => {
-  const saved = localStorage.getItem("theme");
-  if (saved === "light") {
-    document.body.classList.add("light");
-    document.getElementById("themeToggle").textContent = "☀️";
-  }
-};
-
-// Menu toggle
-function toggleMenu() {
-  document.getElementById("menuInfo").classList.toggle("show");
+body.dark {
+  background-color: #111;
+  color: #eee;
 }
 
-// Live image preview (optional – expand if needed)
-function previewImage() {
-  // future use
+body.light {
+  background-color: #fff;
+  color: #111;
 }
 
-// Generate HTML Code
-document.getElementById("g9Form").addEventListener("submit", function (e) {
-  e.preventDefault();
-  const title = document.getElementById("title").value.trim();
-  const sku = document.getElementById("sku").value.trim();
-  const price = document.getElementById("price").value.trim();
-  const offer = document.getElementById("offer").value.trim();
-  const delivery = document.getElementById("delivery").value.trim();
-  const image = document.getElementById("image").value.trim();
-  const desc = document.getElementById("desc").value.trim();
-
-  if (!title || !sku || !price || !image || !desc) {
-    alert("অনুগ্রহ করে সব প্রয়োজনীয় ঘর পূরণ করুন!");
-    return;
-  }
-
-  const offerHTML = offer
-    ? `<div style="font-size: 16px; color: #777; text-decoration: line-through;">৳${price}</div>
-       <div style="font-size: 14px; background: #e0f2f1; color: #388e3c; padding: 4px 10px; display: inline-block; margin-top: 5px; border-radius: 4px;">
-        🏷️ ৳${offer} অফার
-       </div>`
-    : `<div style="font-size: 16px;">৳${price}</div>`;
-
-  const deliveryHTML = delivery ? `<li>⏳ ডেলিভারি: ${delivery}</li>` : "";
-
-  const message = `আমি একটি পণ্য অর্ডার করতে চাই:\n\n📦 পণ্যের নাম: ${title}\n🆔 প্রোডাক্ট কোড: ${sku}\n💰 মূল্য: ৳${offer || price}\n\nদয়া করে বিস্তারিত জানান।`;
-
-  const whatsappLink = `https://wa.me/8801627647776?text=${encodeURIComponent(message)}`;
-
-  const html = `
-<!-- ✅ Product Image -->
-<img src="${image}" alt="${title}" style="display:block; margin:20px auto; max-width:100%; border-radius:10px;" />
-
-<!-- ✅ Price -->
-<div style="text-align:center; margin-bottom:20px;">
-  <div style="font-size: 26px; font-weight: bold; color: #d32f2f;">৳${offer || price}</div>
-  ${offerHTML}
-</div>
-
-<!-- ✅ WhatsApp Order -->
-<p style="text-align: center;">
-  <a href="${whatsappLink}" target="_blank"
-     style="display:inline-block;background:#25D366;color:#fff;padding:12px 25px;border-radius:6px;font-weight:bold;text-decoration:none;font-size:16px;">
-    WhatsApp এ অর্ডার করুন
-  </a>
-</p>
-
-<!-- ✅ Hidden getProduct Shortcode -->
-<p style="display: none;">
-  <a href="#">
-    {getProduct} $button={Price} $price={৳${offer || price}} $sale={৳${price}} $icon={cart} $style={1}
-  </a>
-</p>
-
-<!-- ✅ Product Title -->
-<h1 style="text-align:center; color:#c62828;">${title}</h1>
-
-<!-- ✅ Description -->
-<p style="text-align: justify;">${desc}</p>
-
-<!-- ✅ Product Info -->
-<ul style="list-style:none; padding-left:0;">
-  <li>🔖 প্রোডাক্ট কোড: ${sku}</li>
-  ${deliveryHTML}
-</ul>
-`;
-
-  document.getElementById("output").textContent = html;
-});
-
-// Copy to clipboard
-function copyOutput() {
-  const code = document.getElementById("output").textContent;
-  navigator.clipboard.writeText(code).then(() => alert("✅ কপি সম্পন্ন!"));
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background-color: #1c1c1c;
+  color: white;
 }
 
-// Download as file
-function downloadOutput() {
-  const code = document.getElementById("output").textContent;
-  const blob = new Blob([code], { type: "text/plain" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = "product-post.html";
-  link.click();
+.menu-btn,
+.theme-btn {
+  font-size: 20px;
+  background: #333;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.sidebar {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  background: #222;
+  width: 200px;
+  padding: 15px;
+}
+
+.sidebar.hidden {
+  display: none;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin: 10px 0;
+}
+
+.container {
+  padding: 20px;
+  max-width: 500px;
+  margin: auto;
+}
+
+form input,
+form select,
+form textarea {
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #666;
+  border-radius: 8px;
+  background: #1f1f1f;
+  color: #fff;
+}
+
+form.light input,
+form.light textarea {
+  background: #f9f9f9;
+  color: #000;
+}
+
+.button-group button {
+  padding: 10px 20px;
+  margin: 5px;
+  background: #d32f2f;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.output-box {
+  background: #222;
+  color: #0f0;
+  padding: 15px;
+  margin-top: 20px;
+  white-space: pre-wrap;
+  border-radius: 10px;
+  font-family: monospace;
 }

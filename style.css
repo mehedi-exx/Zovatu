@@ -1,169 +1,132 @@
-/* Reset styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
-  font-family: 'Segoe UI', sans-serif;
-  transition: background 0.3s, color 0.3s;
-  padding-bottom: 60px;
-}
-
-body.dark {
+  margin: 0;
+  font-family: "Segoe UI", sans-serif;
   background-color: #121212;
-  color: #e0e0e0;
+  color: #fff;
 }
 
-body.light {
-  background-color: #f5f5f5;
-  color: #111;
-}
-
-/* Header */
 .header {
-  background-color: #1c1c1c;
-  padding: 12px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #fff;
+  padding: 12px 16px;
+  background: #1e1e1e;
   position: sticky;
   top: 0;
-  z-index: 999;
+  z-index: 100;
 }
 
-.header .logo {
-  font-size: 18px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffc107;
 }
 
 .menu-btn,
-.theme-btn {
-  font-size: 18px;
+.theme-toggle {
+  background: #333;
+  color: #fff;
   border: none;
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
   border-radius: 50%;
-  padding: 10px;
-  background-color: #333;
-  color: white;
   cursor: pointer;
 }
 
-/* Sidebar */
+.container {
+  padding: 20px;
+  max-width: 600px;
+  margin: auto;
+}
+
+form input,
+form textarea,
+form select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  background: #1e1e1e;
+  color: #fff;
+  border: 1px solid #444;
+  border-radius: 10px;
+}
+
+form textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.buttons button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  color: white;
+  background: #d32f2f;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
 .sidebar {
-  position: fixed;
+  position: absolute;
   top: 60px;
-  left: 0;
-  background: #222;
+  left: 10px;
   width: 200px;
+  background: #1e1e1e;
+  border-radius: 10px;
   padding: 10px 15px;
-  display: none;
+  z-index: 1000;
 }
 
 .sidebar ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .sidebar ul li {
-  padding: 10px 0;
+  margin: 12px 0;
 }
 
 .sidebar ul li a {
   text-decoration: none;
-  color: #eee;
-  font-size: 15px;
+  color: #ffc107;
+  font-weight: bold;
 }
 
-/* Form Container */
-.container {
-  max-width: 500px;
-  margin: 20px auto;
-  padding: 20px;
-  background: #1e1e1e;
-  border-radius: 12px;
-  box-shadow: 0 0 10px #00000030;
+.hidden {
+  display: none;
 }
 
-.container input,
-.container select,
-.container textarea {
-  width: 100%;
-  padding: 12px;
-  margin: 10px 0;
-  background: #2a2a2a;
-  border: 1px solid #444;
-  border-radius: 8px;
-  color: #eee;
-  font-size: 15px;
+.light {
+  background-color: #f5f5f5;
+  color: #000;
 }
 
-.container input::placeholder,
-.container textarea::placeholder {
-  color: #888;
+.light .header {
+  background: #fff;
 }
 
-/* Light Theme Overrides */
-body.light .container {
-  background: #ffffff;
+.light .logo {
+  color: #222;
 }
 
-body.light input,
-body.light textarea,
-body.light select {
-  background: #f3f3f3;
-  color: #111;
+.light input,
+.light textarea,
+.light select {
+  background: #fff;
+  color: #000;
   border: 1px solid #ccc;
 }
 
-body.light input::placeholder,
-body.light textarea::placeholder {
-  color: #888;
-}
-
-/* Buttons */
-.button-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 10px;
-  justify-content: center;
-}
-
-.button-group button {
-  flex: 1;
-  min-width: 100px;
-  padding: 10px;
-  background-color: #d32f2f;
-  border: none;
-  color: white;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-.button-group button:hover {
-  background-color: #c62828;
-}
-
-/* Output preview */
-.output-box {
-  background: #161616;
-  color: #00ff88;
-  font-family: monospace;
-  padding: 16px;
-  margin-top: 20px;
-  border-radius: 10px;
-  white-space: pre-wrap;
-  font-size: 14px;
-}
-
-body.light .output-box {
-  background: #f4f4f4;
-  color: #008000;
+.light .buttons button {
+  background: #1976d2;
 }

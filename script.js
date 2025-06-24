@@ -1,72 +1,84 @@
-// Load saved theme
-if (localStorage.getItem('theme') === 'light') {
-  document.body.classList.remove('dark');
-  document.body.classList.add('light');
-  document.getElementById('themeToggle').textContent = '☀️';
-}
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("productForm");
+  const output = document.getElementById("output");
+  const copyBtn = document.getElementById("copyBtn");
+  const downloadBtn = document.getElementById("downloadBtn");
+  const themeToggle = document.getElementById("themeToggle");
+  const menuToggle = document.getElementById("menuToggle");
+  const sideNav = document.getElementById("sideNav");
 
-document.getElementById('themeToggle').addEventListener('click', () => {
-  document.body.classList.toggle('light');
-  const isLight = document.body.classList.contains('light');
-  localStorage.setItem('theme', isLight ? 'light' : 'dark');
-  document.getElementById('themeToggle').textContent = isLight ? '☀️' : '🌙';
-});
+  // Load theme from localStorage
+  if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark");
+    themeToggle.textContent = "☀️";
+  }
 
-document.getElementById('menuBtn').addEventListener('click', () => {
-  document.getElementById('menu').classList.toggle('hidden');
-});
+  themeToggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+    const isDark = document.body.classList.contains("dark");
+    themeToggle.textContent = isDark ? "☀️" : "🌙";
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+  });
 
-document.getElementById('productForm').addEventListener('submit', function (e) {
-  e.preventDefault();
+  menuToggle.addEventListener("click", () => {
+    sideNav.classList.toggle("show");
+  });
 
-  const productName = document.getElementById('productName').value;
-  const productCode = document.getElementById('productCode').value;
-  const price = document.getElementById('price').value;
-  const offerPrice = document.getElementById('offerPrice').value;
-  const delivery = document.getElementById('deliveryTime').value;
-  const stock = document.getElementById('stock').value;
-  const category = document.getElementById('category').value;
-  const desc = document.getElementById('description').value;
-  const image = document.getElementById('imageUrl').value;
-  const admin = document.getElementById('adminPhone').value;
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-  const waMessage = `📦 আমি একটি পণ্য অর্ডার করতে চাই:\n\n📌 পণ্যের নাম: ${productName}\n💰 মূল্য: ৳${price}${offerPrice ? ` (অফার: ৳${offerPrice})` : ""}\n🧾 কোড: ${productCode}\n\n📞 বিস্তারিত জানান।`;
+    const name = form.name.value;
+    const code = form.code.value;
+    const price = form.price.value;
+    const sale = form.sale.value;
+    const delivery = form.delivery.value;
+    const stock = form.stock.value;
+    const cat = form.category.value;
+    const desc = form.desc.value;
+    const image = form.image.value;
+    const phone = form.whatsapp.value;
 
-  const output = `
-<img src="${image}" style="max-width:100%;border-radius:10px;" />
-<h2 style="text-align:center;">${productName}</h2>
-<p style="text-align:center;">৳${offerPrice || price} ${offerPrice ? `→ <del>৳${price}</del>` : ""}</p>
-
-<p style="text-align:center;">
-  <a href="https://wa.me/${admin}?text=${encodeURIComponent(waMessage)}"
-     style="background:#25D366;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:bold;">
+    const productHTML = `
+<!-- ✅ Product Image -->
+<img src="${image}" alt="${name}" style="max-width:100%;border-radius:10px;margin-bottom:10px;" />
+<h2 style="text-align:center;margin:5px 0;">${name}</h2>
+<p style="text-align:center;font-size:16px;">৳${price}${sale ? ` → <strong style="color:#ff5252;">৳${sale}</strong>` : ""}</p>
+<p style="text-align:center;margin:10px 0;">
+  <a href="https://wa.me/${phone}?text=${encodeURIComponent(`📦 আমি একটি পণ্য অর্ডার করতে চাই:\n\n🛍️ পণ্যের নাম: ${name}\n💰 মূল্য: ৳${sale || price}\n🔖 কোড: ${code}\n\n📞 বিস্তারিত জানান`) }"
+     target="_blank"
+     style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
     📲 অর্ডার করুন WhatsApp এ
   </a>
 </p>
 
+<h3>🧵 প্রোডাক্ট বিস্তারিত:</h3>
 <ul>
-  <li>🔢 কোড: ${productCode}</li>
+  <li>🔢 কোড: ${code}</li>
   <li>📦 স্ট্যাটাস: ${stock}</li>
-  <li>📁 ক্যাটাগরি: ${category}</li>
-  ${delivery ? `<li>🚚 ডেলিভারি: ${delivery}</li>` : ""}
+  <li>📁 ক্যাটাগরি: ${cat}</li>
+  ${delivery ? `<li>🚚 ডেলিভারি টাইম: ${delivery}</li>` : ""}
 </ul>
-
 ${desc ? `<p>${desc}</p>` : ""}
-<p style="display:none;"><a href="#"> {getProduct} $button={Price} $price={৳${offerPrice || price}} $sale={৳${price}} $icon={cart} $style={1} </a></p>
-`;
 
-  document.getElementById('output').textContent = output;
-});
+<!-- ✅ Hidden Shortcode -->
+<p style="display:none;">
+  <a href="#">
+    {getProduct} $button={Price} $price={৳${sale || price}} $sale={৳${price}} $icon={cart} $style={1}
+  </a>
+</p>`;
 
-document.getElementById('copyBtn').addEventListener('click', () => {
-  navigator.clipboard.writeText(document.getElementById('output').textContent);
-  alert("✅ কপি হয়ে গেছে!");
-});
+    output.textContent = productHTML;
+  });
 
-document.getElementById('downloadBtn').addEventListener('click', () => {
-  const blob = new Blob([document.getElementById('output').textContent], { type: "text/plain" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "product-code.html";
-  link.click();
+  copyBtn.addEventListener("click", () => {
+    navigator.clipboard.writeText(output.textContent).then(() => alert("Copied!"));
+  });
+
+  downloadBtn.addEventListener("click", () => {
+    const blob = new Blob([output.textContent], { type: "text/html" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "product.html";
+    link.click();
+  });
 });

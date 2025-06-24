@@ -1,5 +1,5 @@
 :root {
-  --bg-light: #f5f5f5;
+  --bg-light: #f9f9f9;
   --bg-dark: #121212;
   --text-light: #1c1c1c;
   --text-dark: #f1f1f1;
@@ -7,74 +7,64 @@
   --accent: #25d366;
   --danger: #ff5252;
   --btn-radius: 12px;
-  --header-height: 60px;
+  --header-height: 58px;
 }
 
-/* Base */
 body {
-  font-family: 'Segoe UI', sans-serif;
   margin: 0;
-  padding: 0;
-  background-color: var(--bg-dark);
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg-dark);
   color: var(--text-dark);
-  transition: all 0.3s ease-in-out;
+  transition: 0.3s ease-in-out;
 }
 
-body.light-mode {
-  background-color: var(--bg-light);
+body.light {
+  background: var(--bg-light);
   color: var(--text-light);
 }
 
 /* Header */
 header {
+  height: var(--header-height);
+  background: #000;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 10px 16px;
-  background-color: #000;
+  align-items: center;
+  padding: 8px 16px;
   position: sticky;
   top: 0;
-  z-index: 1000;
-  height: var(--header-height);
+  z-index: 999;
 }
 
 .logo {
-  font-size: 20px;
-  font-weight: bold;
   color: var(--primary);
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  font-weight: bold;
+  font-size: 20px;
 }
 
-/* Menu & Dark Mode Buttons */
-.toggle-mode,
-.menu-btn {
+.menu-btn,
+.toggle-mode {
   width: 35px;
   height: 35px;
+  background: #2e2e2e;
   border: none;
-  border-radius: 50%;
-  background-color: #333;
   color: var(--primary);
-  font-size: 20px;
+  font-size: 18px;
+  border-radius: 50%;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 /* Sidebar */
 .sidebar {
   position: fixed;
   top: 0;
-  left: -100%;
+  left: -250px;
+  background: #1a1a1a;
   width: 230px;
   height: 100%;
-  background: #1a1a1a;
-  padding: 60px 20px;
-  transition: left 0.3s ease;
-  z-index: 999;
+  padding: 60px 15px;
+  transition: 0.3s ease;
+  z-index: 1000;
 }
 
 .sidebar.show {
@@ -82,16 +72,12 @@ header {
 }
 
 .sidebar a {
-  display: block;
-  color: #fff;
-  padding: 12px;
-  font-size: 16px;
+  color: white;
   text-decoration: none;
+  padding: 10px;
+  display: block;
+  margin-bottom: 5px;
   border-bottom: 1px solid #333;
-}
-
-.sidebar a:hover {
-  background: #333;
 }
 
 /* Main */
@@ -103,18 +89,11 @@ main {
   border-radius: 12px;
 }
 
-body.light-mode main {
+body.light main {
   background: #fff;
 }
 
-/* Title */
-h1 {
-  font-size: 24px;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-/* Form Fields */
+/* Form */
 form input,
 form select,
 form textarea {
@@ -122,62 +101,48 @@ form textarea {
   padding: 12px;
   margin: 10px 0;
   background: #2c2c2c;
-  color: #fff;
+  color: white;
   border: 1px solid #444;
   border-radius: 10px;
   font-size: 16px;
-  box-sizing: border-box;
 }
 
-body.light-mode form input,
-body.light-mode form select,
-body.light-mode form textarea {
-  background: #f3f3f3;
+body.light form input,
+body.light form textarea {
+  background: #f5f5f5;
   color: #000;
   border: 1px solid #ccc;
-}
-
-form textarea {
-  height: 100px;
-  resize: vertical;
 }
 
 /* Buttons */
 .buttons {
   display: flex;
+  gap: 10px;
   justify-content: center;
-  margin: 20px 0;
   flex-wrap: wrap;
-  gap: 12px;
+  margin-top: 20px;
 }
 
 button {
-  padding: 12px 24px;
+  padding: 10px 18px;
+  font-weight: bold;
+  font-size: 15px;
+  color: white;
   border: none;
   border-radius: var(--btn-radius);
-  font-weight: bold;
-  font-size: 16px;
   cursor: pointer;
-  color: #fff;
-  transition: all 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  transition: 0.2s;
 }
 
 button.generate {
-  background-color: var(--accent);
+  background: var(--accent);
 }
-
 button.copy {
-  background-color: #4285f4;
+  background: #4285f4;
 }
-
 button.download {
-  background-color: var(--danger);
+  background: var(--danger);
 }
-
 button:hover {
   opacity: 0.9;
 }
@@ -188,58 +153,24 @@ button:hover {
   color: #0f0;
   padding: 15px;
   margin-top: 20px;
-  border-radius: 12px;
+  border-radius: 10px;
   font-family: monospace;
   white-space: pre-wrap;
-  word-break: break-word;
-  min-height: 100px;
   display: none;
+  min-height: 100px;
 }
-
 .output-box.show {
   display: block;
 }
-
-body.light-mode .output-box {
-  background: #f5f5f5;
+body.light .output-box {
+  background: #f1f1f1;
   color: #222;
 }
 
-/* Mobile Responsive */
+/* Responsive */
 @media (max-width: 768px) {
   .buttons {
     flex-direction: column;
     align-items: stretch;
-  }
-
-  header {
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 8px 10px;
-  }
-
-  .logo {
-    font-size: 18px;
-  }
-
-  h1 {
-    font-size: 20px;
-  }
-
-  form input,
-  form select,
-  form textarea {
-    font-size: 15px;
-  }
-
-  button {
-    font-size: 15px;
-  }
-
-  .toggle-mode,
-  .menu-btn {
-    width: 35px;
-    height: 35px;
-    font-size: 20px;
   }
 }

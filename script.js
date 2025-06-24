@@ -1,117 +1,109 @@
-// 🌙 Default to dark mode using localStorage
-if (!localStorage.getItem("mode")) {
-  localStorage.setItem("mode", "dark");
-}
-document.body.classList.toggle("light-mode", localStorage.getItem("mode") === "light");
-
-// 🌗 Toggle Light/Dark Mode
-document.getElementById("modeToggle").addEventListener("click", function () {
+// 🔄 Theme toggle and store preference
+const themeToggle = document.getElementById("theme-toggle");
+themeToggle.addEventListener("click", () => {
   document.body.classList.toggle("light-mode");
-  const currentMode = document.body.classList.contains("light-mode") ? "light" : "dark";
-  localStorage.setItem("mode", currentMode);
-  this.innerText = currentMode === "light" ? "🌙" : "☀️";
+  document.body.classList.toggle("dark");
+  const current = document.body.classList.contains("light-mode") ? "light" : "dark";
+  localStorage.setItem("theme", current);
+  themeToggle.textContent = current === "light" ? "🌙" : "☀️";
 });
 
-// 📂 Menu Toggle
-document.getElementById("menuBtn").addEventListener("click", function () {
-  document.querySelector(".sidebar").classList.toggle("show");
+// ⏯ Apply saved theme from localStorage
+window.addEventListener("DOMContentLoaded", () => {
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "light") {
+    document.body.classList.add("light-mode");
+    document.body.classList.remove("dark");
+    themeToggle.textContent = "🌙";
+  } else {
+    document.body.classList.add("dark");
+    themeToggle.textContent = "☀️";
+  }
 });
 
-// 🧠 Helper to sanitize input
-function escapeHTML(str) {
-  return str.replace(/[&<>'"]/g, tag => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
-  }[tag]));
-}
+// 📱 Sidebar (Menu) toggle
+const menuBtn = document.getElementById("menu-toggle");
+const sidebar = document.getElementById("sidebar");
 
-// 📦 Generate Product Code
-document.getElementById("generateBtn").addEventListener("click", function () {
-  const title = escapeHTML(document.getElementById("productName").value.trim());
-  const price = escapeHTML(document.getElementById("productPrice").value.trim());
-  const offer = escapeHTML(document.getElementById("offerPrice").value.trim());
-  const code = escapeHTML(document.getElementById("productCode").value.trim());
-  const delivery = escapeHTML(document.getElementById("deliveryTime").value.trim());
-  const stock = document.getElementById("stockStatus").value;
-  const category = escapeHTML(document.getElementById("productCategory").value.trim());
-  const description = escapeHTML(document.getElementById("productDesc").value.trim());
-  const imageURL = document.getElementById("productImage").value.trim();
+menuBtn.addEventListener("click", () => {
+  sidebar.classList.toggle("show");
+});
 
-  if (!title || !price || !code || !category) {
-    alert("Please fill all required fields (Name, Price, Code, Category).");
+// 🛠️ Generate HTML Preview
+document.getElementById("generate").addEventListener("click", () => {
+  const name = document.getElementById("name").value.trim();
+  const code = document.getElementById("code").value.trim();
+  const price = document.getElementById("price").value.trim();
+  const offer = document.getElementById("offer").value.trim();
+  const delivery = document.getElementById("delivery").value.trim();
+  const stock = document.getElementById("stock").value.trim();
+  const category = document.getElementById("category").value.trim();
+  const desc = document.getElementById("desc").value.trim();
+  const image = document.getElementById("image").value.trim();
+  const admin = document.getElementById("admin").value.trim();
+
+  if (!name || !code || !price || !admin) {
+    alert("📛 অনুগ্রহ করে প্রোডাক্ট নাম, কোড, প্রাইস এবং অ্যাডমিন নম্বর দিন!");
     return;
   }
 
-  let html = ``;
+  const html = `
+<!-- ✅ Product Image & Title -->
+<div style="text-align:center;">
+  ${image ? `<img src="${image}" style="max-width:100%;border-radius:10px;margin-bottom:10px;" alt="${name}" />` : ""}
+  <h2 style="margin:5px 0;">${name}</h2>
+  <p style="font-size:16px;">৳${offer || price}${offer ? ` → <strong style="color:#ff5252;">৳${offer}</strong>` : ""}</p>
+</div>
 
-  // 🖼️ Image section
-  if (imageURL) {
-    html += `<img src="${imageURL}" alt="${title}" style="max-width:100%;border-radius:10px;margin-bottom:10px;" />\n`;
-  }
+<!-- ✅ WhatsApp Order Button -->
+<p style="text-align:center;margin:10px 0;">
+  <a href="https://wa.me/${admin}?text=${encodeURIComponent(
+    `📦 আমি একটি পণ্য অর্ডার করতে চাই:\n\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ৳${offer || price}\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category || 'N/A'}\n🚚 ডেলিভারি টাইম: ${delivery || 'N/A'}\n\nদয়া করে বিস্তারিত জানান।`
+  )}"
+    target="_blank"
+    style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
+    📲 অর্ডার করুন WhatsApp এ
+  </a>
+</p>
 
-  // 🏷️ Title & Price
-  html += `<h2 style="text-align:center;margin:5px 0;">${title}</h2>\n`;
-  html += `<p style="text-align:center;font-size:16px;">৳${offer || price} → <strong style="color:#ff5252;">৳${price}</strong></p>\n`;
+<!-- ✅ Details List -->
+<ul>
+  <li>🔢 কোড: ${code}</li>
+  <li>📦 স্ট্যাটাস: ${stock}</li>
+  <li>📁 ক্যাটাগরি: ${category || "N/A"}</li>
+  <li>🚚 ডেলিভারি টাইম: ${delivery || "N/A"}</li>
+</ul>
 
-  // 🟢 WhatsApp Button
-  const message = encodeURIComponent(
-    `📦 আমি একটি পণ্য অর্ডার করতে চাই:\n\n🧾 পণ্যের নাম: *${title}*\n💰 মূল্য: _৳${price}_\n🔖 প্রোডাক্ট কোড: _${code}_\n\n📞 দয়া করে বিস্তারিত জানান।`
-  );
+<!-- ✅ Description -->
+<p>${desc || ""}</p>
 
-  html += `<p style="text-align:center;margin:10px 0;">\n`;
-  html += `  <a href="https://wa.me/8801627647776?text=${message}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">📲 অর্ডার করুন WhatsApp এ</a>\n`;
-  html += `</p>\n`;
+<!-- ✅ Hidden Shortcode (Amazen Theme Support) -->
+<p style="display:none;">
+  <a href="#">
+    {getProduct} $button={Price} $price={৳${offer || price}} $sale={৳${price}} $icon={cart} $style={1}
+  </a>
+</p>
+`;
 
-  // 📃 Product Details
-  html += `<h3>🧵 প্রোডাক্ট বিস্তারিত:</h3>\n<ul>\n`;
-  html += `  <li>🔢 কোড: ${code}</li>\n`;
-  html += `  <li>📦 স্ট্যাটাস: ${stock}</li>\n`;
-  html += `  <li>📁 ক্যাটাগরি: ${category}</li>\n`;
-  if (delivery) {
-    html += `  <li>🚚 ডেলিভারি টাইম: ${delivery}</li>\n`;
-  }
-  html += `</ul>\n`;
-
-  if (description) {
-    html += `<p>${description}</p>\n`;
-  }
-
-  // 🔒 Hidden Shortcode (Amazen)
-  html += `<p style="display:none;">\n`;
-  html += `  <a href="#">\n    {getProduct} $button={Price} $price={৳${price}} ${offer ? `$sale={৳${offer}}` : ''} $icon={cart} $style={1}\n  </a>\n</p>\n`;
-
-  const outputBox = document.getElementById("output");
-  outputBox.innerText = html;
-  outputBox.classList.add("show");
+  const output = document.getElementById("output");
+  output.innerText = html;
+  output.classList.add("show");
 });
 
-// 📋 Copy to Clipboard
-document.getElementById("copyBtn").addEventListener("click", function () {
-  const code = document.getElementById("output").innerText;
-  if (!code) return alert("Please generate code first!");
-  navigator.clipboard.writeText(code).then(() => alert("Copied to clipboard!"));
+// 📋 Copy Button
+document.getElementById("copy").addEventListener("click", () => {
+  const text = document.getElementById("output").innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    alert("✅ কোড কপি করা হয়েছে!");
+  });
 });
 
-// 💾 Download as .txt
-document.getElementById("downloadBtn").addEventListener("click", function () {
-  const code = document.getElementById("output").innerText;
-  if (!code) return alert("Generate your code first!");
-  const blob = new Blob([code], { type: "text/plain;charset=utf-8" });
+// ⬇️ Download Button
+document.getElementById("download").addEventListener("click", () => {
+  const content = document.getElementById("output").innerText;
+  const blob = new Blob([content], { type: "text/html" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
   link.download = "product-post.html";
-  document.body.appendChild(link);
   link.click();
-  document.body.removeChild(link);
-});
-
-// 🌄 Live Image Preview
-document.getElementById("productImage").addEventListener("input", function () {
-  const url = this.value.trim();
-  const preview = document.getElementById("imagePreview");
-  if (url) {
-    preview.src = url;
-    preview.style.display = "block";
-  } else {
-    preview.style.display = "none";
-  }
 });

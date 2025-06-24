@@ -8,9 +8,9 @@
   --danger: #ff5252;
   --btn-radius: 12px;
   --header-height: 60px;
-  --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* Base */
 body {
   font-family: 'Segoe UI', sans-serif;
   margin: 0;
@@ -30,13 +30,12 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 8px 15px;
   background-color: #000;
-  padding: 10px 20px;
   position: sticky;
   top: 0;
   z-index: 1000;
   height: var(--header-height);
-  box-shadow: var(--shadow);
 }
 
 .logo {
@@ -45,37 +44,40 @@ header {
   color: var(--primary);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
 }
 
-.menu-btn,
-.toggle-mode {
+/* Menu & Dark Mode Buttons */
+.toggle-mode,
+.menu-btn {
   width: 35px;
   height: 35px;
-  border: none;
+  border: 2px solid var(--primary);
   border-radius: 50%;
-  background-color: #2e2e2e;
+  background-color: #2c2c2c;
   color: var(--primary);
-  font-size: 18px;
+  font-size: 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
-.menu-btn:hover,
-.toggle-mode:hover {
-  background-color: #444;
+body.light-mode .toggle-mode,
+body.light-mode .menu-btn {
+  background-color: #fff;
+  color: var(--primary);
+  border-color: #ccc;
 }
 
 /* Sidebar */
 .sidebar {
   position: fixed;
   top: 0;
-  left: -240px;
-  width: 220px;
-  height: 100vh;
+  left: -100%;
+  width: 230px;
+  height: 100%;
   background: #1a1a1a;
   padding: 60px 20px;
   transition: left 0.3s ease;
@@ -87,11 +89,11 @@ header {
 }
 
 .sidebar a {
+  display: block;
   color: #fff;
   padding: 12px;
-  display: block;
+  font-size: 16px;
   text-decoration: none;
-  font-size: 15px;
   border-bottom: 1px solid #333;
 }
 
@@ -101,48 +103,43 @@ header {
 
 /* Main */
 main {
-  max-width: 650px;
-  margin: 30px auto;
-  padding: 20px;
-  background-color: #1f1f1f;
-  border-radius: 14px;
-  box-shadow: var(--shadow);
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 15px;
+  background: #1f1f1f;
+  border-radius: 12px;
 }
 
 body.light-mode main {
-  background-color: #fff;
+  background: #fff;
 }
 
+/* Title */
 h1 {
-  text-align: center;
   font-size: 24px;
-  margin-bottom: 25px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
+/* Form Fields */
 form input,
 form select,
 form textarea {
   width: 100%;
-  padding: 12px 15px;
-  margin-bottom: 15px;
-  background-color: #2c2c2c;
+  padding: 12px;
+  margin: 10px 0;
+  background: #2c2c2c;
   color: #fff;
   border: 1px solid #444;
   border-radius: 10px;
-  font-size: 15px;
-  transition: border-color 0.2s;
-}
-
-form input:focus,
-form textarea:focus {
-  border-color: var(--primary);
-  outline: none;
+  font-size: 16px;
+  box-sizing: border-box;
 }
 
 body.light-mode form input,
 body.light-mode form select,
 body.light-mode form textarea {
-  background-color: #f9f9f9;
+  background: #f3f3f3;
   color: #000;
   border: 1px solid #ccc;
 }
@@ -152,27 +149,28 @@ form textarea {
   resize: vertical;
 }
 
-/* Button Area */
+/* Buttons */
 .buttons {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
   justify-content: center;
-  margin-top: 20px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 button {
-  padding: 12px 22px;
-  font-size: 16px;
-  font-weight: 600;
+  padding: 12px 24px;
   border: none;
   border-radius: var(--btn-radius);
+  font-weight: bold;
+  font-size: 16px;
   cursor: pointer;
-  color: #fff;
-  transition: 0.2s;
-  display: flex;
+  transition: all 0.3s ease;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  color: #fff;
 }
 
 button.generate {
@@ -187,6 +185,10 @@ button.download {
   background-color: var(--danger);
 }
 
+body.light-mode button {
+  color: #fff;
+}
+
 button:hover {
   opacity: 0.9;
 }
@@ -195,13 +197,13 @@ button:hover {
 .output-box {
   background: #000;
   color: #0f0;
-  padding: 18px;
-  margin-top: 25px;
-  border-radius: 10px;
+  padding: 15px;
+  margin-top: 20px;
+  border-radius: 12px;
   font-family: monospace;
-  font-size: 15px;
   white-space: pre-wrap;
   word-break: break-word;
+  min-height: 100px;
   display: none;
 }
 
@@ -210,31 +212,45 @@ button:hover {
 }
 
 body.light-mode .output-box {
-  background: #f0f0f0;
-  color: #333;
+  background: #f5f5f5;
+  color: #222;
 }
 
-/* Responsive */
+/* Media Queries */
 @media (max-width: 768px) {
-  main {
-    margin: 20px 10px;
-    padding: 15px;
+  .buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  header {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 8px 10px;
   }
 
   .logo {
     font-size: 18px;
   }
 
+  h1 {
+    font-size: 20px;
+  }
+
+  form input,
+  form select,
+  form textarea {
+    font-size: 15px;
+  }
+
   button {
     font-size: 15px;
   }
 
-  form input,
-  form textarea {
-    font-size: 14px;
-  }
-
-  .buttons {
-    flex-direction: column;
+  .toggle-mode,
+  .menu-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
   }
 }

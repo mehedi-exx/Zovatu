@@ -1,49 +1,53 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>G9Tool – Blogger Product Code Generator</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>G9Tool</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body class="dark">
 
-  <!-- 🌙 Header -->
-  <header>
-    <button class="menu-btn" onclick="toggleMenu()">☰</button>
-    <div class="logo">📦 G9Tool</div>
-    <button class="toggle-mode" onclick="toggleDarkMode()">🌙</button>
+  <!-- Header -->
+  <header class="header">
+    <button id="menu-toggle" class="circle-btn">☰</button>
+    <div class="logo"><span>📦 <strong>G9Tool</strong></span></div>
+    <button id="theme-toggle" class="circle-btn">🌙</button>
   </header>
 
-  <!-- 📋 Sidebar -->
-  <nav class="sidebar" id="sidebar">
-    <a href="#">💡 কীভাবে ব্যবহার করবেন</a>
-    <a href="#">📋 প্রোডাক্ট যুক্ত করুন</a>
-    <a href="#">ℹ️ সাহায্য</a>
+  <!-- Sidebar -->
+  <nav id="sidebar" class="sidebar hidden">
+    <a href="#">📘 গাইডলাইন</a>
+    <a href="#">📞 যোগাযোগ</a>
   </nav>
 
-  <!-- 🧾 Form Area -->
-  <main>
-    <h1>ব্লগার প্রোডাক্ট কোড জেনারেট করুন</h1>
-    <form id="g9Form">
-      <input type="text" id="title" placeholder="প্রোডাক্টের নাম" required />
-      <input type="text" id="image" placeholder="ছবির URL" required />
-      <input type="text" id="code" placeholder="প্রোডাক্ট কোড / SKU" required />
-      <input type="text" id="price" placeholder="মূল্য (৳)" required />
-      <input type="text" id="offer" placeholder="অফার মূল্য (ঐচ্ছিক)" />
-      <input type="text" id="stock" placeholder="স্টক স্ট্যাটাস (যেমন: In Stock)" required />
-      <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: Serum)" required />
+  <!-- Main -->
+  <main class="container">
+    <h1>🛠️ Blogger Product Generator</h1>
+
+    <form id="product-form">
+      <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required />
+      <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required />
+      <input type="number" id="price" placeholder="মূল্য প্রাইস (৳)" required />
+      <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)" />
       <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)" />
-      <textarea id="description" placeholder="প্রোডাক্ট ডেসক্রিপশন লিখুন..." required></textarea>
+      <select id="stock">
+        <option>In Stock</option>
+        <option>Out of Stock</option>
+      </select>
+      <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)" />
+      <textarea id="desc" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
+      <input type="url" id="image" placeholder="ছবির লিংক (Image URL)" />
+      <input type="text" id="admin" placeholder="Admin WhatsApp নম্বর (8801XXXXXXXXX)" required />
 
       <div class="buttons">
-        <button type="submit" class="generate">জেনারেট করুন</button>
-        <button type="button" class="copy" onclick="copyCode()">কপি</button>
-        <button type="button" class="download" onclick="downloadCode()">ডাউনলোড</button>
+        <button type="button" id="generate">✅ Generate</button>
+        <button type="button" id="copy">📋 Copy</button>
+        <button type="button" id="download">⬇️ Download</button>
       </div>
     </form>
 
-    <!-- 🔍 Output Box -->
+    <!-- Output Preview -->
     <div id="output" class="output-box"></div>
   </main>
 

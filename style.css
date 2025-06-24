@@ -30,7 +30,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 15px;
+  padding: 10px 16px;
   background-color: #000;
   position: sticky;
   top: 0;
@@ -52,23 +52,16 @@ header {
 .menu-btn {
   width: 35px;
   height: 35px;
-  border: 2px solid var(--primary);
+  border: none;
   border-radius: 50%;
-  background-color: #2c2c2c;
+  background-color: #333;
   color: var(--primary);
   font-size: 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-}
-
-body.light-mode .toggle-mode,
-body.light-mode .menu-btn {
-  background-color: #fff;
-  color: var(--primary);
-  border-color: #ccc;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 /* Sidebar */
@@ -165,12 +158,12 @@ button {
   font-weight: bold;
   font-size: 16px;
   cursor: pointer;
+  color: #fff;
   transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 button.generate {
@@ -183,10 +176,6 @@ button.copy {
 
 button.download {
   background-color: var(--danger);
-}
-
-body.light-mode button {
-  color: #fff;
 }
 
 button:hover {
@@ -216,7 +205,7 @@ body.light-mode .output-box {
   color: #222;
 }
 
-/* Media Queries */
+/* Mobile Responsive */
 @media (max-width: 768px) {
   .buttons {
     flex-direction: column;
@@ -251,66 +240,6 @@ body.light-mode .output-box {
   .menu-btn {
     width: 35px;
     height: 35px;
-    font-size: 18px;
+    font-size: 20px;
   }
-}
-.toggle-mode,
-.menu-btn {
-  width: 35px;
-  height: 35px;
-  border: none;
-  border-radius: 8px;
-  background-color: var(--primary);
-  color: #000;
-  font-size: 20px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  transition: background-color 0.3s, color 0.3s;
-}
-
-body.light-mode .toggle-mode,
-body.light-mode .menu-btn {
-  background-color: #333;
-  color: var(--primary);
-}
-button {
-  padding: 12px 24px;
-  border: none;
-  border-radius: var(--btn-radius);
-  font-weight: bold;
-  font-size: 16px;
-  cursor: pointer;
-  color: #fff;
-  transition: all 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
-}
-
-button.generate {
-  background-color: var(--accent);
-  color: #fff;
-}
-
-button.copy {
-  background-color: #4285f4;
-  color: #fff;
-}
-
-button.download {
-  background-color: var(--danger);
-  color: #fff;
-}
-
-body.light-mode button {
-  color: #fff;
-}
-
-button:hover {
-  opacity: 0.9;
 }

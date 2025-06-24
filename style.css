@@ -1,99 +1,96 @@
-:root {
-  --bg: #121212;
-  --text: #fff;
-  --input-bg: #1e1e1e;
-  --primary: #fdd835;
-}
-
 body {
-  font-family: "Segoe UI", sans-serif;
-  background: var(--bg);
-  color: var(--text);
+  font-family: sans-serif;
   margin: 0;
   padding: 0;
+  background-color: #121212;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+body.light {
+  background-color: #f9f9f9;
+  color: #111;
 }
 
-header {
-  padding: 10px 20px;
+.header {
   background: #000;
-  border-bottom: 1px solid #333;
+  color: #ffd700;
+  padding: 10px 20px;
   text-align: center;
 }
-
-.logo-bar {
+.logo-wrap {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 }
-
-#menuToggle, #themeToggle {
-  background: #333;
-  color: var(--text);
-  border: none;
-  padding: 8px;
+.logo {
   font-size: 20px;
+}
+.icon-btn {
+  background: #333;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  font-size: 18px;
   border-radius: 50%;
   cursor: pointer;
 }
-
-.brand {
-  font-weight: bold;
-  font-size: 22px;
-  color: var(--primary);
+.icon-btn:hover {
+  background: #555;
 }
 
 main {
-  padding: 15px;
+  padding: 20px;
+  max-width: 600px;
+  margin: auto;
 }
 
 form {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  background: #1b1b1b;
-  padding: 20px;
-  border-radius: 10px;
+  gap: 10px;
 }
-
-input, select, textarea {
+input, textarea, select {
   padding: 10px;
-  font-size: 16px;
-  border: 1px solid #444;
-  background: var(--input-bg);
-  color: var(--text);
   border-radius: 8px;
+  border: 1px solid #444;
+  background: #222;
+  color: #fff;
 }
-
+body.light input,
+body.light textarea,
+body.light select {
+  background: #fff;
+  color: #000;
+  border: 1px solid #ccc;
+}
 textarea {
-  min-height: 100px;
+  resize: vertical;
 }
-
-.buttons {
+.btn-group {
   display: flex;
   gap: 10px;
-  flex-wrap: wrap;
 }
-
 button {
   flex: 1;
   padding: 10px;
-  background: #d32f2f;
+  background: crimson;
   color: #fff;
   border: none;
-  font-weight: bold;
   border-radius: 8px;
+  font-weight: bold;
   cursor: pointer;
 }
-
 button:hover {
-  background: #b71c1c;
+  background: #d32f2f;
 }
-
-#previewBox {
+.output {
   margin-top: 20px;
-  background: #212121;
-  padding: 20px;
-  border-radius: 10px;
+  padding: 15px;
+  border: 1px dashed #888;
+  border-radius: 8px;
+  background: #1e1e1e;
   white-space: pre-wrap;
-  word-break: break-word;
+}
+body.light .output {
+  background: #fff3f3;
 }

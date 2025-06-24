@@ -1,48 +1,54 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>G9Tool - Blogger Product Generator</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>G9Tool</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body class="dark">
+
+  <!-- Header -->
   <header class="header">
-    <div class="menu-toggle" id="menuToggle">☰</div>
-    <h1 class="logo">📦 <span>G9Tool</span></h1>
-    <button id="themeToggle">🌙</button>
+    <button id="menu-toggle" class="circle-btn">☰</button>
+    <div class="logo"><span>📦 <strong>G9Tool</strong></span></div>
+    <button id="theme-toggle" class="circle-btn">🌙</button>
   </header>
 
-  <nav id="sideMenu" class="side-menu">
+  <!-- Sidebar -->
+  <nav id="sidebar" class="sidebar hidden">
     <a href="#">📘 গাইডলাইন</a>
     <a href="#">📞 যোগাযোগ</a>
   </nav>
 
+  <!-- Main -->
   <main class="container">
-    <h2>🔧 Blogger Product Generator</h2>
-    <form id="productForm">
-      <input type="text" id="pname" placeholder="প্রোডাক্ট নাম" required>
-      <input type="text" id="sku" placeholder="প্রোডাক্ট কোড" required>
-      <input type="number" id="price" placeholder="মূল্য প্রাইস (৳)" required>
-      <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
-      <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)">
-      <select id="stock">
-        <option value="In Stock">In Stock</option>
-        <option value="Out of Stock">Out of Stock</option>
-      </select>
-      <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)">
-      <textarea id="description" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
-      <input type="url" id="image" placeholder="ছবির লিংক (Image URL)">
-      <input type="tel" id="whatsapp" placeholder="Admin WhatsApp নম্বর (8801XXXXXXXXX)" required>
+    <h1>🛠️ Blogger Product Generator</h1>
 
-      <div class="button-group">
-        <button type="submit">✅ Generate</button>
-        <button type="button" id="copyBtn">📋 Copy</button>
-        <button type="button" id="downloadBtn">⬇️ Download</button>
+    <form id="product-form">
+      <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required />
+      <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required />
+      <input type="number" id="price" placeholder="মূল্য প্রাইস (৳)" required />
+      <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)" />
+      <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)" />
+      <select id="stock">
+        <option>In Stock</option>
+        <option>Out of Stock</option>
+      </select>
+      <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)" />
+      <textarea id="desc" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
+      <input type="url" id="image" placeholder="ছবির লিংক (Image URL)" />
+      <input type="text" id="admin" placeholder="Admin WhatsApp নম্বর (8801XXXXXXXXX)" required />
+
+      <div class="buttons">
+        <button type="button" id="generate">✅ Generate</button>
+        <button type="button" id="copy">📋 Copy</button>
+        <button type="button" id="download">⬇️ Download</button>
       </div>
     </form>
 
-    <div id="output" class="preview-box"></div>
+    <!-- Output Preview -->
+    <div id="output" class="output-box"></div>
   </main>
 
   <script src="script.js"></script>

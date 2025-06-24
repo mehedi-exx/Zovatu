@@ -1,103 +1,97 @@
-// 🌙 Theme Toggle & Persistence
 function toggleTheme() {
   const body = document.body;
-  const toggle = document.getElementById("themeToggle");
-
-  body.classList.toggle("light");
-
-  const mode = body.classList.contains("light") ? "light" : "dark";
-  localStorage.setItem("g9Theme", mode);
-  toggle.textContent = mode === "light" ? "☀️" : "🌙";
-}
-
-// 🧠 Load saved theme from localStorage
-function applySavedTheme() {
-  const savedTheme = localStorage.getItem("g9Theme");
-  const body = document.body;
-  const toggle = document.getElementById("themeToggle");
-
-  if (savedTheme === "light") {
-    body.classList.add("light");
-    toggle.textContent = "☀️";
+  const icon = document.getElementById('themeToggle');
+  if (body.classList.contains('dark')) {
+    body.classList.replace('dark', 'light');
+    icon.textContent = '☀️';
+    localStorage.setItem('theme', 'light');
   } else {
-    body.classList.remove("light");
-    toggle.textContent = "🌙";
+    body.classList.replace('light', 'dark');
+    icon.textContent = '🌙';
+    localStorage.setItem('theme', 'dark');
   }
 }
 
-// 📁 Show/hide menu
 function toggleMenu() {
-  document.getElementById("menu").classList.toggle("show");
+  document.getElementById('menu').classList.toggle('hidden');
 }
 
-// ✅ Form Submit → Generate Product Code
-document.addEventListener("DOMContentLoaded", function () {
-  applySavedTheme();
+function copyCode() {
+  const output = document.getElementById('output');
+  navigator.clipboard.writeText(output.textContent);
+  alert('Copied to clipboard!');
+}
 
-  document.getElementById("g9Form").addEventListener("submit", function (e) {
-    e.preventDefault();
+function downloadCode() {
+  const code = document.getElementById('output').textContent;
+  const blob = new Blob([code], { type: 'text/html' });
+  const link = document.createElement('a');
+  link.download = "product-post.html";
+  link.href = URL.createObjectURL(blob);
+  link.click();
+}
 
-    const name = document.getElementById("name").value;
-    const sku = document.getElementById("sku").value;
-    const price = document.getElementById("price").value;
-    const offer = document.getElementById("offer").value || price;
-    const delivery = document.getElementById("delivery").value || "২-৫ দিন";
-    const stock = document.getElementById("stock").value;
-    const category = document.getElementById("category").value;
-    const desc = document.getElementById("description").value;
-    const image = document.getElementById("image").value;
-    const wp = document.getElementById("whatsapp").value;
+function generateCode(data) {
+  const priceLine = data.offerPrice
+    ? `${data.offerPrice}৳ <s>${data.mainPrice}৳</s>`
+    : `${data.mainPrice}৳`;
 
-    const message = `📦 আমি একটি পণ্য অর্ডার করতে আগ্রহী:\n\n🛍️ *পণ্যের নাম:* _${name}_\n💰 *মূল্য:* _৳${offer}_\n🔢 *প্রোডাক্ট কোড:* _${sku}_\n\n📞 দয়া করে বিস্তারিত জানান।`;
+  const delivery = data.delivery ? `<li>🚚 ডেলিভারি: ${data.delivery}</li>` : "";
+  const description = data.description ? `<p>${data.description}</p>` : "";
 
-    const html = `
-<img src="${image}" alt="${name}" style="max-width:100%;border-radius:10px;margin-bottom:10px;" />
-<h2 style="text-align:center;margin:5px 0;">${name}</h2>
-<p style="text-align:center;font-size:16px;">৳${price} → <strong style="color:#ff5252;">৳${offer}</strong></p>
+  return `
+<!-- ✅ Product Image -->
+<img src="${data.image}" alt="${data.name}" style="display:block;margin:auto;border-radius:10px;max-width:100%;" />
 
-<p style="text-align:center;margin:10px 0;">
-  <a href="https://wa.me/${wp}?text=${encodeURIComponent(message)}"
-     target="_blank"
-     style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
-    📲 অর্ডার করুন WhatsApp এ
+<!-- ✅ Price -->
+<div style="text-align:center; margin:10px 0;">
+  <strong style="font-size:22px;">${priceLine}</strong>
+</div>
+
+<!-- ✅ WhatsApp Button -->
+<p style="text-align:center;">
+  <a href="https://wa.me/${data.phone}?text=${encodeURIComponent(`আমি একটি পণ্য অর্ডার করতে চাই:\n\nপণ্যের নাম: ${data.name}\nমূল্য: ${data.offerPrice || data.mainPrice}৳\nপ্রোডাক্ট কোড: ${data.code}\nক্যাটাগরি: ${data.category}\n\nদয়া করে বিস্তারিত জানান।`)}"
+    style="background:#25D366;padding:12px 25px;border-radius:6px;color:white;text-decoration:none;font-weight:bold;">
+    📩 অর্ডার করুন
   </a>
 </p>
 
-<h3>🧵 প্রোডাক্ট বিস্তারিত:</h3>
+<h2>${data.name}</h2>
+${description}
 <ul>
-  <li>🔢 কোড: ${sku}</li>
-  <li>📦 স্ট্যাটাস: ${stock}</li>
-  <li>📁 ক্যাটাগরি: ${category}</li>
-  <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
+  <li>📦 স্ট্যাটাস: ${data.stock}</li>
+  ${delivery}
 </ul>
-<p>${desc}</p>
 
-<!-- ✅ Hidden Shortcode -->
+<!-- Hidden Shortcode for Amazen Theme -->
 <p style="display:none;">
-  <a href="#">
-    {getProduct} $button={Price} $price={৳${offer}} $sale={৳${price}} $icon={cart} $style={1}
-  </a>
+  {getProduct} $button={Price} $price={${data.offerPrice || data.mainPrice}} $sale={${data.mainPrice}} $icon={cart} $style={1}
 </p>
 `;
+}
 
-    document.getElementById("output").textContent = html;
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("g9Form");
+  const output = document.getElementById("output");
+  const theme = localStorage.getItem('theme') || 'dark';
+  document.body.className = theme;
+  document.getElementById("themeToggle").textContent = theme === "dark" ? "🌙" : "☀️";
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const data = {
+      name: form.productName.value,
+      code: form.productCode.value,
+      mainPrice: form.mainPrice.value,
+      offerPrice: form.offerPrice.value,
+      delivery: form.delivery.value,
+      image: form.imageLink.value,
+      phone: form.whatsappNumber.value,
+      stock: form.stock.value,
+      category: form.category.value,
+      description: form.description.value
+    };
+
+    output.textContent = generateCode(data);
   });
 });
-
-// 📋 Copy button
-function copyOutput() {
-  const content = document.getElementById("output").textContent;
-  navigator.clipboard.writeText(content).then(() => {
-    alert("✅ কোড কপি হয়েছে!");
-  });
-}
-
-// 📥 Download button
-function downloadOutput() {
-  const content = document.getElementById("output").textContent;
-  const blob = new Blob([content], { type: "text/html" });
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "product-post.html";
-  a.click();
-}

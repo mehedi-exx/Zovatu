@@ -1,56 +1,49 @@
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>G9Tool</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body class="dark">
+document.getElementById("toggleButton").addEventListener("click", function() {
+    document.body.classList.toggle("dark-mode");
+    let mode = document.body.classList.contains("dark-mode") ? "Dark" : "Light";
+    document.getElementById("toggleButton").textContent = `Switch to ${mode} Mode`;
+});
 
-  <!-- Header -->
-  <header class="header">
-    <button id="menu-toggle" class="circle-btn">☰</button>
-    <div class="logo"><span>📦 <strong>G9Tool</strong></span></div>
-    <button id="theme-toggle" class="circle-btn">🌙</button>
-  </header>
+// Function to generate the HTML code based on form inputs
+document.getElementById("generateCodeButton").addEventListener("click", function(event) {
+    event.preventDefault();
 
-  <!-- Sidebar -->
-  <nav id="sidebar" class="sidebar hidden">
-    <a href="#">📘 গাইডলাইন</a>
-    <a href="#">📞 যোগাযোগ</a>
-  </nav>
+    const productName = document.getElementById("productName").value;
+    const productPrice = document.getElementById("productPrice").value;
+    const productDiscount = document.getElementById("productDiscount").value;
+    const productDescription = document.getElementById("productDescription").value;
+    const productImage = document.getElementById("productImage").value;
+    const adminWhatsApp = document.getElementById("adminWhatsApp").value;
 
-  <!-- Main -->
-  <main class="container">
-    <h1>🛠️ Blogger Product Generator</h1>
+    const htmlCode = `
+    <div class="product">
+        <img src="${productImage}" alt="${productName}">
+        <h3>${productName}</h3>
+        <p>Price: $${productPrice}</p>
+        <p>Discount: ${productDiscount}% OFF</p>
+        <p>Description: ${productDescription}</p>
+        <a href="https://wa.me/${adminWhatsApp}?text=I%20want%20to%20order%20${productName}" target="_blank">
+            <button>Order on WhatsApp</button>
+        </a>
+    </div>
+    `;
+    
+    document.getElementById("generatedCode").textContent = htmlCode;
+});
 
-    <form id="product-form">
-      <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required />
-      <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required />
-      <input type="number" id="price" placeholder="মূল্য প্রাইস (৳)" required />
-      <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)" />
-      <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)" />
-      <select id="stock">
-        <option>In Stock</option>
-        <option>Out of Stock</option>
-      </select>
-      <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)" />
-      <textarea id="desc" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
-      <input type="url" id="image" placeholder="ছবির লিংক (Image URL)" />
-      <input type="text" id="admin" placeholder="Admin WhatsApp নম্বর (8801XXXXXXXXX)" required />
+// Function to copy generated HTML code to clipboard
+document.getElementById("copyButton").addEventListener("click", function() {
+    const code = document.getElementById("generatedCode");
+    code.select();
+    document.execCommand("copy");
+});
 
-      <div class="buttons">
-        <button type="button" id="generate">✅ Generate</button>
-        <button type="button" id="copy">📋 Copy</button>
-        <button type="button" id="download">⬇️ Download</button>
-      </div>
-    </form>
-
-    <!-- Output Preview -->
-    <div id="output" class="output-box"></div>
-  </main>
-
-  <script src="script.js"></script>
-</body>
-</html>
+// Function to download the generated HTML code as a file
+document.getElementById("downloadButton").addEventListener("click", function() {
+    const code = document.getElementById("generatedCode").value;
+    const blob = new Blob([code], { type: "text/html" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "product-post.html";
+    link.click();
+});

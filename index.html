@@ -1,49 +1,59 @@
-document.getElementById("toggleButton").addEventListener("click", function() {
-    document.body.classList.toggle("dark-mode");
-    let mode = document.body.classList.contains("dark-mode") ? "Dark" : "Light";
-    document.getElementById("toggleButton").textContent = `Switch to ${mode} Mode`;
-});
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="G9Tool - HTML Code Generator with WhatsApp Order Support">
+    <meta name="keywords" content="HTML Generator, WhatsApp Order, E-commerce">
+    <title>G9 Tool - Product Code Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-// Function to generate the HTML code based on form inputs
-document.getElementById("generateCodeButton").addEventListener("click", function(event) {
-    event.preventDefault();
+    <header>
+        <h1>Welcome to G9Tool</h1>
+        <p>Create professional product post code with WhatsApp ordering support.</p>
+        <button id="toggleButton">Switch to Dark Mode</button>
+    </header>
 
-    const productName = document.getElementById("productName").value;
-    const productPrice = document.getElementById("productPrice").value;
-    const productDiscount = document.getElementById("productDiscount").value;
-    const productDescription = document.getElementById("productDescription").value;
-    const productImage = document.getElementById("productImage").value;
-    const adminWhatsApp = document.getElementById("adminWhatsApp").value;
+    <main>
+        <section>
+            <h2>Product Details</h2>
+            <form id="productForm">
+                <label for="productName">Product Name</label>
+                <input type="text" id="productName" placeholder="Enter product name" required>
 
-    const htmlCode = `
-    <div class="product">
-        <img src="${productImage}" alt="${productName}">
-        <h3>${productName}</h3>
-        <p>Price: $${productPrice}</p>
-        <p>Discount: ${productDiscount}% OFF</p>
-        <p>Description: ${productDescription}</p>
-        <a href="https://wa.me/${adminWhatsApp}?text=I%20want%20to%20order%20${productName}" target="_blank">
-            <button>Order on WhatsApp</button>
-        </a>
-    </div>
-    `;
-    
-    document.getElementById("generatedCode").textContent = htmlCode;
-});
+                <label for="productPrice">Product Price</label>
+                <input type="number" id="productPrice" placeholder="Enter product price" required>
 
-// Function to copy generated HTML code to clipboard
-document.getElementById("copyButton").addEventListener("click", function() {
-    const code = document.getElementById("generatedCode");
-    code.select();
-    document.execCommand("copy");
-});
+                <label for="productDiscount">Product Discount (%)</label>
+                <input type="number" id="productDiscount" placeholder="Enter discount" required>
 
-// Function to download the generated HTML code as a file
-document.getElementById("downloadButton").addEventListener("click", function() {
-    const code = document.getElementById("generatedCode").value;
-    const blob = new Blob([code], { type: "text/html" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "product-post.html";
-    link.click();
-});
+                <label for="productDescription">Product Description</label>
+                <textarea id="productDescription" placeholder="Enter product description" required></textarea>
+
+                <label for="productImage">Product Image URL</label>
+                <input type="url" id="productImage" placeholder="Enter product image URL" required>
+
+                <label for="adminWhatsApp">Admin WhatsApp Number</label>
+                <input type="text" id="adminWhatsApp" placeholder="Enter admin WhatsApp number" required>
+
+                <button type="submit" id="generateCodeButton">Generate HTML Code</button>
+            </form>
+        </section>
+
+        <section>
+            <h2>Generated HTML Code</h2>
+            <textarea id="generatedCode" rows="10" readonly></textarea>
+            <button id="copyButton">Copy Code</button>
+            <button id="downloadButton">Download Code</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 G9Tool - All rights reserved</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

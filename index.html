@@ -38,7 +38,6 @@
       color: inherit;
       cursor: pointer;
     }
-
     .logo {
       font-size: 22px;
       display: flex;
@@ -70,11 +69,9 @@
       padding-top: 70px;
       transition: left 0.3s ease;
     }
-
     .sidebar.open {
       left: 0;
     }
-
     .sidebar a {
       display: block;
       padding: 12px 20px;
@@ -224,12 +221,10 @@
 function toggleMenu() {
   document.getElementById("sidebar").classList.toggle("open");
 }
-
 function showSection(id) {
   document.getElementById("formSection").style.display = id === "form" ? "block" : "none";
   document.getElementById("sidebar").classList.remove("open");
 }
-
 function generateCode() {
   const name = document.getElementById("name").value;
   const code = document.getElementById("code").value;
@@ -248,8 +243,11 @@ function generateCode() {
   }
 
   const finalPrice = offer
-    ? `<del style="text-decoration:line-through !important;color:#fff;font-size:18px;margin-right:5px;">৳${price}</del><span style="color:#f00;font-size:18px;font-weight:bold;">৳${offer}</span>`
-    : `<span style="color:#fff;font-size:18px;">৳${price}</span>`;
+    ? `<span style="font-size:18px; font-weight:bold;">
+         <span style="color:#888; text-decoration: line-through; margin-right:6px;">৳${price}</span>
+         <span style="color:#d00;">৳${offer}</span>
+       </span>`
+    : `<span style="font-size:18px; font-weight:bold; color:#222;">৳${price}</span>`;
 
   const waText = encodeURIComponent(
 `📦 আমি একটি পণ্য অর্ডার করতে চাই:
@@ -273,7 +271,7 @@ function generateCode() {
     📲 অর্ডার করুন WhatsApp এ
   </a>
 </p>
-<ul>
+<ul style="text-align:left;">
   <li>🔢 কোড: ${code}</li>
   <li>📦 স্ট্যাটাস: ${status}</li>
   <li>📁 ক্যাটাগরি: ${category}</li>
@@ -290,7 +288,6 @@ function generateCode() {
   document.getElementById("note").textContent = "✅ কোড তৈরি হয়েছে!";
   document.getElementById("preview").innerHTML = html;
 }
-
 function copyCode() {
   const code = document.getElementById("output").textContent;
   navigator.clipboard.writeText(code).then(() => {

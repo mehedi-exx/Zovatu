@@ -35,6 +35,16 @@
       color: #000;
     }
 
+    body.light header {
+      background: #ffffff;
+    }
+
+    body.light .logo,
+    body.light .menu-btn,
+    body.light .theme-toggle {
+      color: #000;
+    }
+
     header {
       display: flex;
       align-items: center;
@@ -187,30 +197,34 @@
 </div>
 
 <main>
-  <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
-  <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
-  <input type="text" id="price" placeholder="মূল্য প্রাইস (৳)" required>
-  <input type="text" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
-  <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)">
-  <select id="status">
-    <option value="">স্ট্যাটাস নির্বাচন করুন</option>
-    <option value="In Stock">In Stock</option>
-    <option value="Out of Stock">Out of Stock</option>
-  </select>
-  <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)">
-  <textarea id="desc" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
-  <input type="url" id="img" placeholder="ছবির লিংক (Image URL)">
-  <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
 
-  <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
-    <button id="generateBtn" onclick="generateCode()">✅ কোড জেনারেট করুন</button>
-    <button id="copyBtn" onclick="copyCode()">📋 কপি করুন</button>
+  <!-- ✅ FORM SECTION -->
+  <div id="formSection">
+    <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
+    <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
+    <input type="text" id="price" placeholder="মূল্য প্রাইস (৳)" required>
+    <input type="text" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
+    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)">
+    <select id="status">
+      <option value="">স্ট্যাটাস নির্বাচন করুন</option>
+      <option value="In Stock">In Stock</option>
+      <option value="Out of Stock">Out of Stock</option>
+    </select>
+    <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)">
+    <textarea id="desc" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
+    <input type="url" id="img" placeholder="ছবির লিংক (Image URL)">
+    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+      <button id="generateBtn" onclick="generateCode()">✅ কোড জেনারেট করুন</button>
+      <button id="copyBtn" onclick="copyCode()">📋 কপি করুন</button>
+    </div>
+
+    <div class="note" id="note"></div>
+    <div class="output" id="output"></div>
   </div>
 
-  <div class="note" id="note"></div>
-  <div class="output" id="output"></div>
-
-  <!-- Sections -->
+  <!-- ✅ PAGE SECTIONS -->
   <section data-section="home" class="active">
     <h3>স্বাগতম G9Tool-এ!</h3>
     <p>এই টুল দিয়ে আপনি Blogger এর জন্য প্রোডাক্ট কোড তৈরি করতে পারবেন WhatsApp অর্ডারসহ।</p>
@@ -235,20 +249,41 @@
     <h3>ফুল টিউটোরিয়াল</h3>
     <p>প্রোডাক্ট নাম, প্রাইস, ছবি, কোড ইত্যাদি ফিলআপ করে কোড জেনারেট করুন এবং Blogger-এ বসান।</p>
   </section>
+
 </main>
 
 <script>
+  // থিম লোড সময় সেট করুন
+  window.addEventListener("DOMContentLoaded", () => {
+    if (localStorage.getItem("theme") === "light") {
+      document.body.classList.add("light");
+    }
+  });
+
   function toggleMenu() {
     document.getElementById('sidebar').classList.toggle('active');
   }
 
   function toggleTheme() {
-    document.body.classList.toggle('light');
+    document.body.classList.toggle("light");
+    if (document.body.classList.contains("light")) {
+      localStorage.setItem("theme", "light");
+    } else {
+      localStorage.setItem("theme", "dark");
+    }
   }
 
   function showSection(id) {
     document.querySelectorAll('section[data-section]').forEach(sec => sec.classList.remove('active'));
     document.querySelector(`section[data-section="${id}"]`).classList.add('active');
+
+    const form = document.getElementById("formSection");
+    if (id === 'home') {
+      form.style.display = "block";
+    } else {
+      form.style.display = "none";
+    }
+
     toggleMenu();
   }
 

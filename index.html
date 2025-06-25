@@ -27,20 +27,20 @@
       background-color: var(--bg-light);
       color: var(--text-light);
     }
+
     header {
+      position: relative;
+      z-index: 1001;
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 20px;
       background-color: var(--card-dark);
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 1000;
     }
     body.light header {
       background-color: var(--card-light);
     }
+
     .menu-btn, .theme-toggle {
       font-size: 22px;
       background: none;
@@ -57,39 +57,38 @@
 
     .sidebar {
       position: fixed;
-      top: 56px;
-      left: 0;
+      top: 0;
+      left: -260px;
       width: 250px;
       height: 100%;
-      background: #1f1f1f;
-      color: white;
-      transform: translateX(-100%);
-      transition: transform 0.3s ease;
-      z-index: 999;
+      background-color: var(--card-dark);
+      color: var(--text-dark);
+      z-index: 1000;
+      padding-top: 70px;
+      transition: left 0.3s ease;
     }
     body.light .sidebar {
-      background: #fff;
-      color: #000;
+      background-color: var(--card-light);
+      color: var(--text-light);
     }
-    .sidebar.active {
-      transform: translateX(0);
+    .sidebar.open {
+      left: 0;
     }
     .sidebar a {
       display: block;
-      padding: 15px 20px;
-      text-decoration: none;
+      padding: 12px 20px;
       color: inherit;
-      border-bottom: 1px solid #333;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
     }
-    .sidebar a i {
-      margin-right: 8px;
+    body.light .sidebar a {
+      border-bottom: 1px solid #ccc;
     }
 
     main {
-      margin-top: 70px;
-      padding: 20px;
       display: flex;
       justify-content: center;
+      padding: 20px;
     }
     .form-wrapper {
       max-width: 600px;
@@ -97,10 +96,12 @@
       background: var(--card-dark);
       padding: 20px;
       border-radius: 10px;
+      box-sizing: border-box;
     }
     body.light .form-wrapper {
       background: var(--card-light);
     }
+
     input, textarea, select {
       width: 100%;
       padding: 12px;
@@ -109,11 +110,13 @@
       border-radius: 8px;
       background: var(--input-dark);
       color: var(--text-dark);
+      box-sizing: border-box;
     }
     body.light input, body.light textarea, body.light select {
       background: var(--input-light);
       color: var(--text-light);
     }
+
     button {
       padding: 12px 20px;
       margin-top: 10px;
@@ -135,11 +138,13 @@
       text-align: center;
       flex-wrap: wrap;
     }
+
     .note {
       margin-top: 10px;
       color: #0f0;
       text-align: center;
     }
+
     .output {
       margin-top: 20px;
       padding: 20px;
@@ -152,6 +157,7 @@
       background: var(--card-light);
       color: var(--text-light);
     }
+
     .live-preview {
       margin-top: 20px;
       border: 2px dashed #999;
@@ -161,24 +167,6 @@
     }
     body.light .live-preview {
       background: #eee;
-    }
-
-    .page-section {
-      display: none;
-      background: var(--card-dark);
-      padding: 20px;
-      color: var(--text-dark);
-      border-radius: 10px;
-      margin-top: 20px;
-    }
-    body.light .page-section {
-      background: var(--card-light);
-      color: var(--text-light);
-    }
-
-    .close-btn {
-      text-align: right;
-      margin-top: -10px;
     }
 
     @media (max-width: 600px) {
@@ -191,21 +179,21 @@
 <body>
 
   <header>
-    <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+    <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
     <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
     <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-adjust"></i></button>
   </header>
 
-  <div class="sidebar" id="sidebar">
-    <a href="#" onclick="showSection('home')"><i class="fas fa-home"></i> হোম</a>
-    <a href="#" onclick="showSection('about')"><i class="fas fa-info-circle"></i> অ্যাবাউট</a>
-    <a href="#" onclick="showSection('contact')"><i class="fas fa-envelope"></i> কন্ট্যাক্ট</a>
-    <a href="#" onclick="showSection('privacy')"><i class="fas fa-trash"></i> প্রাইভেসি</a>
-    <a href="#" onclick="showSection('tutorial')"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
-  </div>
+  <nav class="sidebar" id="sidebar">
+    <a href="#" onclick="showSection('form')"><i class="fas fa-home"></i> হোম</a>
+    <a href="#" onclick="alert('About Section')"><i class="fas fa-info-circle"></i> অ্যাবাউট</a>
+    <a href="#" onclick="alert('Contact Section')"><i class="fas fa-envelope"></i> কন্ট্যাক্ট</a>
+    <a href="#" onclick="alert('Privacy Section')"><i class="fas fa-trash"></i> প্রাইভেসি</a>
+    <a href="#" onclick="alert('Tutorial Section')"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
+  </nav>
 
   <main>
-    <div class="form-wrapper" id="home">
+    <div class="form-wrapper" id="formSection">
       <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
       <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
       <input type="text" id="price" placeholder="মূল্য প্রাইস (৳)" required>
@@ -230,27 +218,6 @@
       <div class="output" id="output"></div>
       <div class="live-preview" id="preview"></div>
     </div>
-
-    <div class="page-section" id="about">
-      <div class="close-btn"><button onclick="hideSections()">❌</button></div>
-      <h3>ℹ️ G9Tool সম্পর্কে</h3>
-      <p>এই টুলটি ব্লগারের জন্য প্রোডাক্ট কোড জেনারেট করে।</p>
-    </div>
-    <div class="page-section" id="contact">
-      <div class="close-btn"><button onclick="hideSections()">❌</button></div>
-      <h3>📩 যোগাযোগ করুন</h3>
-      <p>আপনার মতামত পাঠান: example@mail.com</p>
-    </div>
-    <div class="page-section" id="privacy">
-      <div class="close-btn"><button onclick="hideSections()">❌</button></div>
-      <h3>🔐 প্রাইভেসি পলিসি</h3>
-      <p>আপনার ডেটা সম্পূর্ণ নিরাপদ।</p>
-    </div>
-    <div class="page-section" id="tutorial">
-      <div class="close-btn"><button onclick="hideSections()">❌</button></div>
-      <h3>🎓 টিউটোরিয়াল</h3>
-      <p>কিভাবে G9Tool ব্যবহার করবেন তা এখানে দেখুন।</p>
-    </div>
   </main>
 
   <script>
@@ -258,25 +225,20 @@
       document.body.classList.toggle("light");
       localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
     }
-    function toggleSidebar() {
-      document.getElementById("sidebar").classList.toggle("active");
-    }
-
-    function showSection(id) {
-      document.querySelectorAll('.form-wrapper, .page-section').forEach(el => el.style.display = 'none');
-      document.getElementById(id).style.display = 'block';
-      document.getElementById("sidebar").classList.remove("active");
-    }
-
-    function hideSections() {
-      document.querySelectorAll('.page-section').forEach(el => el.style.display = 'none');
-      document.getElementById("home").style.display = 'block';
-    }
 
     window.onload = () => {
       const theme = localStorage.getItem("theme");
       if (theme === "light") document.body.classList.add("light");
     };
+
+    function toggleMenu() {
+      document.getElementById("sidebar").classList.toggle("open");
+    }
+
+    function showSection(id) {
+      document.getElementById("formSection").style.display = id === "form" ? "block" : "none";
+      document.getElementById("sidebar").classList.remove("open");
+    }
 
     function generateCode() {
       const name = document.getElementById("name").value;
@@ -301,32 +263,23 @@
       const waLink = `https://wa.me/${wa}?text=📦 আমি একটি পণ্য অর্ডার করতে চাই:\n\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ৳${offer || price}\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি টাইম: ${delivery}`;
 
       const html = `
-<!-- ✅ Product Image & Title -->
 <div style="text-align:center;">
   <img src="${img}" style="max-width:100%;border-radius:10px;margin-bottom:10px;" alt="${name}" />
   <h2 style="margin:5px 0;">${name}</h2>
   <p style="font-size:16px;">${finalPrice}</p>
 </div>
-
-<!-- ✅ WhatsApp Order Button -->
 <p style="text-align:center;margin:10px 0;">
   <a href="${waLink}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
     📲 অর্ডার করুন WhatsApp এ
   </a>
 </p>
-
-<!-- ✅ Details List -->
 <ul>
   <li>🔢 কোড: ${code}</li>
   <li>📦 স্ট্যাটাস: ${status}</li>
   <li>📁 ক্যাটাগরি: ${category}</li>
   <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
 </ul>
-
-<!-- ✅ Description -->
 <p>${desc}</p>
-
-<!-- ✅ Hidden Shortcode -->
 <p style="display:none;">
   <a href="#">
     {getProduct} $button={Price} $price={৳${offer || price}} $sale={৳${price}} $icon={cart} $style={1}

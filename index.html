@@ -19,9 +19,9 @@
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      transition: 0.3s;
       background-color: var(--bg-dark);
       color: var(--text-dark);
+      transition: 0.3s;
     }
     body.light {
       background-color: var(--bg-light);
@@ -94,6 +94,9 @@
       max-width: 600px;
       margin: auto;
       padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     input, textarea, select {
       width: 100%;
@@ -125,6 +128,7 @@
     #copyBtn {
       background: #007bff;
       color: white;
+      margin-left: 10px;
     }
     .output {
       margin-top: 20px;
@@ -155,6 +159,7 @@
     }
     #form-section {
       transition: 0.3s;
+      width: 100%;
     }
   </style>
 </head>
@@ -234,11 +239,7 @@
     document.querySelector(`section[data-section="${id}"]`).classList.add('active');
 
     const formSection = document.getElementById('form-section');
-    if (id === 'home') {
-      formSection.style.display = 'block';
-    } else {
-      formSection.style.display = 'none';
-    }
+    formSection.style.display = (id === 'home') ? 'block' : 'none';
     toggleMenu();
   }
 
@@ -247,7 +248,7 @@
     const code = document.getElementById("code").value;
     const price = document.getElementById("price").value;
     const offer = document.getElementById("offer").value;
-    const delivery = document.getElementById("delivery").value;
+    const delivery = document.getElementById("delivery").value || "2-5 দিন";
     const status = document.getElementById("status").value;
     const category = document.getElementById("category").value;
     const desc = document.getElementById("desc").value;
@@ -263,7 +264,8 @@
       ? `<del>৳${price}</del> <span style="color:#f00;font-weight:bold;">৳${offer}</span>`
       : `৳${price}`;
 
-    const waLink = `https://wa.me/${wa}?text=📦 আমি একটি পণ্য অর্ডার করতে চাই:\n\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ৳${offer || price}\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি টাইম: ${delivery}`;
+    const waText = `📦 আমি একটি পণ্য অর্ডার করতে চাই:\n\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ৳${offer || price}\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি টাইম: ${delivery}`;
+    const waLink = `https://wa.me/${wa}?text=${encodeURIComponent(waText)}`;
 
     const output = `
 <!-- ✅ Product Image & Title -->
@@ -289,7 +291,14 @@
 </ul>
 
 <!-- ✅ Description -->
-<p>${desc}</p>`;
+<p>${desc}</p>
+
+<!-- ✅ Hidden Shortcode (Amazen Theme Support) -->
+<p style="display:none;">
+  <a href="#">
+    {getProduct} $button={Price} $price={৳${price}} $sale={৳${offer || price}} $icon={cart} $style={1}
+  </a>
+</p>`;
 
     document.getElementById("output").textContent = output;
     document.getElementById("note").textContent = "✅ কোড তৈরি হয়েছে!";
@@ -302,7 +311,7 @@
     });
   }
 
-  // Theme Loader
+  // Theme memory loader
   window.onload = () => {
     const theme = localStorage.getItem('theme');
     if (theme === 'light') {

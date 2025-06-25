@@ -1,161 +1,281 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>G9Tool</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>G9Tool - Blogger Product Generator</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     :root {
-      --bg-light: #f5f5f5;
-      --bg-dark: #1e1e1e;
-      --text-light: #000;
+      --bg-dark: #121212;
+      --bg-light: #f4f4f4;
       --text-dark: #fff;
-      --input-bg-light: #fff;
-      --input-bg-dark: #2e2e2e;
+      --text-light: #000;
+      --card-dark: #1f1f1f;
+      --card-light: #fff;
+      --input-dark: #2c2c2c;
+      --input-light: #eee;
     }
-
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: var(--bg-light);
-      color: var(--text-light);
-      transition: background 0.3s, color 0.3s;
-    }
-
-    body.dark {
+      font-family: 'Segoe UI', sans-serif;
+      transition: 0.3s;
       background-color: var(--bg-dark);
       color: var(--text-dark);
     }
-
-    .container {
+    body.light {
+      background-color: var(--bg-light);
+      color: var(--text-light);
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--card-dark);
+      padding: 10px 20px;
+    }
+    body.light header {
+      background: var(--card-light);
+    }
+    .menu-btn, .theme-toggle {
+      background: none;
+      border: none;
+      font-size: 22px;
+      color: inherit;
+      cursor: pointer;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      font-size: 22px;
+      gap: 10px;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -260px;
+      width: 260px;
+      height: 100%;
+      background: var(--card-dark);
+      transition: 0.3s;
+      padding-top: 60px;
+      z-index: 999;
+    }
+    body.light .sidebar {
+      background: #ddd;
+    }
+    .sidebar.active {
+      left: 0;
+    }
+    .sidebar a {
+      display: block;
+      color: inherit;
+      padding: 12px 20px;
+      text-decoration: none;
+      border-bottom: 1px solid #333;
+    }
+    .sidebar a:hover {
+      background: #333;
+      color: #fff;
+    }
+    body.light .sidebar a:hover {
+      background: #bbb;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: inherit;
+      background: none;
+      border: none;
+      font-size: 20px;
+    }
+    main {
       max-width: 600px;
       margin: auto;
       padding: 20px;
     }
-
-    h1 {
-      text-align: center;
-    }
-
     input, textarea, select {
       width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      background-color: var(--input-bg-light);
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: none;
+      background: var(--input-dark);
+      color: var(--text-dark);
+    }
+    body.light input,
+    body.light textarea,
+    body.light select {
+      background: var(--input-light);
       color: var(--text-light);
     }
-
-    body.dark input,
-    body.dark textarea,
-    body.dark select {
-      background-color: var(--input-bg-dark);
-      color: var(--text-dark);
-      border: 1px solid #444;
-    }
-
-    .theme-toggle {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      cursor: pointer;
-      font-size: 20px;
-    }
-
-    .btn {
-      display: inline-block;
-      background: #25D366;
-      color: white;
+    button {
       padding: 12px 20px;
-      text-align: center;
+      margin-top: 10px;
       border: none;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-      width: 100%;
-    }
-
-    .output {
-      margin-top: 30px;
-      background: #eee;
-      padding: 15px;
       border-radius: 8px;
-      font-family: monospace;
-      white-space: pre-wrap;
-      overflow-x: auto;
+      cursor: pointer;
+      font-weight: bold;
     }
-
-    @media (max-width: 600px) {
-      .container {
-        padding: 10px;
-      }
+    #generateBtn {
+      background: #28a745;
+      color: white;
+    }
+    #copyBtn {
+      background: #007bff;
+      color: white;
+    }
+    .output {
+      margin-top: 20px;
+      background: var(--card-dark);
+      padding: 20px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+    }
+    body.light .output {
+      background: var(--card-light);
+    }
+    .note {
+      color: #0f0;
+      margin-top: 10px;
+    }
+    section[data-section] {
+      display: none;
+      margin-top: 20px;
+      padding: 20px;
+      background: var(--card-dark);
+      border-radius: 10px;
+    }
+    body.light section[data-section] {
+      background: var(--card-light);
+    }
+    section[data-section].active {
+      display: block;
+    }
+    #form-section {
+      transition: 0.3s;
     }
   </style>
 </head>
 <body>
-  <div class="theme-toggle" onclick="toggleTheme()">🌙</div>
 
-  <div class="container">
-    <h1>G9Tool</h1>
+<header>
+  <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+  <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
+  <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+</header>
 
-    <input id="name" placeholder="প্রোডাক্ট নাম" />
-    <input id="code" placeholder="প্রোডাক্ট কোড" />
-    <input id="price" placeholder="মূল্য প্রাইস (৳)" />
-    <input id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)" />
-    <input id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)" />
-    <select id="stock">
-      <option value="In Stock">স্ট্যাটাস নির্বাচন করুন</option>
+<div class="sidebar" id="sidebar">
+  <button class="close-btn" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
+  <a href="#" onclick="showSection('home')"><i class="fas fa-house"></i> হোম</a>
+  <a href="#" onclick="showSection('about')"><i class="fas fa-circle-info"></i> এবাউট</a>
+  <a href="#" onclick="showSection('contacts')"><i class="fas fa-phone"></i> কন্টাক্টস</a>
+  <a href="#" onclick="showSection('privacy')"><i class="fas fa-file-alt"></i> প্রাইভেসি পলিসি</a>
+  <a href="#" onclick="showSection('tutorial')"><i class="fab fa-blogger"></i> ফুল টিউটোরিয়াল</a>
+</div>
+
+<main>
+  <div id="form-section">
+    <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
+    <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
+    <input type="text" id="price" placeholder="মূল্য প্রাইস (৳)" required>
+    <input type="text" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
+    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)">
+    <select id="status">
+      <option value="">স্ট্যাটাস নির্বাচন করুন</option>
       <option value="In Stock">In Stock</option>
       <option value="Out of Stock">Out of Stock</option>
     </select>
-    <input id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)" />
+    <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)">
     <textarea id="desc" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
-    <input id="img" placeholder="ছবির লিংক (Image URL)" />
-
-    <button class="btn" onclick="generateCode()">🔧 কোড জেনারেট করুন</button>
-
-    <div class="output" id="result"></div>
+    <input type="url" id="img" placeholder="ছবির লিংক (Image URL)">
+    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+      <button id="generateBtn" onclick="generateCode()">✅ কোড জেনারেট করুন</button>
+      <button id="copyBtn" onclick="copyCode()">📋 কপি করুন</button>
+    </div>
+    <div class="note" id="note"></div>
+    <div class="output" id="output"></div>
   </div>
 
-  <script>
-    // Theme toggle with localStorage
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") document.body.classList.add("dark");
+  <!-- Sections -->
+  <section data-section="home" class="active"></section>
+  <section data-section="about">
+    <h3>এবাউট</h3>
+    <p>G9Tool একটি Blogger Product Generator টুল, যেটি ডিজাইন করা হয়েছে সহজেই ই-কমার্স প্রোডাক্ট ব্লক তৈরির জন্য।</p>
+  </section>
+  <section data-section="contacts">
+    <h3>যোগাযোগ</h3>
+    <p>Email: support@g9tool.com<br>Phone: +8801XXXXXXXXX</p>
+  </section>
+  <section data-section="privacy">
+    <h3>প্রাইভেসি পলিসি</h3>
+    <p>আমাদের টুল কোনো ডেটা সংগ্রহ করে না। সব ডেটা আপনার ডিভাইসেই থাকে।</p>
+  </section>
+  <section data-section="tutorial">
+    <h3>ফুল টিউটোরিয়াল</h3>
+    <p>প্রোডাক্ট নাম, প্রাইস, ছবি, কোড ইত্যাদি ফিলআপ করে কোড জেনারেট করুন এবং Blogger-এ বসান।</p>
+  </section>
+</main>
 
-    function toggleTheme() {
-      document.body.classList.toggle("dark");
-      localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
+<script>
+  function toggleMenu() {
+    document.getElementById('sidebar').classList.toggle('active');
+  }
+
+  function toggleTheme() {
+    document.body.classList.toggle('light');
+    localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+  }
+
+  function showSection(id) {
+    document.querySelectorAll('section[data-section]').forEach(sec => sec.classList.remove('active'));
+    document.querySelector(`section[data-section="${id}"]`).classList.add('active');
+
+    const formSection = document.getElementById('form-section');
+    if (id === 'home') {
+      formSection.style.display = 'block';
+    } else {
+      formSection.style.display = 'none';
+    }
+    toggleMenu();
+  }
+
+  function generateCode() {
+    const name = document.getElementById("name").value;
+    const code = document.getElementById("code").value;
+    const price = document.getElementById("price").value;
+    const offer = document.getElementById("offer").value;
+    const delivery = document.getElementById("delivery").value;
+    const status = document.getElementById("status").value;
+    const category = document.getElementById("category").value;
+    const desc = document.getElementById("desc").value;
+    const img = document.getElementById("img").value;
+    const wa = document.getElementById("wa").value;
+
+    if (!name || !code || !price || !status || !category || !img || !wa) {
+      alert("সব ফিল্ড পূরণ করুন।");
+      return;
     }
 
-    function generateCode() {
-      const name = document.getElementById("name").value;
-      const code = document.getElementById("code").value;
-      const price = document.getElementById("price").value;
-      const offer = document.getElementById("offer").value || price;
-      const delivery = document.getElementById("delivery").value || "2-5 দিন";
-      const stock = document.getElementById("stock").value;
-      const category = document.getElementById("category").value;
-      const desc = document.getElementById("desc").value;
-      const img = document.getElementById("img").value;
+    const finalPrice = offer
+      ? `<del>৳${price}</del> <span style="color:#f00;font-weight:bold;">৳${offer}</span>`
+      : `৳${price}`;
 
-      const waText = encodeURIComponent(
-        `📦 আমি একটি পণ্য অর্ডার করতে চাই:\n\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ৳${price}\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি টাইম: ${delivery}`
-      );
+    const waLink = `https://wa.me/${wa}?text=📦 আমি একটি পণ্য অর্ডার করতে চাই:\n\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ৳${offer || price}\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি টাইম: ${delivery}`;
 
-      const html = `
+    const output = `
 <!-- ✅ Product Image & Title -->
 <div style="text-align:center;">
   <img src="${img}" style="max-width:100%;border-radius:10px;margin-bottom:10px;" alt="${name}" />
   <h2 style="margin:5px 0;">${name}</h2>
-  <p style="font-size:16px;">৳${price}</p>
+  <p style="font-size:16px;">${finalPrice}</p>
 </div>
 
 <!-- ✅ WhatsApp Order Button -->
 <p style="text-align:center;margin:10px 0;">
-  <a href="https://wa.me/8801627647776?text=${waText}" target="_blank"
-    style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
+  <a href="${waLink}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
     📲 অর্ডার করুন WhatsApp এ
   </a>
 </p>
@@ -163,24 +283,33 @@
 <!-- ✅ Details List -->
 <ul>
   <li>🔢 কোড: ${code}</li>
-  <li>📦 স্ট্যাটাস: ${stock}</li>
+  <li>📦 স্ট্যাটাস: ${status}</li>
   <li>📁 ক্যাটাগরি: ${category}</li>
   <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
 </ul>
 
 <!-- ✅ Description -->
-<p>${desc}</p>
+<p>${desc}</p>`;
 
-<!-- ✅ Hidden Shortcode (Amazen Theme Support) -->
-<p style="display:none;">
-  <a href="#">
-    {getProduct} $button={Price} $price={৳${price}} $sale={৳${offer}} $icon={cart} $style={1}
-  </a>
-</p>
-      `.trim();
+    document.getElementById("output").textContent = output;
+    document.getElementById("note").textContent = "✅ কোড তৈরি হয়েছে!";
+  }
 
-      document.getElementById("result").innerText = html;
+  function copyCode() {
+    const code = document.getElementById("output").textContent;
+    navigator.clipboard.writeText(code).then(() => {
+      document.getElementById("note").textContent = "✅ কপি হয়েছে!";
+    });
+  }
+
+  // Theme Loader
+  window.onload = () => {
+    const theme = localStorage.getItem('theme');
+    if (theme === 'light') {
+      document.body.classList.add('light');
     }
-  </script>
+  };
+</script>
+
 </body>
 </html>

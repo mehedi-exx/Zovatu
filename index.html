@@ -33,6 +33,8 @@
       align-items: center;
       padding: 12px 20px;
       background-color: var(--card-dark);
+      position: relative;
+      z-index: 1000;
     }
     body.light header {
       background-color: var(--card-light);
@@ -50,7 +52,6 @@
       align-items: center;
       gap: 8px;
     }
-
     main {
       display: flex;
       justify-content: center;
@@ -121,11 +122,73 @@
       border: 2px dashed #999;
       padding: 20px;
       border-radius: 10px;
-      background: #222;
+      background: var(--card-dark);
     }
     body.light .live-preview {
-      background: #eee;
+      background: var(--card-light);
     }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      left: -200px;
+      top: 0;
+      bottom: 0;
+      width: 200px;
+      background: var(--card-dark);
+      color: var(--text-dark);
+      padding-top: 60px;
+      transition: 0.3s;
+      z-index: 999;
+    }
+    body.light .sidebar {
+      background: var(--card-light);
+      color: var(--text-light);
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .sidebar ul li {
+      padding: 15px 20px;
+      border-bottom: 1px solid #444;
+      cursor: pointer;
+    }
+    .sidebar ul li:hover {
+      background: #333;
+    }
+    body.light .sidebar ul li:hover {
+      background: #ddd;
+    }
+    .sidebar.open {
+      left: 0;
+    }
+
+    .section-panel {
+      display: none;
+      max-width: 700px;
+      margin: 20px auto;
+      padding: 20px;
+      background: var(--card-dark);
+      color: var(--text-dark);
+      border-radius: 10px;
+    }
+    body.light .section-panel {
+      background: var(--card-light);
+      color: var(--text-light);
+    }
+    .close-btn {
+      float: right;
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
     @media (max-width: 600px) {
       .form-wrapper {
         padding: 15px;
@@ -135,12 +198,32 @@
 </head>
 <body>
 
+  <!-- Header -->
   <header>
-    <button class="menu-btn" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+    <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
     <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
     <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-adjust"></i></button>
   </header>
 
+  <!-- Sidebar Menu -->
+  <div id="sidebar" class="sidebar">
+    <ul>
+      <li onclick="showSection('home')"><i class="fas fa-home"></i> হোম</li>
+      <li onclick="showSection('about')"><i class="fas fa-info-circle"></i> অ্যাবাউট</li>
+      <li onclick="showSection('contact')"><i class="fas fa-envelope"></i> কন্ট্যাক্ট</li>
+      <li onclick="showSection('privacy')"><i class="fas fa-user-secret"></i> প্রাইভেসি</li>
+      <li onclick="showSection('tutorial')"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</li>
+    </ul>
+  </div>
+
+  <!-- Sections -->
+  <div class="section-panel" id="home"><button class="close-btn" onclick="closeSection()">❌</button><h2>হোম</h2><p>স্বাগতম G9Tool-এ!</p></div>
+  <div class="section-panel" id="about"><button class="close-btn" onclick="closeSection()">❌</button><h2>About</h2><p>এই টুলটি একটি Blogger Product Generator টুল যা কোড তৈরি করে দ্রুত পোস্ট করতে সাহায্য করে।</p></div>
+  <div class="section-panel" id="contact"><button class="close-btn" onclick="closeSection()">❌</button><h2>Contact</h2><p>যোগাযোগ করুন: g9tool@example.com</p></div>
+  <div class="section-panel" id="privacy"><button class="close-btn" onclick="closeSection()">❌</button><h2>Privacy</h2><p>আপনার সকল তথ্য আমাদের কাছে নিরাপদ।</p></div>
+  <div class="section-panel" id="tutorial"><button class="close-btn" onclick="closeSection()">❌</button><h2>Tutorial</h2><p>১. ফর্ম পূরণ করুন<br>২. কোড জেনারেট করুন<br>৩. কপি করে Blogger-এ ব্যবহার করুন।</p></div>
+
+  <!-- Main Product Form -->
   <main>
     <div class="form-wrapper">
       <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
@@ -159,8 +242,8 @@
       <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
 
       <div class="buttons">
-        <button id="generateBtn" onclick="generateCode()">✅ কোড জেনারেট করুন</button>
-        <button id="copyBtn" onclick="copyCode()">📋 কপি করুন</button>
+        <button id="generateBtn" onclick="generateCode()"><i class="fas fa-check-circle"></i> কোড জেনারেট করুন</button>
+        <button id="copyBtn" onclick="copyCode()"><i class="fas fa-copy"></i> কপি করুন</button>
       </div>
 
       <div class="note" id="note"></div>
@@ -169,31 +252,50 @@
     </div>
   </main>
 
+  <!-- Scripts -->
   <script>
     function toggleTheme() {
       document.body.classList.toggle("light");
       localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
     }
 
-    window.onload = () => {
-      const theme = localStorage.getItem("theme");
-      if (theme === "light") document.body.classList.add("light");
-    };
+    function toggleMenu() {
+      document.getElementById("sidebar").classList.toggle("open");
+    }
+
+    function showSection(id) {
+      document.querySelector('.form-wrapper').style.display = 'none';
+      document.getElementById("sidebar").classList.remove("open");
+      const sections = document.querySelectorAll(".section-panel");
+      sections.forEach(sec => sec.style.display = "none");
+      document.getElementById(id).style.display = "block";
+    }
+
+    function closeSection() {
+      const sections = document.querySelectorAll(".section-panel");
+      sections.forEach(sec => sec.style.display = "none");
+      document.querySelector('.form-wrapper').style.display = 'block';
+    }
 
     function generateCode() {
-      const name = document.getElementById("name").value;
-      const code = document.getElementById("code").value;
-      const price = document.getElementById("price").value;
-      const offer = document.getElementById("offer").value;
-      const delivery = document.getElementById("delivery").value;
+      const name = document.getElementById("name").value.trim();
+      const code = document.getElementById("code").value.trim();
+      const price = document.getElementById("price").value.trim();
+      const offer = document.getElementById("offer").value.trim();
+      const delivery = document.getElementById("delivery").value.trim();
       const status = document.getElementById("status").value;
-      const category = document.getElementById("category").value;
-      const desc = document.getElementById("desc").value;
-      const img = document.getElementById("img").value;
-      const wa = document.getElementById("wa").value;
+      const category = document.getElementById("category").value.trim();
+      const desc = document.getElementById("desc").value.trim();
+      const img = document.getElementById("img").value.trim();
+      const wa = document.getElementById("wa").value.trim();
 
       if (!name || !code || !price || !status || !category || !img || !wa) {
         alert("সব প্রয়োজনীয় ফিল্ড পূরণ করুন।");
+        return;
+      }
+
+      if (!/^8801\d{9}$/.test(wa)) {
+        alert("সঠিক WhatsApp নম্বর দিন (8801XXXXXXXXXX ফরম্যাটে)");
         return;
       }
 
@@ -213,16 +315,16 @@
 <!-- ✅ WhatsApp Order Button -->
 <p style="text-align:center;margin:10px 0;">
   <a href="${waLink}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
-    📲 অর্ডার করুন WhatsApp এ
+    <i class="fab fa-whatsapp"></i> অর্ডার করুন WhatsApp এ
   </a>
 </p>
 
 <!-- ✅ Details List -->
 <ul>
-  <li>🔢 কোড: ${code}</li>
-  <li>📦 স্ট্যাটাস: ${status}</li>
-  <li>📁 ক্যাটাগরি: ${category}</li>
-  <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
+  <li><i class="fas fa-barcode"></i> কোড: ${code}</li>
+  <li><i class="fas fa-box"></i> স্ট্যাটাস: ${status}</li>
+  <li><i class="fas fa-tags"></i> ক্যাটাগরি: ${category}</li>
+  <li><i class="fas fa-truck"></i> ডেলিভারি টাইম: ${delivery}</li>
 </ul>
 
 <!-- ✅ Description -->
@@ -238,6 +340,7 @@
       document.getElementById("output").textContent = html;
       document.getElementById("note").textContent = "✅ কোড তৈরি হয়েছে!";
       document.getElementById("preview").innerHTML = html;
+      document.getElementById("preview").scrollIntoView({ behavior: 'smooth' });
     }
 
     function copyCode() {
@@ -246,6 +349,11 @@
         document.getElementById("note").textContent = "✅ কপি হয়েছে!";
       });
     }
+
+    window.onload = () => {
+      const theme = localStorage.getItem("theme");
+      if (theme === "light") document.body.classList.add("light");
+    };
   </script>
 </body>
 </html>

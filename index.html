@@ -12,12 +12,14 @@
       --card-dark: #1f1f1f;
       --input-dark: #2c2c2c;
     }
+
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
       background-color: var(--bg-dark);
       color: var(--text-dark);
     }
+
     header {
       position: relative;
       z-index: 1001;
@@ -29,6 +31,7 @@
       border-radius: 0 0 20px 20px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
+
     .menu-btn {
       font-size: 22px;
       background: none;
@@ -36,12 +39,14 @@
       color: inherit;
       cursor: pointer;
     }
+
     .logo {
       font-size: 22px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
+
     .telegram-icon {
       font-size: 22px;
       color: #1DA1F2;
@@ -53,6 +58,7 @@
       align-items: center;
       justify-content: center;
     }
+
     .sidebar {
       position: fixed;
       top: 0;
@@ -65,9 +71,11 @@
       padding-top: 70px;
       transition: left 0.3s ease;
     }
+
     .sidebar.open {
       left: 0;
     }
+
     .sidebar a {
       display: block;
       padding: 12px 20px;
@@ -75,11 +83,13 @@
       text-decoration: none;
       border-bottom: 1px solid rgba(255,255,255,0.1);
     }
+
     main {
       display: flex;
       justify-content: center;
       padding: 20px;
     }
+
     .form-wrapper {
       max-width: 600px;
       width: 100%;
@@ -88,6 +98,7 @@
       border-radius: 10px;
       box-sizing: border-box;
     }
+
     input, textarea, select {
       width: 100%;
       padding: 12px;
@@ -99,28 +110,33 @@
       box-sizing: border-box;
       box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
     }
+
     .image-input-group {
       display: flex;
       gap: 10px;
       align-items: center;
     }
+
     .image-input-group input {
       flex: 1;
     }
+
     .image-input-group button {
       background: #444;
       color: #fff;
     }
-    .slider-toggle {
+
+    .checkbox-container {
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 14px;
-      margin-top: 5px;
+      gap: 8px;
     }
-    .slider-toggle input[type="checkbox"] {
-      transform: scale(1.2);
+
+    .checkbox-container input {
+      width: 20px;
+      height: 20px;
     }
+
     button {
       padding: 12px 20px;
       margin-top: 10px;
@@ -129,11 +145,30 @@
       cursor: pointer;
       font-weight: bold;
     }
-    #generateBtn { background: #28a745; color: white; }
-    #copyBtn { background: #007bff; color: white; margin-left: 10px; }
-    .buttons { text-align: center; flex-wrap: wrap; }
-    .note { margin-top: 10px; color: #0f0; text-align: center; }
-    .output, .live-preview {
+
+    #generateBtn { 
+      background: #28a745; 
+      color: white; 
+    }
+
+    #copyBtn { 
+      background: #007bff; 
+      color: white; 
+      margin-left: 10px; 
+    }
+
+    .buttons { 
+      text-align: center; 
+      flex-wrap: wrap; 
+    }
+
+    .note {
+      margin-top: 10px;
+      color: #0f0;
+      text-align: center;
+    }
+
+    .output {
       margin-top: 20px;
       padding: 20px;
       border-radius: 10px;
@@ -142,6 +177,15 @@
       white-space: pre-wrap;
       overflow-x: auto;
     }
+
+    .live-preview {
+      margin-top: 20px;
+      border: 2px dashed #999;
+      padding: 20px;
+      border-radius: 10px;
+      background: #222;
+    }
+
     @media (max-width: 600px) {
       .form-wrapper { padding: 15px; }
     }
@@ -178,9 +222,9 @@
         <div class="image-input-group"><input type="url" placeholder="ছবির লিংক (Image URL)" class="img-url"><button onclick="addImageField()">➕</button></div>
       </div>
       <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
-      <div class="slider-toggle">
-        <label for="autoSlide">অটো স্লাইড চালু রাখুন</label>
-        <input type="checkbox" id="autoSlide" checked>
+      <div class="checkbox-container">
+        <input type="checkbox" id="autoSlideToggle">
+        <label for="autoSlideToggle">অটো স্লাইড চালু থাকবে</label>
       </div>
       <div class="buttons">
         <button id="generateBtn" onclick="generateCode()">✅ কোড জেনারেট করুন</button>
@@ -195,10 +239,12 @@
     function toggleMenu() {
       document.getElementById("sidebar").classList.toggle("open");
     }
+
     function showSection(id) {
       document.getElementById("formSection").style.display = id === "form" ? "block" : "none";
       document.getElementById("sidebar").classList.remove("open");
     }
+
     function addImageField() {
       const container = document.getElementById("imageInputs");
       const count = container.querySelectorAll(".img-url").length;
@@ -208,6 +254,7 @@
       div.innerHTML = `<input type="url" placeholder="ছবির লিংক (Image URL)" class="img-url"> <button onclick="this.parentElement.remove()">❌</button>`;
       container.appendChild(div);
     }
+
     function generateCode() {
       const name = document.getElementById("name").value;
       const code = document.getElementById("code").value;
@@ -217,24 +264,25 @@
       const status = document.getElementById("status").value;
       const category = document.getElementById("category").value;
       const desc = document.getElementById("desc").value;
-      const autoSlide = document.getElementById("autoSlide").checked;
       const imgs = Array.from(document.querySelectorAll(".img-url"))
         .map(i => i.value.trim()).filter(Boolean);
       const wa = document.getElementById("wa").value;
+      const autoSlide = document.getElementById("autoSlideToggle").checked;
+
       if (!name || !code || !price || !status || !category || imgs.length === 0 || !wa) {
         alert("সব প্রয়োজনীয় ফিল্ড পূরণ করুন।");
         return;
       }
+
       const finalPrice = offer ? `<span style='font-size:18px;font-weight:bold;'><span style='color:#888;text-decoration:line-through;margin-right:6px;'>৳${price}</span><span style='color:#d00;'>৳${offer}</span></span>` : `<span style='font-size:18px;font-weight:bold;color:#222;'>৳${price}</span>`;
+
       const waText = encodeURIComponent(`📦 আমি একটি পণ্য অর্ডার করতে চাই:\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ৳${offer || price}\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি টাইম: ${delivery}`);
       const waLink = `https://wa.me/${wa}?text=${waText}`;
-      let sliderContent = imgs.map(i => `<img src='${i}' style='width:100%;max-width:100%;border-radius:10px;display:inline-block;scroll-snap-align:center;margin-bottom:10px;' />`).join('');
-      if (autoSlide) {
-        sliderContent += `<script>setInterval(()=>{const s=document.querySelector('.slider-inner');if(s)s.scrollLeft+=s.clientWidth;},2000);</script>`;
-      }
+
       const imageSection = imgs.length > 1
-        ? `<div class='slider' style='overflow:hidden;position:relative;width:100%;'><div class="slider-badge">🖼 Slide</div><div class='slider-inner' style='white-space:nowrap;overflow-x:auto;scroll-snap-type:x mandatory;'>${sliderContent}</div></div>`
+        ? `<div class='slider' style='overflow:hidden;position:relative;width:100%;'><div style='white-space:nowrap;overflow-x:auto;scroll-snap-type:x mandatory;'>${imgs.map(i => `<img src='${i}' style='width:100%;max-width:100%;border-radius:10px;display:inline-block;scroll-snap-align:center;margin-bottom:10px;' />`).join('')}</div></div>`
         : `<img src='${imgs[0]}' style='max-width:100%;border-radius:10px;margin-bottom:10px;' alt='${name}' />`;
+
       const html = `
 <div style='text-align:center;'>
   ${imageSection}
@@ -252,14 +300,14 @@
 </ul>
 <p>${desc}</p>
 <p style='display:none;'>
-  <a href="#">
-    {getProduct} $button={Price} $price={৳${offer || price}} $sale={৳${price}} $icon={cart} $style={1}
-  </a>
+  <a href="#">{getProduct} $button={Price} $price={৳${offer || price}} $sale={৳${price}} $icon={cart} $style={1}</a>
 </p>`;
+
       document.getElementById("output").textContent = html;
       document.getElementById("note").textContent = "✅ কোড তৈরি হয়েছে!";
       document.getElementById("preview").innerHTML = html;
     }
+
     function copyCode() {
       const code = document.getElementById("output").textContent;
       navigator.clipboard.writeText(code).then(() => {

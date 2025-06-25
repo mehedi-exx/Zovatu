@@ -7,32 +7,31 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     :root {
-      --bg-dark: #121212;
-      --text-dark: #fff;
-      --card-dark: #1f1f1f;
-      --input-dark: #2c2c2c;
+      --bg: #121212;
+      --text: #ffffff;
+      --card: #1f1f1f;
+      --input: #2c2c2c;
     }
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text-dark);
+      background-color: var(--bg);
+      color: var(--text);
     }
     header {
+      background: var(--card);
+      padding: 12px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 20px;
-      background-color: var(--card-dark);
-      border-radius: 0 0 15px 15px;
-      position: relative;
-      z-index: 1001;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
     }
     .menu-btn {
       font-size: 22px;
       background: none;
       border: none;
-      color: inherit;
+      color: var(--text);
       cursor: pointer;
     }
     .logo {
@@ -41,10 +40,12 @@
       align-items: center;
       gap: 8px;
     }
-    .telegram-link {
+    .telegram {
       font-size: 22px;
       color: #0088cc;
-      text-decoration: none;
+      background: none;
+      border: none;
+      cursor: pointer;
     }
     .sidebar {
       position: fixed;
@@ -52,8 +53,8 @@
       left: -260px;
       width: 250px;
       height: 100%;
-      background-color: var(--card-dark);
-      color: var(--text-dark);
+      background-color: var(--card);
+      color: var(--text);
       z-index: 1000;
       padding-top: 70px;
       transition: left 0.3s ease;
@@ -68,6 +69,7 @@
       text-decoration: none;
       border-bottom: 1px solid rgba(255,255,255,0.1);
     }
+
     main {
       display: flex;
       justify-content: center;
@@ -76,9 +78,10 @@
     .form-wrapper {
       max-width: 600px;
       width: 100%;
-      background: var(--card-dark);
+      background: var(--card);
       padding: 20px;
-      border-radius: 10px;
+      border-radius: 12px;
+      box-sizing: border-box;
     }
     input, textarea, select {
       width: 100%;
@@ -86,12 +89,12 @@
       margin: 10px 0;
       border: none;
       border-radius: 8px;
-      background: var(--input-dark);
-      color: var(--text-dark);
+      background: var(--input);
+      color: var(--text);
+      font-size: 16px;
     }
     button {
       padding: 12px 20px;
-      margin-top: 10px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
@@ -108,6 +111,7 @@
     }
     .buttons {
       text-align: center;
+      flex-wrap: wrap;
     }
     .note {
       margin-top: 10px;
@@ -118,13 +122,13 @@
       margin-top: 20px;
       padding: 20px;
       border-radius: 10px;
-      background: #1a1a1a;
-      overflow-x: auto;
-      font-family: monospace;
+      background: var(--input);
+      color: var(--text);
+      white-space: pre-wrap;
     }
     .live-preview {
       margin-top: 20px;
-      border: 2px dashed #999;
+      border: 2px dashed #555;
       padding: 20px;
       border-radius: 10px;
       background: #222;
@@ -141,15 +145,15 @@
   <header>
     <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
     <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
-    <a href="https://t.me/mehedi_exx" target="_blank" class="telegram-link"><i class="fab fa-telegram-plane"></i></a>
+    <a href="https://t.me/mehedi_exx" target="_blank" class="telegram"><i class="fab fa-telegram-plane"></i></a>
   </header>
 
   <nav class="sidebar" id="sidebar">
     <a href="#" onclick="showSection('form')"><i class="fas fa-home"></i> হোম</a>
-    <a href="#" onclick="showAlert('G9Tool একটি প্রোডাক্ট কোড জেনারেটর টুল যা আপনাকে সহজে ব্লগারের জন্য রেডিমেড প্রোডাক্ট পোস্ট তৈরিতে সহায়তা করে।')"><i class="fas fa-info-circle"></i> অ্যাবাউট</a>
-    <a href="#" onclick="showAlert('যোগাযোগ করুন: G9tool@gmail.com')"><i class="fas fa-envelope"></i> কন্ট্যাক্ট</a>
-    <a href="#" onclick="showAlert('আপনার তথ্য আমাদের কাছে নিরাপদ। কোন ধরনের ডেটা শেয়ার বা সংরক্ষণ করা হয় না।')"><i class="fas fa-user-shield"></i> প্রাইভেসি</a>
-    <a href="#" onclick="showAlert('১. ফর্ম পূরণ করুন\n২. Generate বাটনে ক্লিক করুন\n৩. Copy করুন বা প্রিভিউ দেখুন\n৪. কোড Blogger এ ব্যবহার করুন')"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
+    <a href="#" onclick="alert('G9Tool একটি প্রফেশনাল Blogger টুল যা অটো প্রোডাক্ট কোড তৈরি করে।')"><i class="fas fa-info-circle"></i> অ্যাবাউট</a>
+    <a href="#" onclick="alert('যোগাযোগ করুন: G9tool@gmail.com')"><i class="fas fa-envelope"></i> কন্ট্যাক্ট</a>
+    <a href="#" onclick="alert('আপনার তথ্য সম্পূর্ণ নিরাপদ। কোনরকম তথ্য সংগ্রহ করা হয় না।')"><i class="fas fa-lock"></i> প্রাইভেসি</a>
+    <a href="#" onclick="alert('১. প্রোডাক্ট ফর্ম পূরণ করুন\n২. কোড জেনারেট করুন\n৩. কপি করে Blogger পোস্টে বসান')"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
   </nav>
 
   <main>
@@ -190,11 +194,6 @@
       document.getElementById("sidebar").classList.remove("open");
     }
 
-    function showAlert(message) {
-      alert(message);
-      document.getElementById("sidebar").classList.remove("open");
-    }
-
     function generateCode() {
       const name = document.getElementById("name").value;
       const code = document.getElementById("code").value;
@@ -215,9 +214,15 @@
       const finalPrice = offer
         ? `<del>৳${price}</del> <span style="color:#f00;font-weight:bold;">৳${offer}</span>`
         : `৳${price}`;
-
-      const message = `📦 আমি একটি পণ্য অর্ডার করতে চাই:\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ৳${offer || price}\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি টাইম: ${delivery}`;
-      const waLink = `https://wa.me/${wa}?text=${encodeURIComponent(message)}`;
+      const waText = encodeURIComponent(
+`📦 আমি একটি পণ্য অর্ডার করতে চাই:
+🔖 প্রোডাক্ট: ${name}
+💰 মূল্য: ৳${offer || price}
+🧾 কোড: ${code}
+📁 ক্যাটাগরি: ${category}
+🚚 ডেলিভারি টাইম: ${delivery || "N/A"}`
+      );
+      const waLink = `https://wa.me/${wa}?text=${waText}`;
 
       const html = `
 <div style="text-align:center;">
@@ -234,7 +239,7 @@
   <li>🔢 কোড: ${code}</li>
   <li>📦 স্ট্যাটাস: ${status}</li>
   <li>📁 ক্যাটাগরি: ${category}</li>
-  <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
+  <li>🚚 ডেলিভারি টাইম: ${delivery || "N/A"}</li>
 </ul>
 <p>${desc}</p>
 <p style="display:none;">

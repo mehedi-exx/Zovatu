@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="bn"><head>
+<!DOCTYPE html>
+<html lang="bn">
+<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>G9Tool - Blogger Product Generator</title>
@@ -140,58 +142,155 @@
     @media (max-width: 600px) {
       .form-wrapper { padding: 15px; }
     }
-    .slider-icon {
-      text-align: center;
-      margin-top: 5px;
-      font-size: 20px;
-      color: #888;
-    }
   </style>
 </head>
 <body>
-  <!-- Your existing body structure remains unchanged -->
-  <script>
-    let autoSlide = true; // Default auto-slide onfunction generateCode() {
-  // ... previous declarations ...
-  const imgs = Array.from(document.querySelectorAll(".img-url"))
-    .map(i => i.value.trim()).filter(Boolean);
-
-  // Auto-slide toggle value
-  const autoSlideToggle = autoSlide;
-
-  let sliderContent = '';
-  if (imgs.length > 1) {
-    sliderContent = `<div class='slider-icon'><i class='fas fa-images'></i> Slide</div>
-    <div class='slider' style='position:relative;overflow:hidden;'>
-      <div id='slider-inner' style='white-space:nowrap;transition:transform 0.5s ease;'>
-        ${imgs.map((src, i) => `<img src='${src}' class='slider-img' style='width:100%;max-width:100%;border-radius:10px;display:inline-block;margin-bottom:10px;' />`).join('')}
+  <header>
+    <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+    <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
+    <a href="https://t.me/mehedi_exx" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
+  </header>
+  <nav class="sidebar" id="sidebar">
+    <a href="#" onclick="showSection('form')"><i class="fas fa-home"></i> হোম</a>
+    <a href="#" onclick="alert('G9Tool একটি প্রফেশনাল Blogger টুল যা অটো প্রোডাক্ট কোড তৈরি করে।')"><i class="fas fa-info-circle"></i> অ্যাবাউট</a>
+    <a href="#" onclick="alert('যোগাযোগ করুন: G9tool@gmail.com')"><i class="fas fa-envelope"></i> কন্ট্যাক্ট</a>
+    <a href="#" onclick="alert('আপনার তথ্য সম্পূর্ণ নিরাপদ। কোনরকম তথ্য সংগ্রহ করা হয় না।')"><i class="fas fa-lock"></i> প্রাইভেসি</a>
+    <a href="#" onclick="alert('১. প্রোডাক্ট ফর্ম পূরণ করুন\n২. কোড জেনারেট করুন\n৩. কপি করে Blogger পোস্টে বসান')"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
+  </nav>
+  <main>
+    <div class="form-wrapper" id="formSection">
+      <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
+      <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
+      <input type="text" id="price" placeholder="মূল্য প্রাইস (৳)" required>
+      <input type="text" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
+      <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)">
+      <select id="status">
+        <option value="">স্ট্যাটাস নির্বাচন করুন</option>
+        <option value="In Stock">In Stock</option>
+        <option value="Out of Stock">Out of Stock</option>
+      </select>
+      <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)">
+      <textarea id="desc" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
+      <div id="imageInputs">
+        <div class="image-input-group"><input type="url" placeholder="ছবির লিংক (Image URL)" class="img-url"><button onclick="addImageField()">➕</button></div>
       </div>
-    </div>`;
-  } else {
-    sliderContent = `<img src='${imgs[0]}' style='max-width:100%;border-radius:10px;margin-bottom:10px;' alt='${name}' />`;
-  }
+      <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
+      <label style="display:flex;align-items:center;margin-top:10px;">
+        <input type="checkbox" id="autoSlide" checked style="margin-right:8px;">
+        <span style="font-size:14px;">স্লাইড অটো চালু থাকবে</span>
+      </label>
+      <div class="buttons">
+        <button id="generateBtn" onclick="generateCode()">✅ কোড জেনারেট করুন</button>
+        <button id="copyBtn" onclick="copyCode()">📋 কপি করুন</button>
+      </div>
+      <div class="note" id="note"></div>
+      <div class="output" id="output"></div>
+      <div class="live-preview" id="preview"></div>
+    </div>
+  </main>
 
-  const html = `
-
-<div style='text-align:center;'>
-  ${sliderContent}
-  <h2 style='margin:5px 0;'>${name}</h2>
-  <p style='font-size:16px;'>${finalPrice}</p>
-</div>`;document.getElementById("output").textContent = html;
-  document.getElementById("preview").innerHTML = html;
-  if (autoSlideToggle && imgs.length > 1) startAutoSlide();
+<script>
+function toggleMenu() {
+  document.getElementById("sidebar").classList.toggle("open");
 }
-
-function startAutoSlide() {
-  const sliderInner = document.getElementById("slider-inner");
-  let index = 0;
-  const total = sliderInner.children.length;
-  setInterval(() => {
-    index = (index + 1) % total;
-    sliderInner.style.transform = `translateX(-${index * 100}%)`;
+function showSection(id) {
+  document.getElementById("formSection").style.display = id === "form" ? "block" : "none";
+  document.getElementById("sidebar").classList.remove("open");
+}
+function addImageField() {
+  const container = document.getElementById("imageInputs");
+  const count = container.querySelectorAll(".img-url").length;
+  if (count >= 5) return alert("সর্বোচ্চ ৫টি ছবি যোগ করা যাবে।");
+  const div = document.createElement("div");
+  div.className = "image-input-group";
+  div.innerHTML = `<input type="url" placeholder="ছবির লিংক (Image URL)" class="img-url"> <button onclick="this.parentElement.remove()">❌</button>`;
+  container.appendChild(div);
+}
+function startAutoSlider(sliderId) {
+  const container = document.querySelector(`#${sliderId} .slide-container`);
+  if (!container) return;
+  let scrollAmount = 0;
+  const interval = setInterval(() => {
+    if (!document.getElementById("autoSlide").checked) {
+      clearInterval(interval);
+      return;
+    }
+    const width = container.offsetWidth;
+    container.scrollBy({ left: width, behavior: 'smooth' });
+    scrollAmount += width;
+    if (scrollAmount >= container.scrollWidth - width) {
+      scrollAmount = 0;
+      container.scrollTo({ left: 0, behavior: 'smooth' });
+    }
   }, 3000);
 }
+function generateCode() {
+  const name = document.getElementById("name").value;
+  const code = document.getElementById("code").value;
+  const price = document.getElementById("price").value;
+  const offer = document.getElementById("offer").value;
+  const delivery = document.getElementById("delivery").value || "N/A";
+  const status = document.getElementById("status").value;
+  const category = document.getElementById("category").value;
+  const desc = document.getElementById("desc").value;
+  const imgs = Array.from(document.querySelectorAll(".img-url")).map(i => i.value.trim()).filter(Boolean);
+  const wa = document.getElementById("wa").value;
+  const isAuto = document.getElementById("autoSlide").checked;
+  const sliderId = "slider_" + Math.floor(Math.random() * 999999);
 
-  </script>
+  if (!name || !code || !price || !status || !category || imgs.length === 0 || !wa) {
+    alert("সব প্রয়োজনীয় ফিল্ড পূরণ করুন।");
+    return;
+  }
+
+  const finalPrice = offer ? `<span style='font-size:18px;font-weight:bold;'><span style='color:#888;text-decoration:line-through;margin-right:6px;'>৳${price}</span><span style='color:#d00;'>৳${offer}</span></span>` : `<span style='font-size:18px;font-weight:bold;color:#222;'>৳${price}</span>`;
+  const waText = encodeURIComponent(`📦 আমি একটি পণ্য অর্ডার করতে চাই:\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ৳${offer || price}\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি টাইম: ${delivery}`);
+  const waLink = `https://wa.me/${wa}?text=${waText}`;
+
+  const imageSection = imgs.length > 1
+    ? `<div style="position:relative;">
+        <div id="${sliderId}" class="slider" style="overflow:hidden;position:relative;width:100%;">
+          <div class="slide-container" style="white-space:nowrap;overflow-x:auto;scroll-snap-type:x mandatory;">
+            ${imgs.map(i => `<img src="${i}" style="width:100%;max-width:100%;border-radius:10px;display:inline-block;scroll-snap-align:center;margin-bottom:10px;" />`).join('')}
+          </div>
+        </div>
+        <div style="position:absolute;top:8px;right:8px;background:#0008;color:#fff;padding:4px 6px;border-radius:5px;font-size:12px;">
+          <i class="fas fa-images"></i> Slide
+        </div>
+      </div>`
+    : `<img src="${imgs[0]}" style="max-width:100%;border-radius:10px;margin-bottom:10px;" alt="${name}" />`;
+
+  const html = `
+<div style='text-align:center;'>${imageSection}
+  <h2 style='margin:5px 0;'>${name}</h2>
+  <p style='font-size:16px;'>${finalPrice}</p>
+</div>
+<p style='text-align:center;margin:10px 0;'>
+  <a href='${waLink}' target='_blank' style='display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;'>📲 অর্ডার করুন WhatsApp এ</a>
+</p>
+<ul style='text-align:left;'>
+  <li>🔢 কোড: ${code}</li>
+  <li>📦 স্ট্যাটাস: ${status}</li>
+  <li>📁 ক্যাটাগরি: ${category}</li>
+  <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
+</ul>
+<p>${desc}</p>
+<p style='display:none;'><a href="#">{getProduct} $button={Price} $price={৳${offer || price}} $sale={৳${price}} $icon={cart} $style={1}</a></p>`;
+
+  document.getElementById("output").textContent = html;
+  document.getElementById("note").textContent = "✅ কোড তৈরি হয়েছে!";
+  document.getElementById("preview").innerHTML = html;
+
+  if (imgs.length > 1 && isAuto) {
+    setTimeout(() => startAutoSlider(sliderId), 500);
+  }
+}
+function copyCode() {
+  const code = document.getElementById("output").textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    document.getElementById("note").textContent = "✅ কপি হয়েছে!";
+  });
+}
+</script>
 </body>
 </html>

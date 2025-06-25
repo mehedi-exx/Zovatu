@@ -16,6 +16,7 @@
       --input-dark: #2c2c2c;
       --input-light: #fff;
     }
+
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
@@ -23,10 +24,12 @@
       color: var(--text-dark);
       transition: 0.3s;
     }
+
     body.light {
       background-color: var(--bg-light);
       color: var(--text-light);
     }
+
     header {
       display: flex;
       justify-content: space-between;
@@ -36,9 +39,11 @@
       position: relative;
       z-index: 1000;
     }
+
     body.light header {
       background-color: var(--card-light);
     }
+
     .menu-btn, .theme-toggle {
       font-size: 22px;
       background: none;
@@ -46,89 +51,14 @@
       color: inherit;
       cursor: pointer;
     }
+
     .logo {
       font-size: 22px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
-    main {
-      display: flex;
-      justify-content: center;
-      padding: 20px;
-    }
-    .form-wrapper {
-      max-width: 600px;
-      width: 100%;
-      background: var(--card-dark);
-      padding: 20px;
-      border-radius: 10px;
-    }
-    body.light .form-wrapper {
-      background: var(--card-light);
-    }
-    input, textarea, select {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 8px;
-      background: var(--input-dark);
-      color: var(--text-dark);
-    }
-    body.light input, body.light textarea, body.light select {
-      background: var(--input-light);
-      color: var(--text-light);
-    }
-    button {
-      padding: 12px 20px;
-      margin-top: 10px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    #generateBtn {
-      background: #28a745;
-      color: white;
-    }
-    #copyBtn {
-      background: #007bff;
-      color: white;
-      margin-left: 10px;
-    }
-    .buttons {
-      text-align: center;
-    }
-    .note {
-      margin-top: 10px;
-      color: #0f0;
-      text-align: center;
-    }
-    .output {
-      margin-top: 20px;
-      padding: 20px;
-      border-radius: 10px;
-      background: var(--card-dark);
-      color: var(--text-dark);
-      white-space: pre-wrap;
-    }
-    body.light .output {
-      background: var(--card-light);
-      color: var(--text-light);
-    }
-    .live-preview {
-      margin-top: 20px;
-      border: 2px dashed #999;
-      padding: 20px;
-      border-radius: 10px;
-      background: var(--card-dark);
-    }
-    body.light .live-preview {
-      background: var(--card-light);
-    }
 
-    /* Sidebar */
     .sidebar {
       position: fixed;
       left: -200px;
@@ -139,54 +69,113 @@
       color: var(--text-dark);
       padding-top: 60px;
       transition: 0.3s;
-      z-index: 999;
+      z-index: 1100; /* ✅ শুধু এটুকু পরিবর্তন করা হয়েছে */
     }
+
+    .sidebar.active {
+      left: 0;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 12px 20px;
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid #333;
+    }
+
     body.light .sidebar {
       background: var(--card-light);
       color: var(--text-light);
     }
-    .sidebar ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .sidebar ul li {
-      padding: 15px 20px;
-      border-bottom: 1px solid #444;
-      cursor: pointer;
-    }
-    .sidebar ul li:hover {
-      background: #333;
-    }
-    body.light .sidebar ul li:hover {
-      background: #ddd;
-    }
-    .sidebar.open {
-      left: 0;
+
+    main {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
     }
 
-    .section-panel {
-      display: none;
-      max-width: 700px;
-      margin: 20px auto;
-      padding: 20px;
+    .form-wrapper {
+      max-width: 600px;
+      width: 100%;
       background: var(--card-dark);
-      color: var(--text-dark);
+      padding: 20px;
       border-radius: 10px;
     }
-    body.light .section-panel {
+
+    body.light .form-wrapper {
+      background: var(--card-light);
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      background: var(--input-dark);
+      color: var(--text-dark);
+    }
+
+    body.light input, body.light textarea, body.light select {
+      background: var(--input-light);
+      color: var(--text-light);
+    }
+
+    button {
+      padding: 12px 20px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #generateBtn {
+      background: #28a745;
+      color: white;
+    }
+
+    #copyBtn {
+      background: #007bff;
+      color: white;
+      margin-left: 10px;
+    }
+
+    .buttons {
+      text-align: center;
+    }
+
+    .note {
+      margin-top: 10px;
+      color: #0f0;
+      text-align: center;
+    }
+
+    .output {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 10px;
+      background: var(--card-dark);
+      color: var(--text-dark);
+      white-space: pre-wrap;
+    }
+
+    body.light .output {
       background: var(--card-light);
       color: var(--text-light);
     }
-    .close-btn {
-      float: right;
-      background: red;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      padding: 5px 10px;
-      cursor: pointer;
-      font-size: 14px;
+
+    .live-preview {
+      margin-top: 20px;
+      border: 2px dashed #999;
+      padding: 20px;
+      border-radius: 10px;
+      background: #222;
+    }
+
+    body.light .live-preview {
+      background: #eee;
     }
 
     @media (max-width: 600px) {
@@ -198,32 +187,20 @@
 </head>
 <body>
 
-  <!-- Header -->
   <header>
-    <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+    <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
     <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
     <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-adjust"></i></button>
   </header>
 
-  <!-- Sidebar Menu -->
-  <div id="sidebar" class="sidebar">
-    <ul>
-      <li onclick="showSection('home')"><i class="fas fa-home"></i> হোম</li>
-      <li onclick="showSection('about')"><i class="fas fa-info-circle"></i> অ্যাবাউট</li>
-      <li onclick="showSection('contact')"><i class="fas fa-envelope"></i> কন্ট্যাক্ট</li>
-      <li onclick="showSection('privacy')"><i class="fas fa-user-secret"></i> প্রাইভেসি</li>
-      <li onclick="showSection('tutorial')"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</li>
-    </ul>
+  <div class="sidebar" id="sidebar">
+    <a href="#"><i class="fas fa-home"></i> হোম</a>
+    <a href="#"><i class="fas fa-info-circle"></i> অ্যাবাউট</a>
+    <a href="#"><i class="fas fa-envelope"></i> কন্ট্যাক্ট</a>
+    <a href="#"><i class="fas fa-trash"></i> প্রাইভেসি</a>
+    <a href="#"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
   </div>
 
-  <!-- Sections -->
-  <div class="section-panel" id="home"><button class="close-btn" onclick="closeSection()">❌</button><h2>হোম</h2><p>স্বাগতম G9Tool-এ!</p></div>
-  <div class="section-panel" id="about"><button class="close-btn" onclick="closeSection()">❌</button><h2>About</h2><p>এই টুলটি একটি Blogger Product Generator টুল যা কোড তৈরি করে দ্রুত পোস্ট করতে সাহায্য করে।</p></div>
-  <div class="section-panel" id="contact"><button class="close-btn" onclick="closeSection()">❌</button><h2>Contact</h2><p>যোগাযোগ করুন: g9tool@example.com</p></div>
-  <div class="section-panel" id="privacy"><button class="close-btn" onclick="closeSection()">❌</button><h2>Privacy</h2><p>আপনার সকল তথ্য আমাদের কাছে নিরাপদ।</p></div>
-  <div class="section-panel" id="tutorial"><button class="close-btn" onclick="closeSection()">❌</button><h2>Tutorial</h2><p>১. ফর্ম পূরণ করুন<br>২. কোড জেনারেট করুন<br>৩. কপি করে Blogger-এ ব্যবহার করুন।</p></div>
-
-  <!-- Main Product Form -->
   <main>
     <div class="form-wrapper">
       <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
@@ -242,8 +219,8 @@
       <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
 
       <div class="buttons">
-        <button id="generateBtn" onclick="generateCode()"><i class="fas fa-check-circle"></i> কোড জেনারেট করুন</button>
-        <button id="copyBtn" onclick="copyCode()"><i class="fas fa-copy"></i> কপি করুন</button>
+        <button id="generateBtn" onclick="generateCode()">✅ কোড জেনারেট করুন</button>
+        <button id="copyBtn" onclick="copyCode()">📋 কপি করুন</button>
       </div>
 
       <div class="note" id="note"></div>
@@ -252,50 +229,35 @@
     </div>
   </main>
 
-  <!-- Scripts -->
   <script>
     function toggleTheme() {
       document.body.classList.toggle("light");
       localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
     }
 
-    function toggleMenu() {
-      document.getElementById("sidebar").classList.toggle("open");
+    function toggleSidebar() {
+      document.getElementById("sidebar").classList.toggle("active");
     }
 
-    function showSection(id) {
-      document.querySelector('.form-wrapper').style.display = 'none';
-      document.getElementById("sidebar").classList.remove("open");
-      const sections = document.querySelectorAll(".section-panel");
-      sections.forEach(sec => sec.style.display = "none");
-      document.getElementById(id).style.display = "block";
-    }
-
-    function closeSection() {
-      const sections = document.querySelectorAll(".section-panel");
-      sections.forEach(sec => sec.style.display = "none");
-      document.querySelector('.form-wrapper').style.display = 'block';
-    }
+    window.onload = () => {
+      const theme = localStorage.getItem("theme");
+      if (theme === "light") document.body.classList.add("light");
+    };
 
     function generateCode() {
-      const name = document.getElementById("name").value.trim();
-      const code = document.getElementById("code").value.trim();
-      const price = document.getElementById("price").value.trim();
-      const offer = document.getElementById("offer").value.trim();
-      const delivery = document.getElementById("delivery").value.trim();
+      const name = document.getElementById("name").value;
+      const code = document.getElementById("code").value;
+      const price = document.getElementById("price").value;
+      const offer = document.getElementById("offer").value;
+      const delivery = document.getElementById("delivery").value;
       const status = document.getElementById("status").value;
-      const category = document.getElementById("category").value.trim();
-      const desc = document.getElementById("desc").value.trim();
-      const img = document.getElementById("img").value.trim();
-      const wa = document.getElementById("wa").value.trim();
+      const category = document.getElementById("category").value;
+      const desc = document.getElementById("desc").value;
+      const img = document.getElementById("img").value;
+      const wa = document.getElementById("wa").value;
 
       if (!name || !code || !price || !status || !category || !img || !wa) {
         alert("সব প্রয়োজনীয় ফিল্ড পূরণ করুন।");
-        return;
-      }
-
-      if (!/^8801\d{9}$/.test(wa)) {
-        alert("সঠিক WhatsApp নম্বর দিন (8801XXXXXXXXXX ফরম্যাটে)");
         return;
       }
 
@@ -315,16 +277,16 @@
 <!-- ✅ WhatsApp Order Button -->
 <p style="text-align:center;margin:10px 0;">
   <a href="${waLink}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
-    <i class="fab fa-whatsapp"></i> অর্ডার করুন WhatsApp এ
+    📲 অর্ডার করুন WhatsApp এ
   </a>
 </p>
 
 <!-- ✅ Details List -->
 <ul>
-  <li><i class="fas fa-barcode"></i> কোড: ${code}</li>
-  <li><i class="fas fa-box"></i> স্ট্যাটাস: ${status}</li>
-  <li><i class="fas fa-tags"></i> ক্যাটাগরি: ${category}</li>
-  <li><i class="fas fa-truck"></i> ডেলিভারি টাইম: ${delivery}</li>
+  <li>🔢 কোড: ${code}</li>
+  <li>📦 স্ট্যাটাস: ${status}</li>
+  <li>📁 ক্যাটাগরি: ${category}</li>
+  <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
 </ul>
 
 <!-- ✅ Description -->
@@ -340,7 +302,6 @@
       document.getElementById("output").textContent = html;
       document.getElementById("note").textContent = "✅ কোড তৈরি হয়েছে!";
       document.getElementById("preview").innerHTML = html;
-      document.getElementById("preview").scrollIntoView({ behavior: 'smooth' });
     }
 
     function copyCode() {
@@ -349,11 +310,6 @@
         document.getElementById("note").textContent = "✅ কপি হয়েছে!";
       });
     }
-
-    window.onload = () => {
-      const theme = localStorage.getItem("theme");
-      if (theme === "light") document.body.classList.add("light");
-    };
   </script>
 </body>
 </html>

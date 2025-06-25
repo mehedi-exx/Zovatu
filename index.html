@@ -7,30 +7,29 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     :root {
-      --bg: #121212;
-      --text: #fff;
-      --card: #1f1f1f;
-      --input: #2c2c2c;
+      --bg-dark: #121212;
+      --text-dark: #fff;
+      --card-dark: #1f1f1f;
+      --input-dark: #2c2c2c;
     }
-
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
     }
 
     header {
-      position: relative;
-      z-index: 1001;
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 20px;
-      background-color: var(--card);
+      background-color: var(--card-dark);
+      border-bottom-left-radius: 15px;
+      border-bottom-right-radius: 15px;
     }
 
-    .menu-btn {
+    .menu-btn, .telegram {
       font-size: 22px;
       background: none;
       border: none;
@@ -45,29 +44,21 @@
       gap: 8px;
     }
 
-    .telegram-icon a {
-      color: #25a3e1;
-      font-size: 20px;
-      text-decoration: none;
-    }
-
     .sidebar {
       position: fixed;
       top: 0;
       left: -260px;
       width: 250px;
       height: 100%;
-      background-color: var(--card);
-      color: var(--text);
+      background-color: var(--card-dark);
+      color: var(--text-dark);
       z-index: 1000;
       padding-top: 70px;
       transition: left 0.3s ease;
     }
-
     .sidebar.open {
       left: 0;
     }
-
     .sidebar a {
       display: block;
       padding: 12px 20px;
@@ -80,15 +71,17 @@
       display: flex;
       justify-content: center;
       padding: 20px;
+      flex-wrap: wrap;
     }
 
     .form-wrapper {
       max-width: 600px;
       width: 100%;
-      background: var(--card);
+      background: var(--card-dark);
       padding: 20px;
       border-radius: 10px;
       box-sizing: border-box;
+      margin-bottom: 20px;
     }
 
     input, textarea, select {
@@ -97,8 +90,8 @@
       margin: 10px 0;
       border: none;
       border-radius: 8px;
-      background: var(--input);
-      color: var(--text);
+      background: var(--input-dark);
+      color: var(--text-dark);
       box-sizing: border-box;
     }
 
@@ -137,8 +130,8 @@
       margin-top: 20px;
       padding: 20px;
       border-radius: 10px;
-      background: var(--card);
-      color: var(--text);
+      background: #000;
+      color: #fff;
       white-space: pre-wrap;
       overflow-x: auto;
     }
@@ -163,17 +156,15 @@
   <header>
     <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
     <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
-    <div class="telegram-icon">
-      <a href="https://t.me/yourchannel" target="_blank"><i class="fab fa-telegram"></i></a>
-    </div>
+    <a class="telegram" href="https://t.me/yourchannel" target="_blank"><i class="fab fa-telegram-plane"></i></a>
   </header>
 
   <nav class="sidebar" id="sidebar">
     <a href="#" onclick="showSection('form')"><i class="fas fa-home"></i> হোম</a>
-    <a href="#" onclick="alert('About Section')"><i class="fas fa-info-circle"></i> অ্যাবাউট</a>
-    <a href="#" onclick="alert('Contact Section')"><i class="fas fa-envelope"></i> কন্ট্যাক্ট</a>
-    <a href="#" onclick="alert('Privacy Section')"><i class="fas fa-trash"></i> প্রাইভেসি</a>
-    <a href="#" onclick="alert('Tutorial Section')"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
+    <a href="#" onclick="showSection('about')"><i class="fas fa-info-circle"></i> অ্যাবাউট</a>
+    <a href="#" onclick="showSection('contact')"><i class="fas fa-envelope"></i> কন্ট্যাক্ট</a>
+    <a href="#" onclick="showSection('privacy')"><i class="fas fa-user-shield"></i> প্রাইভেসি</a>
+    <a href="#" onclick="showSection('tutorial')"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
   </nav>
 
   <main>
@@ -192,15 +183,40 @@
       <textarea id="desc" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
       <input type="url" id="img" placeholder="ছবির লিংক (Image URL)">
       <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
-
       <div class="buttons">
         <button id="generateBtn" onclick="generateCode()">✅ কোড জেনারেট করুন</button>
         <button id="copyBtn" onclick="copyCode()">📋 কপি করুন</button>
       </div>
-
       <div class="note" id="note"></div>
       <div class="output" id="output"></div>
       <div class="live-preview" id="preview"></div>
+    </div>
+
+    <!-- Extra Sections -->
+    <div class="form-wrapper" id="aboutSection" style="display:none;">
+      <h2>আমাদের সম্পর্কে</h2>
+      <p>G9Tool হল একটি স্মার্ট ব্লগার প্রোডাক্ট কোড জেনারেটর যা WhatsApp অর্ডার লিংক সহ HTML প্রিভিউ তৈরি করে দেয়। এটি সম্পূর্ণ ফ্রি এবং মোবাইল-ফ্রেন্ডলি।</p>
+    </div>
+    <div class="form-wrapper" id="contactSection" style="display:none;">
+      <h2>যোগাযোগ করুন</h2>
+      <p>সাহায্যের জন্য:</p>
+      <ul>
+        <li>ইমেইল: support@g9tool.com</li>
+        <li>টেলিগ্রাম: <a href="https://t.me/yourchannel" target="_blank">@yourchannel</a></li>
+      </ul>
+    </div>
+    <div class="form-wrapper" id="privacySection" style="display:none;">
+      <h2>প্রাইভেসি নীতিমালা</h2>
+      <p>আমরা ব্যবহারকারীর কোন তথ্য সংরক্ষণ করি না। আপনার দেয়া সকল ইনপুট শুধুমাত্র ব্রাউজারে প্রক্রিয়াকৃত হয়।</p>
+    </div>
+    <div class="form-wrapper" id="tutorialSection" style="display:none;">
+      <h2>ব্যবহার নির্দেশিকা</h2>
+      <ol>
+        <li>সকল ফিল্ড পূরণ করুন।</li>
+        <li>✅ "কোড জেনারেট করুন" ক্লিক করুন।</li>
+        <li>📋 "কপি করুন" দিয়ে Blogger পেস্ট করুন।</li>
+        <li>নিচে Live Preview দেখুন।</li>
+      </ol>
     </div>
   </main>
 
@@ -210,7 +226,10 @@
     }
 
     function showSection(id) {
-      document.getElementById("formSection").style.display = id === "form" ? "block" : "none";
+      const sections = ['formSection', 'aboutSection', 'contactSection', 'privacySection', 'tutorialSection'];
+      sections.forEach(sec => {
+        document.getElementById(sec).style.display = (sec === id + 'Section') ? 'block' : 'none';
+      });
       document.getElementById("sidebar").classList.remove("open");
     }
 

@@ -2,202 +2,274 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>G9Tool</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>G9Tool - Blogger Product Generator</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #111;
-      color: #fff;
-      transition: background 0.3s, color 0.3s;
+    :root {
+      --bg: #121212;
+      --text: #fff;
+      --card: #1f1f1f;
+      --input: #2c2c2c;
     }
 
-    body.light {
-      background-color: #f5f5f5;
-      color: #000;
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
     }
 
     header {
+      position: relative;
+      z-index: 1001;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #222;
-      padding: 10px 20px;
-      position: sticky;
-      top: 0;
-      z-index: 999;
+      padding: 12px 20px;
+      background-color: var(--card);
     }
 
-    body.light header {
-      background: #fff;
+    .menu-btn {
+      font-size: 22px;
+      background: none;
+      border: none;
+      color: inherit;
+      cursor: pointer;
     }
 
     .logo {
-      font-size: 1.5em;
-      font-weight: bold;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .menu-toggle {
-      font-size: 1.5em;
-      cursor: pointer;
+    .telegram-icon a {
+      color: #25a3e1;
+      font-size: 20px;
+      text-decoration: none;
     }
 
     .sidebar {
       position: fixed;
-      top: 60px;
-      left: -250px;
+      top: 0;
+      left: -260px;
       width: 250px;
       height: 100%;
-      background: #333;
-      color: white;
-      overflow-y: auto;
+      background-color: var(--card);
+      color: var(--text);
+      z-index: 1000;
+      padding-top: 70px;
       transition: left 0.3s ease;
-      z-index: 998;
     }
 
-    body.light .sidebar {
-      background: #fff;
-      color: #000;
-    }
-
-    .sidebar.active {
+    .sidebar.open {
       left: 0;
     }
 
     .sidebar a {
       display: block;
-      padding: 15px;
-      text-decoration: none;
+      padding: 12px 20px;
       color: inherit;
-      border-bottom: 1px solid #444;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
     }
 
-    .form-container {
-      max-width: 500px;
-      margin: 20px auto;
+    main {
+      display: flex;
+      justify-content: center;
       padding: 20px;
-      background: #222;
-      border-radius: 10px;
     }
 
-    body.light .form-container {
-      background: #fff;
-    }
-
-    input, select, textarea {
+    .form-wrapper {
+      max-width: 600px;
       width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 5px;
+      background: var(--card);
+      padding: 20px;
+      border-radius: 10px;
+      box-sizing: border-box;
     }
 
-    .btn {
+    input, textarea, select {
       width: 100%;
       padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      background: var(--input);
+      color: var(--text);
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 12px 20px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #generateBtn {
       background: #28a745;
       color: white;
-      font-weight: bold;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
     }
 
-    .output-box {
-      margin-top: 20px;
-      padding: 15px;
-      background: #111;
+    #copyBtn {
+      background: #007bff;
+      color: white;
+      margin-left: 10px;
+    }
+
+    .buttons {
+      text-align: center;
+      flex-wrap: wrap;
+    }
+
+    .note {
+      margin-top: 10px;
       color: #0f0;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-      border-radius: 10px;
+      text-align: center;
     }
 
-    body.light .output-box {
-      background: #eee;
-      color: #333;
-    }
-
-    .section {
-      display: none;
+    .output {
+      margin-top: 20px;
       padding: 20px;
+      border-radius: 10px;
+      background: var(--card);
+      color: var(--text);
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+
+    .live-preview {
+      margin-top: 20px;
+      border: 2px dashed #999;
+      padding: 20px;
+      border-radius: 10px;
       background: #222;
     }
 
-    body.light .section {
-      background: #f9f9f9;
-    }
-
-    .section.active {
-      display: block;
+    @media (max-width: 600px) {
+      .form-wrapper {
+        padding: 15px;
+      }
     }
   </style>
 </head>
 <body>
+
   <header>
-    <div class="menu-toggle" onclick="toggleSidebar()">☰</div>
-    <div class="logo">📦 G9Tool</div>
-    <div onclick="toggleTheme()">🌗</div>
+    <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+    <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
+    <div class="telegram-icon">
+      <a href="https://t.me/yourchannel" target="_blank"><i class="fab fa-telegram"></i></a>
+    </div>
   </header>
 
-  <div class="sidebar" id="sidebar">
-    <a href="#" onclick="showSection('home')">🏠 হোম</a>
-    <a href="#" onclick="showSection('about')">ℹ️ অ্যাবাউট</a>
-    <a href="#" onclick="showSection('contact')">✉️ কন্ট্যাক্ত</a>
-    <a href="#" onclick="showSection('privacy')">🗑️ প্রাইভেসি</a>
-    <a href="#" onclick="showSection('tutorial')">🎓 টিউটোরিয়াল</a>
-  </div>
+  <nav class="sidebar" id="sidebar">
+    <a href="#" onclick="showSection('form')"><i class="fas fa-home"></i> হোম</a>
+    <a href="#" onclick="alert('About Section')"><i class="fas fa-info-circle"></i> অ্যাবাউট</a>
+    <a href="#" onclick="alert('Contact Section')"><i class="fas fa-envelope"></i> কন্ট্যাক্ট</a>
+    <a href="#" onclick="alert('Privacy Section')"><i class="fas fa-trash"></i> প্রাইভেসি</a>
+    <a href="#" onclick="alert('Tutorial Section')"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
+  </nav>
 
-  <div class="section active" id="home">
-    <div class="form-container">
-      <input type="text" placeholder="প্রোডাক্ট নাম" />
-      <input type="text" placeholder="প্রোডাক্ট কোড" />
-      <input type="text" placeholder="মূল্য প্রাইস (৳)" />
-      <input type="text" placeholder="অফার প্রাইস (ঐচ্ছিক)" />
-      <input type="text" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)" />
-      <select>
-        <option>স্ট্যাটাস নির্বাচন করুন</option>
-        <option>স্টকে আছে</option>
-        <option>স্টকে নেই</option>
+  <main>
+    <div class="form-wrapper" id="formSection">
+      <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
+      <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
+      <input type="text" id="price" placeholder="মূল্য প্রাইস (৳)" required>
+      <input type="text" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
+      <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)">
+      <select id="status">
+        <option value="">স্ট্যাটাস নির্বাচন করুন</option>
+        <option value="In Stock">In Stock</option>
+        <option value="Out of Stock">Out of Stock</option>
       </select>
-      <input type="text" placeholder="ক্যাটাগরি (যেমন: শাড়ি)" />
-      <textarea placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
-      <button class="btn" onclick="generateCode()">✅ কোড জেনারেট করুন</button>
-      <div class="output-box" id="output">এখানে কোড দেখানো হবে...</div>
-    </div>
-  </div>
+      <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)">
+      <textarea id="desc" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
+      <input type="url" id="img" placeholder="ছবির লিংক (Image URL)">
+      <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
 
-  <div class="section" id="about">এটি হলো অ্যাবাউট পেজের তথ্য।</div>
-  <div class="section" id="contact">এটি হলো কন্টাক্ট পেজের তথ্য।</div>
-  <div class="section" id="privacy">এটি হলো প্রাইভেসি পলিসি।</div>
-  <div class="section" id="tutorial">
-    এটি হলো ফুল টিউটোরিয়াল সেকশন।
-    <ul>
-      <li>✅ ফর্ম পূরণ করুন</li>
-      <li>✅ কোড জেনারেট বাটনে ক্লিক করুন</li>
-      <li>✅ নিচের কোড কপি করে ব্লগে বসান</li>
-    </ul>
-  </div>
+      <div class="buttons">
+        <button id="generateBtn" onclick="generateCode()">✅ কোড জেনারেট করুন</button>
+        <button id="copyBtn" onclick="copyCode()">📋 কপি করুন</button>
+      </div>
+
+      <div class="note" id="note"></div>
+      <div class="output" id="output"></div>
+      <div class="live-preview" id="preview"></div>
+    </div>
+  </main>
 
   <script>
-    function toggleSidebar() {
-      document.getElementById("sidebar").classList.toggle("active");
-    }
-
-    function toggleTheme() {
-      document.body.classList.toggle("light");
+    function toggleMenu() {
+      document.getElementById("sidebar").classList.toggle("open");
     }
 
     function showSection(id) {
-      document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
-      document.getElementById("sidebar").classList.remove("active");
+      document.getElementById("formSection").style.display = id === "form" ? "block" : "none";
+      document.getElementById("sidebar").classList.remove("open");
     }
 
     function generateCode() {
-      const code = `<div>🔧 এটি একটি ডেমো কোড</div>`;
-      document.getElementById("output").innerText = code;
+      const name = document.getElementById("name").value;
+      const code = document.getElementById("code").value;
+      const price = document.getElementById("price").value;
+      const offer = document.getElementById("offer").value;
+      const delivery = document.getElementById("delivery").value;
+      const status = document.getElementById("status").value;
+      const category = document.getElementById("category").value;
+      const desc = document.getElementById("desc").value;
+      const img = document.getElementById("img").value;
+      const wa = document.getElementById("wa").value;
+
+      if (!name || !code || !price || !status || !category || !img || !wa) {
+        alert("সব প্রয়োজনীয় ফিল্ড পূরণ করুন।");
+        return;
+      }
+
+      const finalPrice = offer
+        ? `<del>৳${price}</del> <span style="color:#f00;font-weight:bold;">৳${offer}</span>`
+        : `৳${price}`;
+      const waLink = `https://wa.me/${wa}?text=📦 আমি একটি পণ্য অর্ডার করতে চাই:\n\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ৳${offer || price}\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি টাইম: ${delivery}`;
+
+      const html = `
+<div style="text-align:center;">
+  <img src="${img}" style="max-width:100%;border-radius:10px;margin-bottom:10px;" alt="${name}" />
+  <h2 style="margin:5px 0;">${name}</h2>
+  <p style="font-size:16px;">${finalPrice}</p>
+</div>
+<p style="text-align:center;margin:10px 0;">
+  <a href="${waLink}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
+    📲 অর্ডার করুন WhatsApp এ
+  </a>
+</p>
+<ul>
+  <li>🔢 কোড: ${code}</li>
+  <li>📦 স্ট্যাটাস: ${status}</li>
+  <li>📁 ক্যাটাগরি: ${category}</li>
+  <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
+</ul>
+<p>${desc}</p>
+<p style="display:none;">
+  <a href="#">
+    {getProduct} $button={Price} $price={৳${offer || price}} $sale={৳${price}} $icon={cart} $style={1}
+  </a>
+</p>`;
+
+      document.getElementById("output").textContent = html;
+      document.getElementById("note").textContent = "✅ কোড তৈরি হয়েছে!";
+      document.getElementById("preview").innerHTML = html;
+    }
+
+    function copyCode() {
+      const code = document.getElementById("output").textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        document.getElementById("note").textContent = "✅ কপি হয়েছে!";
+      });
     }
   </script>
 </body>

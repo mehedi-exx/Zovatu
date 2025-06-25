@@ -85,6 +85,7 @@
       justify-content: center;
       padding: 20px;
     }
+
     .form-wrapper {
       max-width: 600px;
       width: 100%;
@@ -124,15 +125,18 @@
       cursor: pointer;
       font-weight: bold;
     }
+
     #generateBtn {
       background: #28a745;
       color: white;
     }
+
     #copyBtn {
       background: #007bff;
       color: white;
       margin-left: 10px;
     }
+
     .buttons {
       text-align: center;
       flex-wrap: wrap;
@@ -177,10 +181,120 @@
   <a href="https://t.me/mehedi_exx" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
 </header>
 
+<nav class="sidebar" id="sidebar">
+  <a href="#" onclick="showSection('form')"><i class="fas fa-home"></i> হোম</a>
+  <a href="#" onclick="alert('G9Tool একটি প্রফেশনাল Blogger টুল যা অটো প্রোডাক্ট কোড তৈরি করে।')"><i class="fas fa-info-circle"></i> অ্যাবাউট</a>
+  <a href="#" onclick="alert('যোগাযোগ করুন: G9tool@gmail.com')"><i class="fas fa-envelope"></i> কন্ট্যাক্ট</a>
+  <a href="#" onclick="alert('আপনার তথ্য সম্পূর্ণ নিরাপদ। কোনরকম তথ্য সংগ্রহ করা হয় না।')"><i class="fas fa-lock"></i> প্রাইভেসি</a>
+  <a href="#" onclick="alert('১. প্রোডাক্ট ফর্ম পূরণ করুন\n২. কোড জেনারেট করুন\n৩. কপি করে Blogger পোস্টে বসান')"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
+</nav>
+
+<main>
+  <div class="form-wrapper" id="formSection">
+    <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
+    <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
+    <input type="text" id="price" placeholder="মূল্য প্রাইস (৳)" required>
+    <input type="text" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
+    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)">
+    <select id="status">
+      <option value="">স্ট্যাটাস নির্বাচন করুন</option>
+      <option value="In Stock">In Stock</option>
+      <option value="Out of Stock">Out of Stock</option>
+    </select>
+    <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)">
+    <textarea id="desc" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
+    <input type="url" id="img" placeholder="ছবির লিংক (Image URL)">
+    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
+
+    <div class="buttons">
+      <button id="generateBtn" onclick="generateCode()">✅ কোড জেনারেট করুন</button>
+      <button id="copyBtn" onclick="copyCode()">📋 কপি করুন</button>
+    </div>
+
+    <div class="note" id="note"></div>
+    <div class="output" id="output"></div>
+    <div class="live-preview" id="preview"></div>
+  </div>
+</main>
+
 <script>
 function toggleMenu() {
   document.getElementById("sidebar").classList.toggle("open");
 }
+
+function showSection(id) {
+  document.getElementById("formSection").style.display = id === "form" ? "block" : "none";
+  document.getElementById("sidebar").classList.remove("open");
+}
+
+function generateCode() {
+  const name = document.getElementById("name").value;
+  const code = document.getElementById("code").value;
+  const price = document.getElementById("price").value;
+  const offer = document.getElementById("offer").value;
+  const delivery = document.getElementById("delivery").value || "N/A";
+  const status = document.getElementById("status").value;
+  const category = document.getElementById("category").value;
+  const desc = document.getElementById("desc").value;
+  const img = document.getElementById("img").value;
+  const wa = document.getElementById("wa").value;
+
+  if (!name || !code || !price || !status || !category || !img || !wa) {
+    alert("সব প্রয়োজনীয় ফিল্ড পূরণ করুন।");
+    return;
+  }
+
+  const finalPrice = offer
+    ? `<del>৳${price}</del> <span style="color:#f00;font-weight:bold;">৳${offer}</span>`
+    : `৳${price}`;
+
+  const waText = encodeURIComponent(
+`📦 আমি একটি পণ্য অর্ডার করতে চাই:
+🔖 প্রোডাক্ট: ${name}
+💰 মূল্য: ৳${offer || price}
+🧾 কোড: ${code}
+📁 ক্যাটাগরি: ${category}
+🚚 ডেলিভারি টাইম: ${delivery}`
+  );
+
+  const waLink = `https://wa.me/${wa}?text=${waText}`;
+
+  const html = `
+<div style="text-align:center;">
+  <img src="${img}" style="max-width:100%;border-radius:10px;margin-bottom:10px;" alt="${name}" />
+  <h2 style="margin:5px 0;">${name}</h2>
+  <p style="font-size:16px;">${finalPrice}</p>
+</div>
+<p style="text-align:center;margin:10px 0;">
+  <a href="${waLink}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
+    📲 অর্ডার করুন WhatsApp এ
+  </a>
+</p>
+<ul>
+  <li>🔢 কোড: ${code}</li>
+  <li>📦 স্ট্যাটাস: ${status}</li>
+  <li>📁 ক্যাটাগরি: ${category}</li>
+  <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
+</ul>
+<p>${desc}</p>
+<p style="display:none;">
+  <a href="#">
+    {getProduct} $button={Price} $price={৳${offer || price}} $sale={৳${price}} $icon={cart} $style={1}
+  </a>
+</p>`;
+
+  document.getElementById("output").textContent = html;
+  document.getElementById("note").textContent = "✅ কোড তৈরি হয়েছে!";
+  document.getElementById("preview").innerHTML = html;
+}
+
+function copyCode() {
+  const code = document.getElementById("output").textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    document.getElementById("note").textContent = "✅ কপি হয়েছে!";
+  });
+}
 </script>
+
 </body>
 </html>

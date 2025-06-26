@@ -135,7 +135,7 @@
 </head>
 <body>
   <header>
-    <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+    <button class="menu-btn" onclick="alert('✅ মেনু অপশন কাজ করছে')"><i class="fas fa-bars"></i></button>
     <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
     <a href="https://t.me/mehedi_exx" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
   </header>
@@ -174,6 +174,7 @@
         imgCount++;
       }
     }
+
     document.getElementById("generateBtn").addEventListener("click", function () {
       const name = document.getElementById("name").value;
       const code = document.getElementById("code").value;
@@ -234,6 +235,7 @@
       document.getElementById("output").textContent = html;
       document.getElementById("preview").innerHTML = html;
     });
+
     document.getElementById("copyBtn").addEventListener("click", function () {
       const code = document.getElementById("output").textContent;
       navigator.clipboard.writeText(code).then(() => {

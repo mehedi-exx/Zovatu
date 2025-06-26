@@ -28,6 +28,7 @@
       font-family: 'Nunito', sans-serif;
       background-color: var(--bg-dark);
       color: var(--text-dark);
+      display: flex;
     }
 
     header {
@@ -61,10 +62,49 @@
       justify-content: center;
     }
 
+    /* Sidebar styles */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 250px;
+      height: 100%;
+      background-color: var(--card-dark);
+      color: var(--text-dark);
+      transition: left 0.3s ease;
+      padding-top: 60px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar.open {
+      left: 0;
+    }
+
+    .sidebar a {
+      padding: 12px 20px;
+      color: var(--text-dark);
+      text-decoration: none;
+      display: block;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      transition: background 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #555;
+    }
+
+    .menu-btn {
+      font-size: 24px;
+      color: var(--text-dark);
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
     main {
-      display: flex;
-      justify-content: center;
+      flex: 1;
       padding: 20px;
+      margin-left: 260px;
     }
 
     .form-wrapper {
@@ -187,49 +227,67 @@
     .entry-sale:hover {
       background-color: #218838;
     }
-
-    .product-details ul {
-      list-style-type: none;
-      padding-left: 0;
-    }
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
-    <a href="https://t.me/mehedi_exx" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
-  </header>
 
-  <main>
-    <div class="form-wrapper">
-      <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
-      <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
-      <input type="text" id="price" placeholder="মূল্য প্রাইস (৳)" required>
-      <input type="text" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
-      <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)">
-      <select id="status">
-        <option value="">স্ট্যাটাস নির্বাচন করুন</option>
-        <option value="In Stock">In Stock</option>
-        <option value="Out of Stock">Out of Stock</option>
-      </select>
-      <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)">
-      <textarea id="desc" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
-      <div id="imageInputs">
-        <input type="url" placeholder="ছবির লিংক (Image URL)" class="img-url">
-        <button type="button" onclick="addImageField()">➕ আরো ছবি যোগ করুন</button>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <a href="#" onclick="showSection('home')"><i class="fas fa-home"></i> Home</a>
+    <a href="#" onclick="showSection('about')"><i class="fas fa-info-circle"></i> About</a>
+    <a href="#" onclick="showSection('contact')"><i class="fas fa-envelope"></i> Contact</a>
+    <a href="#" onclick="showSection('privacy')"><i class="fas fa-lock"></i> Privacy</a>
+    <a href="#" onclick="showSection('tutorial')"><i class="fas fa-graduation-cap"></i> Tutorial</a>
+  </div>
+
+  <!-- Main Content -->
+  <div>
+    <header>
+      <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+      <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
+      <a href="https://t.me/mehedi_exx" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
+    </header>
+
+    <main>
+      <div class="form-wrapper" id="formSection">
+        <h2>Product Generator</h2>
+        <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
+        <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
+        <input type="text" id="price" placeholder="মূল্য প্রাইস (৳)" required>
+        <input type="text" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
+        <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)">
+        <select id="status">
+          <option value="">স্ট্যাটাস নির্বাচন করুন</option>
+          <option value="In Stock">In Stock</option>
+          <option value="Out of Stock">Out of Stock</option>
+        </select>
+        <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)">
+        <textarea id="desc" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
+        <div id="imageInputs">
+          <input type="url" placeholder="ছবির লিংক (Image URL)" class="img-url">
+          <button type="button" onclick="addImageField()">➕ আরো ছবি যোগ করুন</button>
+        </div>
+        <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
+        <div class="buttons">
+          <button id="generateBtn" onclick="generateCode()">✅ কোড জেনারেট করুন</button>
+          <button id="copyBtn" onclick="copyCode()">📋 কপি করুন</button>
+        </div>
+        <div class="note" id="note"></div>
+        <div class="output" id="output"></div>
       </div>
-      <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
-      <div class="buttons">
-        <button id="generateBtn" onclick="generateCode()">✅ কোড জেনারেট করুন</button>
-        <button id="copyBtn" onclick="copyCode()">📋 কপি করুন</button>
-      </div>
-      <div class="note" id="note"></div>
-      <div class="output" id="output"></div>
-    </div>
-  </main>
+    </main>
+  </div>
 
   <script>
     let currentIndex = 0;
+
+    function toggleMenu() {
+      document.getElementById("sidebar").classList.toggle("open");
+    }
+
+    function showSection(section) {
+      alert(`This is the ${section} section!`);
+    }
 
     function addImagesToSlider(images) {
       const sliderContainer = document.getElementById("imageSlider");

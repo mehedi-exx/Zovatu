@@ -19,15 +19,12 @@
       color: var(--text-dark);
     }
     header {
-      position: relative;
-      z-index: 1001;
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 12px 20px;
       background-color: var(--card-dark);
       border-radius: 0 0 20px 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
     .menu-btn {
       font-size: 22px;
@@ -53,18 +50,12 @@
       align-items: center;
       justify-content: center;
     }
-    main {
-      display: flex;
-      justify-content: center;
-      padding: 20px;
-    }
     .form-wrapper {
       max-width: 600px;
-      width: 100%;
-      background: var(--card-dark);
+      margin: auto;
       padding: 20px;
+      background: var(--card-dark);
       border-radius: 10px;
-      box-sizing: border-box;
     }
     input, textarea, select {
       width: 100%;
@@ -74,8 +65,6 @@
       border-radius: 8px;
       background: var(--input-dark);
       color: var(--text-dark);
-      box-sizing: border-box;
-      box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
     }
     button {
       padding: 12px 20px;
@@ -87,7 +76,6 @@
     }
     #generateBtn { background: #28a745; color: white; }
     #copyBtn { background: #007bff; color: white; margin-left: 10px; }
-    .buttons { text-align: center; flex-wrap: wrap; }
     .output, .live-preview {
       margin-top: 20px;
       padding: 20px;
@@ -96,6 +84,47 @@
       white-space: pre-wrap;
       overflow-x: auto;
     }
+    .slider-container {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto 15px;
+      overflow: hidden;
+      border-radius: 10px;
+    }
+    .slides {
+      display: flex;
+      width: 500%;
+      transition: all 0.5s ease;
+    }
+    .slides img {
+      width: 100%;
+      border-radius: 10px;
+    }
+    .slide-radio {
+      display: none;
+    }
+    .slider-nav {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+    }
+    .slider-nav label {
+      background: rgba(0,0,0,0.5);
+      color: #fff;
+      font-size: 24px;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 50%;
+    }
+    #s1:checked ~ .slides { transform: translateX(0%); }
+    #s2:checked ~ .slides { transform: translateX(-100%); }
+    #s3:checked ~ .slides { transform: translateX(-200%); }
+    #s4:checked ~ .slides { transform: translateX(-300%); }
+    #s5:checked ~ .slides { transform: translateX(-400%); }
   </style>
 </head>
 <body>
@@ -105,12 +134,12 @@
   <a href="https://t.me/mehedi_exx" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
 </header>
 <main>
-  <div class="form-wrapper" id="formSection">
-    <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
-    <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
-    <input type="text" id="price" placeholder="মূল্য প্রাইস (৳)" required>
+  <div class="form-wrapper">
+    <input type="text" id="name" placeholder="প্রোডাক্ট নাম">
+    <input type="text" id="code" placeholder="প্রোডাক্ট কোড">
+    <input type="text" id="price" placeholder="মূল্য">
     <input type="text" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
-    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)">
+    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
     <input type="text" id="status" placeholder="স্ট্যাটাস">
     <input type="text" id="category" placeholder="ক্যাটাগরি">
     <textarea id="desc" placeholder="ডেসক্রিপশন"></textarea>
@@ -163,26 +192,37 @@
     let discountText = '';
     if (!isNaN(offer) && offer < price) {
       const discount = Math.round(((price - offer) / price) * 100);
-      finalPrice = `<del>৳${price}</del> <span style='color:red;font-weight:bold;'>৳${offer}</span> <small style='color:#0f0'>(${discount}% ছাড়)</small>`;
+      finalPrice = `<del style='text-decoration: line-through;'>৳${price}</del> <span style='color:red;font-weight:bold;'>৳${offer}</span> <small style='color:#0f0'>(${discount}% ছাড়)</small>`;
     }
 
     const waText = encodeURIComponent(`📦 আমি একটি পণ্য অর্ডার করতে চাই:\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ৳${offer || price}\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি টাইম: ${delivery}`);
     const waLink = `https://wa.me/${wa}?text=${waText}`;
 
-    let sliderHTML = '<div style="text-align:center;">';
-    if (images.length === 1) {
-      sliderHTML += `<img src='${images[0]}' style='max-width:100%;border-radius:10px;margin-bottom:10px;' alt='${name}' />`;
-    } else {
-      sliderHTML += `<div style='position:relative;overflow:hidden;width:100%;max-width:400px;margin:auto;'>`;
-      sliderHTML += `<div style='display:flex;transition:0.3s;'>`;
+    let sliderHTML = '';
+    if (images.length > 1) {
+      sliderHTML += `<div class='slider-container'>`;
+      images.forEach((src, i) => {
+        sliderHTML += `<input type='radio' name='slider' id='s${i+1}' class='slide-radio' ${i===0 ? 'checked' : ''}>`;
+      });
+      sliderHTML += `<div class='slides'>`;
       images.forEach(src => {
-        sliderHTML += `<img src='${src}' style='width:100%;border-radius:10px;' alt='${name}' />`;
+        sliderHTML += `<img src='${src}' alt='${name}'>`;
+      });
+      sliderHTML += `</div><div class='slider-nav'>`;
+      images.forEach((_, i) => {
+        const prev = i === 0 ? images.length : i;
+        const next = (i + 1) % images.length + 1;
+        sliderHTML += `<label for='s${prev}'>&lt;</label><label for='s${next}'>&gt;</label>`;
+        return false;
       });
       sliderHTML += `</div></div>`;
+    } else {
+      sliderHTML += `<img src='${images[0]}' style='max-width:100%;border-radius:10px;margin-bottom:10px;' alt='${name}' />`;
     }
-    sliderHTML += `<h2 style='margin:5px 0;'>${name}</h2><p>${finalPrice}</p></div>`;
 
-    const html = `${sliderHTML}
+    const html = `<div style='text-align:center;'>${sliderHTML}
+<h2 style='margin:5px 0;'>${name}</h2>
+<p>${finalPrice}</p></div>
 <p style='text-align:center;margin:10px 0;'>
   <a href='${waLink}' target='_blank' style='display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;'>📲 অর্ডার করুন WhatsApp এ</a>
 </p>

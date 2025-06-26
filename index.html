@@ -16,11 +16,16 @@
       --icon-color: #fff;
       --thumbnail-size: 60px;
       --thumbnail-border-radius: 10px;
+      --main-color: #ff9800;
+      --title-color: #232f3e;
+      --price-color: #d00;
+      --widget-bg: #ffffff;
+      --radius: 8px;
     }
 
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Nunito', sans-serif;
       background-color: var(--bg-dark);
       color: var(--text-dark);
     }
@@ -35,14 +40,6 @@
       background-color: var(--card-dark);
       border-radius: 0 0 20px 20px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    }
-
-    .menu-btn {
-      font-size: 22px;
-      background: none;
-      border: none;
-      color: inherit;
-      cursor: pointer;
     }
 
     .logo {
@@ -116,32 +113,6 @@
       box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
     }
 
-    .image-input-group {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .image-input-group input {
-      flex: 1;
-    }
-
-    .image-input-group button {
-      background: #444;
-      color: #fff;
-    }
-
-    .checkbox-container {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .checkbox-container input {
-      width: 20px;
-      height: 20px;
-    }
-
     button {
       padding: 12px 20px;
       margin-top: 10px;
@@ -155,6 +126,7 @@
     #copyBtn { background: #007bff; color: white; margin-left: 10px; }
     .buttons { text-align: center; flex-wrap: wrap; }
     .note { margin-top: 10px; color: #0f0; text-align: center; }
+
     .output {
       margin-top: 20px;
       padding: 20px;
@@ -164,78 +136,65 @@
       white-space: pre-wrap;
       overflow-x: auto;
     }
-    .live-preview {
-      margin-top: 20px;
-      border: 2px dashed #999;
-      padding: 20px;
-      border-radius: 10px;
-      background: #222;
-    }
 
-    .slider-container {
-      position: relative;
-      width: 100%;
-    }
-
-    .slider-images {
+    .product-section {
       display: flex;
-      overflow-x: hidden;
+      flex-wrap: wrap;
+      gap: 20px;
     }
 
-    .slider-images img {
+    .product {
+      width: 45%;
+      background: var(--widget-bg);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      padding: 16px;
+      text-align: center;
+    }
+
+    .product img {
       width: 100%;
       height: auto;
-      border-radius: 10px;
+      border-radius: var(--radius);
     }
 
-    .prev-btn, .next-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: var(--button-bg);
-      color: var(--icon-color);
-      border: none;
-      font-size: 26px;
-      padding: 8px 12px;
-      border-radius: 50%;
-      cursor: pointer;
-      z-index: 5;
-      transition: background 0.3s ease;
+    .product h2 {
+      font-size: 18px;
+      color: var(--title-color);
+      font-weight: 700;
     }
 
-    .prev-btn:hover, .next-btn:hover {
-      background: var(--button-hover-bg);
+    .product .entry-price {
+      font-size: 18px;
+      color: var(--price-color);
+      font-weight: 700;
     }
 
-    .prev-btn { left: 10px; }
-    .next-btn { right: 10px; }
-
-    .image-thumbnails {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 10px;
+    .product .entry-sale {
+      background-color: var(--main-color);
+      color: white;
+      padding: 12px 24px;
+      border-radius: var(--radius);
+      text-decoration: none;
+      font-weight: bold;
+      margin-top: 12px;
     }
 
-    .image-thumbnails img {
-      width: 60px;
-      height: 60px;
-      cursor: pointer;
-      object-fit: cover;
-      border-radius: 10px;
+    .product .entry-sale:hover {
+      background-color: #218838;
     }
 
-    @media (max-width: 600px) {
-      .form-wrapper { padding: 15px; }
+    @media (max-width: 768px) {
+      .product { width: 100%; }
     }
   </style>
 </head>
 <body>
   <header>
-    <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
     <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
     <a href="https://t.me/mehedi_exx" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
   </header>
+
   <nav class="sidebar" id="sidebar">
     <a href="#" onclick="showSection('form')"><i class="fas fa-home"></i> হোম</a>
     <a href="#" onclick="alert('G9Tool একটি প্রফেশনাল Blogger টুল যা অটো প্রোডাক্ট কোড তৈরি করে।')"><i class="fas fa-info-circle"></i> অ্যাবাউট</a>
@@ -243,6 +202,7 @@
     <a href="#" onclick="alert('আপনার তথ্য সম্পূর্ণ নিরাপদ। কোনরকম তথ্য সংগ্রহ করা হয় না।')"><i class="fas fa-lock"></i> প্রাইভেসি</a>
     <a href="#" onclick="alert('১. প্রোডাক্ট ফর্ম পূরণ করুন\n২. কোড জেনারেট করুন\n৩. কপি করে Blogger পোস্টে বসান')"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
   </nav>
+
   <main>
     <div class="form-wrapper" id="formSection">
       <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
@@ -258,42 +218,19 @@
       <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)">
       <textarea id="desc" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
       <div id="imageInputs">
-        <div class="image-input-group"><input type="url" placeholder="ছবির লিংক (Image URL)" class="img-url"><button onclick="addImageField()">➕</button></div>
+        <input type="url" placeholder="ছবির লিংক (Image URL)" class="img-url">
       </div>
       <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
-      <div class="checkbox-container">
-        <input type="checkbox" id="autoSlideToggle">
-        <label for="autoSlideToggle">অটো স্লাইড চালু থাকবে</label>
-      </div>
       <div class="buttons">
         <button id="generateBtn" onclick="generateCode()">✅ কোড জেনারেট করুন</button>
         <button id="copyBtn" onclick="copyCode()">📋 কপি করুন</button>
       </div>
       <div class="note" id="note"></div>
       <div class="output" id="output"></div>
-      <div class="live-preview" id="preview"></div>
     </div>
   </main>
+
   <script>
-    function toggleMenu() {
-      document.getElementById("sidebar").classList.toggle("open");
-    }
-
-    function showSection(id) {
-      document.getElementById("formSection").style.display = id === "form" ? "block" : "none";
-      document.getElementById("sidebar").classList.remove("open");
-    }
-
-    function addImageField() {
-      const container = document.getElementById("imageInputs");
-      const count = container.querySelectorAll(".img-url").length;
-      if (count >= 5) return alert("সর্বোচ্চ ৫টি ছবি যোগ করা যাবে।");
-      const div = document.createElement("div");
-      div.className = "image-input-group";
-      div.innerHTML = `<input type="url" placeholder="ছবির লিংক (Image URL)" class="img-url"> <button onclick="this.parentElement.remove()">❌</button>`;
-      container.appendChild(div);
-    }
-
     function generateCode() {
       const name = document.getElementById("name").value;
       const code = document.getElementById("code").value;
@@ -306,7 +243,6 @@
       const imgs = Array.from(document.querySelectorAll(".img-url"))
         .map(i => i.value.trim()).filter(Boolean);
       const wa = document.getElementById("wa").value;
-      const autoSlide = document.getElementById("autoSlideToggle").checked;
 
       if (!name || !code || !price || !status || !category || imgs.length === 0 || !wa) {
         alert("সব প্রয়োজনীয় ফিল্ড পূরণ করুন।");
@@ -320,14 +256,9 @@
 
       const imageSection = imgs.length > 1
         ? `<div class='slider-container'>
-            <div class='slider-images'>${imgs.map(i => `<img src='${i}' class='g9slide' style='width:100%;max-width:100%;border-radius:10px;margin-bottom:10px;' />`).join('')}</div>
-            <button class='prev-btn' onclick='prevImage()'>‹</button>
-            <button class='next-btn' onclick='nextImage()'>›</button>
-          </div>
-          <div class='image-thumbnails'>
-            ${imgs.map(i => `<img src='${i}' class='thumbnail' onclick='showImage(${imgs.indexOf(i)})' />`).join('')}
+            <div class='slider-images'>${imgs.map(i => `<img src='${i}' style='width:100%;border-radius:10px;' />`).join('')}</div>
           </div>`
-        : `<img src='${imgs[0]}' style='max-width:100%;border-radius:10px;margin-bottom:10px;' alt='${name}' />`;
+        : `<img src='${imgs[0]}' style='max-width:100%;border-radius:10px;' alt='${name}' />`;
 
       const html = `
       <div style='text-align:center;'>${imageSection}
@@ -341,14 +272,10 @@
         <li>📁 ক্যাটাগরি: ${category}</li>
         <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
       </ul>
-      <p>${desc}</p>
-      <p style='display:none;'>
-        <a href="#">{getProduct} $button={Price} $price={৳${offer || price}} $sale={৳${price}} $icon={cart} $style={1}</a>
-      </p>`;
+      <p>${desc}</p>`;
 
       document.getElementById("output").textContent = html;
       document.getElementById("note").textContent = "✅ কোড তৈরি হয়েছে!";
-      document.getElementById("preview").innerHTML = html;
     }
 
     function copyCode() {
@@ -357,25 +284,6 @@
         document.getElementById("note").textContent = "✅ কপি হয়েছে!";
       });
     }
-
-    let current = 0;
-    function showImage(n) {
-      const slides = document.querySelectorAll('.g9slide');
-      if (!slides.length) return;
-      current = (n + slides.length) % slides.length;
-      slides.forEach((img, i) => {
-        img.style.display = i === current ? 'inline-block' : 'none';
-      });
-    }
-    function nextImage() { showImage(current + 1); }
-    function prevImage() { showImage(current - 1); }
-
-    const autoSlideFn = () => {
-      const slides = document.querySelectorAll('.g9slide');
-      slides.forEach((s,i)=>s.style.display = i === current ? 'inline-block' : 'none');
-      current = (current + 1) % slides.length;
-    }
-    setInterval(autoSlideFn, 2000);
   </script>
 </body>
 </html>

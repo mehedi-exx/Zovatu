@@ -19,73 +19,6 @@
       color: var(--text-dark);
     }
 
-    header {
-      position: relative;
-      z-index: 1001;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 20px;
-      background-color: var(--card-dark);
-      border-radius: 0 0 20px 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    }
-
-    .menu-btn {
-      font-size: 22px;
-      background: none;
-      border: none;
-      color: inherit;
-      cursor: pointer;
-    }
-    .logo {
-      font-size: 22px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .telegram-icon {
-      font-size: 22px;
-      color: #1DA1F2;
-      background: #fff;
-      padding: 6px;
-      border-radius: 50%;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: -260px;
-      width: 250px;
-      height: 100%;
-      background-color: var(--card-dark);
-      color: var(--text-dark);
-      z-index: 1000;
-      padding-top: 70px;
-      transition: left 0.3s ease;
-    }
-    .sidebar.open {
-      left: 0;
-    }
-    .sidebar a {
-      display: block;
-      padding: 12px 20px;
-      color: inherit;
-      text-decoration: none;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-
-    main {
-      display: flex;
-      justify-content: center;
-      padding: 20px;
-    }
-
     .form-wrapper {
       max-width: 600px;
       width: 100%;
@@ -107,14 +40,23 @@
       box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
     }
 
-    input::placeholder,
-    textarea::placeholder {
+    input::placeholder, textarea::placeholder {
       color: #aaa;
     }
 
-    input:focus, textarea:focus, select:focus {
-      outline: none;
-      border: 2px solid #28a745;
+    .add-img-btn {
+      background: #444;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    .buttons {
+      text-align: center;
+      flex-wrap: wrap;
     }
 
     button {
@@ -137,18 +79,7 @@
       margin-left: 10px;
     }
 
-    .buttons {
-      text-align: center;
-      flex-wrap: wrap;
-    }
-
-    .note {
-      margin-top: 10px;
-      color: #0f0;
-      text-align: center;
-    }
-
-    .output {
+    .output, .live-preview {
       margin-top: 20px;
       padding: 20px;
       border-radius: 10px;
@@ -158,209 +89,179 @@
       overflow-x: auto;
     }
 
-    .live-preview {
-      margin-top: 20px;
-      border: 2px dashed #999;
-      padding: 20px;
-      border-radius: 10px;
-      background: #222;
+    .note {
+      margin-top: 10px;
+      color: #0f0;
+      text-align: center;
     }
 
-    .slider {
+    .g9-slider {
       position: relative;
       max-width: 100%;
-      margin: auto;
       overflow: hidden;
+      margin-bottom: 20px;
     }
 
-    .slides {
+    .g9-slides {
       display: flex;
-      transition: transform 0.5s ease;
+      width: 100%;
+      transition: 0.5s ease;
     }
 
-    .slide {
-      min-width: 100%;
-      box-sizing: border-box;
+    .g9-slide {
+      width: 100%;
+      flex-shrink: 0;
     }
 
-    .slide img {
+    .g9-slide img {
       width: 100%;
       border-radius: 10px;
     }
 
-    .prev, .next {
+    input[name="g9-slide"] {
+      display: none;
+    }
+
+    .g9-nav {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .g9-nav label {
       cursor: pointer;
-      position: absolute;
-      top: 50%;
-      width: auto;
-      padding: 16px;
+      padding: 8px 15px;
+      background: #444;
+      border-radius: 5px;
+      margin: 0 5px;
       color: white;
-      font-weight: bold;
-      font-size: 18px;
-      transition: 0.6s ease;
-      border-radius: 0 3px 3px 0;
-      user-select: none;
     }
 
-    .next {
-      right: 0;
-      border-radius: 3px 0 0 3px;
+    /* Auto slide animation */
+    @keyframes g9-auto {
+      0% { transform: translateX(0%); }
+      33% { transform: translateX(-100%); }
+      66% { transform: translateX(-200%); }
+      100% { transform: translateX(-300%); }
     }
 
-    .prev:hover, .next:hover {
-      background-color: rgba(0,0,0,0.8);
-    }
-
-    .add-image {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      color: #28a745;
-      margin: 10px 0;
-    }
-
-    .add-image i {
-      margin-right: 5px;
-    }
-
-    @media (max-width: 600px) {
-      .form-wrapper {
-        padding: 15px;
-      }
+    .g9-slides {
+      animation: g9-auto 8s infinite;
     }
   </style>
 </head>
 <body>
 
-<header>
-  <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
-  <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
-  <a href="https://t.me/mehedi_exx" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
-</header>
+<div class="form-wrapper">
+  <input type="text" id="name" placeholder="প্রোডাক্ট নাম">
+  <input type="text" id="code" placeholder="প্রোডাক্ট কোড">
+  <input type="text" id="price" placeholder="মূল্য (৳)">
+  <input type="text" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
+  <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)">
 
-<nav class="sidebar" id="sidebar">
-  <a href="#" onclick="showSection('form')"><i class="fas fa-home"></i> হোম</a>
-  <a href="#" onclick="alert('G9Tool একটি প্রফেশনাল Blogger টুল যা অটো প্রোডাক্ট কোড তৈরি করে।')"><i class="fas fa-info-circle"></i> অ্যাবাউট</a>
-  <a href="#" onclick="alert('যোগাযোগ করুন: G9tool@gmail.com')"><i class="fas fa-envelope"></i> কন্ট্যাক্ট</a>
-  <a href="#" onclick="alert('আপনার তথ্য সম্পূর্ণ নিরাপদ। কোনরকম তথ্য সংগ্রহ করা হয় না।')"><i class="fas fa-lock"></i> প্রাইভেসি</a>
-  <a href="#" onclick="alert('১. প্রোডাক্ট ফর্ম পূরণ করুন\n২. কোড জেনারেট করুন\n৩. কপি করে Blogger পোস্টে বসান')"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
-</nav>
+  <select id="status">
+    <option value="">স্ট্যাটাস নির্বাচন করুন</option>
+    <option value="In Stock">In Stock</option>
+    <option value="Out of Stock">Out of Stock</option>
+  </select>
 
-<main>
-  <div class="form-wrapper" id="formSection">
-    <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
-    <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
-    <input type="text" id="price" placeholder="মূল্য প্রাইস (৳)" required>
-    <input type="text" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
-    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)">
-    <select id="status">
-      <option value="">স্ট্যাটাস নির্বাচন করুন</option>
-      <option value="In Stock">In Stock</option>
-      <option value="Out of Stock">Out of Stock</option>
-    </select>
-    <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)">
-    <textarea id="desc" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
+  <select id="category">
+    <option value="">ক্যাটাগরি নির্বাচন করুন</option>
+    <option value="শাড়ি">শাড়ি</option>
+    <option value="জুতা">জুতা</option>
+    <option value="ঘড়ি">ঘড়ি</option>
+    <option value="জুয়েলারি">জুয়েলারি</option>
+    <option value="অন্যান্য">অন্যান্য</option>
+  </select>
 
-    <div id="imageInputs">
-      <input type="text" id="img1" placeholder="ছবির লিংক ১ (Image URL)" required>
-    </div>
+  <textarea id="desc" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
 
-    <div class="add-image" onclick="addImageInput()">
-      <i class="fas fa-plus-circle"></i> আরও ছবি যোগ করুন
-    </div>
-
-    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
-
-    <div class="buttons">
-      <button id="generateBtn" onclick="generateCode()">✅ কোড জেনারেট করুন</button>
-      <button id="copyBtn" onclick="copyCode()">📋 কপি করুন</button>
-    </div>
-
-    <div class="note" id="note"></div>
-    <div class="output" id="output"></div>
-    <div class="live-preview" id="preview"></div>
+  <div id="imgGroup">
+    <input type="url" class="img" placeholder="ছবির লিংক (Image URL)">
   </div>
-</main>
+
+  <span class="add-img-btn" onclick="addImage()">➕ আরও ছবি যোগ করুন</span>
+
+  <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
+  <label><input type="checkbox" id="autoSlide"> অটো স্লাইড চালু করুন</label>
+
+  <div class="buttons">
+    <button id="generateBtn" onclick="generateCode()">✅ কোড জেনারেট করুন</button>
+    <button id="copyBtn" onclick="copyCode()">📋 কপি করুন</button>
+  </div>
+
+  <div class="note" id="note"></div>
+  <div class="output" id="output"></div>
+  <div class="live-preview" id="preview"></div>
+</div>
 
 <script>
-let slideIndex = 0;
-let imageCount = 1; // Start with one image input
+let maxImages = 5;
 
-function toggleMenu() {
-  document.getElementById("sidebar").classList.toggle("open");
-}
-
-function showSection(id) {
-  document.getElementById("formSection").style.display = id === "form" ? "block" : "none";
-  document.getElementById("sidebar").classList.remove("open");
-}
-
-function addImageInput() {
-  if (imageCount < 5) { // Allow a maximum of 5 images
-    imageCount++;
-    const newInput = document.createElement('input');
-    newInput.type = 'text';
-    newInput.id = `img${imageCount}`;
-    newInput.placeholder = `ছবির লিংক ${imageCount} (Image URL)`;
-    document.getElementById('imageInputs').appendChild(newInput);
-  } else {
-    alert("সর্বাধিক ৫টি ছবি যোগ করা যাবে।");
+function addImage() {
+  const group = document.getElementById("imgGroup");
+  const count = group.querySelectorAll(".img").length;
+  if (count >= maxImages) {
+    alert("সর্বোচ্চ ৫টি ছবি যোগ করা যাবে");
+    return;
   }
+  const input = document.createElement("input");
+  input.type = "url";
+  input.className = "img";
+  input.placeholder = "আরও ছবির লিংক";
+  group.appendChild(input);
 }
 
 function generateCode() {
-  const name = document.getElementById("name").value;
-  const code = document.getElementById("code").value;
-  const price = document.getElementById("price").value;
-  const offer = document.getElementById("offer").value;
-  const delivery = document.getElementById("delivery").value || "N/A";
+  const name = document.getElementById("name").value.trim();
+  const code = document.getElementById("code").value.trim();
+  const price = document.getElementById("price").value.trim();
+  const offer = document.getElementById("offer").value.trim();
+  const delivery = document.getElementById("delivery").value.trim() || "N/A";
   const status = document.getElementById("status").value;
   const category = document.getElementById("category").value;
   const desc = document.getElementById("desc").value;
-  const wa = document.getElementById("wa").value;
+  const wa = document.getElementById("wa").value.trim();
+  const auto = document.getElementById("autoSlide").checked;
+  const imgs = [...document.querySelectorAll(".img")].map(i => i.value.trim()).filter(Boolean);
 
-  const images = [];
-  for (let i = 1; i <= imageCount; i++) {
-    const img = document.getElementById(`img${i}`).value;
-    if (img) images.push(img);
-  }
-
-  if (!name || !code || !price || !status || !category || !wa || images.length === 0) {
+  if (!name || !code || !price || !status || !category || !imgs.length || !wa) {
     alert("সব প্রয়োজনীয় ফিল্ড পূরণ করুন।");
     return;
   }
 
-  const finalPrice = offer
-    ? `<del>৳${price}</del> <span style="color:#f00;font-weight:bold;">৳${offer}</span>`
-    : `৳${price}`;
-
-  const waText = encodeURIComponent(
-`📦 আমি একটি পণ্য অর্ডার করতে চাই:
-🔖 প্রোডাক্ট: ${name}
-💰 মূল্য: ৳${offer || price}
-🧾 কোড: ${code}
-📁 ক্যাটাগরি: ${category}
-🚚 ডেলিভারি টাইম: ${delivery}`
-  );
-
+  const finalPrice = offer ? `<del>৳${price}</del> <span style="color:red;font-weight:bold;">৳${offer}</span>` : `৳${price}`;
+  const waText = encodeURIComponent(`📦 আমি একটি পণ্য অর্ডার করতে চাই:\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ৳${offer || price}\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি টাইম: ${delivery}`);
   const waLink = `https://wa.me/${wa}?text=${waText}`;
 
-  const slides = images.map(img => `
-    <div class="slide">
-      <img src="${img}" alt="${name}" />
-    </div>
-  `).join('');
+  const radioInputs = imgs.map((img, i) => `<input type="radio" name="g9-slide" id="g9-slide${i+1}" ${i === 0 ? "checked" : ""}>`).join("\n");
+  const slides = imgs.map(img => `<div class="g9-slide"><img src="${img}" alt=""></div>`).join("\n");
+  const labels = imgs.map((img, i) => `<label for="g9-slide${i+1}">⏪</label>`).join("");
+
+  const slider = `
+<div class="g9-slider">
+  ${radioInputs}
+  <div class="g9-slides">${slides}</div>
+  <div class="g9-nav">${labels}</div>
+</div>`;
+
+  const style = `
+<style>
+.g9-slider { position:relative; overflow:hidden; }
+.g9-slides { display:flex; width:100%; transition:0.5s ease; }
+.g9-slide { width:100%; flex-shrink:0; }
+.g9-slide img { width:100%; border-radius:10px; }
+input[name="g9-slide"] { display:none; }
+.g9-nav { text-align:center; }
+.g9-nav label { cursor:pointer; padding:8px; background:#444; border-radius:5px; margin:5px; color:white; }
+@keyframes auto-slide { 0% { transform: translateX(0%); } 33% { transform: translateX(-100%); } 66% { transform: translateX(-200%); } 100% { transform: translateX(-300%); } }
+.g9-slides { animation: auto-slide 9s infinite; }
+</style>`;
 
   const html = `
-<div class="slider">
-  <div class="slides" style="transform: translateX(-${slideIndex * 100}%);">
-    ${slides}
-  </div>
-  <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
-  <a class="next" onclick="changeSlide(1)">&#10095;</a>
+<div style="text-align:center;">${slider}
+  <h2>${name}</h2>
+  <p style="font-size:16px;">${finalPrice}</p>
 </div>
-<h2 style="margin:5px 0;">${name}</h2>
-<p style="font-size:16px;">${finalPrice}</p>
 <p style="text-align:center;margin:10px 0;">
   <a href="${waLink}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
     📲 অর্ডার করুন WhatsApp এ
@@ -373,21 +274,11 @@ function generateCode() {
   <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
 </ul>
 <p>${desc}</p>
-<p style="display:none;">
-  <a href="#">
-    {getProduct} $button={Price} $price={৳${offer || price}} $sale={৳${price}} $icon={cart} $style={1}
-  </a>
-</p>`;
+${style}`;
 
   document.getElementById("output").textContent = html;
-  document.getElementById("note").textContent = "✅ কোড তৈরি হয়েছে!";
   document.getElementById("preview").innerHTML = html;
-}
-
-function changeSlide(n) {
-  const slides = document.querySelectorAll('.slide');
-  slideIndex = (slideIndex + n + slides.length) % slides.length;
-  document.querySelector('.slides').style.transform = `translateX(-${slideIndex * 100}%)`;
+  document.getElementById("note").textContent = "✅ কোড তৈরি হয়েছে!";
 }
 
 function copyCode() {

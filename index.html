@@ -203,6 +203,11 @@
 <script>
   let imgCount = 1;
 
+  function toggleMenu() {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('open');
+  }
+
   function addImageInput() {
     if (imgCount < 5) {
       const newInput = document.createElement('input');

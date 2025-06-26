@@ -148,10 +148,8 @@
 
     #generateBtn { background: #28a745; color: white; }
     #copyBtn { background: #007bff; color: white; margin-left: 10px; }
-
     .buttons { text-align: center; flex-wrap: wrap; }
     .note { margin-top: 10px; color: #0f0; text-align: center; }
-
     .output {
       margin-top: 20px;
       padding: 20px;
@@ -161,7 +159,6 @@
       white-space: pre-wrap;
       overflow-x: auto;
     }
-
     .live-preview {
       margin-top: 20px;
       border: 2px dashed #999;
@@ -169,7 +166,6 @@
       border-radius: 10px;
       background: #222;
     }
-
     .prev-btn, .next-btn {
       position: absolute;
       top: 50%;
@@ -280,28 +276,30 @@
       const waLink = `https://wa.me/${wa}?text=${waText}`;
 
       const imageSection = imgs.length > 1
-        ? `<div class='slider' style='overflow:hidden;position:relative;width:100%;'><div style='white-space:nowrap;overflow-x:auto;scroll-snap-type:x mandatory;'>${imgs.map(i => `<img src='${i}' style='width:100%;max-width:100%;border-radius:10px;display:inline-block;scroll-snap-align:center;margin-bottom:10px;' />`).join('')}</div></div>`
+        ? `<div class='slider' style='overflow:hidden;position:relative;width:100%;'>
+          <div style='white-space:nowrap;overflow-x:auto;scroll-snap-type:x mandatory;'>${imgs.map(i => 
+          `<img src='${i}' class='g9slide' style='width:100%;max-width:100%;border-radius:10px;display:inline-block;scroll-snap-align:center;margin-bottom:10px;' />`).join('')}</div>
+          <button class='prev-btn' onclick='prevImage()'>‹</button>
+          <button class='next-btn' onclick='nextImage()'>›</button>
+        </div>`
         : `<img src='${imgs[0]}' style='max-width:100%;border-radius:10px;margin-bottom:10px;' alt='${name}' />`;
 
       const html = `
-<div style='text-align:center;'>
-  ${imageSection}
-  <h2 style='margin:5px 0;'>${name}</h2>
-  <p style='font-size:16px;'>${finalPrice}</p>
-</div>
-<p style='text-align:center;margin:10px 0;'>
-  <a href='${waLink}' target='_blank' style='display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;'>📲 অর্ডার করুন WhatsApp এ</a>
-</p>
-<ul style='text-align:left;'>
-  <li>🔢 কোড: ${code}</li>
-  <li>📦 স্ট্যাটাস: ${status}</li>
-  <li>📁 ক্যাটাগরি: ${category}</li>
-  <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
-</ul>
-<p>${desc}</p>
-<p style='display:none;'>
-  <a href="#">{getProduct} $button={Price} $price={৳${offer || price}} $sale={৳${price}} $icon={cart} $style={1}</a>
-</p>`;
+      <div style='text-align:center;'>${imageSection}
+      <h2 style='margin:5px 0;'>${name}</h2>
+      <p style='font-size:16px;'>${finalPrice}</p></div>
+      <p style='text-align:center;margin:10px 0;'>
+      <a href='${waLink}' target='_blank' style='display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;'>📲 অর্ডার করুন WhatsApp এ</a></p>
+      <ul style='text-align:left;'>
+        <li>🔢 কোড: ${code}</li>
+        <li>📦 স্ট্যাটাস: ${status}</li>
+        <li>📁 ক্যাটাগরি: ${category}</li>
+        <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
+      </ul>
+      <p>${desc}</p>
+      <p style='display:none;'>
+        <a href="#">{getProduct} $button={Price} $price={৳${offer || price}} $sale={৳${price}} $icon={cart} $style={1}</a>
+      </p>`;
 
       document.getElementById("output").textContent = html;
       document.getElementById("note").textContent = "✅ কোড তৈরি হয়েছে!";
@@ -314,6 +312,25 @@
         document.getElementById("note").textContent = "✅ কপি হয়েছে!";
       });
     }
+
+    let current = 0;
+    function showImage(n) {
+      const slides = document.querySelectorAll('.g9slide');
+      if (!slides.length) return;
+      current = (n + slides.length) % slides.length;
+      slides.forEach((img, i) => {
+        img.style.display = i === current ? 'inline-block' : 'none';
+      });
+    }
+    function nextImage() { showImage(current + 1); }
+    function prevImage() { showImage(current - 1); }
+
+    const autoSlideFn = () => {
+      const slides = document.querySelectorAll('.g9slide');
+      slides.forEach((s,i)=>s.style.display = i === current ? 'inline-block' : 'none');
+      current = (current + 1) % slides.length;
+    }
+    setInterval(autoSlideFn, 2000);
   </script>
 </body>
 </html>

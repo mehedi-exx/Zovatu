@@ -37,9 +37,16 @@ header {
   border-radius: 50%;
 }
 
+main {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+
 .form-wrapper {
+  width: 100%;
   max-width: 600px;
-  margin: auto;
   background: var(--card-dark);
   padding: 20px;
   border-radius: 10px;
@@ -48,16 +55,21 @@ header {
 input, textarea {
   width: 100%;
   padding: 12px;
-  margin: 8px 0;
+  margin: 10px 0;
   border-radius: 8px;
   border: none;
   background: var(--input-dark);
   color: var(--text-dark);
+  box-sizing: border-box;
+}
+
+textarea {
+  min-height: 80px;
 }
 
 button {
   padding: 12px 20px;
-  margin: 10px 5px 0 0;
+  margin-top: 10px;
   border: none;
   border-radius: 8px;
   font-weight: bold;
@@ -68,9 +80,11 @@ button {
   background: var(--green);
   color: white;
 }
+
 #copyBtn {
   background: var(--blue);
   color: white;
+  margin-left: 10px;
 }
 
 .output, .live-preview {
@@ -87,7 +101,13 @@ img {
   border-radius: 8px;
 }
 
-/* Thumbnail Preview */
+/* Thumbnail Responsive */
+#thumbs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
 #thumbs img {
   width: 60px;
   height: 60px;
@@ -95,5 +115,38 @@ img {
   border-radius: 6px;
   cursor: pointer;
   border: 2px solid transparent;
-  transition: 0.3s;
+}
+
+/* Responsive */
+@media screen and (max-width: 480px) {
+  .form-wrapper {
+    padding: 15px;
+  }
+
+  input, textarea {
+    font-size: 15px;
+  }
+
+  #thumbs img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .telegram-icon {
+    font-size: 20px;
+    padding: 4px;
+  }
+
+  .logo {
+    font-size: 18px;
+  }
+
+  button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  #copyBtn {
+    margin-left: 0;
+  }
 }

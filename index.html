@@ -238,15 +238,18 @@
 </main>
 
 <script>
+// Toggle menu for sidebar
 function toggleMenu() {
   document.getElementById("sidebar").classList.toggle("open");
 }
 
+// Display form section when menu item is clicked
 function showSection(id) {
   document.getElementById("formSection").style.display = id === "form" ? "block" : "none";
   document.getElementById("sidebar").classList.remove("open");
 }
 
+// Add new image field to the form
 function addImageField() {
   const container = document.getElementById('imageInputs');
   const count = container.querySelectorAll('input.img-field').length;
@@ -264,6 +267,7 @@ function addImageField() {
   container.appendChild(input);
 }
 
+// Generate the product code based on the form input
 function generateCode() {
   const name = document.getElementById("name").value;
   const code = document.getElementById("code").value;
@@ -347,6 +351,7 @@ ${slider}
   document.getElementById("preview").innerHTML = html;
 }
 
+// Copy the generated code to clipboard
 function copyCode() {
   const code = document.getElementById("output").textContent;
   navigator.clipboard.writeText(code).then(() => {
@@ -354,6 +359,5 @@ function copyCode() {
   });
 }
 </script>
-
 </body>
 </html>

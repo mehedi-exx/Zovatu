@@ -1,0 +1,148 @@
+:root {
+  --bg-dark: #121212;
+  --text-dark: #fff;
+  --card-dark: #1f1f1f;
+  --input-dark: #2c2c2c;
+  --green: #28a745;
+  --blue: #007bff;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-dark);
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background-color: var(--card-dark);
+  border-radius: 0 0 20px 20px;
+}
+
+.logo {
+  font-size: 22px;
+  display: flex;
+  gap: 8px;
+}
+
+.telegram-icon {
+  font-size: 22px;
+  color: #1DA1F2;
+  background: #fff;
+  padding: 6px;
+  border-radius: 50%;
+}
+
+.form-wrapper {
+  max-width: 600px;
+  margin: auto;
+  background: var(--card-dark);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border-radius: 8px;
+  border: none;
+  background: var(--input-dark);
+  color: var(--text-dark);
+}
+
+button {
+  padding: 12px 20px;
+  margin: 10px 5px 0 0;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#generateBtn {
+  background: var(--green);
+  color: white;
+}
+#copyBtn {
+  background: var(--blue);
+  color: white;
+}
+
+.output, .live-preview {
+  margin-top: 20px;
+  padding: 20px;
+  background: #1c1c1c;
+  border-radius: 10px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+}
+
+/* === SLIDER === */
+.g9-slider-wrapper {
+  max-width: 100%;
+  margin: auto;
+  text-align: center;
+}
+
+.g9-main-image {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #555;
+}
+
+.g9-thumbnails {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.g9-thumbnails img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+#img1:checked ~ .g9-main .img1,
+#img2:checked ~ .g9-main .img2,
+#img3:checked ~ .g9-main .img3,
+#img4:checked ~ .g9-main .img4,
+#img5:checked ~ .g9-main .img5 {
+  display: block;
+}
+
+.g9-main img {
+  display: none;
+}
+
+/* Highlight Selected Thumbnail */
+#img1:checked ~ .g9-thumbnails label[for="img1"] img,
+#img2:checked ~ .g9-thumbnails label[for="img2"] img,
+#img3:checked ~ .g9-thumbnails label[for="img3"] img,
+#img4:checked ~ .g9-thumbnails label[for="img4"] img,
+#img5:checked ~ .g9-thumbnails label[for="img5"] img {
+  border-color: var(--green);
+  box-shadow: 0 0 5px var(--green);
+}
+
+@media (max-width: 480px) {
+  .g9-thumbnails img {
+    width: 50px;
+    height: 50px;
+  }
+}

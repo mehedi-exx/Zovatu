@@ -132,6 +132,21 @@
       border-radius: 10px;
       background: #222;
     }
+    .slider-button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.5);
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      font-size: 18px;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .slider-button.left { left: 10px; }
+    .slider-button.right { right: 10px; }
+
     @media (max-width: 600px) {
       .form-wrapper { padding: 15px; }
     }
@@ -174,7 +189,12 @@
       <option>অন্যান্য</option>
     </select>
     <textarea id="desc" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
-    <input type="text" id="img" placeholder="ছবির লিংক (1 বা একাধিক, কমা দিয়ে দিন)">
+
+    <div id="imageFields">
+      <input type="text" placeholder="ছবির লিংক 1" class="img-input">
+    </div>
+    <button type="button" onclick="addImageField()">➕ আরেকটি ছবি যোগ করুন</button>
+
     <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
     <label><input type="checkbox" id="autoSlide"> অটো স্লাইড চালু করুন</label>
 
@@ -199,6 +219,20 @@ function showSection(id) {
   document.getElementById("sidebar").classList.remove("open");
 }
 
+function addImageField() {
+  const container = document.getElementById("imageFields");
+  const inputs = container.querySelectorAll(".img-input");
+  if (inputs.length >= 5) {
+    alert("সর্বোচ্চ ৫টি ছবি যোগ করা যাবে।");
+    return;
+  }
+  const input = document.createElement("input");
+  input.type = "text";
+  input.placeholder = `ছবির লিংক ${inputs.length + 1}`;
+  input.className = "img-input";
+  container.appendChild(input);
+}
+
 function validateImages(imgArray) {
   return imgArray.every(url => url.match(/\.(jpeg|jpg|png|webp|gif)$/i));
 }
@@ -212,16 +246,17 @@ function generateCode() {
   const status = document.getElementById("status").value;
   const category = document.getElementById("category").value;
   const desc = document.getElementById("desc").value.trim();
-  const imgInput = document.getElementById("img").value.trim();
   const wa = document.getElementById("wa").value.trim();
   const autoSlide = document.getElementById("autoSlide").checked;
 
-  if (!name || !code || !price || !status || !category || !imgInput || !wa) {
+  const imgInputs = document.querySelectorAll(".img-input");
+  const imgArray = Array.from(imgInputs).map(i => i.value.trim()).filter(Boolean);
+
+  if (!name || !code || !price || !status || !category || imgArray.length === 0 || !wa) {
     alert("সব প্রয়োজনীয় ফিল্ড পূরণ করুন।");
     return;
   }
 
-  const imgArray = imgInput.split(",").map(x => x.trim()).filter(Boolean);
   if (!validateImages(imgArray)) {
     alert("ছবির লিংক সঠিক নয়! শুধু .jpg, .jpeg, .png, .webp, .gif ব্যবহার করুন।");
     return;
@@ -238,7 +273,10 @@ function generateCode() {
   imgArray.forEach((img, i) => {
     slider += `<img src="${img}" class="g9slide" style="width:100%;display:${i===0?'block':'none'};">`;
   });
-  slider += `<button onclick="g9Prev()" style="position:absolute;top:50%;left:10px;">⏪</button><button onclick="g9Next()" style="position:absolute;top:50%;right:10px;">⏩</button></div>`;
+  slider += `
+    <button class="slider-button left" onclick="g9Prev()">⏪</button>
+    <button class="slider-button right" onclick="g9Next()">⏩</button>
+  </div>`;
 
   const html = `
 <div style="text-align:center;">${slider}
@@ -278,14 +316,14 @@ function generateCode() {
 }
 
 function g9Next() {
-  if (!window.g9Imgs) return;
+  if (!window.g9Imgs || window.g9Imgs.length === 0) return;
   window.g9Imgs[window.g9Index].style.display = "none";
   window.g9Index = (window.g9Index + 1) % window.g9Imgs.length;
   window.g9Imgs[window.g9Index].style.display = "block";
 }
 
 function g9Prev() {
-  if (!window.g9Imgs) return;
+  if (!window.g9Imgs || window.g9Imgs.length === 0) return;
   window.g9Imgs[window.g9Index].style.display = "none";
   window.g9Index = (window.g9Index - 1 + window.g9Imgs.length) % window.g9Imgs.length;
   window.g9Imgs[window.g9Index].style.display = "block";

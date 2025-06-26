@@ -1,247 +1,47 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>G9Tool - Blogger Product Generator</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>G9Tool</title>
+  <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <style>
-    :root {
-      --bg-dark: #121212;
-      --text-dark: #fff;
-      --card-dark: #1f1f1f;
-      --input-dark: #2c2c2c;
-    }
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text-dark);
-    }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 20px;
-      background-color: var(--card-dark);
-      border-radius: 0 0 20px 20px;
-    }
-    .menu-btn {
-      font-size: 22px;
-      background: none;
-      border: none;
-      color: inherit;
-      cursor: pointer;
-    }
-    .logo {
-      font-size: 22px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .telegram-icon {
-      font-size: 22px;
-      color: #1DA1F2;
-      background: #fff;
-      padding: 6px;
-      border-radius: 50%;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .form-wrapper {
-      max-width: 600px;
-      margin: auto;
-      padding: 20px;
-      background: var(--card-dark);
-      border-radius: 10px;
-    }
-    input, textarea, select {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 8px;
-      background: var(--input-dark);
-      color: var(--text-dark);
-    }
-    button {
-      padding: 12px 20px;
-      margin-top: 10px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    #generateBtn { background: #28a745; color: white; }
-    #copyBtn { background: #007bff; color: white; margin-left: 10px; }
-    .output, .live-preview {
-      margin-top: 20px;
-      padding: 20px;
-      border-radius: 10px;
-      background: #222;
-      white-space: pre-wrap;
-      overflow-x: auto;
-    }
-    .g9-slider-wrapper {
-      max-width: 400px;
-      margin: auto;
-      text-align: center;
-    }
-    .g9-main-image {
-      width: 100%;
-      height: auto;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      border: 1px solid #555;
-    }
-    .g9-thumbnails {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-    }
-    .g9-thumbnails img {
-      width: 70px;
-      height: 70px;
-      object-fit: cover;
-      border-radius: 8px;
-      border: 2px solid transparent;
-      cursor: pointer;
-      transition: 0.3s ease;
-    }
-    input[type="radio"] {
-      display: none;
-    }
-    #img1:checked ~ .g9-main .img1,
-    #img2:checked ~ .g9-main .img2,
-    #img3:checked ~ .g9-main .img3,
-    #img4:checked ~ .g9-main .img4,
-    #img5:checked ~ .g9-main .img5 {
-      display: block;
-    }
-    .g9-main img {
-      display: none;
-    }
-    #img1:checked ~ .g9-thumbnails label[for="img1"] img,
-    #img2:checked ~ .g9-thumbnails label[for="img2"] img,
-    #img3:checked ~ .g9-thumbnails label[for="img3"] img,
-    #img4:checked ~ .g9-thumbnails label[for="img4"] img,
-    #img5:checked ~ .g9-thumbnails label[for="img5"] img {
-      border-color: #28a745;
-      box-shadow: 0 0 5px #28a745;
-    }
-  </style>
 </head>
 <body>
-  <header>
-    <button class="menu-btn" onclick="alert('✅ মেনু অপশন কাজ করছে')"><i class="fas fa-bars"></i></button>
-    <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
-    <a href="https://t.me/mehedi_exx" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
-  </header>
-  <main>
-    <div class="form-wrapper">
-      <input type="text" id="name" placeholder="প্রোডাক্ট নাম">
-      <input type="text" id="code" placeholder="প্রোডাক্ট কোড">
-      <input type="text" id="price" placeholder="মূল্য">
-      <input type="text" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
-      <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
-      <input type="text" id="status" placeholder="স্ট্যাটাস">
-      <input type="text" id="category" placeholder="ক্যাটাগরি">
-      <textarea id="desc" placeholder="ডেসক্রিপশন"></textarea>
-      <div id="imageInputs">
-        <input type="url" class="img-url" placeholder="ছবির লিংক">
-      </div>
-      <button onclick="addImageInput()">➕ আরও ছবি যোগ করুন</button>
-      <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
-      <div class="buttons">
-        <button id="generateBtn">✅ কোড জেনারেট করুন</button>
-        <button id="copyBtn">📋 কপি করুন</button>
-      </div>
-      <div class="output" id="output"></div>
-      <div class="live-preview" id="preview"></div>
+
+<header>
+  <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
+  <a href="https://t.me/mehedi_exx" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
+</header>
+
+<main>
+  <div class="form-wrapper">
+    <input type="text" id="name" placeholder="প্রোডাক্ট নাম">
+    <input type="text" id="code" placeholder="প্রোডাক্ট কোড">
+    <input type="number" id="price" placeholder="মূল্য প্রাইস (৳)">
+    <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
+    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
+    <input type="text" id="status" placeholder="স্ট্যাটাস">
+    <input type="text" id="category" placeholder="ক্যাটাগরি">
+    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা (ঐচ্ছিক)"></textarea>
+
+    <div id="imageInputs">
+      <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
     </div>
-  </main>
-  <script>
-    let imgCount = 1;
-    function addImageInput() {
-      if (imgCount < 5) {
-        const newInput = document.createElement('input');
-        newInput.type = 'url';
-        newInput.className = 'img-url';
-        newInput.placeholder = `ছবির লিংক (Image URL) ${imgCount + 1}`;
-        document.getElementById('imageInputs').appendChild(newInput);
-        imgCount++;
-      }
-    }
+    <button onclick="addImageInput()">➕ আরও ছবি যোগ করুন</button>
 
-    document.getElementById("generateBtn").addEventListener("click", function () {
-      const name = document.getElementById("name").value;
-      const code = document.getElementById("code").value;
-      const price = parseFloat(document.getElementById("price").value);
-      const offer = parseFloat(document.getElementById("offer").value);
-      const delivery = document.getElementById("delivery").value || "N/A";
-      const status = document.getElementById("status").value;
-      const category = document.getElementById("category").value;
-      const desc = document.getElementById("desc").value;
-      const wa = document.getElementById("wa").value;
-      const images = Array.from(document.querySelectorAll('.img-url')).map(i => i.value).filter(Boolean);
+    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
 
-      if (!name || !code || !price || !status || !category || !images.length || !wa) {
-        alert("⚠️ সব প্রয়োজনীয় ইনপুট পূরণ করুন");
-        return;
-      }
+    <div style="text-align:center;">
+      <button id="generateBtn">✅ কোড জেনারেট করুন</button>
+      <button id="copyBtn">📋 কপি করুন</button>
+    </div>
 
-      let finalPrice = `৳${price}`;
-      if (!isNaN(offer) && offer < price) {
-        const discount = Math.round(((price - offer) / price) * 100);
-        finalPrice = `<del style='text-decoration: line-through;'>৳${price}</del> <span style='color:red;font-weight:bold;'>৳${offer}</span> <small style='color:#0f0'>(${discount}% ছাড়)</small>`;
-      }
+    <div class="output" id="output"></div>
+    <div class="live-preview" id="preview"></div>
+  </div>
+</main>
 
-      const waText = encodeURIComponent(`📦 আমি একটি পণ্য অর্ডার করতে চাই:\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ৳${offer || price}\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি টাইম: ${delivery}`);
-      const waLink = `https://wa.me/${wa}?text=${waText}`;
-
-      let slider = `<div class='g9-slider-wrapper'>`;
-      images.forEach((src, i) => {
-        slider += `<input type='radio' name='slider' id='img${i+1}' class='slide-radio' ${i === 0 ? 'checked' : ''}>`;
-      });
-      slider += `<div class='g9-main'>`;
-      images.forEach((src, i) => {
-        slider += `<img src='${src}' class='g9-main-image img${i+1}'>`;
-      });
-      slider += `</div><div class='g9-thumbnails'>`;
-      images.forEach((src, i) => {
-        slider += `<label for='img${i+1}'><img src='${src}'></label>`;
-      });
-      slider += `</div></div>`;
-
-      const html = `${slider}
-<h2 style='text-align:center;margin:5px 0;'>${name}</h2>
-<p style='text-align:center;'>${finalPrice}</p>
-<p style='text-align:center;margin:10px 0;'>
-  <a href='${waLink}' target='_blank' style='display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;'>📲 অর্ডার করুন WhatsApp এ</a>
-</p>
-<ul>
-  <li>🔢 কোড: ${code}</li>
-  <li>📦 স্ট্যাটাস: ${status}</li>
-  <li>📁 ক্যাটাগরি: ${category}</li>
-  <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
-</ul>
-<p>${desc}</p>
-<p style='display:none;'>
-  <a href='#'>{getProduct} $button={Price} $price={৳${offer || price}} $sale={৳${price}} $icon={cart} $style={1}</a>
-</p>`;
-
-      document.getElementById("output").textContent = html;
-      document.getElementById("preview").innerHTML = html;
-    });
-
-    document.getElementById("copyBtn").addEventListener("click", function () {
-      const code = document.getElementById("output").textContent;
-      navigator.clipboard.writeText(code).then(() => {
-        alert("✅ কোড কপি হয়েছে!");
-      });
-    });
-  </script>
+<script src="script.js"></script>
 </body>
 </html>

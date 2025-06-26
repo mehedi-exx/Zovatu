@@ -18,7 +18,6 @@
       background-color: var(--bg-dark);
       color: var(--text-dark);
     }
-
     header {
       position: relative;
       z-index: 1001;
@@ -30,7 +29,6 @@
       border-radius: 0 0 20px 20px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
-
     .menu-btn {
       font-size: 22px;
       background: none;
@@ -44,7 +42,6 @@
       align-items: center;
       gap: 8px;
     }
-
     .telegram-icon {
       font-size: 22px;
       color: #1DA1F2;
@@ -56,39 +53,11 @@
       align-items: center;
       justify-content: center;
     }
-
-    .slider-container {
+    main {
       display: flex;
-      overflow: hidden;
-      position: relative;
+      justify-content: center;
+      padding: 20px;
     }
-
-    .slider {
-      display: flex;
-      transition: transform 0.5s ease;
-    }
-
-    .slider img {
-      max-width: 100%;
-      border-radius: 10px;
-      object-fit: cover;
-    }
-
-    .prev, .next {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background-color: rgba(0, 0, 0, 0.5);
-      color: white;
-      font-size: 30px;
-      padding: 10px;
-      border: none;
-      cursor: pointer;
-    }
-
-    .prev { left: 10px; }
-    .next { right: 10px; }
-
     .form-wrapper {
       max-width: 600px;
       width: 100%;
@@ -97,7 +66,6 @@
       border-radius: 10px;
       box-sizing: border-box;
     }
-
     input, textarea, select {
       width: 100%;
       padding: 12px;
@@ -109,7 +77,6 @@
       box-sizing: border-box;
       box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
     }
-
     button {
       padding: 12px 20px;
       margin-top: 10px;
@@ -118,56 +85,25 @@
       cursor: pointer;
       font-weight: bold;
     }
-
-    #generateBtn {
-      background: #28a745;
-      color: white;
-    }
-
-    #copyBtn {
-      background: #007bff;
-      color: white;
-      margin-left: 10px;
-    }
-
-    .buttons {
-      text-align: center;
-      flex-wrap: wrap;
-    }
-
-    .output {
+    #generateBtn { background: #28a745; color: white; }
+    #copyBtn { background: #007bff; color: white; margin-left: 10px; }
+    .buttons { text-align: center; flex-wrap: wrap; }
+    .output, .live-preview {
       margin-top: 20px;
-      padding: 20px;
-      border-radius: 10px;
-      background: var(--card-dark);
-      color: var(--text-dark);
-      white-space: pre-wrap;
-      overflow-x: auto;
-    }
-
-    .live-preview {
-      margin-top: 20px;
-      border: 2px dashed #999;
       padding: 20px;
       border-radius: 10px;
       background: #222;
-    }
-
-    @media (max-width: 600px) {
-      .form-wrapper {
-        padding: 15px;
-      }
+      white-space: pre-wrap;
+      overflow-x: auto;
     }
   </style>
 </head>
 <body>
-
 <header>
   <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
   <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
   <a href="https://t.me/mehedi_exx" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
 </header>
-
 <main>
   <div class="form-wrapper" id="formSection">
     <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
@@ -175,119 +111,79 @@
     <input type="text" id="price" placeholder="মূল্য প্রাইস (৳)" required>
     <input type="text" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
     <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)">
-    <select id="status">
-      <option value="">স্ট্যাটাস নির্বাচন করুন</option>
-      <option value="In Stock">In Stock</option>
-      <option value="Out of Stock">Out of Stock</option>
-    </select>
-    <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)">
-    <textarea id="desc" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
-
-    <div id="imageInputs">
-      <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
-    </div>
-
-    <button onclick="addImageInput()">➕ আরও ছবি যোগ করুন</button>
-
+    <input type="text" id="status" placeholder="স্ট্যাটাস">
+    <input type="text" id="category" placeholder="ক্যাটাগরি">
+    <textarea id="desc" placeholder="ডেসক্রিপশন"></textarea>
+    <input type="url" class="img-url" placeholder="ছবির লিংক">
+    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
     <div class="buttons">
-      <button id="generateBtn" onclick="generateCode()">✅ কোড জেনারেট করুন</button>
-      <button id="copyBtn" onclick="copyCode()">📋 কপি করুন</button>
+      <button id="generateBtn">✅ কোড জেনারেট করুন</button>
+      <button id="copyBtn">📋 কপি করুন</button>
     </div>
-
-    <div class="note" id="note"></div>
     <div class="output" id="output"></div>
     <div class="live-preview" id="preview"></div>
   </div>
 </main>
-
 <script>
-  let imgCount = 1;
-
   function toggleMenu() {
-    const sidebar = document.getElementById('sidebar');
-    sidebar.classList.toggle('open');
+    alert("✅ মেনু অপশন কাজ করছে");
   }
 
-  function addImageInput() {
-    if (imgCount < 5) {
-      const newInput = document.createElement('input');
-      newInput.type = 'url';
-      newInput.className = 'img-url';
-      newInput.placeholder = `ছবির লিংক (Image URL) ${imgCount + 1}`;
-      document.getElementById('imageInputs').appendChild(newInput);
-      imgCount++;
-    }
-  }
-
-  function generateCode() {
+  document.getElementById("generateBtn").addEventListener("click", function () {
     const name = document.getElementById("name").value;
     const code = document.getElementById("code").value;
     const price = document.getElementById("price").value;
-    const offer = document.getElementById("offer").value || price;
-    const delivery = document.getElementById("delivery").value || "N/A";
+    const offer = document.getElementById("offer").value;
+    const delivery = document.getElementById("delivery").value;
     const status = document.getElementById("status").value;
     const category = document.getElementById("category").value;
     const desc = document.getElementById("desc").value;
+    const img = document.querySelector('.img-url').value;
+    const wa = document.getElementById("wa").value;
 
-    const images = document.querySelectorAll('.img-url');
-    const imgArray = Array.from(images).map(input => input.value);
-
-    if (!name || !code || !price || !status || !category || imgArray.length === 0) {
-      alert("সব প্রয়োজনীয় ফিল্ড পূরণ করুন।");
+    if (!name || !code || !price || !status || !category || !img || !wa) {
+      alert("⚠️ সব প্রয়োজনীয় ইনপুট পূরণ করুন");
       return;
     }
 
-    const finalPrice = `<del>৳${price}</del> <span style="color:#f00;font-weight:bold;">৳${offer}</span>`;
+    const finalPrice = offer
+      ? `<del>৳${price}</del> <span style='color:red;font-weight:bold;'>৳${offer}</span>`
+      : `৳${price}`;
 
-    const waText = encodeURIComponent(
-`📦 আমি একটি পণ্য অর্ডার করতে চাই:
-🔖 প্রোডাক্ট: ${name}
-💰 মূল্য: ৳${offer}
-🧾 কোড: ${code}
-📁 ক্যাটাগরি: ${category}
-🚚 ডেলিভারি টাইম: ${delivery}`
-    );
+    const waText = encodeURIComponent(`📦 আমি একটি পণ্য অর্ডার করতে চাই:\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ৳${offer || price}\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি টাইম: ${delivery || "N/A"}`);
 
     const waLink = `https://wa.me/${wa}?text=${waText}`;
 
-    let sliderHTML = '<div class="slider-container">';
-    imgArray.forEach(src => {
-      sliderHTML += `<div class="slider"><img src="${src}" alt="${name}" /></div>`;
-    });
-    sliderHTML += '</div>';
-
     const html = `
-<div style="text-align:center;">
-  ${sliderHTML}
-  <h2 style="margin:5px 0;">${name}</h2>
-  <p style="font-size:16px;">${finalPrice}</p>
+<div style='text-align:center;'>
+  <img src='${img}' style='max-width:100%;border-radius:10px;margin-bottom:10px;' alt='${name}' />
+  <h2 style='margin:5px 0;'>${name}</h2>
+  <p>${finalPrice}</p>
 </div>
-<p style="text-align:center;margin:10px 0;">
-  <a href="${waLink}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
-    📲 অর্ডার করুন WhatsApp এ
-  </a>
+<p style='text-align:center;margin:10px 0;'>
+  <a href='${waLink}' target='_blank' style='display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;'>📲 অর্ডার করুন WhatsApp এ</a>
 </p>
 <ul>
   <li>🔢 কোড: ${code}</li>
   <li>📦 স্ট্যাটাস: ${status}</li>
   <li>📁 ক্যাটাগরি: ${category}</li>
-  <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
+  <li>🚚 ডেলিভারি টাইম: ${delivery || "N/A"}</li>
 </ul>
 <p>${desc}</p>
-`;
+<p style='display:none;'>
+  <a href='#'>{getProduct} $button={Price} $price={৳${offer || price}} $sale={৳${price}} $icon={cart} $style={1}</a>
+</p>`;
 
     document.getElementById("output").textContent = html;
-    document.getElementById("note").textContent = "✅ কোড তৈরি হয়েছে!";
     document.getElementById("preview").innerHTML = html;
-  }
+  });
 
-  function copyCode() {
+  document.getElementById("copyBtn").addEventListener("click", function () {
     const code = document.getElementById("output").textContent;
     navigator.clipboard.writeText(code).then(() => {
-      document.getElementById("note").textContent = "✅ কপি হয়েছে!";
+      alert("✅ কোড কপি হয়েছে!");
     });
-  }
+  });
 </script>
-
 </body>
 </html>

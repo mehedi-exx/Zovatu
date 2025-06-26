@@ -18,6 +18,7 @@
       background-color: var(--bg-dark);
       color: var(--text-dark);
     }
+
     header {
       position: relative;
       z-index: 1001;
@@ -29,6 +30,7 @@
       border-radius: 0 0 20px 20px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
+
     .menu-btn {
       font-size: 22px;
       background: none;
@@ -42,6 +44,7 @@
       align-items: center;
       gap: 8px;
     }
+
     .telegram-icon {
       font-size: 22px;
       color: #1DA1F2;
@@ -53,6 +56,7 @@
       align-items: center;
       justify-content: center;
     }
+
     .sidebar {
       position: fixed;
       top: 0;
@@ -75,11 +79,13 @@
       text-decoration: none;
       border-bottom: 1px solid rgba(255,255,255,0.1);
     }
+
     main {
       display: flex;
       justify-content: center;
       padding: 20px;
     }
+
     .form-wrapper {
       max-width: 600px;
       width: 100%;
@@ -88,6 +94,7 @@
       border-radius: 10px;
       box-sizing: border-box;
     }
+
     input, textarea, select {
       width: 100%;
       padding: 12px;
@@ -99,14 +106,16 @@
       box-sizing: border-box;
       box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
     }
-    input::placeholder,
-    textarea::placeholder {
+
+    input::placeholder, textarea::placeholder {
       color: #aaa;
     }
+
     input:focus, textarea:focus, select:focus {
       outline: none;
       border: 2px solid #28a745;
     }
+
     button {
       padding: 12px 20px;
       margin-top: 10px;
@@ -115,24 +124,29 @@
       cursor: pointer;
       font-weight: bold;
     }
+
     #generateBtn {
       background: #28a745;
       color: white;
     }
+
     #copyBtn {
       background: #007bff;
       color: white;
       margin-left: 10px;
     }
+
     .buttons {
       text-align: center;
       flex-wrap: wrap;
     }
+
     .note {
       margin-top: 10px;
       color: #0f0;
       text-align: center;
     }
+
     .output {
       margin-top: 20px;
       padding: 20px;
@@ -142,6 +156,7 @@
       white-space: pre-wrap;
       overflow-x: auto;
     }
+
     .live-preview {
       margin-top: 20px;
       border: 2px dashed #999;
@@ -150,35 +165,59 @@
       background: #222;
     }
 
-    /* Slider Styles */
-    .slider-container {
+    .slider-wrapper {
       position: relative;
+      max-width: 100%;
       overflow: hidden;
       border-radius: 10px;
     }
-    .slides {
-      display: flex;
-      transition: transform 0.5s ease;
-    }
-    .slides img {
+    .slider-wrapper img {
       width: 100%;
-      object-fit: cover;
+      border-radius: 10px;
     }
-    .slider-nav {
+    .slider-content {
+      display: flex;
+      transition: transform 0.4s ease-in-out;
+    }
+    .slide {
+      min-width: 100%;
+      box-sizing: border-box;
+    }
+    .slider-controls {
       position: absolute;
       top: 50%;
       width: 100%;
       display: flex;
       justify-content: space-between;
       transform: translateY(-50%);
+      padding: 0 10px;
     }
-    .prev, .next {
-      background: rgba(0, 0, 0, 0.5);
+    .slider-btn {
+      background: rgba(0,0,0,0.5);
       color: white;
-      padding: 10px;
-      cursor: pointer;
+      font-size: 20px;
       border: none;
-      font-size: 18px;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .slider-dots {
+      text-align: center;
+      margin-top: 10px;
+    }
+    .slider-dots button {
+      background: #444;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 3px 8px;
+      margin: 0 3px;
+      cursor: pointer;
+      font-size: 12px;
     }
 
     @media (max-width: 600px) {
@@ -189,6 +228,7 @@
   </style>
 </head>
 <body>
+
 <header>
   <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
   <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
@@ -218,19 +258,18 @@
     <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)">
     <textarea id="desc" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
 
-    <label style="display:block; margin-top: 15px;">ছবির লিংকসমূহ:</label>
     <div id="imageInputs">
-      <input type="url" name="img[]" class="img-field" placeholder="ছবির লিংক (Image URL)" required>
+      <input type="url" class="img-field" placeholder="ছবির লিংক ১ (আবশ্যক)" required>
     </div>
-    <button type="button" onclick="addImageField()" style="margin-top:10px;background:#444;color:#fff;padding:8px 16px;border-radius:8px;display:flex;align-items:center;gap:6px;">
-      <i class="fas fa-plus"></i> আরও ছবি দিন (সর্বোচ্চ ৫টি)
-    </button>
+    <button type="button" onclick="addImageInput()" style="margin-top:10px;background:#555;color:#fff;">➕ আরও ছবি যোগ করুন</button>
 
     <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
+
     <div class="buttons">
       <button id="generateBtn" onclick="generateCode()">✅ কোড জেনারেট করুন</button>
       <button id="copyBtn" onclick="copyCode()">📋 কপি করুন</button>
     </div>
+
     <div class="note" id="note"></div>
     <div class="output" id="output"></div>
     <div class="live-preview" id="preview"></div>
@@ -238,36 +277,27 @@
 </main>
 
 <script>
-// Toggle menu for sidebar
 function toggleMenu() {
   document.getElementById("sidebar").classList.toggle("open");
 }
 
-// Display form section when menu item is clicked
 function showSection(id) {
   document.getElementById("formSection").style.display = id === "form" ? "block" : "none";
   document.getElementById("sidebar").classList.remove("open");
 }
 
-// Add new image field to the form
-function addImageField() {
-  const container = document.getElementById('imageInputs');
-  const count = container.querySelectorAll('input.img-field').length;
-  if (count >= 5) {
-    alert("আপনি সর্বোচ্চ ৫টি ছবি যুক্ত করতে পারবেন।");
-    return;
-  }
+let imgCount = 1;
+function addImageInput() {
+  if (imgCount >= 5) return;
+  imgCount++;
   const input = document.createElement('input');
-  input.type = "url";
-  input.name = "img[]";
-  input.placeholder = "আরও ছবির লিংক দিন";
-  input.className = "img-field";
-  input.required = true;
-  input.style.marginTop = "10px";
-  container.appendChild(input);
+  input.type = 'url';
+  input.placeholder = `ছবির লিংক ${imgCount}`;
+  input.className = 'img-field';
+  input.style.marginTop = '10px';
+  document.getElementById('imageInputs').appendChild(input);
 }
 
-// Generate the product code based on the form input
 function generateCode() {
   const name = document.getElementById("name").value;
   const code = document.getElementById("code").value;
@@ -278,10 +308,10 @@ function generateCode() {
   const category = document.getElementById("category").value;
   const desc = document.getElementById("desc").value;
   const wa = document.getElementById("wa").value;
-  const imgInputs = document.querySelectorAll(".img-field");
-  const imgUrls = [...imgInputs].map(input => input.value.trim()).filter(url => url);
+  const imgFields = document.querySelectorAll('.img-field');
+  const images = Array.from(imgFields).map(i => i.value).filter(Boolean);
 
-  if (!name || !code || !price || !status || !category || imgUrls.length === 0 || !wa) {
+  if (!name || !code || !price || !status || !category || images.length === 0 || !wa) {
     alert("সব প্রয়োজনীয় ফিল্ড পূরণ করুন।");
     return;
   }
@@ -296,38 +326,35 @@ function generateCode() {
 💰 মূল্য: ৳${offer || price}
 🧾 কোড: ${code}
 📁 ক্যাটাগরি: ${category}
-🚚 ডেলিভারি টাইম: ${delivery}`);
+🚚 ডেলিভারি টাইম: ${delivery}`
+  );
   const waLink = `https://wa.me/${wa}?text=${waText}`;
 
-  let slider = '';
-  if (imgUrls.length === 1) {
-    slider = `<div style="text-align:center;"><img src="${imgUrls[0]}" style="max-width:100%;border-radius:10px;margin-bottom:10px;" alt="${name}" /></div>`;
+  let imageHTML = '';
+  if (images.length === 1) {
+    imageHTML = `<img src="${images[0]}" style="max-width:100%;border-radius:10px;margin-bottom:10px;" alt="${name}" />`;
   } else {
-    slider = `
-<div class="slider-container">
-  <div class="slides">
-    ${imgUrls.map(url => `<img src="${url}" style="width:100%;object-fit:cover;">`).join('')}
-  </div>
-  <div class="slider-nav">
-    <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
-    <button class="next" onclick="moveSlide(1)">&#10095;</button>
-  </div>
-</div>
-<script>
-let current = 0;
-const totalSlides = ${imgUrls.length};
-function moveSlide(direction) {
-  current = (current + direction + totalSlides) % totalSlides;
-  const slides = document.querySelector('.slides');
-  slides.style.transform = 'translateX(-' + (current * 100) + '%)';
-}
-</script>`;
+    const slides = images.map(src => `<div class="slide"><img src="${src}" alt="img"></div>`).join('');
+    const dots = images.map((_, i) => `<button onclick="moveToSlide(${i})">ছবি</button>`).join('');
+    imageHTML = `
+    <div class="slider-wrapper">
+      <div class="slider-content" id="sliderTrack">
+        ${slides}
+      </div>
+      <div class="slider-controls">
+        <button class="slider-btn" onclick="prevSlide()">&#10094;</button>
+        <button class="slider-btn" onclick="nextSlide()">&#10095;</button>
+      </div>
+      <div class="slider-dots">${dots}</div>
+    </div>`;
   }
 
   const html = `
-${slider}
-<h2 style="text-align:center;margin:5px 0;">${name}</h2>
-<p style="text-align:center;font-size:16px;">${finalPrice}</p>
+<div style="text-align:center;">
+  ${imageHTML}
+  <h2 style="margin:5px 0;">${name}</h2>
+  <p style="font-size:16px;">${finalPrice}</p>
+</div>
 <p style="text-align:center;margin:10px 0;">
   <a href="${waLink}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
     📲 অর্ডার করুন WhatsApp এ
@@ -349,15 +376,39 @@ ${slider}
   document.getElementById("output").textContent = html;
   document.getElementById("note").textContent = "✅ কোড তৈরি হয়েছে!";
   document.getElementById("preview").innerHTML = html;
+  currentSlide = 0;
+  updateSlider();
 }
 
-// Copy the generated code to clipboard
 function copyCode() {
   const code = document.getElementById("output").textContent;
   navigator.clipboard.writeText(code).then(() => {
     document.getElementById("note").textContent = "✅ কপি হয়েছে!";
   });
 }
+
+let currentSlide = 0;
+function updateSlider() {
+  const slider = document.getElementById('sliderTrack');
+  if (!slider) return;
+  const slideWidth = slider.clientWidth;
+  slider.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
+}
+function nextSlide() {
+  const total = document.querySelectorAll('.slider-content .slide').length;
+  currentSlide = (currentSlide + 1) % total;
+  updateSlider();
+}
+function prevSlide() {
+  const total = document.querySelectorAll('.slider-content .slide').length;
+  currentSlide = (currentSlide - 1 + total) % total;
+  updateSlider();
+}
+function moveToSlide(index) {
+  currentSlide = index;
+  updateSlider();
+}
 </script>
+
 </body>
 </html>

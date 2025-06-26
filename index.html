@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>G9Tool - Blogger Product Generator</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
@@ -84,153 +84,139 @@
       white-space: pre-wrap;
       overflow-x: auto;
     }
-
-    .slider-container {
-      position: relative;
-      width: 100%;
-      max-width: 500px;
-      margin: 0 auto 15px;
-      overflow: hidden;
-      border-radius: 10px;
+    .g9-slider-wrapper {
+      max-width: 400px;
+      margin: auto;
+      text-align: center;
     }
-    .slides {
+    .g9-main-image {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #555;
+    }
+    .g9-thumbnails {
       display: flex;
-      width: 500%;
-      transition: all 0.5s ease;
+      justify-content: center;
+      gap: 8px;
     }
-    .slides img {
-      width: 100%;
-      border-radius: 10px;
+    .g9-thumbnails img {
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: 0.3s ease;
     }
-    .slide-radio {
+    input[type="radio"] {
       display: none;
     }
-    .slider-nav {
-      position: absolute;
-      top: 50%;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      transform: translateY(-50%);
+    #img1:checked ~ .g9-main .img1,
+    #img2:checked ~ .g9-main .img2,
+    #img3:checked ~ .g9-main .img3,
+    #img4:checked ~ .g9-main .img4,
+    #img5:checked ~ .g9-main .img5 {
+      display: block;
     }
-    .slider-nav label {
-      background: rgba(0,0,0,0.5);
-      color: #fff;
-      font-size: 24px;
-      padding: 5px 10px;
-      cursor: pointer;
-      border-radius: 50%;
+    .g9-main img {
+      display: none;
     }
-
-    #s1:checked ~ .slides { transform: translateX(0%); }
-    #s2:checked ~ .slides { transform: translateX(-100%); }
-    #s3:checked ~ .slides { transform: translateX(-200%); }
-    #s4:checked ~ .slides { transform: translateX(-300%); }
-    #s5:checked ~ .slides { transform: translateX(-400%); }
+    #img1:checked ~ .g9-thumbnails label[for="img1"] img,
+    #img2:checked ~ .g9-thumbnails label[for="img2"] img,
+    #img3:checked ~ .g9-thumbnails label[for="img3"] img,
+    #img4:checked ~ .g9-thumbnails label[for="img4"] img,
+    #img5:checked ~ .g9-thumbnails label[for="img5"] img {
+      border-color: #28a745;
+      box-shadow: 0 0 5px #28a745;
+    }
   </style>
 </head>
 <body>
-
-<header>
-  <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
-  <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
-  <a href="https://t.me/mehedi_exx" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
-</header>
-
-<main>
-  <div class="form-wrapper" id="formSection">
-    <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
-    <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
-    <input type="text" id="price" placeholder="মূল্য প্রাইস (৳)" required>
-    <input type="text" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
-    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)">
-    <input type="text" id="status" placeholder="স্ট্যাটাস">
-    <input type="text" id="category" placeholder="ক্যাটাগরি">
-    <textarea id="desc" placeholder="ডেসক্রিপশন"></textarea>
-    <div id="imageInputs">
-      <input type="url" class="img-url" placeholder="ছবির লিংক">
+  <header>
+    <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+    <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
+    <a href="https://t.me/mehedi_exx" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
+  </header>
+  <main>
+    <div class="form-wrapper">
+      <input type="text" id="name" placeholder="প্রোডাক্ট নাম">
+      <input type="text" id="code" placeholder="প্রোডাক্ট কোড">
+      <input type="text" id="price" placeholder="মূল্য">
+      <input type="text" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
+      <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
+      <input type="text" id="status" placeholder="স্ট্যাটাস">
+      <input type="text" id="category" placeholder="ক্যাটাগরি">
+      <textarea id="desc" placeholder="ডেসক্রিপশন"></textarea>
+      <div id="imageInputs">
+        <input type="url" class="img-url" placeholder="ছবির লিংক">
+      </div>
+      <button onclick="addImageInput()">➕ আরও ছবি যোগ করুন</button>
+      <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
+      <div class="buttons">
+        <button id="generateBtn">✅ কোড জেনারেট করুন</button>
+        <button id="copyBtn">📋 কপি করুন</button>
+      </div>
+      <div class="output" id="output"></div>
+      <div class="live-preview" id="preview"></div>
     </div>
-    <button onclick="addImageInput()">➕ আরও ছবি যোগ করুন</button>
-    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
-    <div class="buttons">
-      <button id="generateBtn">✅ কোড জেনারেট করুন</button>
-      <button id="copyBtn">📋 কপি করুন</button>
-    </div>
-    <div class="output" id="output"></div>
-    <div class="live-preview" id="preview"></div>
-  </div>
-</main>
-
-<script>
-  let imgCount = 1;
-
-  function addImageInput() {
-    if (imgCount < 5) {
-      const newInput = document.createElement('input');
-      newInput.type = 'url';
-      newInput.className = 'img-url';
-      newInput.placeholder = `ছবির লিংক (Image URL) ${imgCount + 1}`;
-      document.getElementById('imageInputs').appendChild(newInput);
-      imgCount++;
+  </main>
+  <script>
+    let imgCount = 1;
+    function addImageInput() {
+      if (imgCount < 5) {
+        const newInput = document.createElement('input');
+        newInput.type = 'url';
+        newInput.className = 'img-url';
+        newInput.placeholder = `ছবির লিংক (Image URL) ${imgCount + 1}`;
+        document.getElementById('imageInputs').appendChild(newInput);
+        imgCount++;
+      }
     }
-  }
+    document.getElementById("generateBtn").addEventListener("click", function () {
+      const name = document.getElementById("name").value;
+      const code = document.getElementById("code").value;
+      const price = parseFloat(document.getElementById("price").value);
+      const offer = parseFloat(document.getElementById("offer").value);
+      const delivery = document.getElementById("delivery").value || "N/A";
+      const status = document.getElementById("status").value;
+      const category = document.getElementById("category").value;
+      const desc = document.getElementById("desc").value;
+      const wa = document.getElementById("wa").value;
+      const images = Array.from(document.querySelectorAll('.img-url')).map(i => i.value).filter(Boolean);
 
-  function toggleMenu() {
-    alert("✅ মেনু অপশন কাজ করছে");
-  }
+      if (!name || !code || !price || !status || !category || !images.length || !wa) {
+        alert("⚠️ সব প্রয়োজনীয় ইনপুট পূরণ করুন");
+        return;
+      }
 
-  document.getElementById("generateBtn").addEventListener("click", function () {
-    const name = document.getElementById("name").value;
-    const code = document.getElementById("code").value;
-    const price = parseFloat(document.getElementById("price").value);
-    const offer = parseFloat(document.getElementById("offer").value);
-    const delivery = document.getElementById("delivery").value || "N/A";
-    const status = document.getElementById("status").value;
-    const category = document.getElementById("category").value;
-    const desc = document.getElementById("desc").value;
-    const wa = document.getElementById("wa").value;
-    const images = Array.from(document.querySelectorAll('.img-url')).map(i => i.value).filter(Boolean);
+      let finalPrice = `৳${price}`;
+      if (!isNaN(offer) && offer < price) {
+        const discount = Math.round(((price - offer) / price) * 100);
+        finalPrice = `<del style='text-decoration: line-through;'>৳${price}</del> <span style='color:red;font-weight:bold;'>৳${offer}</span> <small style='color:#0f0'>(${discount}% ছাড়)</small>`;
+      }
 
-    if (!name || !code || !price || !status || !category || !images.length || !wa) {
-      alert("⚠️ সব প্রয়োজনীয় ইনপুট পূরণ করুন");
-      return;
-    }
+      const waText = encodeURIComponent(`📦 আমি একটি পণ্য অর্ডার করতে চাই:\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ৳${offer || price}\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি টাইম: ${delivery}`);
+      const waLink = `https://wa.me/${wa}?text=${waText}`;
 
-    let finalPrice = `৳${price}`;
-    let discountText = '';
-    if (!isNaN(offer) && offer < price) {
-      const discount = Math.round(((price - offer) / price) * 100);
-      finalPrice = `<del style='text-decoration: line-through;'>৳${price}</del> <span style='color:red;font-weight:bold;'>৳${offer}</span> <small style='color:#0f0'>(${discount}% ছাড়)</small>`;
-    }
-
-    const waText = encodeURIComponent(`📦 আমি একটি পণ্য অর্ডার করতে চাই:\\n🔖 প্রোডাক্ট: ${name}\\n💰 মূল্য: ৳${offer || price}\\n🧾 কোড: ${code}\\n📁 ক্যাটাগরি: ${category}\\n🚚 ডেলিভারি টাইম: ${delivery}`);
-    const waLink = `https://wa.me/${wa}?text=${waText}`;
-
-    let sliderHTML = '';
-    if (images.length > 1) {
-      sliderHTML += `<div class='slider-container'>`;
+      let slider = `<div class='g9-slider-wrapper'>`;
       images.forEach((src, i) => {
-        sliderHTML += `<input type='radio' name='slider' id='s${i+1}' class='slide-radio' ${i===0 ? 'checked' : ''}>`;
+        slider += `<input type='radio' name='slider' id='img${i+1}' class='slide-radio' ${i === 0 ? 'checked' : ''}>`;
       });
-      sliderHTML += `<div class='slides'>`;
-      images.forEach(src => {
-        sliderHTML += `<img src='${src}' alt='${name}'>`;
+      slider += `<div class='g9-main'>`;
+      images.forEach((src, i) => {
+        slider += `<img src='${src}' class='g9-main-image img${i+1}'>`;
       });
-      sliderHTML += `</div><div class='slider-nav'>`;
-      images.forEach((_, i) => {
-        const prev = i === 0 ? images.length : i;
-        const next = (i + 1) % images.length + 1;
-        sliderHTML += `<label for='s${prev}'>&lt;</label><label for='s${next}'>&gt;</label>`;
-        return false;
+      slider += `</div><div class='g9-thumbnails'>`;
+      images.forEach((src, i) => {
+        slider += `<label for='img${i+1}'><img src='${src}'></label>`;
       });
-      sliderHTML += `</div></div>`;
-    } else {
-      sliderHTML += `<img src='${images[0]}' style='max-width:100%;border-radius:10px;margin-bottom:10px;' alt='${name}' />`;
-    }
+      slider += `</div></div>`;
 
-    const html = `<div style='text-align:center;'>${sliderHTML}
-<h2 style='margin:5px 0;'>${name}</h2>
-<p>${finalPrice}</p></div>
+      const html = `${slider}
+<h2 style='text-align:center;margin:5px 0;'>${name}</h2>
+<p style='text-align:center;'>${finalPrice}</p>
 <p style='text-align:center;margin:10px 0;'>
   <a href='${waLink}' target='_blank' style='display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;'>📲 অর্ডার করুন WhatsApp এ</a>
 </p>
@@ -245,17 +231,15 @@
   <a href='#'>{getProduct} $button={Price} $price={৳${offer || price}} $sale={৳${price}} $icon={cart} $style={1}</a>
 </p>`;
 
-    document.getElementById("output").textContent = html;
-    document.getElementById("preview").innerHTML = html;
-  });
-
-  document.getElementById("copyBtn").addEventListener("click", function () {
-    const code = document.getElementById("output").textContent;
-    navigator.clipboard.writeText(code).then(() => {
-      alert("✅ কোড কপি হয়েছে!");
+      document.getElementById("output").textContent = html;
+      document.getElementById("preview").innerHTML = html;
     });
-  });
-</script>
-
+    document.getElementById("copyBtn").addEventListener("click", function () {
+      const code = document.getElementById("output").textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        alert("✅ কোড কপি হয়েছে!");
+      });
+    });
+  </script>
 </body>
 </html>

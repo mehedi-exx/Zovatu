@@ -149,6 +149,38 @@
       border-radius: 10px;
       background: #222;
     }
+
+    /* Slider Styles */
+    .slider-container {
+      position: relative;
+      overflow: hidden;
+      border-radius: 10px;
+    }
+    .slides {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    .slides img {
+      width: 100%;
+      object-fit: cover;
+    }
+    .slider-nav {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+    }
+    .prev, .next {
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      padding: 10px;
+      cursor: pointer;
+      border: none;
+      font-size: 18px;
+    }
+
     @media (max-width: 600px) {
       .form-wrapper {
         padding: 15px;
@@ -209,10 +241,12 @@
 function toggleMenu() {
   document.getElementById("sidebar").classList.toggle("open");
 }
+
 function showSection(id) {
   document.getElementById("formSection").style.display = id === "form" ? "block" : "none";
   document.getElementById("sidebar").classList.remove("open");
 }
+
 function addImageField() {
   const container = document.getElementById('imageInputs');
   const count = container.querySelectorAll('input.img-field').length;
@@ -251,6 +285,7 @@ function generateCode() {
   const finalPrice = offer
     ? `<del>৳${price}</del> <span style="color:#f00;font-weight:bold;">৳${offer}</span>`
     : `৳${price}`;
+
   const waText = encodeURIComponent(
 `📦 আমি একটি পণ্য অর্ডার করতে চাই:
 🔖 প্রোডাক্ট: ${name}
@@ -265,19 +300,24 @@ function generateCode() {
     slider = `<div style="text-align:center;"><img src="${imgUrls[0]}" style="max-width:100%;border-radius:10px;margin-bottom:10px;" alt="${name}" /></div>`;
   } else {
     slider = `
-<div class="slider-container" style="position:relative;overflow:hidden;border-radius:10px;margin-bottom:10px;">
-  <div class="slides" style="display:flex;transition:transform 0.5s ease;width:${imgUrls.length * 100}%;">
-    ${imgUrls.map(url => `<img src="${url}" style="width:${100 / imgUrls.length}%;object-fit:cover;">`).join('')}
+<div class="slider-container">
+  <div class="slides">
+    ${imgUrls.map(url => `<img src="${url}" style="width:100%;object-fit:cover;">`).join('')}
+  </div>
+  <div class="slider-nav">
+    <button class="prev" onclick="moveSlide(-1)">&#10094;</button>
+    <button class="next" onclick="moveSlide(1)">&#10095;</button>
   </div>
 </div>
 <script>
 let current = 0;
-setInterval(() => {
+const totalSlides = ${imgUrls.length};
+function moveSlide(direction) {
+  current = (current + direction + totalSlides) % totalSlides;
   const slides = document.querySelector('.slides');
-  current = (current + 1) % ${imgUrls.length};
-  slides.style.transform = 'translateX(-' + (current * (100 / ${imgUrls.length})) + '%)';
-}, 3000);
-<\/script>`;
+  slides.style.transform = 'translateX(-' + (current * 100) + '%)';
+}
+</script>`;
   }
 
   const html = `
@@ -306,6 +346,7 @@ ${slider}
   document.getElementById("note").textContent = "✅ কোড তৈরি হয়েছে!";
   document.getElementById("preview").innerHTML = html;
 }
+
 function copyCode() {
   const code = document.getElementById("output").textContent;
   navigator.clipboard.writeText(code).then(() => {

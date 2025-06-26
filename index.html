@@ -14,6 +14,8 @@
       --button-bg: #28a745;
       --button-hover-bg: #218838;
       --icon-color: #fff;
+      --thumbnail-size: 60px;
+      --thumbnail-border-radius: 10px;
     }
 
     body {
@@ -170,6 +172,22 @@
       background: #222;
     }
 
+    .slider-container {
+      position: relative;
+      width: 100%;
+    }
+
+    .slider-images {
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    .slider-images img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+
     .prev-btn, .next-btn {
       position: absolute;
       top: 50%;
@@ -184,11 +202,28 @@
       z-index: 5;
       transition: background 0.3s ease;
     }
+
     .prev-btn:hover, .next-btn:hover {
       background: var(--button-hover-bg);
     }
+
     .prev-btn { left: 10px; }
     .next-btn { right: 10px; }
+
+    .image-thumbnails {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .image-thumbnails img {
+      width: var(--thumbnail-size);
+      height: var(--thumbnail-size);
+      cursor: pointer;
+      object-fit: cover;
+      border-radius: var(--thumbnail-border-radius);
+    }
 
     @media (max-width: 600px) {
       .form-wrapper { padding: 15px; }
@@ -268,7 +303,8 @@
       const status = document.getElementById("status").value;
       const category = document.getElementById("category").value;
       const desc = document.getElementById("desc").value;
-      const imgs = Array.from(document.querySelectorAll(".img-url")).map(i => i.value.trim()).filter(Boolean);
+      const imgs = Array.from(document.querySelectorAll(".img-url"))
+        .map(i => i.value.trim()).filter(Boolean);
       const wa = document.getElementById("wa").value;
       const autoSlide = document.getElementById("autoSlideToggle").checked;
 
@@ -283,12 +319,14 @@
       const waLink = `https://wa.me/${wa}?text=${waText}`;
 
       const imageSection = imgs.length > 1
-        ? `<div class='slider' style='overflow:hidden;position:relative;width:100%;'>
-          <div style='white-space:nowrap;overflow-x:auto;scroll-snap-type:x mandatory;'>${imgs.map(i => 
-          `<img src='${i}' class='g9slide' style='width:100%;max-width:100%;border-radius:10px;display:inline-block;scroll-snap-align:center;margin-bottom:10px;' />`).join('')}</div>
-          <button class='prev-btn' onclick='prevImage()'>‹</button>
-          <button class='next-btn' onclick='nextImage()'>›</button>
-        </div>`
+        ? `<div class='slider-container'>
+            <div class='slider-images'>${imgs.map(i => `<img src='${i}' class='g9slide' style='width:100%;max-width:100%;border-radius:10px;margin-bottom:10px;' />`).join('')}</div>
+            <button class='prev-btn' onclick='prevImage()'>‹</button>
+            <button class='next-btn' onclick='nextImage()'>›</button>
+          </div>
+          <div class='image-thumbnails'>
+            ${imgs.map(i => `<img src='${i}' class='thumbnail' onclick='showImage(${imgs.indexOf(i)})' />`).join('')}
+          </div>`
         : `<img src='${imgs[0]}' style='max-width:100%;border-radius:10px;margin-bottom:10px;' alt='${name}' />`;
 
       const html = `

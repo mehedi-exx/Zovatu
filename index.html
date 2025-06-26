@@ -11,6 +11,9 @@
       --text-dark: #fff;
       --card-dark: #1f1f1f;
       --input-dark: #2c2c2c;
+      --button-bg: #28a745;
+      --button-hover-bg: #218838;
+      --icon-color: #fff;
     }
 
     body {
@@ -146,7 +149,7 @@
       font-weight: bold;
     }
 
-    #generateBtn { background: #28a745; color: white; }
+    #generateBtn { background: var(--button-bg); color: white; }
     #copyBtn { background: #007bff; color: white; margin-left: 10px; }
     .buttons { text-align: center; flex-wrap: wrap; }
     .note { margin-top: 10px; color: #0f0; text-align: center; }
@@ -166,18 +169,23 @@
       border-radius: 10px;
       background: #222;
     }
+
     .prev-btn, .next-btn {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background: rgba(0,0,0,0.6);
-      color: white;
+      background: var(--button-bg);
+      color: var(--icon-color);
       border: none;
       font-size: 26px;
       padding: 8px 12px;
       border-radius: 50%;
       cursor: pointer;
       z-index: 5;
+      transition: background 0.3s ease;
+    }
+    .prev-btn:hover, .next-btn:hover {
+      background: var(--button-hover-bg);
     }
     .prev-btn { left: 10px; }
     .next-btn { right: 10px; }
@@ -260,8 +268,7 @@
       const status = document.getElementById("status").value;
       const category = document.getElementById("category").value;
       const desc = document.getElementById("desc").value;
-      const imgs = Array.from(document.querySelectorAll(".img-url"))
-        .map(i => i.value.trim()).filter(Boolean);
+      const imgs = Array.from(document.querySelectorAll(".img-url")).map(i => i.value.trim()).filter(Boolean);
       const wa = document.getElementById("wa").value;
       const autoSlide = document.getElementById("autoSlideToggle").checked;
 

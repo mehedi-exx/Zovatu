@@ -11,20 +11,17 @@
       --text-dark: #fff;
       --card-dark: #1f1f1f;
       --input-dark: #2c2c2c;
-      --btn-dark: #28a745;
     }
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
       background-color: var(--bg-dark);
       color: var(--text-dark);
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      justify-content: flex-start;
     }
 
     header {
+      position: relative;
+      z-index: 1001;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -41,7 +38,6 @@
       color: inherit;
       cursor: pointer;
     }
-
     .logo {
       font-size: 22px;
       display: flex;
@@ -61,48 +57,45 @@
       justify-content: center;
     }
 
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: -260px;
-      width: 250px;
-      height: 100%;
-      background-color: var(--card-dark);
-      color: var(--text-dark);
-      z-index: 1000;
-      padding-top: 70px;
-      transition: left 0.3s ease;
-    }
-
-    .sidebar.open {
-      left: 0;
-    }
-
-    .sidebar a {
-      display: block;
-      padding: 12px 20px;
-      color: inherit;
-      text-decoration: none;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-    }
-
-    main {
+    .slider-container {
       display: flex;
-      justify-content: center;
-      padding: 20px;
-      flex: 1;
-      flex-direction: column;
-      align-items: center;
+      overflow: hidden;
+      position: relative;
     }
+
+    .slider {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+
+    .slider img {
+      max-width: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    .prev, .next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      font-size: 30px;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .prev { left: 10px; }
+    .next { right: 10px; }
 
     .form-wrapper {
-      width: 100%;
       max-width: 600px;
+      width: 100%;
       background: var(--card-dark);
       padding: 20px;
       border-radius: 10px;
       box-sizing: border-box;
-      margin-bottom: 20px;
     }
 
     input, textarea, select {
@@ -117,15 +110,6 @@
       box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
     }
 
-    input::placeholder, textarea::placeholder {
-      color: #aaa;
-    }
-
-    input:focus, textarea:focus, select:focus {
-      outline: none;
-      border: 2px solid var(--btn-dark);
-    }
-
     button {
       padding: 12px 20px;
       margin-top: 10px;
@@ -133,18 +117,17 @@
       border-radius: 8px;
       cursor: pointer;
       font-weight: bold;
-      width: 100%;
     }
 
     #generateBtn {
-      background: var(--btn-dark);
+      background: #28a745;
       color: white;
     }
 
     #copyBtn {
       background: #007bff;
       color: white;
-      margin-top: 10px;
+      margin-left: 10px;
     }
 
     .buttons {
@@ -152,13 +135,7 @@
       flex-wrap: wrap;
     }
 
-    .note {
-      margin-top: 10px;
-      color: #0f0;
-      text-align: center;
-    }
-
-    .output, .live-preview {
+    .output {
       margin-top: 20px;
       padding: 20px;
       border-radius: 10px;
@@ -168,71 +145,17 @@
       overflow-x: auto;
     }
 
-    .slider-wrapper {
-      position: relative;
-      max-width: 100%;
-      overflow: hidden;
+    .live-preview {
+      margin-top: 20px;
+      border: 2px dashed #999;
+      padding: 20px;
       border-radius: 10px;
-    }
-
-    .slider-content {
-      display: flex;
-      transition: transform 0.5s ease;
-    }
-
-    .slider-controls {
-      position: absolute;
-      top: 50%;
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      transform: translateY(-50%);
-      padding: 0 10px;
-    }
-
-    .slider-btn {
-      background: rgba(0,0,0,0.5);
-      color: white;
-      font-size: 20px;
-      border: none;
-      border-radius: 50%;
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-
-    .slider-dots {
-      text-align: center;
-      margin-top: 10px;
-    }
-
-    .slider-dots button {
-      background: #444;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 3px 8px;
-      margin: 0 3px;
-      cursor: pointer;
-      font-size: 12px;
+      background: #222;
     }
 
     @media (max-width: 600px) {
       .form-wrapper {
         padding: 15px;
-      }
-
-      .buttons button {
-        width: 100%;
-        margin-top: 10px;
-      }
-
-      header {
-        flex-direction: column;
-        gap: 10px;
       }
     }
   </style>
@@ -244,14 +167,6 @@
   <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
   <a href="https://t.me/mehedi_exx" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
 </header>
-
-<nav class="sidebar" id="sidebar">
-  <a href="#" onclick="showSection('form')"><i class="fas fa-home"></i> হোম</a>
-  <a href="#" onclick="alert('G9Tool একটি প্রফেশনাল Blogger টুল যা অটো প্রোডাক্ট কোড তৈরি করে।')"><i class="fas fa-info-circle"></i> অ্যাবাউট</a>
-  <a href="#" onclick="alert('যোগাযোগ করুন: G9tool@gmail.com')"><i class="fas fa-envelope"></i> কন্ট্যাক্ট</a>
-  <a href="#" onclick="alert('আপনার তথ্য সম্পূর্ণ নিরাপদ। কোনরকম তথ্য সংগ্রহ করা হয় না।')"><i class="fas fa-lock"></i> প্রাইভেসি</a>
-  <a href="#" onclick="alert('১. প্রোডাক্ট ফর্ম পূরণ করুন\n২. কোড জেনারেট করুন\n৩. কপি করে Blogger পোস্টে বসান')"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
-</nav>
 
 <main>
   <div class="form-wrapper" id="formSection">
@@ -269,11 +184,10 @@
     <textarea id="desc" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
 
     <div id="imageInputs">
-      <input type="url" class="img-field" placeholder="ছবির লিংক ১ (আবশ্যক)" required>
+      <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
     </div>
-    <button type="button" onclick="addImageInput()" style="margin-top:10px;background:#555;color:#fff;">➕ আরও ছবি যোগ করুন</button>
 
-    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
+    <button onclick="addImageInput()">➕ আরও ছবি যোগ করুন</button>
 
     <div class="buttons">
       <button id="generateBtn" onclick="generateCode()">✅ কোড জেনারেট করুন</button>
@@ -287,129 +201,87 @@
 </main>
 
 <script>
-function toggleMenu() {
-  document.getElementById("sidebar").classList.toggle("open");
-}
+  let imgCount = 1;
 
-function showSection(id) {
-  document.getElementById("formSection").style.display = id === "form" ? "block" : "none";
-  document.getElementById("sidebar").classList.remove("open");
-}
-
-let imgCount = 1;
-function addImageInput() {
-  if (imgCount >= 5) return;
-  imgCount++;
-  const input = document.createElement('input');
-  input.type = 'url';
-  input.placeholder = `ছবির লিংক ${imgCount}`;
-  input.className = 'img-field';
-  input.style.marginTop = '10px';
-  document.getElementById('imageInputs').appendChild(input);
-}
-
-function generateCode() {
-  const name = document.getElementById("name").value;
-  const code = document.getElementById("code").value;
-  const price = document.getElementById("price").value;
-  const offer = document.getElementById("offer").value;
-  const delivery = document.getElementById("delivery").value || "N/A";
-  const status = document.getElementById("status").value;
-  const category = document.getElementById("category").value;
-  const desc = document.getElementById("desc").value;
-  const wa = document.getElementById("wa").value;
-
-  const imgFields = document.querySelectorAll('.img-field');
-  const images = Array.from(imgFields).map(i => i.value).filter(Boolean);
-
-  if (!name || !code || !price || !status || !category || images.length === 0 || !wa) {
-    alert("সব প্রয়োজনীয় ফিল্ড পূরণ করুন।");
-    return;
+  function addImageInput() {
+    if (imgCount < 5) {
+      const newInput = document.createElement('input');
+      newInput.type = 'url';
+      newInput.className = 'img-url';
+      newInput.placeholder = `ছবির লিংক (Image URL) ${imgCount + 1}`;
+      document.getElementById('imageInputs').appendChild(newInput);
+      imgCount++;
+    }
   }
 
-  const finalPrice = offer
-    ? `<del>৳${price}</del> <span style="color:#f00;font-weight:bold;">৳${offer}</span>`
-    : `৳${price}`;
+  function generateCode() {
+    const name = document.getElementById("name").value;
+    const code = document.getElementById("code").value;
+    const price = document.getElementById("price").value;
+    const offer = document.getElementById("offer").value || price;
+    const delivery = document.getElementById("delivery").value || "N/A";
+    const status = document.getElementById("status").value;
+    const category = document.getElementById("category").value;
+    const desc = document.getElementById("desc").value;
 
-  const waText = encodeURIComponent(
-    `📦 আমি একটি পণ্য অর্ডার করতে চাই:\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ৳${offer || price}\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি টাইম: ${delivery}`
-  );
+    const images = document.querySelectorAll('.img-url');
+    const imgArray = Array.from(images).map(input => input.value);
 
-  const waLink = `https://wa.me/${wa}?text=${waText}`;
+    if (!name || !code || !price || !status || !category || imgArray.length === 0) {
+      alert("সব প্রয়োজনীয় ফিল্ড পূরণ করুন।");
+      return;
+    }
 
-  let imageHTML = '';
-  if (images.length === 1) {
-    imageHTML = `<img src="${images[0]}" style="max-width:100%;border-radius:10px;margin-bottom:10px;" alt="${name}" />`;
-  } else {
-    const slides = images.map(src => `<div class="slide"><img src="${src}" alt="img"></div>`).join('');
-    const dots = images.map((_, i) => `<button onclick="moveToSlide(${i})" style="display:inline-block;width:10px;height:10px;margin:0 3px;border-radius:50%;background:${i === currentIndex ? '#28a745' : '#aaa'};cursor:pointer;"></button>`).join('');
-    imageHTML = `
-      <div class="slider-wrapper">
-        <div class="slider-content" id="sliderTrack">
-          ${slides}
-        </div>
-        <div class="slider-controls">
-          <button class="slider-btn" onclick="prevSlide()">❮</button>
-          <button class="slider-btn" onclick="nextSlide()">❯</button>
-        </div>
-        <div class="slider-dots">${dots}</div>
-      </div>`;
+    const finalPrice = `<del>৳${price}</del> <span style="color:#f00;font-weight:bold;">৳${offer}</span>`;
+
+    const waText = encodeURIComponent(
+`📦 আমি একটি পণ্য অর্ডার করতে চাই:
+🔖 প্রোডাক্ট: ${name}
+💰 মূল্য: ৳${offer}
+🧾 কোড: ${code}
+📁 ক্যাটাগরি: ${category}
+🚚 ডেলিভারি টাইম: ${delivery}`
+    );
+
+    const waLink = `https://wa.me/${wa}?text=${waText}`;
+
+    let sliderHTML = '<div class="slider-container">';
+    imgArray.forEach(src => {
+      sliderHTML += `<div class="slider"><img src="${src}" alt="${name}" /></div>`;
+    });
+    sliderHTML += '</div>';
+
+    const html = `
+<div style="text-align:center;">
+  ${sliderHTML}
+  <h2 style="margin:5px 0;">${name}</h2>
+  <p style="font-size:16px;">${finalPrice}</p>
+</div>
+<p style="text-align:center;margin:10px 0;">
+  <a href="${waLink}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
+    📲 অর্ডার করুন WhatsApp এ
+  </a>
+</p>
+<ul>
+  <li>🔢 কোড: ${code}</li>
+  <li>📦 স্ট্যাটাস: ${status}</li>
+  <li>📁 ক্যাটাগরি: ${category}</li>
+  <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
+</ul>
+<p>${desc}</p>
+`;
+
+    document.getElementById("output").textContent = html;
+    document.getElementById("note").textContent = "✅ কোড তৈরি হয়েছে!";
+    document.getElementById("preview").innerHTML = html;
   }
 
-  const html = `
-    <div style="text-align:center;">
-      ${imageHTML}
-      <h2 style="margin:5px 0;">${name}</h2>
-      <p style="font-size:16px;">${finalPrice}</p>
-    </div>
-    <p style="text-align:center;margin:10px 0;">
-      <a href="${waLink}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
-        📲 অর্ডার করুন WhatsApp এ
-      </a>
-    </p>
-    <ul>
-      <li>🔢 কোড: ${code}</li>
-      <li>📦 স্ট্যাটাস: ${status}</li>
-      <li>📁 ক্যাটাগরি: ${category}</li>
-      <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
-    </ul>
-    <p>${desc}</p>
-    <p style="display:none;">
-      <a href="#">
-        {getProduct} $button={Price} $price={৳${offer || price}} $sale={৳${price}} $icon={cart} $style={1}
-      </a>
-    </p>`;
-
-  document.getElementById("output").textContent = html;
-  document.getElementById("note").textContent = "✅ কোড তৈরি হয়েছে!";
-  document.getElementById("preview").innerHTML = html;
-  currentSlide = 0;
-  updateSlider();
-}
-
-let currentSlide = 0;
-function updateSlider() {
-  const slider = document.getElementById('sliderTrack');
-  const slideWidth = slider.clientWidth;
-  slider.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
-}
-
-function nextSlide() {
-  const total = document.querySelectorAll('.slider-content .slide').length;
-  currentSlide = (currentSlide + 1) % total;
-  updateSlider();
-}
-
-function prevSlide() {
-  const total = document.querySelectorAll('.slider-content .slide').length;
-  currentSlide = (currentSlide - 1 + total) % total;
-  updateSlider();
-}
-
-function moveToSlide(index) {
-  currentSlide = index;
-  updateSlider();
-}
+  function copyCode() {
+    const code = document.getElementById("output").textContent;
+    navigator.clipboard.writeText(code).then(() => {
+      document.getElementById("note").textContent = "✅ কপি হয়েছে!";
+    });
+  }
 </script>
 
 </body>

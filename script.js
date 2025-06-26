@@ -21,9 +21,7 @@ document.getElementById("generateBtn").addEventListener("click", function () {
   const category = document.getElementById("category").value;
   const desc = document.getElementById("desc").value;
   const wa = document.getElementById("wa").value;
-  const images = Array.from(document.querySelectorAll(".img-url")).map(
-    (i) => i.value
-  ).filter(Boolean);
+  const images = Array.from(document.querySelectorAll(".img-url")).map(i => i.value).filter(Boolean);
 
   if (!name || !code || !price || !status || !category || !images.length || !wa) {
     alert("⚠️ সব প্রয়োজনীয় ইনপুট পূরণ করুন");
@@ -31,49 +29,48 @@ document.getElementById("generateBtn").addEventListener("click", function () {
   }
 
   let finalPrice = `৳${price}`;
+  let discountText = "";
   if (!isNaN(offer) && offer < price) {
     const discount = Math.round(((price - offer) / price) * 100);
-    finalPrice = `<del style="text-decoration: line-through;">৳${price}</del> <span style="color:red;font-weight:bold;">৳${offer}</span> <small style="color:#0f0">(${discount}% ছাড়)</small>`;
+    finalPrice = `
+      <del style="display:inline-block;color:#aaa;vertical-align:middle;text-decoration:line-through;line-height:1.2;margin-right:5px;">৳${price}</del>
+      <span style="color:red;font-weight:bold;">৳${offer}</span>
+      <small style="color:limegreen">(${discount}% ছাড়)</small>
+    `;
   }
 
-  const waText = encodeURIComponent(`📦 আমি একটি পণ্য অর্ডার করতে চাই:
+  const waText = encodeURIComponent(`📦 আমি একটি পণ্য অর্ডার করতে চাই
 🔖 প্রোডাক্ট: ${name}
 💰 মূল্য: ৳${offer || price}
 🧾 কোড: ${code}
 📁 ক্যাটাগরি: ${category}
 🚚 ডেলিভারি টাইম: ${delivery}`);
+
   const waLink = `https://wa.me/${wa}?text=${waText}`;
 
-  // স্লাইডার HTML তৈরি
-  let sliderHTML = `<div class="g9-slider-wrapper">`;
-  images.forEach((_, i) => {
-    sliderHTML += `<input type="radio" name="slider" id="img${i + 1}" ${
-      i === 0 ? "checked" : ""
-    }>`;
-  });
-
-  sliderHTML += `<div class="g9-main">`;
-  images.forEach((src, i) => {
-    sliderHTML += `<img src="${src}" class="g9-main-image img${i + 1}">`;
-  });
-  sliderHTML += `</div><div class="g9-thumbnails">`;
-  images.forEach((src, i) => {
-    sliderHTML += `<label for="img${i + 1}"><img src="${src}"></label>`;
-  });
-  sliderHTML += `</div></div>`;
+  // স্লাইডার HTML
+  let mainImg = images[0] || "";
+  let thumbs = images
+    .map((src, i) => {
+      return `<img src="${src}" style="width:60px;height:60px;border-radius:6px;cursor:pointer;border:2px solid ${i === 0 ? "green" : "transparent"};" onclick="changeImage(this)">`;
+    })
+    .join("");
 
   const html = `
 <div style="text-align:center;">
-  ${sliderHTML}
+  <img id="mainImg" src="${mainImg}" style="width:100%;max-width:500px;border-radius:10px;border:1px solid #ccc;margin-bottom:10px;">
+  <div id="thumbs" style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+    ${thumbs}
+  </div>
   <h2 style="margin:5px 0;">${name}</h2>
-  <p>${finalPrice}</p>
+  <p style="font-size:18px;">${finalPrice}</p>
 </div>
 <p style="text-align:center;margin:10px 0;">
   <a href="${waLink}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
     📲 অর্ডার করুন WhatsApp এ
   </a>
 </p>
-<ul>
+<ul style="list-style:none;padding:0;margin:15px 0;text-align:left;max-width:500px;margin:auto;">
   <li>🔢 কোড: ${code}</li>
   <li>📦 স্ট্যাটাস: ${status}</li>
   <li>📁 ক্যাটাগরি: ${category}</li>
@@ -84,7 +81,16 @@ document.getElementById("generateBtn").addEventListener("click", function () {
   <a href="#">
     {getProduct} $button={Price} $price={৳${offer || price}} $sale={৳${price}} $icon={cart} $style={1}
   </a>
-</p>`;
+</p>
+<script>
+  function changeImage(el) {
+    document.getElementById('mainImg').src = el.src;
+    let all = document.querySelectorAll('#thumbs img');
+    all.forEach(img => img.style.border = "2px solid transparent");
+    el.style.border = "2px solid green";
+  }
+<\/script>
+`;
 
   document.getElementById("output").textContent = html;
   document.getElementById("preview").innerHTML = html;

@@ -84,6 +84,7 @@
       white-space: pre-wrap;
       overflow-x: auto;
     }
+
     .slider-container {
       position: relative;
       width: 100%;
@@ -120,6 +121,7 @@
       cursor: pointer;
       border-radius: 50%;
     }
+
     #s1:checked ~ .slides { transform: translateX(0%); }
     #s2:checked ~ .slides { transform: translateX(-100%); }
     #s3:checked ~ .slides { transform: translateX(-200%); }
@@ -128,18 +130,20 @@
   </style>
 </head>
 <body>
+
 <header>
   <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
   <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
   <a href="https://t.me/mehedi_exx" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
 </header>
+
 <main>
-  <div class="form-wrapper">
-    <input type="text" id="name" placeholder="প্রোডাক্ট নাম">
-    <input type="text" id="code" placeholder="প্রোডাক্ট কোড">
-    <input type="text" id="price" placeholder="মূল্য">
+  <div class="form-wrapper" id="formSection">
+    <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
+    <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
+    <input type="text" id="price" placeholder="মূল্য প্রাইস (৳)" required>
     <input type="text" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
-    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
+    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)">
     <input type="text" id="status" placeholder="স্ট্যাটাস">
     <input type="text" id="category" placeholder="ক্যাটাগরি">
     <textarea id="desc" placeholder="ডেসক্রিপশন"></textarea>
@@ -156,8 +160,10 @@
     <div class="live-preview" id="preview"></div>
   </div>
 </main>
+
 <script>
   let imgCount = 1;
+
   function addImageInput() {
     if (imgCount < 5) {
       const newInput = document.createElement('input');
@@ -168,9 +174,11 @@
       imgCount++;
     }
   }
+
   function toggleMenu() {
     alert("✅ মেনু অপশন কাজ করছে");
   }
+
   document.getElementById("generateBtn").addEventListener("click", function () {
     const name = document.getElementById("name").value;
     const code = document.getElementById("code").value;
@@ -195,7 +203,7 @@
       finalPrice = `<del style='text-decoration: line-through;'>৳${price}</del> <span style='color:red;font-weight:bold;'>৳${offer}</span> <small style='color:#0f0'>(${discount}% ছাড়)</small>`;
     }
 
-    const waText = encodeURIComponent(`📦 আমি একটি পণ্য অর্ডার করতে চাই:\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ৳${offer || price}\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি টাইম: ${delivery}`);
+    const waText = encodeURIComponent(`📦 আমি একটি পণ্য অর্ডার করতে চাই:\\n🔖 প্রোডাক্ট: ${name}\\n💰 মূল্য: ৳${offer || price}\\n🧾 কোড: ${code}\\n📁 ক্যাটাগরি: ${category}\\n🚚 ডেলিভারি টাইম: ${delivery}`);
     const waLink = `https://wa.me/${wa}?text=${waText}`;
 
     let sliderHTML = '';
@@ -248,5 +256,6 @@
     });
   });
 </script>
+
 </body>
 </html>

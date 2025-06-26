@@ -38,6 +38,7 @@
       color: inherit;
       cursor: pointer;
     }
+
     .logo {
       font-size: 22px;
       display: flex;
@@ -69,9 +70,11 @@
       padding-top: 70px;
       transition: left 0.3s ease;
     }
+
     .sidebar.open {
       left: 0;
     }
+
     .sidebar a {
       display: block;
       padding: 12px 20px;
@@ -165,56 +168,62 @@
       background: #222;
     }
 
-    .slider-box {
+    .slider-wrapper {
       position: relative;
+      max-width: 100%;
       overflow: hidden;
       border-radius: 10px;
     }
-    .slider-box div {
+
+    .slider-content {
       display: flex;
       transition: transform 0.5s ease;
     }
-    .slider-box img {
-      width: 100%;
-    }
 
-    .slider-nav {
+    .slider-controls {
       position: absolute;
       top: 50%;
-      left: 0;
-      transform: translateY(-50%);
       width: 100%;
       display: flex;
       justify-content: space-between;
+      transform: translateY(-50%);
       padding: 0 10px;
-      box-sizing: border-box;
     }
 
-    .slider-nav button {
-      background: rgba(0, 0, 0, 0.5);
+    .slider-btn {
+      background: rgba(0,0,0,0.5);
       color: white;
-      border: none;
-      padding: 10px;
-      cursor: pointer;
       font-size: 20px;
+      border: none;
       border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
     }
 
     .slider-dots {
       text-align: center;
       margin-top: 10px;
     }
-    .slider-dots span {
-      height: 10px;
-      width: 10px;
+
+    .slider-dots button {
+      background: #444;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 3px 8px;
       margin: 0 3px;
-      background-color: #bbb;
-      display: inline-block;
-      border-radius: 50%;
       cursor: pointer;
+      font-size: 12px;
     }
-    .slider-dots .active {
-      background-color: #28a745;
+
+    @media (max-width: 600px) {
+      .form-wrapper {
+        padding: 15px;
+      }
     }
   </style>
 </head>
@@ -299,6 +308,7 @@ function generateCode() {
   const category = document.getElementById("category").value;
   const desc = document.getElementById("desc").value;
   const wa = document.getElementById("wa").value;
+
   const imgFields = document.querySelectorAll('.img-field');
   const images = Array.from(imgFields).map(i => i.value).filter(Boolean);
 
@@ -312,13 +322,9 @@ function generateCode() {
     : `৳${price}`;
 
   const waText = encodeURIComponent(
-`📦 আমি একটি পণ্য অর্ডার করতে চাই:
-🔖 প্রোডাক্ট: ${name}
-💰 মূল্য: ৳${offer || price}
-🧾 কোড: ${code}
-📁 ক্যাটাগরি: ${category}
-🚚 ডেলিভারি টাইম: ${delivery}`
+    `📦 আমি একটি পণ্য অর্ডার করতে চাই:\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ৳${offer || price}\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি টাইম: ${delivery}`
   );
+
   const waLink = `https://wa.me/${wa}?text=${waText}`;
 
   let imageHTML = '';
@@ -326,73 +332,70 @@ function generateCode() {
     imageHTML = `<img src="${images[0]}" style="max-width:100%;border-radius:10px;margin-bottom:10px;" alt="${name}" />`;
   } else {
     const slides = images.map(src => `<div class="slide"><img src="${src}" alt="img"></div>`).join('');
-    const dots = images.map((_, i) => `<button onclick="moveToSlide(${i})">ছবি</button>`).join('');
+    const dots = images.map((_, i) => `<button onclick="moveToSlide(${i})" style="display:inline-block;width:10px;height:10px;margin:0 3px;border-radius:50%;background:${i === currentIndex ? '#28a745' : '#aaa'};cursor:pointer;"></button>`).join('');
     imageHTML = `
-    <div class="slider-wrapper">
-      <div class="slider-content" id="sliderTrack">
-        ${slides}
-      </div>
-      <div class="slider-controls">
-        <button class="slider-btn" onclick="prevSlide()">&#10094;</button>
-        <button class="slider-btn" onclick="nextSlide()">&#10095;</button>
-      </div>
-      <div class="slider-dots">${dots}</div>
-    </div>`;
+      <div class="slider-wrapper">
+        <div class="slider-content" id="sliderTrack">
+          ${slides}
+        </div>
+        <div class="slider-controls">
+          <button class="slider-btn" onclick="prevSlide()">❮</button>
+          <button class="slider-btn" onclick="nextSlide()">❯</button>
+        </div>
+        <div class="slider-dots">${dots}</div>
+      </div>`;
   }
 
   const html = `
-<div style="text-align:center;">
-  ${imageHTML}
-  <h2 style="margin:5px 0;">${name}</h2>
-  <p style="font-size:16px;">${finalPrice}</p>
-</div>
-<p style="text-align:center;margin:10px 0;">
-  <a href="${waLink}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
-    📲 অর্ডার করুন WhatsApp এ
-  </a>
-</p>
-<ul>
-  <li>🔢 কোড: ${code}</li>
-  <li>📦 স্ট্যাটাস: ${status}</li>
-  <li>📁 ক্যাটাগরি: ${category}</li>
-  <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
-</ul>
-<p>${desc}</p>
-<p style="display:none;">
-  <a href="#">
-    {getProduct} $button={Price} $price={৳${offer || price}} $sale={৳${price}} $icon={cart} $style={1}
-  </a>
-</p>`;
+    <div style="text-align:center;">
+      ${imageHTML}
+      <h2 style="margin:5px 0;">${name}</h2>
+      <p style="font-size:16px;">${finalPrice}</p>
+    </div>
+    <p style="text-align:center;margin:10px 0;">
+      <a href="${waLink}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
+        📲 অর্ডার করুন WhatsApp এ
+      </a>
+    </p>
+    <ul>
+      <li>🔢 কোড: ${code}</li>
+      <li>📦 স্ট্যাটাস: ${status}</li>
+      <li>📁 ক্যাটাগরি: ${category}</li>
+      <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
+    </ul>
+    <p>${desc}</p>
+    <p style="display:none;">
+      <a href="#">
+        {getProduct} $button={Price} $price={৳${offer || price}} $sale={৳${price}} $icon={cart} $style={1}
+      </a>
+    </p>`;
 
   document.getElementById("output").textContent = html;
   document.getElementById("note").textContent = "✅ কোড তৈরি হয়েছে!";
   document.getElementById("preview").innerHTML = html;
-}
-
-function copyCode() {
-  const code = document.getElementById("output").textContent;
-  navigator.clipboard.writeText(code).then(() => {
-    document.getElementById("note").textContent = "✅ কপি হয়েছে!";
-  });
+  currentSlide = 0;
+  updateSlider();
 }
 
 let currentSlide = 0;
 function updateSlider() {
   const slider = document.getElementById('sliderTrack');
-  if (!slider) return;
   const slideWidth = slider.clientWidth;
   slider.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
 }
+
 function nextSlide() {
   const total = document.querySelectorAll('.slider-content .slide').length;
   currentSlide = (currentSlide + 1) % total;
   updateSlider();
 }
+
 function prevSlide() {
   const total = document.querySelectorAll('.slider-content .slide').length;
   currentSlide = (currentSlide - 1 + total) % total;
   updateSlider();
 }
+
 function moveToSlide(index) {
   currentSlide = index;
   updateSlider();

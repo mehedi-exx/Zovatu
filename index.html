@@ -146,27 +146,11 @@
       font-weight: bold;
     }
 
-    #generateBtn { 
-      background: #28a745; 
-      color: white; 
-    }
+    #generateBtn { background: #28a745; color: white; }
+    #copyBtn { background: #007bff; color: white; margin-left: 10px; }
 
-    #copyBtn { 
-      background: #007bff; 
-      color: white; 
-      margin-left: 10px; 
-    }
-
-    .buttons { 
-      text-align: center; 
-      flex-wrap: wrap; 
-    }
-
-    .note {
-      margin-top: 10px;
-      color: #0f0;
-      text-align: center;
-    }
+    .buttons { text-align: center; flex-wrap: wrap; }
+    .note { margin-top: 10px; color: #0f0; text-align: center; }
 
     .output {
       margin-top: 20px;
@@ -186,6 +170,22 @@
       background: #222;
     }
 
+    .prev-btn, .next-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.6);
+      color: white;
+      border: none;
+      font-size: 26px;
+      padding: 8px 12px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 5;
+    }
+    .prev-btn { left: 10px; }
+    .next-btn { right: 10px; }
+
     @media (max-width: 600px) {
       .form-wrapper { padding: 15px; }
     }
@@ -197,6 +197,7 @@
     <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
     <a href="https://t.me/mehedi_exx" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
   </header>
+
   <nav class="sidebar" id="sidebar">
     <a href="#" onclick="showSection('form')"><i class="fas fa-home"></i> হোম</a>
     <a href="#" onclick="alert('G9Tool একটি প্রফেশনাল Blogger টুল যা অটো প্রোডাক্ট কোড তৈরি করে।')"><i class="fas fa-info-circle"></i> অ্যাবাউট</a>
@@ -204,6 +205,7 @@
     <a href="#" onclick="alert('আপনার তথ্য সম্পূর্ণ নিরাপদ। কোনরকম তথ্য সংগ্রহ করা হয় না।')"><i class="fas fa-lock"></i> প্রাইভেসি</a>
     <a href="#" onclick="alert('১. প্রোডাক্ট ফর্ম পূরণ করুন\n২. কোড জেনারেট করুন\n৩. কপি করে Blogger পোস্টে বসান')"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
   </nav>
+
   <main>
     <div class="form-wrapper" id="formSection">
       <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
@@ -235,6 +237,7 @@
       <div class="live-preview" id="preview"></div>
     </div>
   </main>
+
   <script>
     function toggleMenu() {
       document.getElementById("sidebar").classList.toggle("open");
@@ -264,8 +267,7 @@
       const status = document.getElementById("status").value;
       const category = document.getElementById("category").value;
       const desc = document.getElementById("desc").value;
-      const imgs = Array.from(document.querySelectorAll(".img-url"))
-        .map(i => i.value.trim()).filter(Boolean);
+      const imgs = Array.from(document.querySelectorAll(".img-url")).map(i => i.value.trim()).filter(Boolean);
       const wa = document.getElementById("wa").value;
       const autoSlide = document.getElementById("autoSlideToggle").checked;
 
@@ -274,13 +276,41 @@
         return;
       }
 
-      const finalPrice = offer ? `<span style='font-size:18px;font-weight:bold;'><span style='color:#888;text-decoration:line-through;margin-right:6px;'>৳${price}</span><span style='color:#d00;'>৳${offer}</span></span>` : `<span style='font-size:18px;font-weight:bold;color:#222;'>৳${price}</span>`;
+      const finalPrice = offer
+        ? `<span style='font-size:18px;font-weight:bold;'><span style='color:#888;text-decoration:line-through;margin-right:6px;'>৳${price}</span><span style='color:#d00;'>৳${offer}</span></span>`
+        : `<span style='font-size:18px;font-weight:bold;color:#222;'>৳${price}</span>`;
 
       const waText = encodeURIComponent(`📦 আমি একটি পণ্য অর্ডার করতে চাই:\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ৳${offer || price}\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি টাইম: ${delivery}`);
       const waLink = `https://wa.me/${wa}?text=${waText}`;
 
+      const sliderId = "slider_" + Date.now();
+      const imageSlides = imgs.map((img, i) =>
+        `<img src='${img}' class='slide-img' data-index='${i}' style='width:100%;max-width:100%;border-radius:10px;display:none;margin-bottom:10px;' alt='image'/>`
+      ).join("");
+
       const imageSection = imgs.length > 1
-        ? `<div class='slider' style='overflow:hidden;position:relative;width:100%;'><div style='white-space:nowrap;overflow-x:auto;scroll-snap-type:x mandatory;'>${imgs.map(i => `<img src='${i}' style='width:100%;max-width:100%;border-radius:10px;display:inline-block;scroll-snap-align:center;margin-bottom:10px;' />`).join('')}</div></div>`
+        ? `<div class='slider-container' style='position:relative;width:100%;overflow:hidden;'>
+              <div id='${sliderId}' class='slider-images'>${imageSlides}</div>
+              <button class='prev-btn' onclick="slidePrev('${sliderId}')">‹</button>
+              <button class='next-btn' onclick="slideNext('${sliderId}')">›</button>
+           </div>
+           <script>
+             let currentIndex_${sliderId} = 0;
+             const slides_${sliderId} = document.querySelectorAll('#${sliderId} .slide-img');
+             function showSlide_${sliderId}(index) {
+               slides_${sliderId}.forEach((img, i) => img.style.display = i === index ? 'inline-block' : 'none');
+             }
+             function slideNext(id) {
+               currentIndex_${sliderId} = (currentIndex_${sliderId} + 1) % slides_${sliderId}.length;
+               showSlide_${sliderId}(currentIndex_${sliderId});
+             }
+             function slidePrev(id) {
+               currentIndex_${sliderId} = (currentIndex_${sliderId} - 1 + slides_${sliderId}.length) % slides_${sliderId}.length;
+               showSlide_${sliderId}(currentIndex_${sliderId});
+             }
+             showSlide_${sliderId}(0);
+             ${autoSlide ? `setInterval(() => { slideNext('${sliderId}'); }, 2000);` : ""}
+           </script>`
         : `<img src='${imgs[0]}' style='max-width:100%;border-radius:10px;margin-bottom:10px;' alt='${name}' />`;
 
       const html = `

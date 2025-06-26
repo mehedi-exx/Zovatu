@@ -1,14 +1,218 @@
-<!-- ছবির ইনপুট -->
-<label style="display:block; margin-top: 15px;">ছবির লিংকসমূহ:</label>
-<div id="imageInputs">
-  <input type="url" name="img[]" class="img-field" placeholder="ছবির লিংক (Image URL)" required>
-</div>
-<button type="button" onclick="addImageField()" style="margin-top:10px;background:#444;color:#fff;padding:8px 16px;border-radius:8px;display:flex;align-items:center;gap:6px;">
-  <i class="fas fa-plus"></i> আরও ছবি দিন (সর্বোচ্চ ৫টি)
-</button>
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>G9Tool - Blogger Product Generator</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-dark: #121212;
+      --text-dark: #fff;
+      --card-dark: #1f1f1f;
+      --input-dark: #2c2c2c;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+    header {
+      position: relative;
+      z-index: 1001;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      background-color: var(--card-dark);
+      border-radius: 0 0 20px 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    .menu-btn {
+      font-size: 22px;
+      background: none;
+      border: none;
+      color: inherit;
+      cursor: pointer;
+    }
+    .logo {
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .telegram-icon {
+      font-size: 22px;
+      color: #1DA1F2;
+      background: #fff;
+      padding: 6px;
+      border-radius: 50%;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -260px;
+      width: 250px;
+      height: 100%;
+      background-color: var(--card-dark);
+      color: var(--text-dark);
+      z-index: 1000;
+      padding-top: 70px;
+      transition: left 0.3s ease;
+    }
+    .sidebar.open {
+      left: 0;
+    }
+    .sidebar a {
+      display: block;
+      padding: 12px 20px;
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    main {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+    .form-wrapper {
+      max-width: 600px;
+      width: 100%;
+      background: var(--card-dark);
+      padding: 20px;
+      border-radius: 10px;
+      box-sizing: border-box;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      background: var(--input-dark);
+      color: var(--text-dark);
+      box-sizing: border-box;
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+    }
+    input::placeholder,
+    textarea::placeholder {
+      color: #aaa;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border: 2px solid #28a745;
+    }
+    button {
+      padding: 12px 20px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    #generateBtn {
+      background: #28a745;
+      color: white;
+    }
+    #copyBtn {
+      background: #007bff;
+      color: white;
+      margin-left: 10px;
+    }
+    .buttons {
+      text-align: center;
+      flex-wrap: wrap;
+    }
+    .note {
+      margin-top: 10px;
+      color: #0f0;
+      text-align: center;
+    }
+    .output {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 10px;
+      background: var(--card-dark);
+      color: var(--text-dark);
+      white-space: pre-wrap;
+      overflow-x: auto;
+    }
+    .live-preview {
+      margin-top: 20px;
+      border: 2px dashed #999;
+      padding: 20px;
+      border-radius: 10px;
+      background: #222;
+    }
+    @media (max-width: 600px) {
+      .form-wrapper {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+  <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
+  <a href="https://t.me/mehedi_exx" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
+</header>
 
-<!-- কোড জেনারেশন ফাংশনের নিচে যুক্ত করুন -->
+<nav class="sidebar" id="sidebar">
+  <a href="#" onclick="showSection('form')"><i class="fas fa-home"></i> হোম</a>
+  <a href="#" onclick="alert('G9Tool একটি প্রফেশনাল Blogger টুল যা অটো প্রোডাক্ট কোড তৈরি করে।')"><i class="fas fa-info-circle"></i> অ্যাবাউট</a>
+  <a href="#" onclick="alert('যোগাযোগ করুন: G9tool@gmail.com')"><i class="fas fa-envelope"></i> কন্ট্যাক্ট</a>
+  <a href="#" onclick="alert('আপনার তথ্য সম্পূর্ণ নিরাপদ। কোনরকম তথ্য সংগ্রহ করা হয় না।')"><i class="fas fa-lock"></i> প্রাইভেসি</a>
+  <a href="#" onclick="alert('১. প্রোডাক্ট ফর্ম পূরণ করুন\n২. কোড জেনারেট করুন\n৩. কপি করে Blogger পোস্টে বসান')"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
+</nav>
+
+<main>
+  <div class="form-wrapper" id="formSection">
+    <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
+    <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
+    <input type="text" id="price" placeholder="মূল্য প্রাইস (৳)" required>
+    <input type="text" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
+    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)">
+    <select id="status">
+      <option value="">স্ট্যাটাস নির্বাচন করুন</option>
+      <option value="In Stock">In Stock</option>
+      <option value="Out of Stock">Out of Stock</option>
+    </select>
+    <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)">
+    <textarea id="desc" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
+
+    <label style="display:block; margin-top: 15px;">ছবির লিংকসমূহ:</label>
+    <div id="imageInputs">
+      <input type="url" name="img[]" class="img-field" placeholder="ছবির লিংক (Image URL)" required>
+    </div>
+    <button type="button" onclick="addImageField()" style="margin-top:10px;background:#444;color:#fff;padding:8px 16px;border-radius:8px;display:flex;align-items:center;gap:6px;">
+      <i class="fas fa-plus"></i> আরও ছবি দিন (সর্বোচ্চ ৫টি)
+    </button>
+
+    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
+    <div class="buttons">
+      <button id="generateBtn" onclick="generateCode()">✅ কোড জেনারেট করুন</button>
+      <button id="copyBtn" onclick="copyCode()">📋 কপি করুন</button>
+    </div>
+    <div class="note" id="note"></div>
+    <div class="output" id="output"></div>
+    <div class="live-preview" id="preview"></div>
+  </div>
+</main>
+
 <script>
+function toggleMenu() {
+  document.getElementById("sidebar").classList.toggle("open");
+}
+function showSection(id) {
+  document.getElementById("formSection").style.display = id === "form" ? "block" : "none";
+  document.getElementById("sidebar").classList.remove("open");
+}
 function addImageField() {
   const container = document.getElementById('imageInputs');
   const count = container.querySelectorAll('input.img-field').length;
@@ -16,7 +220,6 @@ function addImageField() {
     alert("আপনি সর্বোচ্চ ৫টি ছবি যুক্ত করতে পারবেন।");
     return;
   }
-
   const input = document.createElement('input');
   input.type = "url";
   input.name = "img[]";
@@ -24,7 +227,6 @@ function addImageField() {
   input.className = "img-field";
   input.required = true;
   input.style.marginTop = "10px";
-
   container.appendChild(input);
 }
 
@@ -38,7 +240,6 @@ function generateCode() {
   const category = document.getElementById("category").value;
   const desc = document.getElementById("desc").value;
   const wa = document.getElementById("wa").value;
-
   const imgInputs = document.querySelectorAll(".img-field");
   const imgUrls = [...imgInputs].map(input => input.value.trim()).filter(url => url);
 
@@ -50,63 +251,33 @@ function generateCode() {
   const finalPrice = offer
     ? `<del>৳${price}</del> <span style="color:#f00;font-weight:bold;">৳${offer}</span>`
     : `৳${price}`;
-
   const waText = encodeURIComponent(
 `📦 আমি একটি পণ্য অর্ডার করতে চাই:
 🔖 প্রোডাক্ট: ${name}
 💰 মূল্য: ৳${offer || price}
 🧾 কোড: ${code}
 📁 ক্যাটাগরি: ${category}
-🚚 ডেলিভারি টাইম: ${delivery}`
-  );
-
+🚚 ডেলিভারি টাইম: ${delivery}`);
   const waLink = `https://wa.me/${wa}?text=${waText}`;
 
   let slider = '';
   if (imgUrls.length === 1) {
     slider = `<div style="text-align:center;"><img src="${imgUrls[0]}" style="max-width:100%;border-radius:10px;margin-bottom:10px;" alt="${name}" /></div>`;
   } else {
-    const slides = imgUrls.map((url, i) => `
-      <input type="radio" name="slider" id="s${i+1}" ${i==0 ? 'checked' : ''} hidden>
-    `).join('') + `
-    <div class="slider">
-      ${imgUrls.map((url, i) => `
-        <label class="slide" for="s${(i+1)%imgUrls.length+1}" style="${i==0 ? 'opacity:1;z-index:1;' : ''}">
-          <img src="${url}" alt="Product Image ${i+1}">
-        </label>
-      `).join('')}
-    </div>
-    <style>
-      .slider {
-        position:relative;
-        width:100%;
-        height:300px;
-        overflow:hidden;
-        border-radius:10px;
-        margin-bottom:10px;
-      }
-      .slide {
-        position:absolute;
-        width:100%;
-        height:100%;
-        transition:opacity 0.6s ease;
-        opacity:0;
-      }
-      .slide img {
-        width:100%;
-        height:100%;
-        object-fit:cover;
-        border-radius:10px;
-      }
-      input#s1:checked ~ .slider label:nth-child(1),
-      input#s2:checked ~ .slider label:nth-child(2),
-      input#s3:checked ~ .slider label:nth-child(3),
-      input#s4:checked ~ .slider label:nth-child(4),
-      input#s5:checked ~ .slider label:nth-child(5) {
-        opacity:1 !important;
-        z-index:1;
-      }
-    </style>`;
+    slider = `
+<div class="slider-container" style="position:relative;overflow:hidden;border-radius:10px;margin-bottom:10px;">
+  <div class="slides" style="display:flex;transition:transform 0.5s ease;width:${imgUrls.length * 100}%;">
+    ${imgUrls.map(url => `<img src="${url}" style="width:${100 / imgUrls.length}%;object-fit:cover;">`).join('')}
+  </div>
+</div>
+<script>
+let current = 0;
+setInterval(() => {
+  const slides = document.querySelector('.slides');
+  current = (current + 1) % ${imgUrls.length};
+  slides.style.transform = 'translateX(-' + (current * (100 / ${imgUrls.length})) + '%)';
+}, 3000);
+<\/script>`;
   }
 
   const html = `
@@ -135,4 +306,13 @@ ${slider}
   document.getElementById("note").textContent = "✅ কোড তৈরি হয়েছে!";
   document.getElementById("preview").innerHTML = html;
 }
+function copyCode() {
+  const code = document.getElementById("output").textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    document.getElementById("note").textContent = "✅ কপি হয়েছে!";
+  });
+}
 </script>
+
+</body>
+</html>

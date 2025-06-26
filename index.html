@@ -211,23 +211,16 @@
       background-color: rgba(0,0,0,0.8);
     }
 
-    .image-inputs {
+    .add-image {
       display: flex;
-      flex-direction: column;
-    }
-
-    .image-input {
-      display: none;
-    }
-
-    .image-label {
+      align-items: center;
       cursor: pointer;
-      padding: 10px;
-      background: var(--input-dark);
-      border-radius: 8px;
-      margin: 5px 0;
-      text-align: center;
-      color: var(--text-dark);
+      color: #28a745;
+      margin: 10px 0;
+    }
+
+    .add-image i {
+      margin-right: 5px;
     }
 
     @media (max-width: 600px) {
@@ -268,17 +261,12 @@
     <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: শাড়ি)">
     <textarea id="desc" placeholder="প্রোডাক্ট ডেসক্রিপশন (ঐচ্ছিক)"></textarea>
 
-    <div class="image-inputs">
-      <label class="image-label" for="img1">ছবি ১ যোগ করুন</label>
-      <input type="text" id="img1" class="image-input" placeholder="ছবির লিংক ১ (Image URL)">
-      <label class="image-label" for="img2">ছবি ২ যোগ করুন</label>
-      <input type="text" id="img2" class="image-input" placeholder="ছবির লিংক ২ (Image URL)">
-      <label class="image-label" for="img3">ছবি ৩ যোগ করুন</label>
-      <input type="text" id="img3" class="image-input" placeholder="ছবির লিংক ৩ (Image URL)">
-      <label class="image-label" for="img4">ছবি ৪ যোগ করুন</label>
-      <input type="text" id="img4" class="image-input" placeholder="ছবির লিংক ৪ (Image URL)">
-      <label class="image-label" for="img5">ছবি ৫ যোগ করুন</label>
-      <input type="text" id="img5" class="image-input" placeholder="ছবির লিংক ৫ (Image URL)">
+    <div id="imageInputs">
+      <input type="text" id="img1" placeholder="ছবির লিংক ১ (Image URL)" required>
+    </div>
+
+    <div class="add-image" onclick="addImageInput()">
+      <i class="fas fa-plus-circle"></i> আরও ছবি যোগ করুন
     </div>
 
     <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
@@ -296,6 +284,7 @@
 
 <script>
 let slideIndex = 0;
+let imageCount = 1; // Start with one image input
 
 function toggleMenu() {
   document.getElementById("sidebar").classList.toggle("open");
@@ -304,6 +293,19 @@ function toggleMenu() {
 function showSection(id) {
   document.getElementById("formSection").style.display = id === "form" ? "block" : "none";
   document.getElementById("sidebar").classList.remove("open");
+}
+
+function addImageInput() {
+  if (imageCount < 5) { // Allow a maximum of 5 images
+    imageCount++;
+    const newInput = document.createElement('input');
+    newInput.type = 'text';
+    newInput.id = `img${imageCount}`;
+    newInput.placeholder = `ছবির লিংক ${imageCount} (Image URL)`;
+    document.getElementById('imageInputs').appendChild(newInput);
+  } else {
+    alert("সর্বাধিক ৫টি ছবি যোগ করা যাবে।");
+  }
 }
 
 function generateCode() {
@@ -315,14 +317,15 @@ function generateCode() {
   const status = document.getElementById("status").value;
   const category = document.getElementById("category").value;
   const desc = document.getElementById("desc").value;
-  const img1 = document.getElementById("img1").value;
-  const img2 = document.getElementById("img2").value;
-  const img3 = document.getElementById("img3").value;
-  const img4 = document.getElementById("img4").value;
-  const img5 = document.getElementById("img5").value;
   const wa = document.getElementById("wa").value;
 
-  if (!name || !code || !price || !status || !category || !wa || (!img1 && !img2 && !img3 && !img4 && !img5)) {
+  const images = [];
+  for (let i = 1; i <= imageCount; i++) {
+    const img = document.getElementById(`img${i}`).value;
+    if (img) images.push(img);
+  }
+
+  if (!name || !code || !price || !status || !category || !wa || images.length === 0) {
     alert("সব প্রয়োজনীয় ফিল্ড পূরণ করুন।");
     return;
   }
@@ -342,7 +345,6 @@ function generateCode() {
 
   const waLink = `https://wa.me/${wa}?text=${waText}`;
 
-  const images = [img1, img2, img3, img4, img5].filter(Boolean);
   const slides = images.map(img => `
     <div class="slide">
       <img src="${img}" alt="${name}" />

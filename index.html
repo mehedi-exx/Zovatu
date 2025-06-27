@@ -1,47 +1,201 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>G9Tool - Blogger Product Generator</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>G9Tool - Product Generator</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #121212;
+      color: #fff;
+    }
+    header {
+      background: #1f1f1f;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 0 0 20px 20px;
+    }
+    .logo { font-size: 20px; }
+    .telegram-icon {
+      width: 36px; height: 36px;
+      background: white; color: #1da1f2;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none;
+    }
+    main {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+    .form-wrapper {
+      background: #1f1f1f;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      width: 100%;
+    }
+    input, select, textarea {
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px;
+      background: #2c2c2c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+    }
+    button {
+      background: #28a745;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .output, .live-preview {
+      background: #222;
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 8px;
+      white-space: pre-wrap;
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <div class="logo">🛒 G9Tool</div>
+    <a href="https://t.me/G9tool" target="_blank" class="telegram-icon">↗</a>
+  </header>
 
-<header>
-  <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
-  <a href="https://t.me/G9tool" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
-</header>
+  <main>
+    <div class="form-wrapper">
+      <input type="text" id="name" placeholder="প্রোডাক্ট নাম *">
+      <input type="text" id="code" placeholder="প্রোডাক্ট কোড *">
+      <input type="number" id="price" placeholder="মূল্য (৳) *">
+      <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
+      <select id="unit">
+        <option value="">ইউনিট নির্বাচন করুন</option>
+        <option value="100g">100g</option>
+        <option value="250g">250g</option>
+        <option value="500g">500g</option>
+        <option value="1kg">1kg</option>
+        <option value="2kg">2kg</option>
+      </select>
+      <select id="qty">
+        <option value="1">১ ইউনিট</option>
+        <option value="2">২ ইউনিট</option>
+        <option value="5">৫ ইউনিট</option>
+      </select>
+      <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
+      <select id="status">
+        <option value="">স্ট্যাটাস</option>
+        <option value="In Stock">In Stock</option>
+        <option value="Out of Stock">Out of Stock</option>
+      </select>
+      <input type="text" id="category" placeholder="ক্যাটাগরি">
+      <input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি">
+      <input type="text" id="sizes" placeholder="সাইজ (কমা দিয়ে)">
+      <input type="text" id="colors" placeholder="কালার (কমা দিয়ে)">
+      <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea>
+      <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)">
+      <input type="url" id="img1" placeholder="ছবি ১ *">
+      <input type="url" id="img2" placeholder="ছবি ২">
+      <input type="url" id="img3" placeholder="ছবি ৩">
+      <input type="url" id="img4" placeholder="ছবি ৪">
+      <input type="url" id="img5" placeholder="ছবি ৫">
+      <input type="text" id="wa" placeholder="WhatsApp নম্বর *">
+      <button onclick="generateCode()">✅ কোড জেনারেট করুন</button>
 
-<main>
-  <div class="form-wrapper">
-    <input type="text" id="name" placeholder="প্রোডাক্ট নাম">
-    <input type="text" id="code" placeholder="প্রোডাক্ট কোড">
-    <input type="number" id="price" placeholder="মূল্য প্রাইস (৳)">
-    <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
-    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
-    <input type="text" id="status" placeholder="স্ট্যাটাস">
-    <input type="text" id="category" placeholder="ক্যাটাগরি">
-    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা (ঐচ্ছিক)"></textarea>
-
-    <div id="imageInputs">
-      <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
+      <div class="output" id="output"></div>
+      <div class="live-preview" id="preview"></div>
     </div>
-    <button onclick="addImageInput()">➕ আরও ছবি যোগ করুন</button>
+  </main>
 
-    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
+  <script>
+    function generateCode() {
+      const name = document.getElementById("name").value;
+      const code = document.getElementById("code").value;
+      const price = parseFloat(document.getElementById("price").value);
+      const offer = parseFloat(document.getElementById("offer").value);
+      const unit = document.getElementById("unit").value;
+      const qty = parseInt(document.getElementById("qty").value);
+      const delivery = document.getElementById("delivery").value;
+      const status = document.getElementById("status").value;
+      const category = document.getElementById("category").value;
+      const brand = document.getElementById("brand").value;
+      const sizes = document.getElementById("sizes").value;
+      const colors = document.getElementById("colors").value;
+      const desc = document.getElementById("desc").value;
+      const video = document.getElementById("video").value;
+      const wa = document.getElementById("wa").value;
+      const images = [
+        document.getElementById("img1").value,
+        document.getElementById("img2").value,
+        document.getElementById("img3").value,
+        document.getElementById("img4").value,
+        document.getElementById("img5").value
+      ].filter(Boolean);
 
-    <div style="text-align:center;">
-      <button id="generateBtn">✅ কোড জেনারেট করুন</button>
-      <button id="copyBtn">📋 কপি করুন</button>
-    </div>
+      if (!name || !code || !price || !images.length || !wa) {
+        alert("আবশ্যিক ঘরগুলো পূরণ করুন।");
+        return;
+      }
 
-    <div class="output" id="output"></div>
-    <div class="live-preview" id="preview"></div>
-  </div>
-</main>
+      const totalPrice = price * qty;
+      const totalOffer = offer ? offer * qty : null;
 
-<script src="script.js"></script>
+      let priceHTML = totalOffer
+        ? `<del>৳${totalPrice}</del> <span style="color:red;font-weight:bold;">৳${totalOffer}</span> <small style="color:limegreen;">(${Math.round(((totalPrice - totalOffer)/totalPrice)*100)}% ছাড়)</small>`
+        : `৳${totalPrice}`;
+
+      const videoHTML = video.includes("youtube.com/watch?v=")
+        ? `<iframe width="100%" height="280" src="https://www.youtube.com/embed/${video.split("v=")[1].split("&")[0]}" frameborder="0" allowfullscreen style="border-radius:10px;margin-top:15px;"></iframe>`
+        : "";
+
+      const thumbs = images.map((img, i) =>
+        `<img src="${img}" onclick="document.getElementById('mainImg').src='${img}';" style="width:60px;height:60px;border-radius:6px;cursor:pointer;border:2px solid ${i===0 ? 'green' : 'transparent'};">`
+      ).join("");
+
+      const details = `
+        <li>🔢 কোড: ${code}</li>
+        ${status ? `<li>📦 স্ট্যাটাস: ${status}</li>` : ""}
+        ${category ? `<li>📁 ক্যাটাগরি: ${category}</li>` : ""}
+        ${brand ? `<li>🏷️ ব্র্যান্ড: ${brand}</li>` : ""}
+        ${sizes ? `<li>📏 সাইজ: ${sizes}</li>` : ""}
+        ${colors ? `<li>🎨 কালার: ${colors}</li>` : ""}
+        ${delivery ? `<li>🚚 ডেলিভারি টাইম: ${delivery}</li>` : ""}
+      `;
+
+      const mainImage = images[0];
+
+      const html = `
+<div style="text-align:center;">
+  <img id="mainImg" src="${mainImage}" style="width:100%;max-width:500px;border-radius:10px;border:1px solid #ccc;margin-bottom:10px;">
+  <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">${thumbs}</div>
+  <h2 style="margin:5px 0;">${name}</h2>
+  <p style="font-size:18px;">${priceHTML} / ${qty}${unit}</p>
+  ${videoHTML}
+</div>
+<p style="text-align:center;margin:10px 0;">
+  <a href="https://wa.me/${wa}?text=📦 আমি একটি পণ্য অর্ডার করতে চাই%0A🔖 প্রোডাক্ট: ${name}%0A💰 মূল্য: ৳${totalOffer || totalPrice}%0A🧾 কোড: ${code}%0A📁 ক্যাটাগরি: ${category}%0A🚚 ডেলিভারি টাইম: ${delivery}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">📲 অর্ডার করুন WhatsApp এ</a>
+</p>
+<ul style="list-style:none;padding:0;margin:15px 0;text-align:left;max-width:500px;margin:auto;">
+  ${details}
+</ul>
+<p>${desc}</p>
+<p style="display:none;">
+  <a href="#">
+    {getProduct} $button={Price} $price={৳${totalOffer || totalPrice}}${offer ? ` $sale={৳${totalPrice}}` : ""} $icon={cart} $style={1}
+  </a>
+</p>`;
+      document.getElementById("output").textContent = html;
+      document.getElementById("preview").innerHTML = html;
+    }
+  </script>
 </body>
 </html>

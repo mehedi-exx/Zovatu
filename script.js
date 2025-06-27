@@ -1,110 +1,163 @@
-let imgCount = 1;
-
-function addImageInput() {
-  if (imgCount < 5) {
-    const newInput = document.createElement("input");
-    newInput.type = "url";
-    newInput.className = "img-url";
-    newInput.placeholder = `ছবির লিংক (Image URL) ${imgCount + 1}`;
-    document.getElementById("imageInputs").appendChild(newInput);
-    imgCount++;
-  }
+:root {
+  --bg-dark: #121212;
+  --text-dark: #fff;
+  --card-dark: #1f1f1f;
+  --input-dark: #2c2c2c;
+  --green: #28a745;
+  --blue: #007bff;
 }
 
-document.getElementById("generateBtn").addEventListener("click", function () {
-  const name = document.getElementById("name").value;
-  const code = document.getElementById("code").value;
-  const price = parseFloat(document.getElementById("price").value);
-  const offer = parseFloat(document.getElementById("offer").value);
-  const delivery = document.getElementById("delivery").value || "N/A";
-  const status = document.getElementById("status").value;
-  const category = document.getElementById("category").value;
-  const desc = document.getElementById("desc").value;
-  const wa = document.getElementById("wa").value;
-  const images = Array.from(document.querySelectorAll(".img-url")).map(i => i.value).filter(Boolean);
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-dark);
+}
 
-  if (!name || !code || !price || !status || !category || !images.length || !wa) {
-    alert("⚠️ সব প্রয়োজনীয় ইনপুট পূরণ করুন");
-    return;
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background-color: var(--card-dark);
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.logo {
+  font-size: 22px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.telegram-icon {
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  background: #fff;
+  color: #1DA1F2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  text-decoration: none;
+  box-shadow: 0 0 5px #00000030;
+  transition: 0.3s;
+}
+.telegram-icon:hover {
+  transform: scale(1.05);
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  padding: 20px 10px;
+}
+
+.form-wrapper {
+  width: 100%;
+  max-width: 600px;
+  background: var(--card-dark);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 12px 14px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: none;
+  background: var(--input-dark);
+  color: var(--text-dark);
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+textarea {
+  min-height: 80px;
+}
+
+button {
+  padding: 12px 20px;
+  margin: 10px 5px 0 0;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#generateBtn {
+  background: var(--green);
+  color: white;
+}
+
+#copyBtn {
+  background: var(--blue);
+  color: white;
+}
+
+.output, .live-preview {
+  margin-top: 20px;
+  padding: 20px;
+  background: #1c1c1c;
+  border-radius: 10px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+#thumbs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+#thumbs img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: 0.3s;
+}
+
+/* Responsive */
+@media screen and (max-width: 480px) {
+  .form-wrapper {
+    padding: 15px;
   }
 
-  const firstImg = images[0];
-  let thumbs = images
-    .map((src, i) => {
-      return `<img src="${src}" style="width:60px;height:60px;border-radius:6px;cursor:pointer;border:2px solid ${i === 0 ? "green" : "transparent"};" onclick="changeImage(this)">`;
-    })
-    .join("");
-
-  // Pricing Section
-  let finalPrice = `৳${price}`;
-  if (!isNaN(offer) && offer < price) {
-    const discount = Math.round(((price - offer) / price) * 100);
-    finalPrice = `
-<del style="display:inline-block;color:#aaa;vertical-align:middle;text-decoration:line-through;line-height:1.2;margin-right:5px;">৳${price}</del>
-<span style="color:red;font-weight:bold;">৳${offer}</span>
-<small style="color:limegreen">(${discount}% ছাড়)</small>
-    `;
+  input, textarea {
+    font-size: 15px;
   }
 
-  const waText = encodeURIComponent(`📦 আমি একটি পণ্য অর্ডার করতে চাই
-🔖 প্রোডাক্ট: ${name}
-💰 মূল্য: ৳${offer || price}
-🧾 কোড: ${code}
-📁 ক্যাটাগরি: ${category}
-🚚 ডেলিভারি টাইম: ${delivery}`);
-
-  const waLink = `https://wa.me/${wa}?text=${waText}`;
-
-  const html = `
-<div style="text-align:center;">
-  <img id="mainImg" src="${firstImg}" style="width:100%;max-width:500px;border-radius:10px;border:1px solid #ccc;margin-bottom:10px;">
-  <div id="thumbs" style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
-    ${thumbs}
-  </div>
-
-  <h2 style="margin:5px 0;">${name}</h2>
-  <p style="font-size:18px;">${finalPrice}</p>
-</div>
-
-<p style="text-align:center;margin:10px 0;">
-  <a href="${waLink}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
-    📲 অর্ডার করুন WhatsApp এ
-  </a>
-</p>
-
-<ul style="list-style:none;padding:0;margin:15px 0;text-align:left;max-width:500px;margin:auto;">
-  <li>🔢 কোড: ${code}</li>
-  <li>📦 স্ট্যাটাস: ${status}</li>
-  <li>📁 ক্যাটাগরি: ${category}</li>
-  <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
-</ul>
-
-<p>${desc}</p>
-
-<p style="display:none;">
-  <a href="#">
-    {getProduct} $button={Price} $price={৳${offer || price}} $sale={৳${price}} $icon={cart} $style={1}
-  </a>
-</p>
-
-<!-- JavaScript: স্লাইডার থাম্ব ক্লিক হ্যান্ডলার -->
-<script>
-  function changeImage(el) {
-    document.getElementById('mainImg').src = el.src;
-    let all = document.querySelectorAll('#thumbs img');
-    all.forEach(img => img.style.border = "2px solid transparent");
-    el.style.border = "2px solid green";
+  #thumbs img {
+    width: 48px;
+    height: 48px;
   }
-<\/script>
-`;
 
-  document.getElementById("output").textContent = html;
-  document.getElementById("preview").innerHTML = html;
-});
+  .telegram-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
 
-document.getElementById("copyBtn").addEventListener("click", function () {
-  const code = document.getElementById("output").textContent;
-  navigator.clipboard.writeText(code).then(() => {
-    alert("✅ কোড কপি হয়েছে!");
-  });
-});
+  .logo {
+    font-size: 18px;
+  }
+
+  button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  #copyBtn {
+    margin-left: 0;
+  }
+}

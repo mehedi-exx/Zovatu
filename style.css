@@ -9,7 +9,6 @@
 
 body {
   margin: 0;
-  padding: 0;
   font-family: 'Segoe UI', sans-serif;
   background: var(--bg-dark);
   color: var(--text-dark);
@@ -22,38 +21,27 @@ header {
   padding: 12px 20px;
   background-color: var(--card-dark);
   border-radius: 0 0 20px 20px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
 .logo {
   font-size: 22px;
   display: flex;
   gap: 8px;
-  align-items: center;
 }
 
 .telegram-icon {
-  width: 40px;
-  height: 40px;
-  font-size: 20px;
-  background: #fff;
+  font-size: 22px;
   color: #1DA1F2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: #fff;
+  padding: 6px;
   border-radius: 50%;
-  text-decoration: none;
-  box-shadow: 0 0 5px #00000030;
-  transition: 0.3s;
-}
-.telegram-icon:hover {
-  transform: scale(1.05);
 }
 
 main {
   display: flex;
   justify-content: center;
-  padding: 20px 10px;
+  padding: 20px;
+  flex-wrap: wrap;
 }
 
 .form-wrapper {
@@ -66,13 +54,12 @@ main {
 
 input, textarea {
   width: 100%;
-  padding: 12px 14px;
+  padding: 12px;
   margin: 10px 0;
   border-radius: 8px;
   border: none;
   background: var(--input-dark);
   color: var(--text-dark);
-  font-size: 16px;
   box-sizing: border-box;
 }
 
@@ -82,12 +69,11 @@ textarea {
 
 button {
   padding: 12px 20px;
-  margin: 10px 5px 0 0;
+  margin-top: 10px;
   border: none;
   border-radius: 8px;
   font-weight: bold;
   cursor: pointer;
-  font-size: 16px;
 }
 
 #generateBtn {
@@ -98,6 +84,7 @@ button {
 #copyBtn {
   background: var(--blue);
   color: white;
+  margin-left: 10px;
 }
 
 .output, .live-preview {
@@ -107,16 +94,20 @@ button {
   border-radius: 10px;
   overflow-x: auto;
   white-space: pre-wrap;
-  word-break: break-word;
 }
 
+img {
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+/* Thumbnail Responsive */
 #thumbs {
   display: flex;
   justify-content: center;
   gap: 8px;
   flex-wrap: wrap;
 }
-
 #thumbs img {
   width: 60px;
   height: 60px;
@@ -124,7 +115,6 @@ button {
   border-radius: 6px;
   cursor: pointer;
   border: 2px solid transparent;
-  transition: 0.3s;
 }
 
 /* Responsive */
@@ -143,9 +133,8 @@ button {
   }
 
   .telegram-icon {
-    width: 36px;
-    height: 36px;
-    font-size: 18px;
+    font-size: 20px;
+    padding: 4px;
   }
 
   .logo {

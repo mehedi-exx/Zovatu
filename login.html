@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>G9Tool Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-page">
+  <div class="login-container">
+    <div class="subscription-info">
+      <h2>🔒 প্রিমিয়াম সাবস্ক্রিপশন প্রয়োজন</h2>
+      <p>এই টুলটি ব্যবহারের জন্য আপনাকে <strong>১৯৯৯ টাকা</strong> সাবস্ক্রিপশন নিতে হবে।</p>
+      <p>পেমেন্টের জন্য যোগাযোগ করুন:</p>
+      <a href="https://wa.me/8801XXXXXXXXX" target="_blank" class="btn whatsapp">📲 WhatsApp</a>
+      <a href="https://t.me/G9tool" target="_blank" class="btn telegram">📩 Telegram</a>
+      <p style="margin-top:10px;">পেমেন্টের পর আপনি ইউজারনেম এবং পাসওয়ার্ড পাবেন।</p>
+    </div>
+
+    <div class="login-box">
+      <h3>🔑 লগইন করুন</h3>
+      <input type="text" id="username" placeholder="ইউজারনেম">
+      <input type="password" id="password" placeholder="পাসওয়ার্ড">
+      <button onclick="login()">✅ লগইন</button>
+      <p id="login-error" style="color:tomato;margin-top:10px;"></p>
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+</body>
+</html>

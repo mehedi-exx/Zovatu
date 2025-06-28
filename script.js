@@ -83,7 +83,7 @@ document.getElementById("generateBtn").addEventListener("click", function () {
 
 <p style="display:none;">
   <a href="#">
-    {getProduct} $button={Price} $price={৳${offer || price}} $sale={৳${price}} $icon={cart} $style={1}
+    {getProduct} $price={৳${offer || price}}${!isNaN(offer) && offer < price ? ` $sale={৳${price}}` : ""}
   </a>
 </p>
 

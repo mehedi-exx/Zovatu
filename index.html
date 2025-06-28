@@ -3,34 +3,63 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>G9Tool - Blogger Product Generator</title>
+  <title>G9Tool - Premium Product Generator</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script>
+    const user = localStorage.getItem("loggedInUser");
+    if (!user) {
+      window.location.href = "login.html";
+    }
+  </script>
 </head>
 <body>
 
 <header>
   <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
-  <a href="https://t.me/mehedi_exx" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
+  <a href="https://t.me/G9tool" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
 </header>
 
 <main>
   <div class="form-wrapper">
-    <input type="text" id="name" placeholder="প্রোডাক্ট নাম">
-    <input type="text" id="code" placeholder="প্রোডাক্ট কোড">
-    <input type="number" id="price" placeholder="মূল্য প্রাইস (৳)">
+    <h2 style="text-align:center;">📝 প্রোডাক্ট জেনারেটর</h2>
+
+    <input type="text" id="name" placeholder="প্রোডাক্ট নাম *">
+    <input type="text" id="code" placeholder="প্রোডাক্ট কোড *">
+    <input type="number" id="price" placeholder="মূল্য প্রাইস (৳) *">
     <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
-    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
-    <input type="text" id="status" placeholder="স্ট্যাটাস">
-    <input type="text" id="category" placeholder="ক্যাটাগরি">
+    <input type="text" id="unit" placeholder="ইউনিট (যেমন: পিস)">
+    <input type="number" id="qty" placeholder="পরিমাণ (Qty)">
+    <input type="text" id="brand" placeholder="ব্র্যান্ড (ঐচ্ছিক)">
+    
+    <select id="color">
+      <option value="">কালার সিলেক্ট করুন</option>
+      <option>লাল</option><option>নীল</option><option>সবুজ</option><option>কালো</option>
+    </select>
+
+    <select id="size">
+      <option value="">সাইজ সিলেক্ট করুন</option>
+      <option>S</option><option>M</option><option>L</option><option>XL</option>
+    </select>
+
+    <select id="taste">
+      <option value="">টেস্ট সিলেক্ট করুন</option>
+      <option>ঝাল</option><option>মিষ্টি</option><option>মাঝারি</option>
+    </select>
+
+    <input type="text" id="category" placeholder="ক্যাটাগরি *">
+    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)">
+    <input type="text" id="status" placeholder="স্ট্যাটাস *">
+    <input type="text" id="tag" placeholder="কাস্টম ব্যাজ (যেমন: 🔥নতুন)">
     <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা (ঐচ্ছিক)"></textarea>
 
     <div id="imageInputs">
-      <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
+      <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL) *">
     </div>
     <button onclick="addImageInput()">➕ আরও ছবি যোগ করুন</button>
 
-    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
+    <input type="url" id="video" placeholder="ভিডিও লিংক (যদি থাকে)">
+    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX) *">
 
     <div style="text-align:center;">
       <button id="generateBtn">✅ কোড জেনারেট করুন</button>

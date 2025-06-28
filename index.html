@@ -24,46 +24,34 @@
   <div class="form-wrapper">
     <h2 style="text-align:center;">📝 প্রোডাক্ট জেনারেটর</h2>
 
-    <input type="text" id="name" placeholder="প্রোডাক্ট নাম *">
-    <input type="text" id="code" placeholder="প্রোডাক্ট কোড *">
-    <input type="number" id="price" placeholder="মূল্য প্রাইস (৳) *">
+    <input type="text" id="name" placeholder="প্রোডাক্ট নাম *" required>
+    <input type="text" id="code" placeholder="প্রোডাক্ট কোড *" required>
+    <input type="number" id="price" placeholder="মূল্য প্রাইস (৳) *" required>
     <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
     <input type="text" id="unit" placeholder="ইউনিট (যেমন: পিস)">
     <input type="number" id="qty" placeholder="পরিমাণ (Qty)">
     <input type="text" id="brand" placeholder="ব্র্যান্ড (ঐচ্ছিক)">
-    
-    <select id="color">
-      <option value="">কালার সিলেক্ট করুন</option>
-      <option>লাল</option><option>নীল</option><option>সবুজ</option><option>কালো</option>
-    </select>
-
-    <select id="size">
-      <option value="">সাইজ সিলেক্ট করুন</option>
-      <option>S</option><option>M</option><option>L</option><option>XL</option>
-    </select>
-
-    <select id="taste">
-      <option value="">টেস্ট সিলেক্ট করুন</option>
-      <option>ঝাল</option><option>মিষ্টি</option><option>মাঝারি</option>
-    </select>
-
-    <input type="text" id="category" placeholder="ক্যাটাগরি *">
+    <input type="text" id="color" placeholder="কালার লিখুন (ঐচ্ছিক)">
+    <input type="text" id="size" placeholder="সাইজ লিখুন (ঐচ্ছিক)">
+    <input type="text" id="taste" placeholder="টেস্ট লিখুন (ঐচ্ছিক)">
+    <input type="text" id="category" placeholder="ক্যাটাগরি *" required>
     <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)">
-    <input type="text" id="status" placeholder="স্ট্যাটাস *">
+    <input type="text" id="status" placeholder="স্ট্যাটাস *" required>
     <input type="text" id="tag" placeholder="কাস্টম ব্যাজ (যেমন: 🔥নতুন)">
     <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা (ঐচ্ছিক)"></textarea>
 
+    <!-- Image Inputs -->
     <div id="imageInputs">
-      <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL) *">
+      <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL) *" required>
     </div>
-    <button onclick="addImageInput()">➕ আরও ছবি যোগ করুন</button>
+    <button type="button" onclick="addImageInput()">➕ আরও ছবি যোগ করুন</button>
 
     <input type="url" id="video" placeholder="ভিডিও লিংক (যদি থাকে)">
-    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX) *">
+    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX) *" required>
 
     <div style="text-align:center;">
-      <button id="generateBtn">✅ কোড জেনারেট করুন</button>
-      <button id="copyBtn">📋 কপি করুন</button>
+      <button id="generateBtn" type="button">✅ কোড জেনারেট করুন</button>
+      <button id="copyBtn" type="button">📋 কপি করুন</button>
     </div>
 
     <div class="output" id="output"></div>

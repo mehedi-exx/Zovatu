@@ -1,66 +1,31 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>G9Tool - Premium Product Generator</title>
+  <meta charset="UTF-8">
+  <title>G9Tool Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <script>
-    const user = localStorage.getItem("loggedInUser");
-    if (!user) {
-      window.location.href = "login.html";
-    }
-  </script>
 </head>
-<body>
-
-<header>
-  <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
-  <a href="https://t.me/G9tool" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
-</header>
-
-<main>
-  <div class="form-wrapper">
-    <h2 style="text-align:center;">📝 প্রোডাক্ট জেনারেটর</h2>
-
-    <input type="text" id="name" placeholder="প্রোডাক্ট নাম *">
-    <input type="text" id="code" placeholder="প্রোডাক্ট কোড *">
-    <input type="number" id="price" placeholder="মূল্য প্রাইস (৳) *">
-    <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
-    <input type="text" id="unit" placeholder="ইউনিট (যেমন: পিস)">
-    <input type="number" id="qty" placeholder="পরিমাণ (Qty)">
-    <input type="text" id="brand" placeholder="ব্র্যান্ড (ঐচ্ছিক)">
-
-    <!-- ✅ ড্রপডাউন OFF করে ইনপুট করা হয়েছে -->
-    <input type="text" id="color" placeholder="কালার লিখুন (ঐচ্ছিক)">
-    <input type="text" id="size" placeholder="সাইজ লিখুন (ঐচ্ছিক)">
-    <input type="text" id="taste" placeholder="টেস্ট লিখুন (ঐচ্ছিক)">
-
-    <input type="text" id="category" placeholder="ক্যাটাগরি *">
-    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)">
-    <input type="text" id="status" placeholder="স্ট্যাটাস *">
-    <input type="text" id="tag" placeholder="কাস্টম ব্যাজ (যেমন: 🔥নতুন)">
-    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা (ঐচ্ছিক)"></textarea>
-
-    <div id="imageInputs">
-      <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL) *">
-    </div>
-    <button onclick="addImageInput()">➕ আরও ছবি যোগ করুন</button>
-
-    <input type="url" id="video" placeholder="ভিডিও লিংক (যদি থাকে)">
-    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX) *">
-
-    <div style="text-align:center;">
-      <button id="generateBtn">✅ কোড জেনারেট করুন</button>
-      <button id="copyBtn">📋 কপি করুন</button>
+<body class="login-page">
+  <div class="login-container">
+    <div class="subscription-info">
+      <h2>🔒 প্রিমিয়াম সাবস্ক্রিপশন প্রয়োজন</h2>
+      <p>এই টুলটি ব্যবহারের জন্য আপনাকে <strong>১৯৯৯ টাকা</strong> সাবস্ক্রিপশন নিতে হবে।</p>
+      <p>পেমেন্টের জন্য যোগাযোগ করুন:</p>
+      <a href="https://wa.me/8801XXXXXXXXX" target="_blank" class="btn whatsapp">📲 WhatsApp</a>
+      <a href="https://t.me/G9tool" target="_blank" class="btn telegram">📩 Telegram</a>
+      <p style="margin-top:10px;">পেমেন্টের পর আপনি ইউজারনেম এবং পাসওয়ার্ড পাবেন।</p>
     </div>
 
-    <div class="output" id="output"></div>
-    <div class="live-preview" id="preview"></div>
+    <div class="login-box">
+      <h3>🔑 লগইন করুন</h3>
+      <input type="text" id="username" placeholder="ইউজারনেম">
+      <input type="password" id="password" placeholder="পাসওয়ার্ড">
+      <button onclick="login()">✅ লগইন</button>
+      <p id="login-error" style="color:tomato;margin-top:10px;"></p>
+    </div>
   </div>
-</main>
 
-<script src="script.js"></script>
+  <script src="auth.js"></script>
 </body>
 </html>

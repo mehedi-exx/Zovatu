@@ -12,43 +12,51 @@ function addImageInput() {
 }
 
 document.getElementById("generateBtn").addEventListener("click", function () {
-  const name = document.getElementById("name").value;
-  const code = document.getElementById("code").value;
+  const name = document.getElementById("name").value.trim();
+  const code = document.getElementById("code").value.trim();
   const price = parseFloat(document.getElementById("price").value);
   const offer = parseFloat(document.getElementById("offer").value);
+  const unit = document.getElementById("unit").value.trim();
+  const qty = parseInt(document.getElementById("qty").value);
+  const brand = document.getElementById("brand").value.trim();
+  const color = document.getElementById("color").value;
+  const size = document.getElementById("size").value;
+  const taste = document.getElementById("taste").value;
   const delivery = document.getElementById("delivery").value || "N/A";
-  const status = document.getElementById("status").value;
-  const category = document.getElementById("category").value;
-  const desc = document.getElementById("desc").value;
-  const wa = document.getElementById("wa").value;
-  const images = Array.from(document.querySelectorAll(".img-url")).map(i => i.value).filter(Boolean);
+  const status = document.getElementById("status").value.trim();
+  const category = document.getElementById("category").value.trim();
+  const desc = document.getElementById("desc").value.trim();
+  const wa = document.getElementById("wa").value.trim();
+  const video = document.getElementById("video").value.trim();
+  const tag = document.getElementById("tag").value.trim();
+  const images = Array.from(document.querySelectorAll(".img-url")).map(i => i.value.trim()).filter(Boolean);
 
   if (!name || !code || !price || !status || !category || !images.length || !wa) {
-    alert("⚠️ সব প্রয়োজনীয় ইনপুট পূরণ করুন");
+    alert("⚠️ প্রয়োজনীয় সব ইনপুট দিন (* চিহ্নিত)।");
     return;
   }
 
-  const firstImg = images[0];
-  let thumbs = images
-    .map((src, i) => {
-      return `<img src="${src}" style="width:60px;height:60px;border-radius:6px;cursor:pointer;border:2px solid ${i === 0 ? "green" : "transparent"};" onclick="changeImage(this)">`;
-    })
-    .join("");
+  const mainImage = images[0];
+  let thumbs = images.map((src, i) => {
+    return `<img src="${src}" style="width:60px;height:60px;border-radius:6px;cursor:pointer;border:2px solid ${i === 0 ? 'green' : 'transparent'};" onclick="changeImage(this)">`;
+  }).join("");
 
-  // Pricing Section
+  // মূল দাম × Qty
+  let total = price * (isNaN(qty) ? 1 : qty);
   let finalPrice = `৳${price}`;
   if (!isNaN(offer) && offer < price) {
     const discount = Math.round(((price - offer) / price) * 100);
     finalPrice = `
-<del style="display:inline-block;color:#aaa;vertical-align:middle;text-decoration:line-through;line-height:1.2;margin-right:5px;">৳${price}</del>
-<span style="color:red;font-weight:bold;">৳${offer}</span>
-<small style="color:limegreen">(${discount}% ছাড়)</small>
+      <del style="color:#aaa;">৳${price}</del>
+      <span style="color:red;font-weight:bold;">৳${offer}</span>
+      <small style="color:limegreen">(${discount}% ছাড়)</small>
     `;
+    total = offer * (isNaN(qty) ? 1 : qty);
   }
 
   const waText = encodeURIComponent(`📦 আমি একটি পণ্য অর্ডার করতে চাই
 🔖 প্রোডাক্ট: ${name}
-💰 মূল্য: ৳${offer || price}
+💰 মূল্য: ৳${offer || price} ${unit ? ` (${unit} × ${qty || 1} = ৳${total})` : ""}
 🧾 কোড: ${code}
 📁 ক্যাটাগরি: ${category}
 🚚 ডেলিভারি টাইম: ${delivery}`);
@@ -57,11 +65,11 @@ document.getElementById("generateBtn").addEventListener("click", function () {
 
   const html = `
 <div style="text-align:center;">
-  <img id="mainImg" src="${firstImg}" style="width:100%;max-width:500px;border-radius:10px;border:1px solid #ccc;margin-bottom:10px;">
+  ${tag ? `<div style="margin-bottom:5px;"><span style="background:#ff5722;color:#fff;padding:5px 12px;border-radius:20px;">${tag}</span></div>` : ""}
+  <img id="mainImg" src="${mainImage}" style="width:100%;max-width:500px;border-radius:10px;border:1px solid #ccc;margin-bottom:10px;">
   <div id="thumbs" style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
     ${thumbs}
   </div>
-
   <h2 style="margin:5px 0;">${name}</h2>
   <p style="font-size:18px;">${finalPrice}</p>
 </div>
@@ -72,14 +80,19 @@ document.getElementById("generateBtn").addEventListener("click", function () {
   </a>
 </p>
 
-<ul style="list-style:none;padding:0;margin:15px 0;text-align:left;max-width:500px;margin:auto;">
+<ul style="list-style:none;padding:0;margin:15px auto;text-align:left;max-width:500px;">
   <li>🔢 কোড: ${code}</li>
   <li>📦 স্ট্যাটাস: ${status}</li>
   <li>📁 ক্যাটাগরি: ${category}</li>
+  ${brand ? `<li>🏢 ব্র্যান্ড: ${brand}</li>` : ""}
+  ${color ? `<li>🎨 কালার: ${color}</li>` : ""}
+  ${size ? `<li>📏 সাইজ: ${size}</li>` : ""}
+  ${taste ? `<li>🍽️ টেস্ট: ${taste}</li>` : ""}
   <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
 </ul>
 
-<p>${desc}</p>
+${desc ? `<p>${desc}</p>` : ""}
+${video ? `<div style="text-align:center;"><iframe width="100%" height="250" src="${video}" frameborder="0" allowfullscreen style="border-radius:10px;"></iframe></div>` : ""}
 
 <p style="display:none;">
   <a href="#">
@@ -87,7 +100,6 @@ document.getElementById("generateBtn").addEventListener("click", function () {
   </a>
 </p>
 
-<!-- JavaScript: স্লাইডার থাম্ব ক্লিক হ্যান্ডলার -->
 <script>
   function changeImage(el) {
     document.getElementById('mainImg').src = el.src;

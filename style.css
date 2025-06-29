@@ -1,72 +1,54 @@
-:root {
-  --bg-dark: #121212;
-  --text-light: #fff;
-  --card-dark: #1f1f1f;
-  --input-dark: #2c2c2c;
-  --green: #28a745;
-  --blue: #007bff;
-  --red: #dc3545;
-}
-
-/* Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
-  background: var(--bg-dark);
-  color: var(--text-light);
+  margin: 0;
   font-family: 'Segoe UI', sans-serif;
-  line-height: 1.6;
-  min-height: 100vh;
+  background: #121212;
+  color: white;
 }
 
-/* Header */
-header {
-  width: 100%;
-  background-color: var(--card-dark);
-  padding: 14px 20px;
+.header {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  position: relative;
-  border-radius: 0 0 20px 20px;
+  background: #1c1c1c;
+  padding: 10px 20px;
+  border-radius: 0 0 15px 15px;
+}
+
+.left-icons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.menu-btn {
+  font-size: 20px;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 .logo {
   font-size: 20px;
+  color: white;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  font-weight: bold;
 }
 
 .telegram-icon {
-  position: absolute;
-  right: 20px;
-  font-size: 22px;
-  background: #fff;
+  background: #ffffff;
   color: #0088cc;
-  padding: 6px;
   border-radius: 50%;
-  text-decoration: none;
+  padding: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
+  text-decoration: none;
+  font-size: 18px;
 }
 
-.menu-toggle {
-  position: absolute;
-  left: 20px;
-  font-size: 22px;
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-}
-
-/* Sidebar */
 .sidebar {
   position: fixed;
   top: 0;
@@ -113,127 +95,12 @@ header {
   cursor: pointer;
 }
 
-/* Main Content */
-main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-/* Login, Generator Form Box */
-.form-wrapper {
-  width: 100%;
-  max-width: 400px;
-  background: var(--card-dark);
-  padding: 30px;
-  border-radius: 12px;
-  margin-top: 20px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-}
-
-input, textarea {
-  width: 100%;
-  padding: 14px;
-  margin: 10px 0;
-  border-radius: 8px;
-  border: none;
-  background: var(--input-dark);
-  color: var(--text-light);
-  font-size: 16px;
-}
-
-textarea {
-  min-height: 80px;
-  resize: vertical;
-}
-
-button {
-  padding: 12px 20px;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 10px;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-#generateBtn {
-  background: var(--green);
-  color: white;
-}
-
-#copyBtn {
-  background: var(--blue);
-  color: white;
-  margin-left: 10px;
-}
-
-.output,
-.live-preview {
-  margin-top: 20px;
-  padding: 20px;
-  background: #1c1c1c;
-  border-radius: 10px;
-  overflow-x: auto;
-  white-space: pre-wrap;
-}
-
-/* Thumbnail Image Grid */
-#thumbs {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-#thumbs img {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-  border-radius: 6px;
-  cursor: pointer;
-  border: 2px solid transparent;
-}
-
-img.active-thumb {
-  border: 2px solid #28a745;
-}
-
-/* Info / Footer Links */
-.info {
-  text-align: center;
-  margin-top: 15px;
-  font-size: 14px;
-}
-
-/* Responsive */
 @media screen and (max-width: 480px) {
-  .form-wrapper {
-    padding: 20px;
-    margin: 15px;
-  }
-
-  .telegram-icon {
-    font-size: 20px;
-    padding: 5px;
-  }
-
   .logo {
     font-size: 18px;
   }
-
-  button {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-
-  #copyBtn {
-    margin-left: 0;
+  .telegram-icon {
+    font-size: 16px;
+    padding: 5px;
   }
 }

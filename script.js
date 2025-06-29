@@ -1,3 +1,5 @@
+// G9Tool Product Generator Logic
+
 let imgCount = 1;
 
 function addImageInput() {
@@ -19,15 +21,14 @@ document.getElementById("generateBtn").addEventListener("click", function () {
   const unit = document.getElementById("unit").value.trim();
   const qty = parseInt(document.getElementById("qty").value);
   const brand = document.getElementById("brand").value.trim();
-  const color = document.getElementById("color").value;
-  const size = document.getElementById("size").value;
-  const taste = document.getElementById("taste").value;
+  const color = document.getElementById("color").value.trim();
+  const size = document.getElementById("size").value.trim();
+  const taste = document.getElementById("taste").value.trim();
   const delivery = document.getElementById("delivery").value || "N/A";
   const status = document.getElementById("status").value.trim();
   const category = document.getElementById("category").value.trim();
   const desc = document.getElementById("desc").value.trim();
   const wa = document.getElementById("wa").value.trim();
-  const video = document.getElementById("video").value.trim();
   const tag = document.getElementById("tag").value.trim();
   const images = Array.from(document.querySelectorAll(".img-url")).map(i => i.value.trim()).filter(Boolean);
 
@@ -41,7 +42,6 @@ document.getElementById("generateBtn").addEventListener("click", function () {
     return `<img src="${src}" style="width:60px;height:60px;border-radius:6px;cursor:pointer;border:2px solid ${i === 0 ? 'green' : 'transparent'};" onclick="changeImage(this)">`;
   }).join("");
 
-  // মূল দাম × Qty
   let total = price * (isNaN(qty) ? 1 : qty);
   let finalPrice = `৳${price}`;
   if (!isNaN(offer) && offer < price) {
@@ -56,11 +56,10 @@ document.getElementById("generateBtn").addEventListener("click", function () {
 
   const waText = encodeURIComponent(`📦 আমি একটি পণ্য অর্ডার করতে চাই
 🔖 প্রোডাক্ট: ${name}
-💰 মূল্য: ৳${offer || price} ${unit ? ` (${unit} × ${qty || 1} = ৳${total})` : ""}
+💰 মূল্য: ৳${offer || price}${unit ? ` (${unit} × ${qty || 1} = ৳${total})` : ""}
 🧾 কোড: ${code}
 📁 ক্যাটাগরি: ${category}
 🚚 ডেলিভারি টাইম: ${delivery}`);
-
   const waLink = `https://wa.me/${wa}?text=${waText}`;
 
   const html = `
@@ -73,13 +72,11 @@ document.getElementById("generateBtn").addEventListener("click", function () {
   <h2 style="margin:5px 0;">${name}</h2>
   <p style="font-size:18px;">${finalPrice}</p>
 </div>
-
 <p style="text-align:center;margin:10px 0;">
   <a href="${waLink}" target="_blank" style="display:inline-block;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;">
     📲 অর্ডার করুন WhatsApp এ
   </a>
 </p>
-
 <ul style="list-style:none;padding:0;margin:15px auto;text-align:left;max-width:500px;">
   <li>🔢 কোড: ${code}</li>
   <li>📦 স্ট্যাটাস: ${status}</li>
@@ -90,10 +87,7 @@ document.getElementById("generateBtn").addEventListener("click", function () {
   ${taste ? `<li>🍽️ টেস্ট: ${taste}</li>` : ""}
   <li>🚚 ডেলিভারি টাইম: ${delivery}</li>
 </ul>
-
 ${desc ? `<p>${desc}</p>` : ""}
-${video ? `<div style="text-align:center;"><iframe width="100%" height="250" src="${video}" frameborder="0" allowfullscreen style="border-radius:10px;"></iframe></div>` : ""}
-
 <p style="display:none;">
   <a href="#">
     {getProduct} $price={৳${offer || price}}${!isNaN(offer) && offer < price ? ` $sale={৳${price}}` : ""}

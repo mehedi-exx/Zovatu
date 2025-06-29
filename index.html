@@ -3,155 +3,117 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>G9Tool Login</title>
+  <title>G9Tool Premium</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
+      margin: 0;
+      padding: 0;
       background: #121212;
       color: white;
       font-family: 'Segoe UI', sans-serif;
     }
-
-    header {
-      width: 100%;
+    .header {
+      background: #1f1f1f;
       padding: 12px 20px;
-      background-color: #1f1f1f;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
       border-radius: 0 0 20px 20px;
     }
-
-    .telegram-icon {
-      position: absolute;
-      right: 20px;
-      font-size: 22px;
-      background: #fff;
-      color: #0088cc;
-      padding: 6px;
-      border-radius: 50%;
+    .header-flex {
       display: flex;
       align-items: center;
-      justify-content: center;
-      text-decoration: none;
+      justify-content: space-between;
+      max-width: 700px;
+      margin: auto;
     }
-
-    .logo {
-      font-size: 20px;
+    .header-title {
       display: flex;
       align-items: center;
       gap: 8px;
+      font-size: 20px;
     }
-
-    .form-wrapper {
-      width: 100%;
-      max-width: 400px;
+    .telegram {
+      background: white;
+      color: #0088cc;
+      padding: 8px;
+      border-radius: 50%;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .login-box {
       background: #1f1f1f;
       padding: 30px;
       border-radius: 12px;
-      margin-top: 30px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      max-width: 360px;
+      width: 90%;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      text-align: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
     }
-
     input {
       width: 100%;
       padding: 14px;
       margin: 10px 0;
-      border-radius: 6px;
+      border-radius: 8px;
       border: none;
       background: #2a2a2a;
       color: white;
       font-size: 16px;
     }
-
-    button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 15px;
-      border: none;
-      border-radius: 6px;
+    .login-btn {
       background: #28a745;
       color: white;
-      font-weight: bold;
+      border: none;
+      padding: 14px;
       font-size: 16px;
+      border-radius: 8px;
+      width: 100%;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      font-weight: bold;
     }
-
-    a {
-      color: #00aaff;
+    .contact-links {
+      margin-top: 20px;
+      font-size: 15px;
+    }
+    .contact-links a {
+      color: #00bfff;
       text-decoration: none;
-    }
-
-    .info {
-      text-align: center;
-      margin-top: 15px;
-      font-size: 14px;
-    }
-
-    @media screen and (max-width: 480px) {
-      .form-wrapper {
-        padding: 20px;
-        margin: 15px;
-      }
+      margin: 0 4px;
     }
   </style>
 </head>
 <body>
-<header>
-  <div class="logo"><i class="fas fa-lock"></i> G9Tool Premium</div>
-  <a href="https://t.me/G9tool" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
-</header>
 
-<main>
-  <div class="form-wrapper">
-    <h2 style="text-align:center;"><i class="fas fa-user-shield"></i> লগইন করুন</h2>
-    <input type="text" id="username" placeholder="ইউজারনেম">
-    <input type="password" id="password" placeholder="পাসওয়ার্ড">
-    <button onclick="login()"><i class="fas fa-sign-in-alt"></i> লগইন</button>
-    <div class="info">
-      প্রিমিয়াম এক্সেস নিতে যোগাযোগ করুন:<br>
-      <a href="https://wa.me/8801XXXXXXXXXX" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a> |
-      <a href="https://t.me/G9tool" target="_blank"><i class="fab fa-telegram"></i> Telegram</a>
-    </div>
+<!-- Header -->
+<div class="header">
+  <div class="header-flex">
+    <div class="header-title"><i class="fas fa-lock"></i> G9Tool Premium</div>
+    <a href="https://t.me/G9tool" target="_blank" class="telegram"><i class="fab fa-telegram-plane"></i></a>
   </div>
-</main>
+</div>
 
-<script>
-async function login() {
-  const user = document.getElementById("username").value.trim();
-  const pass = document.getElementById("password").value.trim();
+<!-- Login Card -->
+<div class="login-box">
+  <h2><i class="fas fa-user-shield"></i> লগইন করুন</h2>
+  <input type="text" id="username" placeholder="ইউজারনেম" />
+  <input type="password" id="password" placeholder="পাসওয়ার্ড" />
+  <button class="login-btn" onclick="loginUser()"><i class="fas fa-sign-in-alt"></i> লগইন</button>
 
-  if (!user || !pass) {
-    alert("⚠️ ইউজারনেম ও পাসওয়ার্ড দিন!");
-    return;
-  }
+  <div class="contact-links">
+    প্রিমিয়াম এক্সেস নিতে যোগাযোগ করুন:
+    <br />
+    <a href="https://wa.me/8801XXXXXXXXX" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a> |
+    <a href="https://t.me/G9tool" target="_blank"><i class="fab fa-telegram-plane"></i> Telegram</a>
+  </div>
+</div>
 
-  try {
-    const res = await fetch(`users/${user}.json`);
-    if (!res.ok) throw new Error('User not found');
-    const data = await res.json();
-
-    if (data.password === pass) {
-      localStorage.setItem("g9tool_user", user);
-      window.location.href = "dashboard.html";
-    } else {
-      alert("❌ ভুল পাসওয়ার্ড!");
-    }
-  } catch {
-    alert("❌ ইউজার খুঁজে পাওয়া যায়নি!");
-  }
-}
-</script>
+<script src="auth.js"></script>
 </body>
 </html>

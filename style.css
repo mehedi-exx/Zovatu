@@ -1,279 +1,161 @@
-/* G9Tool - Premium Dark Style */
 :root {
-  --bg: #0f0f0f;
-  --card: #1c1c1c;
-  --input: #262626;
-  --text: #f1f1f1;
-  --border: #333;
-  --primary: #25D366;
-  --secondary: #1DA1F2;
-  --accent: #ff9800;
-  --danger: #ff4d4d;
-  --font: 'Segoe UI', sans-serif;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+  --bg-dark: #121212;
+  --text-dark: #fff;
+  --card-dark: #1f1f1f;
+  --input-dark: #2c2c2c;
+  --green: #28a745;
+  --blue: #007bff;
+  --red: #dc3545;
 }
 
 body {
-  font-family: var(--font);
-  background-color: var(--bg);
-  color: var(--text);
-  line-height: 1.6;
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: var(--bg-dark);
+  color: var(--text-dark);
 }
 
-/* Header */
 header {
-  background: var(--card);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 24px;
-  border-radius: 0 0 16px 16px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-}
-
-.menu-toggle {
-  font-size: 22px;
-  cursor: pointer;
-  color: var(--text);
+  padding: 12px 20px;
+  background-color: var(--card-dark);
+  border-radius: 0 0 20px 20px;
 }
 
 .logo {
-  font-size: 20px;
-  font-weight: bold;
-  text-align: center;
-  flex: 1;
+  font-size: 22px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
 
 .telegram-icon {
-  color: var(--secondary);
+  font-size: 22px;
+  color: #1DA1F2;
   background: #fff;
-  padding: 8px;
-  font-size: 20px;
+  padding: 6px;
   border-radius: 50%;
-  text-decoration: none;
-}
-
-/* Sidebar */
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: -250px;
-  width: 220px;
-  height: 100vh;
-  background: var(--card);
-  padding: 20px;
-  transition: left 0.3s ease;
-  z-index: 1000;
-}
-
-.sidebar ul {
-  list-style: none;
-}
-
-.sidebar ul li {
-  background: #2a2a2a;
-  padding: 12px;
-  margin: 8px 0;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.sidebar ul li:hover,
-.sidebar ul li.active {
-  background: var(--primary);
-  color: #fff;
-}
-
-body.menu-open .sidebar {
-  left: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 main {
-  padding: 40px 20px;
   display: flex;
   justify-content: center;
-  transition: 0.3s;
+  padding: 20px;
+  flex-wrap: wrap;
 }
 
-body.menu-open main {
-  margin-left: 220px;
-}
-
-/* Form */
 .form-wrapper {
-  background: var(--card);
-  padding: 30px;
-  border-radius: 16px;
   width: 100%;
-  max-width: 720px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  max-width: 600px;
+  background: var(--card-dark);
+  padding: 20px;
+  border-radius: 10px;
 }
 
-.form-wrapper h2 {
-  text-align: center;
-  color: var(--accent);
-  margin-bottom: 20px;
-}
-
-input, select, textarea {
+input, textarea {
   width: 100%;
-  background: var(--input);
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: 12px 16px;
+  padding: 12px;
+  margin: 10px 0;
   border-radius: 8px;
-  font-size: 16px;
-  margin-bottom: 15px;
-  transition: 0.3s;
-}
-
-input:focus, textarea:focus, select:focus {
-  border-color: var(--primary);
-  outline: none;
+  border: none;
+  background: var(--input-dark);
+  color: var(--text-dark);
+  box-sizing: border-box;
 }
 
 textarea {
-  resize: vertical;
   min-height: 80px;
 }
 
 button {
-  padding: 12px 24px;
+  padding: 12px 20px;
+  margin-top: 10px;
   border: none;
   border-radius: 8px;
   font-weight: bold;
-  font-size: 16px;
   cursor: pointer;
-  transition: 0.3s;
-  margin: 5px;
 }
 
 #generateBtn {
-  background-color: var(--primary);
+  background: var(--green);
   color: white;
 }
 
 #copyBtn {
-  background-color: var(--secondary);
+  background: var(--blue);
   color: white;
+  margin-left: 10px;
 }
 
 .output, .live-preview {
-  background: #181818;
-  border: 1px solid #444;
-  border-radius: 12px;
+  margin-top: 20px;
   padding: 20px;
-  margin-top: 25px;
-  color: #e0e0e0;
-  font-size: 15px;
+  background: #1c1c1c;
+  border-radius: 10px;
   overflow-x: auto;
+  white-space: pre-wrap;
 }
 
-/* Login Page */
-.login-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  padding: 40px 15px;
-}
-
-.login-container {
-  background: var(--card);
-  padding: 30px;
-  border-radius: 16px;
-  width: 100%;
-  max-width: 480px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.4);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.login-container h2 {
-  text-align: center;
-  color: var(--accent);
-}
-
-.login-container p {
-  text-align: center;
-  font-size: 15px;
-}
-
-.login-container .btn {
-  background: var(--primary);
-  padding: 12px 20px;
-  color: white;
+img {
+  max-width: 100%;
   border-radius: 8px;
-  text-align: center;
-  font-weight: bold;
-  text-decoration: none;
 }
 
-.login-container .btn.telegram {
-  background: var(--secondary);
+/* Thumbnail Responsive */
+#thumbs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+#thumbs img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 2px solid transparent;
 }
 
-#login-error {
-  color: var(--danger);
-  text-align: center;
-  font-size: 15px;
-}
-
-/* Footer */
-footer {
-  text-align: center;
-  padding: 20px;
-  font-size: 14px;
-  color: #aaa;
-  background: #111;
-  margin-top: 40px;
+#thumbs img.active {
+  border: 2px solid limegreen;
 }
 
 /* Responsive */
-@media (max-width: 768px) {
-  .menu-toggle {
-    display: block;
+@media screen and (max-width: 480px) {
+  .form-wrapper {
+    padding: 15px;
   }
 
-  .sidebar {
-    width: 100%;
-    left: -100%;
+  input, textarea {
+    font-size: 15px;
   }
 
-  body.menu-open .sidebar {
-    left: 0;
-  }
-
-  body.menu-open main {
-    margin-left: 0;
-  }
-
-  .form-wrapper,
-  .login-container {
-    padding: 20px;
-  }
-
-  button {
-    width: 100%;
-  }
-
-  #copyBtn {
-    margin-left: 0;
+  #thumbs img {
+    width: 48px;
+    height: 48px;
   }
 
   .telegram-icon {
-    font-size: 18px;
-    padding: 6px;
+    font-size: 20px;
+    padding: 4px;
   }
 
   .logo {
     font-size: 18px;
+  }
+
+  button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  #copyBtn {
+    margin-left: 0;
   }
 }

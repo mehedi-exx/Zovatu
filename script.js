@@ -29,6 +29,29 @@ function addImageInput() {
   container.appendChild(input);
 }
 
+// ✅ কাস্টম ফিল্ড যুক্ত করা
+function addCustomField() {
+  const container = document.getElementById("custom-fields");
+  const fieldGroup = document.createElement("div");
+  fieldGroup.className = "custom-field-group";
+  fieldGroup.style.marginBottom = "10px";
+
+  const keyInput = document.createElement("input");
+  keyInput.type = "text";
+  keyInput.placeholder = "শিরোনাম (যেমন: ওয়ারেন্টি)";
+  keyInput.className = "custom-key";
+  keyInput.style.marginRight = "5px";
+
+  const valueInput = document.createElement("input");
+  valueInput.type = "text";
+  valueInput.placeholder = "বিস্তারিত";
+  valueInput.className = "custom-value";
+
+  fieldGroup.appendChild(keyInput);
+  fieldGroup.appendChild(valueInput);
+  container.appendChild(fieldGroup);
+}
+
 // কোড জেনারেট করা
 document.getElementById("generateBtn").addEventListener("click", () => {
   const name = document.getElementById("name").value.trim();
@@ -79,6 +102,17 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   }
 
+  // ✅ কাস্টম ফিল্ড সংগ্রহ করা
+  const customFields = document.querySelectorAll(".custom-field-group");
+  let customHTML = "";
+  customFields.forEach(group => {
+    const key = group.querySelector(".custom-key").value.trim();
+    const value = group.querySelector(".custom-value").value.trim();
+    if (key && value) {
+      customHTML += `<p style="color:#ccc;">${key}: ${value}</p>`;
+    }
+  });
+
   // ফাইনাল কোড তৈরি
   const html = `
 <div class="product-box" style="background:#1f1f1f;padding:15px;border-radius:10px;margin-bottom:20px;">
@@ -91,6 +125,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   <p style="color:#ccc;">কোড: ${code} | স্ট্যাটাস: ${status || "N/A"} | ক্যাটাগরি: ${category || "N/A"}</p>
   <p style="color:#ccc;">ডেলিভারি টাইম: ${delivery || "N/A"}</p>
   <p style="color:#ccc;">ব্র্যান্ড: ${brand || "N/A"} | সাইজ: ${size || "N/A"} | রঙ: ${color || "N/A"}</p>
+  ${customHTML}
   <p style="color:#ddd;">${desc || ""}</p>
   <a href="https://wa.me/${wa}?text=আমি এই প্রোডাক্টটি অর্ডার করতে চাই: ${name} (${code})" 
      style="display:inline-block;margin-top:10px;padding:10px 15px;background:#25D366;color:#fff;border-radius:5px;text-decoration:none;">

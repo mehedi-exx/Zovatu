@@ -2,88 +2,53 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>G9Tool - প্রোডাক্ট জেনারেটর</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <script>
-    const user = localStorage.getItem("loggedInUser");
-    if (!user) {
-      window.location.href = "login.html";
-    }
-  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>G9Tool Login</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-
-<!-- Header -->
 <header>
-  <div class="menu-toggle">☰</div>
-  <div class="logo">📦 G9Tool</div>
-  <a href="https://t.me/G9tool" target="_blank" class="telegram-icon">
-    <i class="fab fa-telegram"></i>
-  </a>
+  <div class="logo"><i class="fas fa-lock"></i> G9Tool Premium</div>
+  <a href="https://t.me/G9tool" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
 </header>
-
-<!-- Sidebar -->
-<aside class="sidebar">
-  <ul>
-    <li class="active">🏠 Home</li>
-    <li>🛠️ Generate</li>
-    <li>ℹ️ About</li>
-    <li>📞 Contact</li>
-    <li onclick="logout()">🚪 Logout</li>
-  </ul>
-</aside>
-
-<!-- Main Content -->
 <main>
   <div class="form-wrapper">
-    <h2 style="text-align:center;">📝 প্রোডাক্ট জেনারেটর</h2>
-
-    <input type="text" id="name" placeholder="প্রোডাক্ট নাম *" required>
-    <input type="text" id="code" placeholder="প্রোডাক্ট কোড *" required>
-    <input type="number" id="price" placeholder="মূল্য (৳) *" required>
-    <input type="number" id="offer" placeholder="অফার মূল্য">
-    <input type="text" id="unit" placeholder="ইউনিট (যেমন: পিস)">
-    <input type="number" id="qty" placeholder="পরিমাণ">
-    <input type="text" id="brand" placeholder="ব্র্যান্ড">
-    <input type="text" id="color" placeholder="কালার">
-    <input type="text" id="size" placeholder="সাইজ">
-    <input type="text" id="taste" placeholder="টেস্ট">
-    <input type="text" id="category" placeholder="ক্যাটাগরি *" required>
-    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
-    <input type="text" id="status" placeholder="স্ট্যাটাস *" required>
-    <input type="text" id="tag" placeholder="কাস্টম ব্যাজ (যেমন: 🔥 নতুন)">
-    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea>
-
-    <div id="imageInputs">
-      <input type="url" class="img-url" placeholder="প্রধান ছবির লিংক *" required>
-    </div>
-    <button type="button" onclick="addImageInput()">➕ আরও ছবি যোগ করুন</button>
-
-    <input type="text" id="wa" placeholder="WhatsApp নম্বর * (8801XXXXXXXXX)" required>
-
-    <div style="text-align:center;">
-      <button id="generateBtn">✅ কোড জেনারেট করুন</button>
-      <button id="copyBtn">📋 কপি করুন</button>
-    </div>
-
-    <div class="output" id="output"></div>
-    <div class="live-preview" id="preview"></div>
+    <h2 style="text-align:center;margin-bottom:20px;">🔐 লগইন করুন</h2>
+    <input type="text" id="username" placeholder="ইউজারনেম">
+    <input type="password" id="password" placeholder="পাসওয়ার্ড">
+    <button onclick="login()" id="generateBtn">লগইন করুন</button>
+    <p style="text-align:center;margin-top:15px;">
+      👤 প্রিমিয়াম এক্সেস পেতে যোগাযোগ করুন:<br>
+      <a href="https://wa.me/8801XXXXXXXXXX" target="_blank">📲 WhatsApp</a> |
+      <a href="https://t.me/G9tool" target="_blank">📨 Telegram</a>
+    </p>
   </div>
 </main>
-
-<!-- Footer -->
-<footer>
-  <p>© G9Tool 2025 | All Rights Reserved</p>
-</footer>
-
-<script src="script.js"></script>
 <script>
-  function logout() {
-    localStorage.removeItem("loggedInUser");
-    window.location.href = "login.html";
+async function login() {
+  const user = document.getElementById("username").value.trim();
+  const pass = document.getElementById("password").value.trim();
+
+  if (!user || !pass) {
+    alert("⚠️ ইউজারনেম ও পাসওয়ার্ড দিন");
+    return;
   }
+
+  try {
+    const res = await fetch(`users/${user}.json`);
+    const data = await res.json();
+
+    if (data.password === pass) {
+      localStorage.setItem("g9tool_user", user);
+      window.location.href = "dashboard.html";
+    } else {
+      alert("❌ পাসওয়ার্ড ভুল!");
+    }
+  } catch {
+    alert("❌ ইউজার খুঁজে পাওয়া যায়নি!");
+  }
+}
 </script>
 </body>
 </html>

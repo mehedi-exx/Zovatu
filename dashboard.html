@@ -30,10 +30,22 @@
     <input type="number" id="price" placeholder="মূল্য প্রাইস (৳)" required>
     <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
     <input type="text" id="unit" placeholder="ইউনিট (যেমন: পিস, কেজি)">
+
+    <!-- নতুন ইনপুট ফিল্ড শুরু -->
+    <input id="brand" type="text" placeholder="🏷️ ব্র্যান্ড / কোম্পানি">
+    <input id="color" type="text" placeholder="🎨 রঙ (কমা দিয়ে লিখুন যেমনঃ লাল,নীল,সবুজ)">
+    <input id="size" type="text" placeholder="📏 সাইজ (কমা দিয়ে লিখুন যেমনঃ S,M,L,XL)">
+    <input id="video" type="url" placeholder="📹 ভিডিও লিংক (YouTube embed)">
+    <select id="stock">
+      <option value="In Stock">✅ স্টকে আছে</option>
+      <option value="Out of Stock">❌ স্টকে নেই</option>
+    </select>
+    <label style="display:flex;align-items:center;gap:6px;margin-top:10px;">
+      <input type="checkbox" id="autoSlide"> 🔁 অটো স্লাইড চালু করুন
+    </label>
+    <!-- নতুন ইনপুট ফিল্ড শেষ -->
+
     <input type="number" id="qty" placeholder="পরিমাণ (Qty)">
-    <input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি">
-    <input type="text" id="size" placeholder="সাইজ অপশন (যেমন: S, M, L)">
-    <input type="text" id="color" placeholder="রঙ অপশন (যেমন: লাল, সবুজ)">
     <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
     <input type="text" id="status" placeholder="স্ট্যাটাস">
     <input type="text" id="category" placeholder="ক্যাটাগরি">
@@ -44,8 +56,7 @@
     </div>
     <button onclick="addImageInput()"><i class="fas fa-plus"></i> আরও ছবি যোগ করুন</button>
 
-    <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)">
-    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)" required>
+    <input type="url" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)" required>
 
     <div style="text-align:center;">
       <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট</button>
@@ -59,17 +70,16 @@
 
 <!-- Sidebar -->
 <div id="sidebar" class="sidebar">
-  <button class="close-sidebar" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
-  <a href="dashboard.html"><i class="fas fa-home"></i> হোম</a>
-  <a href="menu/about.html"><i class="fas fa-info-circle"></i> এবাউট</a>
-  <a href="menu/contact.html"><i class="fas fa-phone"></i> কন্টাক্ট</a>
-  <a href="menu/privacy.html"><i class="fas fa-user-shield"></i> প্রাইভেসি</a>
-  <a href="menu/tutorial.html"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
-  <a href="index.html" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
+  <button class="close-btn" onclick="closeMenu()">✖</button>
+  <ul>
+    <li><a href="#home">🏠 হোম</a></li>
+    <li><a href="#about">ℹ️ সম্পর্কে</a></li>
+    <li><a href="#contact">📞 যোগাযোগ</a></li>
+    <li><a href="#privacy">🔒 প্রাইভেসি</a></li>
+    <li><a href="#tutorial">📘 টিউটোরিয়াল</a></li>
+  </ul>
 </div>
 
-<!-- ✅ External Script -->
 <script src="script.js"></script>
-
 </body>
 </html>

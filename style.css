@@ -172,6 +172,74 @@ footer {
   margin-top: 40px;
 }
 
+/* 🔐 Login Page Styling */
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg);
+  min-height: 100vh;
+  padding: 30px 15px;
+}
+
+.login-container {
+  background: var(--card);
+  padding: 30px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 0 12px rgba(0,0,0,0.4);
+}
+
+.login-container h2 {
+  text-align: center;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+.login-container p {
+  font-size: 15px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.login-container input[type="text"],
+.login-container input[type="password"] {
+  background: var(--input);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 16px;
+  width: 100%;
+}
+
+.login-container button {
+  background: var(--primary);
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.login-container .btn.telegram {
+  background: var(--secondary);
+}
+
+#login-error {
+  color: var(--error);
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* 📱 Responsive Styles */
 @media screen and (max-width: 768px) {
   .menu-toggle {
     display: block;
@@ -190,7 +258,7 @@ footer {
     left: 0;
   }
 
-  .form-wrapper {
+  .form-wrapper, .login-container {
     padding: 20px;
   }
 

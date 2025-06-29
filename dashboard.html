@@ -9,6 +9,7 @@
 </head>
 <body>
 
+<!-- Header -->
 <header class="header">
   <div class="left-icons">
     <button class="menu-btn" onclick="toggleMenu()">
@@ -23,11 +24,7 @@
   </a>
 </header>
 
-<!-- আপনার বাকি ফর্ম এবং মেনু -->
-<main>
-  <!-- Form Section Here -->
-</main>
-
+<!-- Sidebar Menu -->
 <div id="sidebar" class="sidebar">
   <button class="close-sidebar" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
   <a href="dashboard.html"><i class="fas fa-home"></i> হোম</a>
@@ -38,9 +35,54 @@
   <a href="index.html"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
 </div>
 
+<!-- Product Form Section -->
+<main>
+  <div class="form-wrapper">
+    <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required />
+    <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required />
+    <input type="number" id="price" placeholder="মূল্য প্রাইস (৳)" required />
+    <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)" />
+    <input type="text" id="unit" placeholder="ইউনিট (যেমন: পিস, কেজি)" />
+    <input type="number" id="qty" placeholder="পরিমাণ (Qty)" />
+    <input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি" />
+    <input type="text" id="size" placeholder="সাইজ অপশন (যেমন: S, M, L)" />
+    <input type="text" id="color" placeholder="রঙ অপশন (যেমন: লাল, সবুজ)" />
+    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম" />
+    <input type="text" id="status" placeholder="স্ট্যাটাস" />
+    <input type="text" id="category" placeholder="ক্যাটাগরি" />
+    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea>
+
+    <div id="imageInputs">
+      <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)" />
+    </div>
+    <button onclick="addImageInput()"><i class="fas fa-plus"></i> আরও ছবি যোগ করুন</button>
+
+    <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)" />
+    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)" required />
+
+    <div style="text-align:center;">
+      <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট</button>
+      <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
+    </div>
+
+    <div class="output" id="output"></div>
+    <div class="live-preview" id="preview"></div>
+  </div>
+</main>
+
+<!-- Script -->
 <script>
   function toggleMenu() {
     document.getElementById("sidebar").classList.toggle("active");
+  }
+
+  function addImageInput() {
+    const container = document.getElementById("imageInputs");
+    const input = document.createElement("input");
+    input.type = "url";
+    input.placeholder = "ছবির লিংক (Image URL)";
+    input.className = "img-url";
+    container.appendChild(input);
   }
 </script>
 

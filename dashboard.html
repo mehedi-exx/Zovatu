@@ -6,167 +6,12 @@
   <title>G9Tool Dashboard</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #121212;
-      color: #fff;
-    }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      padding: 10px 20px;
-      background: #1f1f1f;
-      border-radius: 0 0 20px 20px;
-    }
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .menu-toggle {
-      font-size: 22px;
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
-    }
-    .logo {
-      font-size: 20px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .telegram-icon {
-      font-size: 22px;
-      background: #fff;
-      color: #0088cc;
-      padding: 6px;
-      border-radius: 50%;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: -100%;
-      height: 100vh;
-      width: 80%;
-      max-width: 280px;
-      background: #1e1e1e;
-      z-index: 999;
-      padding: 60px 20px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      transition: left 0.3s ease-in-out;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.5);
-    }
-    .sidebar.active {
-      left: 0;
-    }
-    .sidebar a {
-      font-size: 18px;
-      padding: 12px;
-      color: white;
-      text-decoration: none;
-      background: #333;
-      border-radius: 8px;
-      text-align: left;
-    }
-    .sidebar a:hover {
-      background: #444;
-    }
-    .close-sidebar {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      font-size: 24px;
-      color: white;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-    .form-wrapper {
-      max-width: 700px;
-      margin: auto;
-      padding: 20px;
-    }
-    input, textarea {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: none;
-      background: #2a2a2a;
-      color: #fff;
-    }
-    button {
-      padding: 12px 20px;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    #generateBtn {
-      background: #28a745;
-      color: #fff;
-    }
-    #copyBtn {
-      background: #007bff;
-      color: #fff;
-      margin-left: 10px;
-    }
-    @media screen and (max-width: 480px) {
-      .form-wrapper {
-        padding: 15px;
-      }
-      input, textarea {
-        font-size: 15px;
-      }
-      .telegram-icon {
-        font-size: 20px;
-        padding: 4px;
-      }
-      .logo {
-        font-size: 18px;
-      }
-      button {
-        width: 100%;
-        margin-bottom: 10px;
-      }
-      #copyBtn {
-        margin-left: 0;
-      }
-    }
-  </style>
 </head>
 <body>
 <header>
-  <div class="header-left">
-    <button class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
-    <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
-  </div>
-  <div class="header-right">
-    <a href="https://t.me/G9tool" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
-  </div>
+  <button class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+  <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
+  <a href="https://t.me/G9tool" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
 </header>
 
 <div id="sidebar" class="sidebar">
@@ -214,19 +59,27 @@
 </main>
 
 <script>
-if (!localStorage.getItem("g9tool_user")) {
-  window.location.href = "index.html";
-}
-function logout() {
-  localStorage.removeItem("g9tool_user");
-}
 function toggleMenu() {
   document.getElementById("sidebar").classList.toggle("active");
 }
 function closeMenu() {
   document.getElementById("sidebar").classList.remove("active");
 }
+function logout() {
+  localStorage.removeItem("g9tool_user");
+}
+function addImageInput() {
+  const container = document.getElementById("imageInputs");
+  const input = document.createElement("input");
+  input.type = "url";
+  input.placeholder = "ছবির লিংক (Image URL)";
+  input.classList.add("img-url");
+  container.appendChild(input);
+}
+if (!localStorage.getItem("g9tool_user")) {
+  window.location.href = "index.html";
+}
 </script>
-<script src="script.js"></script>
+<script src="script.js" defer></script>
 </body>
 </html>

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>G9Tool Dashboard</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     header {
       display: flex;
@@ -13,18 +13,24 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 12px;
+      padding: 10px 20px;
+      background: #1f1f1f;
+      border-radius: 0 0 20px 20px;
     }
+
     .header-left {
       display: flex;
       align-items: center;
       gap: 12px;
     }
+
     .header-right {
       display: flex;
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
     }
+
     .menu-toggle {
       font-size: 22px;
       background: none;
@@ -32,6 +38,26 @@
       color: white;
       cursor: pointer;
     }
+
+    .logo {
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .telegram-icon {
+      font-size: 22px;
+      background: #fff;
+      color: #0088cc;
+      padding: 6px;
+      border-radius: 50%;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     .sidebar {
       position: fixed;
       top: 0;
@@ -46,9 +72,11 @@
       gap: 20px;
       animation: fadeIn 0.3s ease-in-out;
     }
+
     .sidebar.active {
       display: flex;
     }
+
     .sidebar a {
       font-size: 18px;
       padding: 12px;
@@ -58,9 +86,11 @@
       border-radius: 8px;
       text-align: center;
     }
+
     .sidebar a:hover {
       background: #444;
     }
+
     .close-sidebar {
       position: absolute;
       top: 15px;
@@ -71,6 +101,7 @@
       border: none;
       cursor: pointer;
     }
+
     @keyframes fadeIn {
       from {opacity: 0;}
       to {opacity: 1;}
@@ -78,6 +109,7 @@
   </style>
 </head>
 <body>
+
 <header>
   <div class="header-left">
     <button class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
@@ -90,12 +122,12 @@
 
 <div id="sidebar" class="sidebar">
   <button class="close-sidebar" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
-  <a href="#home"><i class="fas fa-home"></i> হোম</a>
-  <a href="#about"><i class="fas fa-info-circle"></i> এবাউট</a>
-  <a href="#contact"><i class="fas fa-phone"></i> কন্টাক্ট</a>
-  <a href="#privacy"><i class="fas fa-user-shield"></i> প্রাইভেসি পলিসি</a>
-  <a href="#tutorial"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
-  <a href="#logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
+  <a href="javascript:void(0)" onclick="closeMenu()"><i class="fas fa-home"></i> হোম</a>
+  <a href="menu/about.html"><i class="fas fa-info-circle"></i> এবাউট</a>
+  <a href="menu/contact.html"><i class="fas fa-phone"></i> কন্টাক্ট</a>
+  <a href="menu/privacy.html"><i class="fas fa-user-shield"></i> প্রাইভেসি</a>
+  <a href="menu/tutorial.html"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
+  <a href="index.html" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
 </div>
 
 <main>
@@ -106,24 +138,24 @@
     <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
     <input type="text" id="unit" placeholder="ইউনিট (যেমন: পিস, কেজি)">
     <input type="number" id="qty" placeholder="পরিমাণ (Qty)">
-    <input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি (ঐচ্ছিক)">
+    <input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি">
     <input type="text" id="size" placeholder="সাইজ অপশন (যেমন: S, M, L)">
     <input type="text" id="color" placeholder="রঙ অপশন (যেমন: লাল, সবুজ)">
     <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
     <input type="text" id="status" placeholder="স্ট্যাটাস">
     <input type="text" id="category" placeholder="ক্যাটাগরি">
-    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা (ঐচ্ছিক)"></textarea>
+    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea>
 
     <div id="imageInputs">
       <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
     </div>
     <button onclick="addImageInput()"><i class="fas fa-plus"></i> আরও ছবি যোগ করুন</button>
 
-    <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube / অন্য)">
+    <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)">
     <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
 
     <div style="text-align:center;">
-      <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট করুন</button>
+      <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট</button>
       <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
     </div>
 
@@ -138,10 +170,12 @@ if (!localStorage.getItem("g9tool_user")) {
 }
 function logout() {
   localStorage.removeItem("g9tool_user");
-  window.location.href = "index.html";
 }
 function toggleMenu() {
   document.getElementById("sidebar").classList.toggle("active");
+}
+function closeMenu() {
+  document.getElementById("sidebar").classList.remove("active");
 }
 </script>
 <script src="script.js"></script>

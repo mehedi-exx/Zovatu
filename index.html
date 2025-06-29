@@ -6,28 +6,107 @@
   <title>G9Tool Login</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #121212;
+      color: white;
+      font-family: sans-serif;
+      animation: fadeIn 0.6s ease-in;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding: 12px 20px;
+      background-color: #1f1f1f;
+      border-radius: 0 0 20px 20px;
+    }
+
+    .logo {
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .telegram-icon {
+      font-size: 22px;
+      background: #fff;
+      color: #0088cc;
+      padding: 6px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+    }
+
+    .form-wrapper {
+      width: 100%;
+      max-width: 400px;
+      padding: 30px;
+      background: #1c1c1c;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      margin-top: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: none;
+      background: #2a2a2a;
+      color: white;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      background: #28a745;
+      color: white;
+      font-weight: bold;
+      border-radius: 6px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    a {
+      color: #1da1f2;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(10px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+  </style>
 </head>
 <body>
 <header>
   <div class="logo"><i class="fas fa-lock"></i> G9Tool Premium</div>
-  <div class="header-right">
-    <a href="https://t.me/G9tool" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
-  </div>
+  <a href="https://t.me/G9tool" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
 </header>
 
 <main>
   <div class="form-wrapper">
-    <h2 style="text-align:center;margin-bottom:20px;">🔐 লগইন করুন</h2>
-
+    <h2 style="text-align:center;"><i class="fas fa-user-shield"></i> লগইন করুন</h2>
     <input type="text" id="username" placeholder="ইউজারনেম">
     <input type="password" id="password" placeholder="পাসওয়ার্ড">
-
-    <button onclick="login()" id="generateBtn">লগইন করুন</button>
+    <button onclick="login()"><i class="fas fa-sign-in-alt"></i> লগইন</button>
 
     <p style="text-align:center;margin-top:15px;">
-      👤 প্রিমিয়াম এক্সেস পেতে যোগাযোগ করুন:<br>
-      <a href="https://wa.me/8801XXXXXXXXXX" target="_blank">📲 WhatsApp</a> |
-      <a href="https://t.me/G9tool" target="_blank">📨 Telegram</a>
+      প্রিমিয়াম এক্সেস পেতে যোগাযোগ করুন:<br>
+      <a href="https://wa.me/8801XXXXXXXXXX" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a> |
+      <a href="https://t.me/G9tool" target="_blank"><i class="fab fa-telegram"></i> Telegram</a>
     </p>
   </div>
 </main>

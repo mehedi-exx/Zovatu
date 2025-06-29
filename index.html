@@ -16,7 +16,6 @@
       background: #121212;
       color: white;
       font-family: sans-serif;
-      animation: fadeIn 0.6s ease-in;
     }
 
     header {
@@ -82,11 +81,23 @@
 
     a {
       color: #1da1f2;
+      text-decoration: none;
     }
 
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(10px);}
-      to {opacity: 1; transform: translateY(0);}
+    @media (max-width: 480px) {
+      .form-wrapper {
+        padding: 20px;
+        margin: 10px;
+      }
+
+      .telegram-icon {
+        font-size: 20px;
+        padding: 5px;
+      }
+
+      .logo {
+        font-size: 18px;
+      }
     }
   </style>
 </head>

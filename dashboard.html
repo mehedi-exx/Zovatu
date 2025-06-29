@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="bn">
+<!DOCTYPE html>
+<html lang="bn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,21 +8,29 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
+
+<!-- 🔷 Header Section -->
 <header>
-  <div class="header-content">
+  <div class="header-flex">
     <button class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
     <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
     <a href="https://t.me/G9tool" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
   </div>
-</header><div id="sidebar" class="sidebar">
+</header>
+
+<!-- 🔷 Sidebar Menu -->
+<div id="sidebar" class="sidebar">
   <button class="close-sidebar" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
-  <a href="javascript:void(0)" onclick="closeMenu()"><i class="fas fa-home"></i> হোম</a>
+  <a href="dashboard.html"><i class="fas fa-home"></i> হোম</a>
   <a href="menu/about.html"><i class="fas fa-info-circle"></i> এবাউট</a>
   <a href="menu/contact.html"><i class="fas fa-phone"></i> কন্টাক্ট</a>
   <a href="menu/privacy.html"><i class="fas fa-user-shield"></i> প্রাইভেসি</a>
   <a href="menu/tutorial.html"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
   <a href="index.html" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
-</div><main>
+</div>
+
+<!-- 🔷 Main Form Section -->
+<main>
   <div class="form-wrapper">
     <input type="text" id="name" placeholder="প্রোডাক্ট নাম">
     <input type="text" id="code" placeholder="প্রোডাক্ট কোড">
@@ -35,43 +44,56 @@
     <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
     <input type="text" id="status" placeholder="স্ট্যাটাস">
     <input type="text" id="category" placeholder="ক্যাটাগরি">
-    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea><div id="imageInputs">
-  <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
-</div>
-<button onclick="addImageInput()"><i class="fas fa-plus"></i> আরও ছবি যোগ করুন</button>
+    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea>
 
-<input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)">
-<input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
+    <!-- 🔷 Image URL Inputs -->
+    <div id="imageInputs">
+      <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
+    </div>
+    <button onclick="addImageInput()"><i class="fas fa-plus"></i> আরও ছবি যোগ করুন</button>
 
-<div style="text-align:center;">
-  <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট</button>
-  <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
-</div>
+    <!-- 🔷 Video & WhatsApp -->
+    <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)">
+    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
 
-<div class="output" id="output"></div>
-<div class="live-preview" id="preview"></div>
+    <!-- 🔷 Generate / Copy Buttons -->
+    <div style="text-align:center;">
+      <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট</button>
+      <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
+    </div>
 
+    <!-- 🔷 Output & Preview -->
+    <div class="output" id="output"></div>
+    <div class="live-preview" id="preview"></div>
   </div>
-</main><script>
+</main>
+
+<!-- 🔷 JS Functions -->
+<script>
 function toggleMenu() {
   document.getElementById("sidebar").classList.toggle("active");
-}
-function closeMenu() {
-  document.getElementById("sidebar").classList.remove("active");
 }
 function logout() {
   localStorage.removeItem("g9tool_user");
 }
 function addImageInput() {
   const container = document.getElementById("imageInputs");
-  const input = document.createElement("input");
-  input.type = "url";
-  input.placeholder = "ছবির লিংক (Image URL)";
-  input.classList.add("img-url");
-  container.appendChild(input);
+  if (container.children.length < 5) {
+    const input = document.createElement("input");
+    input.type = "url";
+    input.className = "img-url";
+    input.placeholder = "ছবির লিংক (Image URL)";
+    container.appendChild(input);
+  } else {
+    alert("সর্বোচ্চ ৫টি ছবি যোগ করা যাবে।");
+  }
 }
 if (!localStorage.getItem("g9tool_user")) {
   window.location.href = "index.html";
 }
-</script><script src="script.js" defer></script></body>
+</script>
+
+<!-- 🔷 External Script -->
+<script src="script.js" defer></script>
+</body>
 </html>

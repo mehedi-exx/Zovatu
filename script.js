@@ -1,4 +1,4 @@
-// G9Tool Product Generator Script
+// G9Tool - Product Generator Script
 
 let imgCount = 1;
 
@@ -7,13 +7,13 @@ function addImageInput() {
     const newInput = document.createElement("input");
     newInput.type = "url";
     newInput.className = "img-url";
-    newInput.placeholder = `ছবির লিংক (Image URL) ${imgCount + 1}`;
+    newInput.placeholder = `ছবির লিংক ${imgCount + 1}`;
     document.getElementById("imageInputs").appendChild(newInput);
     imgCount++;
   }
 }
 
-document.getElementById("generateBtn").addEventListener("click", function () {
+document.getElementById("generateBtn").addEventListener("click", () => {
   const name = document.getElementById("name").value.trim();
   const code = document.getElementById("code").value.trim();
   const price = parseFloat(document.getElementById("price").value);
@@ -30,7 +30,9 @@ document.getElementById("generateBtn").addEventListener("click", function () {
   const desc = document.getElementById("desc").value.trim();
   const wa = document.getElementById("wa").value.trim();
   const tag = document.getElementById("tag").value.trim();
-  const images = Array.from(document.querySelectorAll(".img-url")).map(i => i.value.trim()).filter(Boolean);
+  const images = Array.from(document.querySelectorAll(".img-url"))
+    .map(i => i.value.trim())
+    .filter(Boolean);
 
   if (!name || !code || !price || !status || !category || !images.length || !wa) {
     alert("⚠️ প্রয়োজনীয় সব ইনপুট দিন (* চিহ্নিত)।");
@@ -89,15 +91,16 @@ document.getElementById("generateBtn").addEventListener("click", function () {
 </ul>
 ${desc ? `<p>${desc}</p>` : ""}
 <p style="display:none;">
-  <a href="#"> {getProduct} $price={৳${offer || price}}${!isNaN(offer) && offer < price ? ` $sale={৳${price}}` : ""} </a>
+  <a href="#">
+    {getProduct} $price={৳${offer || price}}${!isNaN(offer) && offer < price ? ` $sale={৳${price}}` : ""}
+  </a>
 </p>
 <script>
-  function changeImage(el) {
-    document.getElementById('mainImg').src = el.src;
-    let all = document.querySelectorAll('#thumbs img');
-    all.forEach(img => img.style.border = "2px solid transparent");
-    el.style.border = "2px solid green";
-  }
+function changeImage(el) {
+  document.getElementById('mainImg').src = el.src;
+  document.querySelectorAll('#thumbs img').forEach(i => i.style.border = '2px solid transparent');
+  el.style.border = '2px solid green';
+}
 <\/script>
 `;
 
@@ -105,7 +108,7 @@ ${desc ? `<p>${desc}</p>` : ""}
   document.getElementById("preview").innerHTML = html;
 });
 
-document.getElementById("copyBtn").addEventListener("click", function () {
+document.getElementById("copyBtn").addEventListener("click", () => {
   const code = document.getElementById("output").textContent;
   navigator.clipboard.writeText(code).then(() => {
     alert("✅ কোড কপি হয়েছে!");

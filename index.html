@@ -1,8 +1,9 @@
-<!DOCTYPE html><html lang="bn">
+<!DOCTYPE html>
+<html lang="bn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>G9Tool - Premium Product Generator</title>
+  <title>G9Tool - প্রোডাক্ট জেনারেটর</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <script>
@@ -12,58 +13,77 @@
     }
   </script>
 </head>
-<body><header class="header-flex">
-  <nav class="menu-toggle" onclick="document.body.classList.toggle('menu-open')">☰</nav>
-  <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
-  <a href="https://t.me/G9tool" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
-</header><aside class="sidebar">
+<body>
+
+<!-- Header -->
+<header>
+  <div class="menu-toggle">☰</div>
+  <div class="logo">📦 G9Tool</div>
+  <a href="https://t.me/G9tool" target="_blank" class="telegram-icon">
+    <i class="fab fa-telegram"></i>
+  </a>
+</header>
+
+<!-- Sidebar -->
+<aside class="sidebar">
   <ul>
-    <li class="active">Home</li>
-    <li>Generate</li>
-    <li>About</li>
-    <li>Contact</li>
-    <li onclick="logout()">Logout</li>
+    <li class="active">🏠 Home</li>
+    <li>🛠️ Generate</li>
+    <li>ℹ️ About</li>
+    <li>📞 Contact</li>
+    <li onclick="logout()">🚪 Logout</li>
   </ul>
-</aside><main>
+</aside>
+
+<!-- Main Content -->
+<main>
   <div class="form-wrapper">
-    <h2 style="text-align:center;">📝 প্রোডাক্ট জেনারেটর</h2><input type="text" id="name" placeholder="প্রোডাক্ট নাম *" required>
-<input type="text" id="code" placeholder="প্রোডাক্ট কোড *" required>
-<input type="number" id="price" placeholder="মূল্য প্রাইস (৳) *" required>
-<input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
-<input type="text" id="unit" placeholder="ইউনিট (যেমন: পিস)">
-<input type="number" id="qty" placeholder="পরিমাণ (Qty)">
-<input type="text" id="brand" placeholder="ব্র্যান্ড (ঐচ্ছিক)">
-<input type="text" id="color" placeholder="কালার লিখুন (ঐচ্ছিক)">
-<input type="text" id="size" placeholder="সাইজ লিখুন (ঐচ্ছিক)">
-<input type="text" id="taste" placeholder="টেস্ট লিখুন (ঐচ্ছিক)">
-<input type="text" id="category" placeholder="ক্যাটাগরি *" required>
-<input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)">
-<input type="text" id="status" placeholder="স্ট্যাটাস *" required>
-<input type="text" id="tag" placeholder="কাস্টম ব্যাজ (যেমন: 🔥নতুন)">
-<textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা (ঐচ্ছিক)"></textarea>
+    <h2 style="text-align:center;">📝 প্রোডাক্ট জেনারেটর</h2>
 
-<div id="imageInputs">
-  <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL) *" required>
-</div>
-<button type="button" onclick="addImageInput()">➕ আরও ছবি যোগ করুন</button>
+    <input type="text" id="name" placeholder="প্রোডাক্ট নাম *" required>
+    <input type="text" id="code" placeholder="প্রোডাক্ট কোড *" required>
+    <input type="number" id="price" placeholder="মূল্য (৳) *" required>
+    <input type="number" id="offer" placeholder="অফার মূল্য">
+    <input type="text" id="unit" placeholder="ইউনিট (যেমন: পিস)">
+    <input type="number" id="qty" placeholder="পরিমাণ">
+    <input type="text" id="brand" placeholder="ব্র্যান্ড">
+    <input type="text" id="color" placeholder="কালার">
+    <input type="text" id="size" placeholder="সাইজ">
+    <input type="text" id="taste" placeholder="টেস্ট">
+    <input type="text" id="category" placeholder="ক্যাটাগরি *" required>
+    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
+    <input type="text" id="status" placeholder="স্ট্যাটাস *" required>
+    <input type="text" id="tag" placeholder="কাস্টম ব্যাজ (যেমন: 🔥 নতুন)">
+    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea>
 
-<input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX) *" required>
+    <div id="imageInputs">
+      <input type="url" class="img-url" placeholder="প্রধান ছবির লিংক *" required>
+    </div>
+    <button type="button" onclick="addImageInput()">➕ আরও ছবি যোগ করুন</button>
 
-<div style="text-align:center;">
-  <button id="generateBtn" type="button">✅ কোড জেনারেট করুন</button>
-  <button id="copyBtn" type="button">📋 কপি করুন</button>
-</div>
+    <input type="text" id="wa" placeholder="WhatsApp নম্বর * (8801XXXXXXXXX)" required>
 
-<div class="output" id="output"></div>
-<div class="live-preview" id="preview"></div>
+    <div style="text-align:center;">
+      <button id="generateBtn">✅ কোড জেনারেট করুন</button>
+      <button id="copyBtn">📋 কপি করুন</button>
+    </div>
 
+    <div class="output" id="output"></div>
+    <div class="live-preview" id="preview"></div>
   </div>
-</main><footer>
+</main>
+
+<!-- Footer -->
+<footer>
   <p>© G9Tool 2025 | All Rights Reserved</p>
-</footer><script src="script.js"></script><script>
+</footer>
+
+<script src="script.js"></script>
+<script>
   function logout() {
     localStorage.removeItem("loggedInUser");
     window.location.href = "login.html";
   }
-</script></body>
+</script>
+</body>
 </html>

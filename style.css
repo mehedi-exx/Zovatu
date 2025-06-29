@@ -1,5 +1,3 @@
-/* G9Tool Premium CSS */
-
 :root {
   --bg: #121212;
   --card: #1e1e1e;
@@ -23,48 +21,50 @@ body {
   background-color: var(--bg);
   color: var(--text);
   font-family: var(--font);
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
+/* Header */
 header {
-  background: var(--card);
-  padding: 15px 25px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: var(--card);
+  padding: 14px 20px;
   border-radius: 0 0 20px 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
 
 .logo {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.telegram-icon {
-  background: #fff;
-  color: var(--secondary);
-  padding: 8px;
-  border-radius: 50%;
-  font-size: 22px;
-  text-decoration: none;
+  text-align: center;
+  flex: 1;
 }
 
 .menu-toggle {
-  display: none;
-  font-size: 24px;
+  font-size: 22px;
   cursor: pointer;
+  color: var(--text);
+  margin-right: 15px;
 }
 
+.telegram-icon {
+  color: var(--secondary);
+  background: #fff;
+  padding: 8px;
+  border-radius: 50%;
+  font-size: 20px;
+  text-decoration: none;
+}
+
+/* Sidebar */
 .sidebar {
   position: fixed;
   top: 0;
-  left: -260px;
-  width: 240px;
-  height: 100vh;
+  left: -250px;
+  width: 220px;
+  height: 100%;
   background: var(--card);
   padding: 20px;
   transition: 0.3s;
@@ -76,13 +76,12 @@ header {
 }
 
 .sidebar ul li {
-  padding: 12px 10px;
-  margin: 8px 0;
+  padding: 12px;
+  margin-bottom: 10px;
   border-radius: 6px;
   cursor: pointer;
   background: #2a2a2a;
-  color: var(--text);
-  transition: 0.2s;
+  transition: 0.3s;
 }
 
 .sidebar ul li:hover,
@@ -100,29 +99,30 @@ main {
   justify-content: center;
   padding: 30px 15px;
   margin-left: 0;
-  transition: 0.3s;
+  transition: margin-left 0.3s;
 }
 
 body.menu-open main {
-  margin-left: 240px;
+  margin-left: 220px;
 }
 
+/* Form */
 .form-wrapper {
   background: var(--card);
-  border-radius: 16px;
   padding: 30px;
+  border-radius: 16px;
   width: 100%;
   max-width: 720px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+  box-shadow: 0 0 8px rgba(0,0,0,0.4);
 }
 
 input, select, textarea {
   background: var(--input);
   border: 1px solid var(--border);
   color: var(--text);
-  border-radius: 8px;
   padding: 12px 14px;
-  margin-bottom: 14px;
+  margin-bottom: 15px;
+  border-radius: 8px;
   width: 100%;
   font-size: 16px;
 }
@@ -133,25 +133,27 @@ textarea {
 }
 
 button {
-  padding: 12px 20px;
+  background: var(--primary);
+  color: white;
+  padding: 12px;
   border: none;
   border-radius: 8px;
-  font-size: 16px;
   font-weight: bold;
-  margin: 10px 5px 0 0;
+  font-size: 16px;
   cursor: pointer;
+  margin-top: 10px;
 }
 
-#generateBtn {
-  background: var(--primary);
-  color: #fff;
+button:hover {
+  opacity: 0.9;
 }
 
 #copyBtn {
   background: var(--secondary);
-  color: #fff;
+  margin-left: 10px;
 }
 
+/* Preview / Output */
 .output, .live-preview {
   background: #181818;
   border: 1px solid #444;
@@ -163,70 +165,48 @@ button {
   overflow-x: auto;
 }
 
-footer {
-  text-align: center;
-  color: #aaa;
-  padding: 20px 10px;
-  font-size: 14px;
-  background: #111;
-  margin-top: 40px;
-}
-
-/* 🔐 Login Page Styling */
+/* Login Page */
 .login-page {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  background: var(--bg);
+  padding: 40px 15px;
   min-height: 100vh;
-  padding: 30px 15px;
 }
 
 .login-container {
   background: var(--card);
   padding: 30px;
   border-radius: 16px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.4);
   display: flex;
   flex-direction: column;
   gap: 20px;
-  max-width: 500px;
-  width: 100%;
-  box-shadow: 0 0 12px rgba(0,0,0,0.4);
 }
 
 .login-container h2 {
   text-align: center;
   color: var(--accent);
-  margin-bottom: 10px;
 }
 
 .login-container p {
+  text-align: center;
   font-size: 15px;
   line-height: 1.6;
-  text-align: center;
 }
 
-.login-container input[type="text"],
-.login-container input[type="password"] {
-  background: var(--input);
-  border: 1px solid var(--border);
-  color: var(--text);
-  border-radius: 8px;
-  padding: 12px;
-  font-size: 16px;
-  width: 100%;
-}
-
-.login-container button {
+.login-container .btn {
+  display: inline-block;
   background: var(--primary);
-  color: white;
-  padding: 12px;
-  border: none;
+  padding: 10px 20px;
+  color: #fff;
+  text-align: center;
   border-radius: 8px;
-  font-size: 16px;
   font-weight: bold;
-  cursor: pointer;
-  margin-top: 10px;
+  text-decoration: none;
+  margin: auto;
 }
 
 .login-container .btn.telegram {
@@ -236,17 +216,23 @@ footer {
 #login-error {
   color: var(--error);
   text-align: center;
-  margin-top: 10px;
+  font-weight: bold;
 }
 
-/* 📱 Responsive Styles */
-@media screen and (max-width: 768px) {
+/* Footer */
+footer {
+  background: #111;
+  text-align: center;
+  padding: 15px;
+  color: #aaa;
+  font-size: 14px;
+  margin-top: 40px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
   .menu-toggle {
     display: block;
-  }
-
-  body.menu-open main {
-    margin-left: 0;
   }
 
   .sidebar {
@@ -258,17 +244,16 @@ footer {
     left: 0;
   }
 
+  body.menu-open main {
+    margin-left: 0;
+  }
+
   .form-wrapper, .login-container {
     padding: 20px;
   }
 
   input, textarea, select {
     font-size: 15px;
-  }
-
-  .telegram-icon {
-    font-size: 20px;
-    padding: 6px;
   }
 
   button {
@@ -278,5 +263,14 @@ footer {
 
   #copyBtn {
     margin-left: 0;
+  }
+
+  .telegram-icon {
+    font-size: 18px;
+    padding: 6px;
+  }
+
+  .logo {
+    font-size: 18px;
   }
 }

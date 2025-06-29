@@ -2,10 +2,10 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>G9Tool Login</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     body {
       display: flex;
@@ -15,88 +15,94 @@
       min-height: 100vh;
       background: #121212;
       color: white;
-      font-family: sans-serif;
+      font-family: 'Segoe UI', sans-serif;
     }
 
     header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       width: 100%;
       padding: 12px 20px;
       background-color: #1f1f1f;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
       border-radius: 0 0 20px 20px;
+    }
+
+    .telegram-icon {
+      position: absolute;
+      right: 20px;
+      font-size: 22px;
+      background: #fff;
+      color: #0088cc;
+      padding: 6px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
     }
 
     .logo {
       font-size: 20px;
       display: flex;
       align-items: center;
-      gap: 10px;
-    }
-
-    .telegram-icon {
-      font-size: 22px;
-      background: #fff;
-      color: #0088cc;
-      padding: 6px;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
+      gap: 8px;
     }
 
     .form-wrapper {
       width: 100%;
       max-width: 400px;
+      background: #1f1f1f;
       padding: 30px;
-      background: #1c1c1c;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      margin-top: 20px;
+      border-radius: 12px;
+      margin-top: 30px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
     }
 
     input {
       width: 100%;
-      padding: 12px;
+      padding: 14px;
       margin: 10px 0;
       border-radius: 6px;
       border: none;
       background: #2a2a2a;
       color: white;
+      font-size: 16px;
     }
 
     button {
       width: 100%;
       padding: 12px;
+      margin-top: 15px;
       border: none;
+      border-radius: 6px;
       background: #28a745;
       color: white;
       font-weight: bold;
-      border-radius: 6px;
-      margin-top: 10px;
+      font-size: 16px;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
 
     a {
-      color: #1da1f2;
+      color: #00aaff;
       text-decoration: none;
     }
 
-    @media (max-width: 480px) {
+    .info {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    @media screen and (max-width: 480px) {
       .form-wrapper {
         padding: 20px;
-        margin: 10px;
-      }
-
-      .telegram-icon {
-        font-size: 20px;
-        padding: 5px;
-      }
-
-      .logo {
-        font-size: 18px;
+        margin: 15px;
       }
     }
   </style>
@@ -113,12 +119,11 @@
     <input type="text" id="username" placeholder="ইউজারনেম">
     <input type="password" id="password" placeholder="পাসওয়ার্ড">
     <button onclick="login()"><i class="fas fa-sign-in-alt"></i> লগইন</button>
-
-    <p style="text-align:center;margin-top:15px;">
-      প্রিমিয়াম এক্সেস পেতে যোগাযোগ করুন:<br>
+    <div class="info">
+      প্রিমিয়াম এক্সেস নিতে যোগাযোগ করুন:<br>
       <a href="https://wa.me/8801XXXXXXXXXX" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a> |
       <a href="https://t.me/G9tool" target="_blank"><i class="fab fa-telegram"></i> Telegram</a>
-    </p>
+    </div>
   </div>
 </main>
 
@@ -128,19 +133,20 @@ async function login() {
   const pass = document.getElementById("password").value.trim();
 
   if (!user || !pass) {
-    alert("⚠️ ইউজারনেম ও পাসওয়ার্ড দিন");
+    alert("⚠️ ইউজারনেম ও পাসওয়ার্ড দিন!");
     return;
   }
 
   try {
     const res = await fetch(`users/${user}.json`);
+    if (!res.ok) throw new Error('User not found');
     const data = await res.json();
 
     if (data.password === pass) {
       localStorage.setItem("g9tool_user", user);
       window.location.href = "dashboard.html";
     } else {
-      alert("❌ পাসওয়ার্ড ভুল!");
+      alert("❌ ভুল পাসওয়ার্ড!");
     }
   } catch {
     alert("❌ ইউজার খুঁজে পাওয়া যায়নি!");

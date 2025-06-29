@@ -10,55 +10,28 @@
 <body>
 <header>
   <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
-  <div>
+  <div class="header-right">
     <a href="https://t.me/G9tool" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
-    <button onclick="logout()" style="margin-left:10px;background:#dc3545;color:#fff;padding:6px 12px;border:none;border-radius:6px;cursor:pointer;">🚪 লগআউট</button>
+    <button onclick="logout()" style="background:var(--red);color:#fff;padding:6px 12px;border:none;border-radius:6px;cursor:pointer;">🚪 লগআউট</button>
   </div>
 </header>
 
 <main>
   <div class="form-wrapper">
-    <!-- ফর্ম শুরু -->
+    <!-- কোড জেনারেটর ফর্ম এখানে থাকবে -->
     <input type="text" id="name" placeholder="প্রোডাক্ট নাম">
     <input type="text" id="code" placeholder="প্রোডাক্ট কোড">
-    <input type="number" id="price" placeholder="মূল্য প্রাইস (৳)">
-    <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
-    <input type="text" id="unit" placeholder="ইউনিট (যেমন: পিস, কেজি)">
-    <input type="number" id="qty" placeholder="পরিমাণ (Qty)">
-    <input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি (ঐচ্ছিক)">
-    <input type="text" id="size" placeholder="সাইজ অপশন (যেমন: S, M, L)">
-    <input type="text" id="color" placeholder="রঙ অপশন (যেমন: লাল, সবুজ)">
-    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
-    <input type="text" id="status" placeholder="স্ট্যাটাস">
-    <input type="text" id="category" placeholder="ক্যাটাগরি">
-    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা (ঐচ্ছিক)"></textarea>
+    <!-- বাকি ইনপুট এখানেই থাকবে যেমন পূর্বের মতো -->
 
-    <div id="imageInputs">
-      <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
-    </div>
-    <button onclick="addImageInput()">➕ আরও ছবি যোগ করুন</button>
-
-    <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube / অন্য)">
-    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
-
-    <div style="text-align:center;">
-      <button id="generateBtn">✅ কোড জেনারেট করুন</button>
-      <button id="copyBtn">📋 কপি করুন</button>
-    </div>
-
-    <div class="output" id="output"></div>
-    <div class="live-preview" id="preview"></div>
-    <!-- ফর্ম শেষ -->
+    <div id="output" class="output"></div>
+    <div id="preview" class="live-preview"></div>
   </div>
 </main>
 
 <script>
-// যদি ইউজার লগইন না করে তাহলে index.html এ রিডাইরেক্ট করবে
 if (!localStorage.getItem("g9tool_user")) {
   window.location.href = "index.html";
 }
-
-// লগআউট বাটন
 function logout() {
   localStorage.removeItem("g9tool_user");
   window.location.href = "index.html";

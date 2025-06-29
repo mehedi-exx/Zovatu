@@ -2,10 +2,10 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>G9Tool - Premium Product Generator</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <script>
     const user = localStorage.getItem("loggedInUser");
     if (!user) {
@@ -15,10 +15,23 @@
 </head>
 <body>
 
+<!-- Header with Menu -->
 <header>
   <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
+  <nav class="menu-toggle" onclick="document.body.classList.toggle('menu-open')">☰</nav>
   <a href="https://t.me/G9tool" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
 </header>
+
+<!-- Sidebar Menu -->
+<aside class="sidebar">
+  <ul>
+    <li class="active">Home</li>
+    <li>Generate</li>
+    <li>About</li>
+    <li>Contact</li>
+    <li onclick="logout()">Logout</li>
+  </ul>
+</aside>
 
 <main>
   <div class="form-wrapper">
@@ -40,13 +53,11 @@
     <input type="text" id="tag" placeholder="কাস্টম ব্যাজ (যেমন: 🔥নতুন)">
     <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা (ঐচ্ছিক)"></textarea>
 
-    <!-- Image Inputs -->
     <div id="imageInputs">
       <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL) *" required>
     </div>
     <button type="button" onclick="addImageInput()">➕ আরও ছবি যোগ করুন</button>
 
-    <input type="url" id="video" placeholder="ভিডিও লিংক (যদি থাকে)">
     <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX) *" required>
 
     <div style="text-align:center;">
@@ -59,6 +70,16 @@
   </div>
 </main>
 
+<footer>
+  <p>© G9Tool 2025 | All Rights Reserved</p>
+</footer>
+
 <script src="script.js"></script>
+<script>
+function logout() {
+  localStorage.removeItem("loggedInUser");
+  window.location.href = "login.html";
+}
+</script>
 </body>
 </html>

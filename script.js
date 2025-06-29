@@ -30,37 +30,41 @@ function generateCode() {
                       .map(input => input.value.trim()).filter(url => url);
 
   if (!name || !code || !price || !images.length || !wa) {
-    alert("প্রোডাক্ট নাম, কোড, প্রাইস, ছবি এবং WhatsApp নাম্বার দিন!");
+    alert("⚠️ প্রোডাক্ট নাম, কোড, প্রাইস, ছবি ও WhatsApp নম্বর দিন!");
     return;
   }
 
   const total = price * qty;
-  const offerText = offer ? `<span style="text-decoration:line-through;color:#999;">৳${price}</span> <b style="color:#0f0;">৳${offer}</b>` : `৳${price}`;
-  const discount = offer ? ` <small style="color:#0f0;">(${Math.round((1 - offer / price) * 100)}% ছাড়)</small>` : '';
-  
+  const offerText = offer
+    ? `<span style="text-decoration:line-through;color:#999;">৳${price}</span> <b style="color:#0f0;">৳${offer}</b>`
+    : `৳${price}`;
+  const discount = offer
+    ? ` <small style="color:#0f0;">(${Math.round((1 - offer / price) * 100)}% ছাড়)</small>`
+    : '';
+
   let html = `<div class="product-box" style="text-align:center;background:#222;padding:15px;border-radius:10px;">`;
 
-  // main image + thumbnail
+  // Main Image + Thumbs
   html += `<div class="image-slider">`;
   html += `<img src="${images[0]}" alt="${name}" style="max-width:100%;border-radius:10px;margin-bottom:10px;">`;
   if (images.length > 1) {
     html += `<div id="thumbs" style="margin-top:10px;">`;
-    images.forEach((img, i) => {
+    images.forEach(img => {
       html += `<img src="${img}" onclick="this.closest('.product-box').querySelector('img').src='${img}'" style="width:60px;height:60px;border-radius:6px;margin:4px;cursor:pointer;">`;
     });
     html += `</div>`;
   }
   html += `</div>`;
 
-  // title & price
+  // Title + Price
   html += `<h3 style="margin:10px 0;">${name}</h3>`;
   html += `<p style="font-size:18px;">${offerText}${discount}</p>`;
 
-  // WhatsApp button
+  // WhatsApp Button
   const message = `আমি ${name} (${code}) কিনতে চাই।`;
   html += `<a href="https://wa.me/${wa}?text=${encodeURIComponent(message)}" target="_blank" style="display:inline-block;margin:10px 0;padding:10px 20px;background:#25d366;color:#fff;border-radius:6px;text-decoration:none;">WhatsApp অর্ডার</a>`;
 
-  // details list
+  // Details List
   html += `<ul style="text-align:left;list-style:none;padding:0;margin:10px auto;max-width:300px;">`;
   if (code) html += `<li><b>কোড:</b> ${code}</li>`;
   if (status) html += `<li><b>স্ট্যাটাস:</b> ${status}</li>`;
@@ -72,13 +76,15 @@ function generateCode() {
   if (unit && qty) html += `<li><b>পরিমাণ:</b> ${qty} ${unit}</li>`;
   html += `</ul>`;
 
+  // Description + Video
   if (desc) html += `<p style="margin-top:10px;text-align:left;">${desc}</p>`;
   if (video) html += `<div style="margin-top:15px;"><iframe width="100%" height="200" src="${video}" frameborder="0" allowfullscreen></iframe></div>`;
-  
-  // hidden shortcode
+
+  // Hidden shortcode
   html += `<div style="display:none;">{getProduct}</div>`;
   html += `</div>`;
 
+  // Show output
   document.getElementById("output").innerText = html;
   document.getElementById("preview").innerHTML = html;
 }

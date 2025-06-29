@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="bn">
+<!DOCTYPE html><html lang="bn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,40 +6,28 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
-<body class="login-page">
-
-  <!-- Header -->
-  <header>
+<body class="login-page">  <!-- Header -->  <header class="header-flex">
+    <nav class="menu-toggle">☰</nav>
     <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
     <a href="https://t.me/G9tool" target="_blank" class="telegram-icon">
       <i class="fab fa-telegram"></i>
     </a>
-  </header>
-
-  <!-- Login Box -->
-  <div class="login-container">
+  </header>  <!-- Login Box -->  <div class="login-container">
     <h2>🔐 প্রিমিয়াম এক্সেস</h2>
-    <p>এই টুল ব্যবহার করতে প্রিমিয়াম সাবস্ক্রিপশন প্রয়োজন। সাবস্ক্রিপশন নিতে WhatsApp বা Telegram-এ যোগাযোগ করুন।</p>
+    <p>এই টুল ব্যবহারের জন্য আপনাকে প্রিমিয়াম সাবস্ক্রিপশন নিতে হবে। WhatsApp বা Telegram এ যোগাযোগ করুন।</p><a href="https://wa.me/8801XXXXXXXXX" class="btn" target="_blank">📲 যোগাযোগ করুন WhatsApp এ</a>
+<a href="https://t.me/G9tool" class="btn telegram" target="_blank">📩 Telegram মেসেজ</a>
 
-    <a href="https://wa.me/8801627647776" class="btn" target="_blank">📲 যোগাযোগ করুন WhatsApp এ</a>
-    <a href="https://t.me/mehedi_exx" class="btn telegram" target="_blank">📩 Telegram মেসেজ</a>
+<hr style="margin:20px 0; border:1px solid #333;">
 
-    <hr style="margin:20px 0; border:1px solid #333;">
+<h2>👤 লগইন করুন</h2>
+<input type="text" id="username" placeholder="ইউজারনেম লিখুন">
+<input type="password" id="password" placeholder="পাসওয়ার্ড লিখুন">
+<button onclick="login()">✅ লগইন করুন</button>
+<div id="login-error"></div>
 
-    <h2>👤 লগইন করুন</h2>
-    <input type="text" id="username" placeholder="ইউজারনেম লিখুন">
-    <input type="password" id="password" placeholder="পাসওয়ার্ড লিখুন">
-    <button onclick="login()">✅ লগইন করুন</button>
-    <div id="login-error"></div>
-  </div>
-
-  <!-- Footer -->
-  <footer>
+  </div>  <!-- Footer -->  <footer>
     <p>© G9Tool 2025 | All Rights Reserved</p>
-  </footer>
-
-  <!-- Login Script -->
-  <script>
+  </footer>  <!-- Login Script -->  <script>
     function login() {
       const username = document.getElementById("username").value.trim();
       const password = document.getElementById("password").value.trim();
@@ -68,6 +55,5 @@
           errorBox.textContent = "❌ ইউজার খুঁজে পাওয়া যায়নি।";
         });
     }
-  </script>
-</body>
+  </script></body>
 </html>

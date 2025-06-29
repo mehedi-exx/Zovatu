@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="bn">
+<!DOCTYPE html><html lang="bn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,17 +12,11 @@
     }
   </script>
 </head>
-<body>
-
-<!-- Header with Menu -->
-<header>
-  <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
+<body><header class="header-flex">
   <nav class="menu-toggle" onclick="document.body.classList.toggle('menu-open')">☰</nav>
+  <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
   <a href="https://t.me/G9tool" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
-</header>
-
-<!-- Sidebar Menu -->
-<aside class="sidebar">
+</header><aside class="sidebar">
   <ul>
     <li class="active">Home</li>
     <li>Generate</li>
@@ -31,55 +24,46 @@
     <li>Contact</li>
     <li onclick="logout()">Logout</li>
   </ul>
-</aside>
-
-<main>
+</aside><main>
   <div class="form-wrapper">
-    <h2 style="text-align:center;">📝 প্রোডাক্ট জেনারেটর</h2>
+    <h2 style="text-align:center;">📝 প্রোডাক্ট জেনারেটর</h2><input type="text" id="name" placeholder="প্রোডাক্ট নাম *" required>
+<input type="text" id="code" placeholder="প্রোডাক্ট কোড *" required>
+<input type="number" id="price" placeholder="মূল্য প্রাইস (৳) *" required>
+<input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
+<input type="text" id="unit" placeholder="ইউনিট (যেমন: পিস)">
+<input type="number" id="qty" placeholder="পরিমাণ (Qty)">
+<input type="text" id="brand" placeholder="ব্র্যান্ড (ঐচ্ছিক)">
+<input type="text" id="color" placeholder="কালার লিখুন (ঐচ্ছিক)">
+<input type="text" id="size" placeholder="সাইজ লিখুন (ঐচ্ছিক)">
+<input type="text" id="taste" placeholder="টেস্ট লিখুন (ঐচ্ছিক)">
+<input type="text" id="category" placeholder="ক্যাটাগরি *" required>
+<input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)">
+<input type="text" id="status" placeholder="স্ট্যাটাস *" required>
+<input type="text" id="tag" placeholder="কাস্টম ব্যাজ (যেমন: 🔥নতুন)">
+<textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা (ঐচ্ছিক)"></textarea>
 
-    <input type="text" id="name" placeholder="প্রোডাক্ট নাম *" required>
-    <input type="text" id="code" placeholder="প্রোডাক্ট কোড *" required>
-    <input type="number" id="price" placeholder="মূল্য প্রাইস (৳) *" required>
-    <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
-    <input type="text" id="unit" placeholder="ইউনিট (যেমন: পিস)">
-    <input type="number" id="qty" placeholder="পরিমাণ (Qty)">
-    <input type="text" id="brand" placeholder="ব্র্যান্ড (ঐচ্ছিক)">
-    <input type="text" id="color" placeholder="কালার লিখুন (ঐচ্ছিক)">
-    <input type="text" id="size" placeholder="সাইজ লিখুন (ঐচ্ছিক)">
-    <input type="text" id="taste" placeholder="টেস্ট লিখুন (ঐচ্ছিক)">
-    <input type="text" id="category" placeholder="ক্যাটাগরি *" required>
-    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম (ঐচ্ছিক)">
-    <input type="text" id="status" placeholder="স্ট্যাটাস *" required>
-    <input type="text" id="tag" placeholder="কাস্টম ব্যাজ (যেমন: 🔥নতুন)">
-    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা (ঐচ্ছিক)"></textarea>
+<div id="imageInputs">
+  <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL) *" required>
+</div>
+<button type="button" onclick="addImageInput()">➕ আরও ছবি যোগ করুন</button>
 
-    <div id="imageInputs">
-      <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL) *" required>
-    </div>
-    <button type="button" onclick="addImageInput()">➕ আরও ছবি যোগ করুন</button>
+<input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX) *" required>
 
-    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX) *" required>
+<div style="text-align:center;">
+  <button id="generateBtn" type="button">✅ কোড জেনারেট করুন</button>
+  <button id="copyBtn" type="button">📋 কপি করুন</button>
+</div>
 
-    <div style="text-align:center;">
-      <button id="generateBtn" type="button">✅ কোড জেনারেট করুন</button>
-      <button id="copyBtn" type="button">📋 কপি করুন</button>
-    </div>
+<div class="output" id="output"></div>
+<div class="live-preview" id="preview"></div>
 
-    <div class="output" id="output"></div>
-    <div class="live-preview" id="preview"></div>
   </div>
-</main>
-
-<footer>
+</main><footer>
   <p>© G9Tool 2025 | All Rights Reserved</p>
-</footer>
-
-<script src="script.js"></script>
-<script>
-function logout() {
-  localStorage.removeItem("loggedInUser");
-  window.location.href = "login.html";
-}
-</script>
-</body>
+</footer><script src="script.js"></script><script>
+  function logout() {
+    localStorage.removeItem("loggedInUser");
+    window.location.href = "login.html";
+  }
+</script></body>
 </html>

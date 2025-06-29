@@ -1,187 +1,175 @@
-body {
-  background-color: #121212;
-  color: #f9f9f9;
-  font-family: 'Segoe UI', sans-serif;
+/* G9Tool Updated CSS */
+
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-.header {
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #121212;
+  color: #fff;
+  padding: 0;
+  margin: 0;
+}
+
+header.header {
+  background: #1e1e1e;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 20px;
-  background-color: #1c1c1c;
-  border-bottom: 1px solid #333;
-  border-radius: 0 0 12px 12px;
+  padding: 12px 16px;
+  border-radius: 0 0 15px 15px;
 }
 
-.logo {
-  font-size: 20px;
-  font-weight: bold;
-  color: #25D366;
-}
-
-.telegram-icon {
-  color: #0088cc;
-  background: #fff;
-  padding: 8px;
-  border-radius: 50%;
-  font-size: 20px;
-  text-decoration: none;
+.left-icons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .menu-btn {
   background: none;
   border: none;
   color: white;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.telegram-icon {
+  background: white;
+  color: #0088cc;
+  border-radius: 50%;
+  padding: 6px;
   font-size: 20px;
-  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+main {
+  padding: 20px;
 }
 
 .form-wrapper {
   max-width: 600px;
   margin: auto;
+  background: #1c1c1c;
   padding: 20px;
+  border-radius: 12px;
 }
 
-input[type="text"],
-input[type="url"],
-input[type="number"],
-select,
+input,
 textarea {
-  background-color: #1e1e1e;
-  color: #f0f0f0;
+  width: 100%;
+  background: #2a2a2a;
+  color: white;
   border: 1px solid #444;
   border-radius: 8px;
-  padding: 10px;
-  margin-bottom: 10px;
-  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 15px;
   font-size: 16px;
-}
-
-textarea {
-  height: 120px;
-  resize: vertical;
 }
 
 button {
-  padding: 10px 20px;
-  background-color: #25D366;
-  color: #fff;
   border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  margin: 5px;
+  padding: 12px 18px;
   font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button i {
+  margin-right: 6px;
+}
+
+#generateBtn {
+  background: #28a745;
+  color: white;
+  margin-right: 10px;
+}
+
+#copyBtn {
+  background: #007bff;
+  color: white;
 }
 
 button:hover {
-  background-color: #20c55a;
+  opacity: 0.9;
 }
 
-#imageInputs input {
-  display: block;
-  margin-bottom: 8px;
+#imageInputs {
+  margin-bottom: 15px;
 }
 
-/* অটো স্লাইড চেকবক্স */
-label input[type="checkbox"] {
-  transform: scale(1.2);
-  accent-color: limegreen;
-}
-
-/* লাইভ প্রিভিউ */
-.live-preview {
-  border-top: 1px dashed #444;
-  padding-top: 20px;
-  margin-top: 20px;
-}
-
-/* হোয়াটসঅ্যাপ অর্ডার বাটনের আইকন */
-a[href*="wa.me"] img {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-}
-
-/* প্রোডাক্ট ডিসক্রিপশন স্টাইল */
-#preview p[style*="background"] {
-  background-color: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 8px;
-  padding: 12px 16px;
-}
-
-/* ভিডিও প্রিভিউ */
-iframe {
-  border-radius: 10px;
-  border: 1px solid #444;
-}
-
-/* সাইডবার */
 .sidebar {
   position: fixed;
   top: 0;
-  left: -250px;
-  width: 250px;
+  left: -100%;
   height: 100%;
-  background-color: #222;
-  padding: 20px;
-  transition: left 0.3s;
-  z-index: 1000;
+  width: 75%;
+  background: #1f1f1f;
+  padding: 60px 20px;
+  transition: 0.3s;
+  z-index: 999;
 }
 
 .sidebar.active {
   left: 0;
 }
 
-.sidebar .close-btn {
+.sidebar a {
+  display: block;
+  background: #2a2a2a;
+  color: white;
+  text-decoration: none;
+  margin-bottom: 10px;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.sidebar a:hover {
+  background: #444;
+}
+
+.close-sidebar {
+  position: absolute;
+  top: 15px;
+  right: 20px;
   background: none;
+  color: white;
   border: none;
-  color: #fff;
   font-size: 24px;
-  float: right;
   cursor: pointer;
 }
 
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-  margin-top: 40px;
-}
+@media (max-width: 480px) {
+  .form-wrapper {
+    padding: 15px;
+  }
 
-.sidebar ul li {
-  margin: 15px 0;
-}
+  input,
+  textarea {
+    font-size: 15px;
+  }
 
-.sidebar ul li a {
-  color: #eee;
-  text-decoration: none;
-  font-size: 16px;
-}
+  button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 
-/* লাইট মোড সাপোর্ট */
-@media (prefers-color-scheme: light) {
-  body {
-    background-color: #ffffff;
-    color: #000000;
-  }
-  input, textarea, select {
-    background-color: #fff;
-    color: #000;
-    border: 1px solid #ccc;
-  }
-  .header {
-    background-color: #f0f0f0;
-    color: #000;
-  }
-  .sidebar {
-    background-color: #ddd;
-  }
-  #preview p[style*="background"] {
-    background-color: #f0f0f0;
-    border-color: #ccc;
+  #generateBtn {
+    margin-right: 0;
   }
 }

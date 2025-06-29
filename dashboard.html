@@ -14,22 +14,69 @@
       flex-wrap: wrap;
       gap: 12px;
     }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
     .header-right {
       display: flex;
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
     }
+    .menu-toggle {
+      font-size: 22px;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+    .sidebar {
+      display: none;
+      position: absolute;
+      top: 60px;
+      left: 0;
+      width: 200px;
+      background: #1e1e1e;
+      padding: 15px;
+      border-radius: 0 10px 10px 0;
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+    }
+    .sidebar.active {
+      display: block;
+    }
+    .sidebar a {
+      display: block;
+      padding: 10px;
+      color: white;
+      text-decoration: none;
+      border-bottom: 1px solid #333;
+    }
+    .sidebar a:hover {
+      background: #333;
+    }
   </style>
 </head>
 <body>
 <header>
-  <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
+  <div class="header-left">
+    <button class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+    <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
+  </div>
   <div class="header-right">
     <a href="https://t.me/G9tool" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
-    <button onclick="logout()" style="background:var(--red);color:#fff;padding:6px 12px;border:none;border-radius:6px;cursor:pointer;">🚪 লগআউট</button>
   </div>
 </header>
+
+<div id="sidebar" class="sidebar">
+  <a href="#home">🏠 হোম</a>
+  <a href="#about">ℹ️ এবাউট</a>
+  <a href="#contact">📞 কন্টাক্ট</a>
+  <a href="#privacy">🔒 প্রাইভেসি পলিসি</a>
+  <a href="#tutorial">🎓 টিউটোরিয়াল</a>
+  <a href="#logout" onclick="logout()">🚪 লগআউট</a>
+</div>
 
 <main>
   <div class="form-wrapper">
@@ -72,6 +119,9 @@ if (!localStorage.getItem("g9tool_user")) {
 function logout() {
   localStorage.removeItem("g9tool_user");
   window.location.href = "index.html";
+}
+function toggleMenu() {
+  document.getElementById("sidebar").classList.toggle("active");
 }
 </script>
 <script src="script.js"></script>

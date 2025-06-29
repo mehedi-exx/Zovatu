@@ -1,24 +1,24 @@
-async function login() {
+async function loginUser() {
   const uname = document.getElementById("username").value.trim();
   const pass = document.getElementById("password").value.trim();
-  const errorBox = document.getElementById("login-error");
 
   if (!uname || !pass) {
-    errorBox.textContent = "⚠️ ইউজারনেম এবং পাসওয়ার্ড দিন।";
+    alert("⚠️ ইউজারনেম এবং পাসওয়ার্ড দিন!");
     return;
   }
 
   try {
-    const res = await fetch(`user/user-${uname}.json`);
+    const res = await fetch(`users/${uname}.json`);
+    if (!res.ok) throw new Error("User not found");
     const data = await res.json();
 
     if (data.username === uname && data.password === pass && data.isPremium) {
-      localStorage.setItem("loggedInUser", uname);
-      window.location.href = "index.html";
+      localStorage.setItem("g9tool_user", uname);
+      window.location.href = "dashboard.html";
     } else {
-      errorBox.textContent = "❌ ইউজারনেম বা পাসওয়ার্ড ভুল বা আপনি প্রিমিয়াম নন।";
+      alert("❌ ইউজারনেম বা পাসওয়ার্ড ভুল অথবা প্রিমিয়াম এক্সেস নেই!");
     }
-  } catch (e) {
-    errorBox.textContent = "❌ ইউজার খুঁজে পাওয়া যায়নি।";
+  } catch (err) {
+    alert("❌ ইউজার খুঁজে পাওয়া যায়নি!");
   }
 }

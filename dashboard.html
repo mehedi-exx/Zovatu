@@ -9,16 +9,25 @@
 </head>
 <body>
 
-<!-- 🔷 Header Section -->
-<header>
-  <div class="header-flex">
-    <button class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
-    <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
-    <a href="https://t.me/G9tool" target="_blank" class="telegram-icon"><i class="fab fa-telegram"></i></a>
+<header class="header">
+  <div class="left-icons">
+    <button class="menu-btn" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="logo">
+      <i class="fas fa-box-open"></i> G9Tool
+    </div>
   </div>
+  <a href="https://t.me/G9tool" class="telegram-icon" target="_blank">
+    <i class="fab fa-telegram-plane"></i>
+  </a>
 </header>
 
-<!-- 🔷 Sidebar -->
+<!-- আপনার বাকি ফর্ম এবং মেনু -->
+<main>
+  <!-- Form Section Here -->
+</main>
+
 <div id="sidebar" class="sidebar">
   <button class="close-sidebar" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
   <a href="dashboard.html"><i class="fas fa-home"></i> হোম</a>
@@ -26,72 +35,14 @@
   <a href="menu/contact.html"><i class="fas fa-phone"></i> কন্টাক্ট</a>
   <a href="menu/privacy.html"><i class="fas fa-user-shield"></i> প্রাইভেসি</a>
   <a href="menu/tutorial.html"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
-  <a href="index.html" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
+  <a href="index.html"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
 </div>
 
-<!-- 🔷 Main Section -->
-<main>
-  <div class="form-wrapper">
-    <input type="text" id="name" placeholder="প্রোডাক্ট নাম" />
-    <input type="text" id="code" placeholder="প্রোডাক্ট কোড" />
-    <input type="number" id="price" placeholder="মূল্য প্রাইস (৳)" />
-    <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)" />
-    <input type="text" id="unit" placeholder="ইউনিট (যেমন: পিস, কেজি)" />
-    <input type="number" id="qty" placeholder="পরিমাণ (Qty)" />
-    <input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি" />
-    <input type="text" id="size" placeholder="সাইজ অপশন (যেমন: S, M, L)" />
-    <input type="text" id="color" placeholder="রঙ অপশন (যেমন: লাল, সবুজ)" />
-    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম" />
-    <input type="text" id="status" placeholder="স্ট্যাটাস" />
-    <input type="text" id="category" placeholder="ক্যাটাগরি" />
-    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea>
-
-    <!-- Image URL inputs -->
-    <div id="imageInputs">
-      <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)" />
-    </div>
-    <button onclick="addImageInput()"><i class="fas fa-plus"></i> আরও ছবি যোগ করুন</button>
-
-    <!-- Video & WhatsApp -->
-    <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)" />
-    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)" />
-
-    <!-- Generate & Copy Buttons -->
-    <div style="text-align:center;">
-      <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট</button>
-      <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
-    </div>
-
-    <!-- Output + Live Preview -->
-    <div class="output" id="output"></div>
-    <div class="live-preview" id="preview"></div>
-  </div>
-</main>
-
-<!-- 🔷 Scripts -->
 <script>
-function toggleMenu() {
-  document.getElementById("sidebar").classList.toggle("active");
-}
-function logout() {
-  localStorage.removeItem("g9tool_user");
-}
-function addImageInput() {
-  const container = document.getElementById("imageInputs");
-  if (container.children.length < 5) {
-    const input = document.createElement("input");
-    input.type = "url";
-    input.className = "img-url";
-    input.placeholder = "ছবির লিংক (Image URL)";
-    container.appendChild(input);
-  } else {
-    alert("সর্বোচ্চ ৫টি ছবি যোগ করা যাবে।");
+  function toggleMenu() {
+    document.getElementById("sidebar").classList.toggle("active");
   }
-}
-if (!localStorage.getItem("g9tool_user")) {
-  window.location.href = "index.html";
-}
 </script>
-<script src="script.js" defer></script>
+
 </body>
 </html>

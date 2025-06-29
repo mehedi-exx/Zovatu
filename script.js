@@ -1,4 +1,4 @@
-// G9Tool Product Generator Logic
+// G9Tool Product Generator Script
 
 let imgCount = 1;
 
@@ -89,11 +89,8 @@ document.getElementById("generateBtn").addEventListener("click", function () {
 </ul>
 ${desc ? `<p>${desc}</p>` : ""}
 <p style="display:none;">
-  <a href="#">
-    {getProduct} $price={৳${offer || price}}${!isNaN(offer) && offer < price ? ` $sale={৳${price}}` : ""}
-  </a>
+  <a href="#"> {getProduct} $price={৳${offer || price}}${!isNaN(offer) && offer < price ? ` $sale={৳${price}}` : ""} </a>
 </p>
-
 <script>
   function changeImage(el) {
     document.getElementById('mainImg').src = el.src;

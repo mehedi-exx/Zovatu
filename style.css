@@ -1,175 +1,119 @@
-/* G9Tool Updated CSS */
+:root {
+  --bg-color: #ffffff;
+  --text-color: #111111;
+  --card-bg: #f9f9f9;
+  --border-color: #ddd;
+  --accent-color: #1da1f2; /* WhatsApp green or replaceable */
+  --price-color: #e60023;
+}
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #121212;
+    --text-color: #f5f5f5;
+    --card-bg: #1e1e1e;
+    --border-color: #333;
+    --accent-color: #25d366;
+    --price-color: #ff4f81;
+  }
 }
 
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #121212;
-  color: #fff;
-  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
+  padding: 0;
 }
 
-header.header {
-  background: #1e1e1e;
+.product-output {
+  padding: 2rem;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  border-radius: 0 0 15px 15px;
-}
-
-.left-icons {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.menu-btn {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 22px;
-  cursor: pointer;
-}
-
-.logo {
-  font-size: 18px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.telegram-icon {
-  background: white;
-  color: #0088cc;
-  border-radius: 50%;
-  padding: 6px;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  text-decoration: none;
+  flex-wrap: wrap;
 }
 
-main {
-  padding: 20px;
-}
-
-.form-wrapper {
-  max-width: 600px;
-  margin: auto;
-  background: #1c1c1c;
-  padding: 20px;
+.product-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
-}
-
-input,
-textarea {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  max-width: 480px;
   width: 100%;
-  background: #2a2a2a;
-  color: white;
-  border: 1px solid #444;
-  border-radius: 8px;
-  padding: 12px 15px;
-  margin-bottom: 15px;
-  font-size: 16px;
+  padding: 1.5rem;
+  margin: 1rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-button {
-  border: none;
-  padding: 12px 18px;
-  font-size: 16px;
+.product-card h2 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.price-line {
   font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: gray;
+  margin-right: 8px;
+}
+
+.discounted-price {
+  color: var(--price-color);
+  font-size: 1.2rem;
+}
+
+.discount-percent {
+  color: green;
+  font-weight: bold;
+  margin-left: 8px;
+}
+
+.meta-line, .variant-line {
+  font-size: 0.9rem;
+  color: gray;
+  margin-bottom: 0.5rem;
+}
+
+.delivery {
+  font-size: 0.9rem;
+  font-style: italic;
+  margin-bottom: 0.5rem;
+}
+
+.desc {
+  margin-top: 1rem;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.gallery img {
+  max-width: 100%;
   border-radius: 8px;
-  cursor: pointer;
+  margin-top: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-button i {
-  margin-right: 6px;
-}
-
-#generateBtn {
-  background: #28a745;
+.wa-button {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--accent-color);
   color: white;
-  margin-right: 10px;
-}
-
-#copyBtn {
-  background: #007bff;
-  color: white;
-}
-
-button:hover {
-  opacity: 0.9;
-}
-
-#imageInputs {
-  margin-bottom: 15px;
-}
-
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: -100%;
-  height: 100%;
-  width: 75%;
-  background: #1f1f1f;
-  padding: 60px 20px;
-  transition: 0.3s;
-  z-index: 999;
-}
-
-.sidebar.active {
-  left: 0;
-}
-
-.sidebar a {
-  display: block;
-  background: #2a2a2a;
-  color: white;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  margin-top: 1.5rem;
   text-decoration: none;
-  margin-bottom: 10px;
-  padding: 12px;
-  border-radius: 8px;
+  transition: background-color 0.3s ease;
 }
 
-.sidebar a:hover {
-  background: #444;
+.wa-button:hover {
+  background-color: #128c7e;
 }
 
-.close-sidebar {
-  position: absolute;
-  top: 15px;
-  right: 20px;
-  background: none;
-  color: white;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-@media (max-width: 480px) {
-  .form-wrapper {
-    padding: 15px;
-  }
-
-  input,
-  textarea {
-    font-size: 15px;
-  }
-
-  button {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-
-  #generateBtn {
-    margin-right: 0;
-  }
+.wa-button i {
+  margin-right: 8px;
 }

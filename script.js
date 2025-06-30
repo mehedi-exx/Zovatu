@@ -1,3 +1,4 @@
+// ✅ Generate Output
 document.getElementById("generateBtn").addEventListener("click", () => {
   const name = document.getElementById("name").value.trim();
   const code = document.getElementById("code").value.trim();
@@ -23,7 +24,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
 
   const discount = offer && price ? Math.round(((price - offer) / price) * 100) : 0;
 
-  // থাম্বনেইল গ্যালারি তৈরি
+  // ✅ Thumbnail Images
   let thumbHTML = "";
   const mainImg = imgs[0].value.trim();
   imgs.forEach((input, i) => {
@@ -33,7 +34,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   });
 
-  // কাস্টম ফিল্ড HTML তৈরি
+  // ✅ Custom Fields
   const customFields = document.querySelectorAll(".custom-field-group");
   let customHTML = "";
   customFields.forEach(group => {
@@ -44,7 +45,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   });
 
-  // ভিডিও লিংক এম্বেড
+  // ✅ YouTube Video Embed
   let videoEmbed = "";
   if (video.includes("youtube.com") || video.includes("youtu.be")) {
     let videoId = "";
@@ -58,10 +59,11 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   }
 
+  // ✅ Final Output HTML
   const html = `
 <div style="text-align:center;">
   <img id="mainImg" src="${mainImg}" style="width:100%;max-width:500px;border-radius:10px;border:1px solid #ccc;margin-bottom:10px;">
-
+  
   <div id="thumbs" style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
     ${thumbHTML}
   </div>
@@ -109,7 +111,31 @@ document.getElementById("generateBtn").addEventListener("click", () => {
 </div>
 `;
 
-  // Show in Output
   document.getElementById("output").textContent = html;
   document.getElementById("preview").innerHTML = html;
 });
+
+// ✅ Add More Image Button
+function addImageInput() {
+  const container = document.getElementById("imageInputs");
+  const inputs = container.querySelectorAll(".img-url");
+  if (inputs.length >= 5) return;
+  const input = document.createElement("input");
+  input.type = "url";
+  input.className = "img-url";
+  input.placeholder = "ছবির লিংক (Image URL)";
+  container.appendChild(input);
+}
+
+// ✅ Copy Button
+document.getElementById("copyBtn").addEventListener("click", () => {
+  const output = document.getElementById("output").textContent;
+  navigator.clipboard.writeText(output)
+    .then(() => alert("✅ কোড কপি হয়েছে!"))
+    .catch(() => alert("❌ কপি করা যায়নি"));
+});
+
+// ✅ Menu Toggle (☰)
+function toggleMenu() {
+  document.getElementById("sidebar").classList.toggle("active");
+}

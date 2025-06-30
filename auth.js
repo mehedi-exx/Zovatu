@@ -1,20 +1,33 @@
-document.getElementById("loginForm").addEventListener("submit", function (e) {
-  e.preventDefault();
+document.addEventListener("DOMContentLoaded", () => {
+  const loginForm = document.getElementById("loginForm");
+  let attempt = 0;
+  const maxAttempts = 5;
 
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
+  loginForm.addEventListener("submit", function (e) {
+    e.preventDefault();
 
-  // ইউজারনেম ও পাসওয়ার্ড যাচাই (এইটা তোমার নিজস্ব শর্ত অনুযায়ী ঠিক করো)
-  const validUsername = "admin";
-  const validPassword = "1234";
+    const username = sanitize(document.getElementById("username").value.trim());
+    const password = sanitize(document.getElementById("password").value.trim());
 
-  if (username === validUsername && password === validPassword) {
-    // ✅ লগইন সফল → sessionStorage এ ইউজার সেট করো
-    sessionStorage.setItem("loggedInUser", username);
+    const validUsername = "admin";
+    const validPassword = "1234";
 
-    // ড্যাশবোর্ডে নিয়ে যাও
-    window.location.href = "dashboard.html";
-  } else {
-    alert("❌ ভুল ইউজারনেম অথবা পাসওয়ার্ড!");
+    if (attempt >= maxAttempts) {
+      alert("🚫 অনেকবার ভুল চেষ্টা করেছেন! দয়া করে পরে আবার চেষ্টা করুন।");
+      return;
+    }
+
+    if (username === validUsername && password === validPassword) {
+      sessionStorage.setItem("loggedInUser", username);
+      alert("✅ সফলভাবে লগইন হয়েছে!");
+      window.location.href = "dashboard.html";
+    } else {
+      attempt++;
+      alert(`❌ ভুল ইউজারনেম বা পাসওয়ার্ড! বাকি সুযোগ: ${maxAttempts - attempt}`);
+    }
+  });
+
+  function sanitize(input) {
+    return input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 });

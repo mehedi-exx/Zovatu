@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>G9Tool Premium</title>
-  <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     body {
@@ -56,6 +55,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+      transition: 0.3s;
     }
     input {
       width: 100%;
@@ -66,6 +66,12 @@
       background: #2a2a2a;
       color: white;
       font-size: 16px;
+      outline: none;
+      transition: 0.3s;
+    }
+    input:focus {
+      background: #333;
+      box-shadow: 0 0 5px #28a745;
     }
     .login-btn {
       background: #28a745;
@@ -77,6 +83,10 @@
       width: 100%;
       cursor: pointer;
       font-weight: bold;
+      transition: background 0.3s;
+    }
+    .login-btn:hover {
+      background: #218838;
     }
     .contact-links {
       margin-top: 20px;
@@ -86,6 +96,15 @@
       color: #00bfff;
       text-decoration: none;
       margin: 0 4px;
+    }
+    .shake {
+      animation: shake 0.3s;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
     }
   </style>
 </head>
@@ -100,11 +119,13 @@
 </div>
 
 <!-- Login Card -->
-<div class="login-box">
+<div class="login-box" id="loginBox">
   <h2><i class="fas fa-user-shield"></i> লগইন করুন</h2>
-  <input type="text" id="username" placeholder="ইউজারনেম" />
-  <input type="password" id="password" placeholder="পাসওয়ার্ড" />
-  <button class="login-btn" onclick="loginUser()"><i class="fas fa-sign-in-alt"></i> লগইন</button>
+  <form onsubmit="event.preventDefault(); loginUser();">
+    <input type="text" id="username" placeholder="ইউজারনেম" required />
+    <input type="password" id="password" placeholder="পাসওয়ার্ড" required />
+    <button type="submit" class="login-btn"><i class="fas fa-sign-in-alt"></i> লগইন</button>
+  </form>
 
   <div class="contact-links">
     প্রিমিয়াম এক্সেস নিতে যোগাযোগ করুন:
@@ -114,6 +135,22 @@
   </div>
 </div>
 
-<script src="auth.js"></script>
+<script>
+function loginUser() {
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  if (username === "admin" && password === "1234") {
+    sessionStorage.setItem("loggedInUser", username);
+    window.location.href = "dashboard.html";
+  } else {
+    const box = document.getElementById("loginBox");
+    box.classList.add("shake");
+    setTimeout(() => box.classList.remove("shake"), 300);
+    alert("❌ ভুল ইউজারনেম বা পাসওয়ার্ড!");
+  }
+}
+</script>
+
 </body>
 </html>

@@ -35,7 +35,6 @@
     <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea><div id="imageInputs">
   <div class="image-group">
     <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
-    <button onclick="this.parentElement.remove()">❌</button>
   </div>
 </div>
 <button onclick="addImageInput()"><i class="fas fa-plus"></i> আরও ছবি যোগ করুন</button>
@@ -49,7 +48,6 @@
   <div class="custom-field-group">
     <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
     <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
-    <button onclick="this.parentElement.remove()">❌</button>
   </div>
 </div>
 <button onclick="addCustomField()"><i class="fas fa-plus"></i> নতুন তথ্য যোগ করুন</button>
@@ -78,7 +76,6 @@ function addImageInput() {
   group.className = "image-group";
   group.innerHTML = `
     <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
-    <button onclick="this.parentElement.remove()">❌</button>
   `;
   container.appendChild(group);
 }
@@ -90,7 +87,6 @@ function addCustomField() {
   group.innerHTML = `
     <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
     <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
-    <button onclick="this.parentElement.remove()">❌</button>
   `;
   container.appendChild(group);
 }

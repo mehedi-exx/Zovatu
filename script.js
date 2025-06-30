@@ -23,7 +23,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
 
   const discount = offer && price ? Math.round(((price - offer) / price) * 100) : 0;
 
-  // থাম্বনেইল গ্যালারি
+  // থাম্বনেইল গ্যালারি তৈরি
   let thumbHTML = "";
   const mainImg = imgs[0].value.trim();
   imgs.forEach((input, i) => {
@@ -33,7 +33,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   });
 
-  // কাস্টম ফিল্ড
+  // কাস্টম ফিল্ড HTML তৈরি
   const customFields = document.querySelectorAll(".custom-field-group");
   let customHTML = "";
   customFields.forEach(group => {
@@ -44,7 +44,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   });
 
-  // ইউটিউব ভিডিও এম্বেড
+  // ভিডিও লিংক এম্বেড
   let videoEmbed = "";
   if (video.includes("youtube.com") || video.includes("youtu.be")) {
     let videoId = "";
@@ -77,7 +77,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   </p>
 
   <p style="text-align:center;margin:10px 0;">
-    <a href="https://wa.me/${wa}?text=📦 আমি একটি পণ্য অর্ডার করতে চাই\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ${offer || price}৳\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি: ${delivery}" 
+    <a href="https://wa.me/${wa}?text=📦 আমি একটি পণ্য অর্ডার করতে চাই%0A🔖 প্রোডাক্ট: ${name}%0A💰 মূল্য: ${offer || price}৳%0A🧾 কোড: ${code}%0A📁 ক্যাটাগরি: ${category}%0A🚚 ডেলিভারি: ${delivery}" 
        target="_blank"
        style="display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;font-size:16px;">
       <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="height:20px;width:20px;">
@@ -109,6 +109,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
 </div>
 `;
 
+  // Show in Output
   document.getElementById("output").textContent = html;
   document.getElementById("preview").innerHTML = html;
 });

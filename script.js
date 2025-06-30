@@ -1,58 +1,3 @@
-// ইউজার চেক
-if (!localStorage.getItem("g9tool_user")) {
-  window.location.href = "index.html";
-}
-
-// মেনু ফাংশন
-function toggleMenu() {
-  document.getElementById("sidebar").classList.toggle("active");
-}
-function closeMenu() {
-  document.getElementById("sidebar").classList.remove("active");
-}
-
-// লগআউট
-function logout() {
-  localStorage.removeItem("g9tool_user");
-  window.location.href = "index.html";
-}
-
-// ইমেজ ইনপুট যুক্ত করা
-function addImageInput() {
-  const container = document.getElementById("imageInputs");
-  const inputs = container.querySelectorAll(".img-url");
-  if (inputs.length >= 5) return;
-  const input = document.createElement("input");
-  input.type = "url";
-  input.className = "img-url";
-  input.placeholder = "ছবির লিংক (Image URL)";
-  container.appendChild(input);
-}
-
-// ✅ কাস্টম ফিল্ড যুক্ত করা
-function addCustomField() {
-  const container = document.getElementById("custom-fields");
-  const fieldGroup = document.createElement("div");
-  fieldGroup.className = "custom-field-group";
-  fieldGroup.style.marginBottom = "10px";
-
-  const keyInput = document.createElement("input");
-  keyInput.type = "text";
-  keyInput.placeholder = "শিরোনাম (যেমন: ওয়ারেন্টি)";
-  keyInput.className = "custom-key";
-  keyInput.style.marginRight = "5px";
-
-  const valueInput = document.createElement("input");
-  valueInput.type = "text";
-  valueInput.placeholder = "বিস্তারিত";
-  valueInput.className = "custom-value";
-
-  fieldGroup.appendChild(keyInput);
-  fieldGroup.appendChild(valueInput);
-  container.appendChild(fieldGroup);
-}
-
-// কোড জেনারেট করা
 document.getElementById("generateBtn").addEventListener("click", () => {
   const name = document.getElementById("name").value.trim();
   const code = document.getElementById("code").value.trim();
@@ -76,19 +21,30 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     return;
   }
 
-  const total = unit && qty ? ` (${qty} × ${unit} = ${price * qty}৳)` : "";
   const discount = offer && price ? Math.round(((price - offer) / price) * 100) : 0;
 
-  // ইমেজ স্লাইডার কোড তৈরি
-  let imgHTML = "";
+  // থাম্বনেইল গ্যালারি
+  let thumbHTML = "";
+  const mainImg = imgs[0].value.trim();
   imgs.forEach((input, i) => {
     const url = input.value.trim();
     if (url) {
-      imgHTML += `<img src="${url}" alt="image${i + 1}" style="width:100%;margin-bottom:10px;border-radius:8px;" />`;
+      thumbHTML += `<img src="${url}" style="width:60px;height:60px;border-radius:6px;cursor:pointer;border:2px solid ${i === 0 ? 'green' : 'transparent'};" onclick="document.getElementById('mainImg').src=this.src;document.querySelectorAll('#thumbs img').forEach(img=>img.style.border='2px solid transparent');this.style.border='2px solid green';">`;
     }
   });
 
-  // ভিডিও ইফ্রেম
+  // কাস্টম ফিল্ড
+  const customFields = document.querySelectorAll(".custom-field-group");
+  let customHTML = "";
+  customFields.forEach(group => {
+    const key = group.querySelector(".custom-key").value.trim();
+    const value = group.querySelector(".custom-value").value.trim();
+    if (key && value) {
+      customHTML += `<li>🔧 ${key}: ${value}</li>`;
+    }
+  });
+
+  // ইউটিউব ভিডিও এম্বেড
   let videoEmbed = "";
   if (video.includes("youtube.com") || video.includes("youtu.be")) {
     let videoId = "";
@@ -102,47 +58,57 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   }
 
-  // ✅ কাস্টম ফিল্ড সংগ্রহ করা
-  const customFields = document.querySelectorAll(".custom-field-group");
-  let customHTML = "";
-  customFields.forEach(group => {
-    const key = group.querySelector(".custom-key").value.trim();
-    const value = group.querySelector(".custom-value").value.trim();
-    if (key && value) {
-      customHTML += `<p style="color:#ccc;">${key}: ${value}</p>`;
-    }
-  });
-
-  // ফাইনাল কোড তৈরি
   const html = `
-<div class="product-box" style="background:#1f1f1f;padding:15px;border-radius:10px;margin-bottom:20px;">
-  ${imgHTML}
-  <h3 style="color:#fff;">${name}</h3>
-  <p style="color:#ccc;">মূল্য: <span style="${offer ? 'text-decoration:line-through;color:red;' : ''}">${price}৳</span>
-    ${offer ? `<span style="color:#00ff00;font-weight:bold;"> → ${offer}৳</span> 
-    <small style="color:orange;">(-${discount}%)</small>` : ""}
+<div style="text-align:center;">
+  <img id="mainImg" src="${mainImg}" style="width:100%;max-width:500px;border-radius:10px;border:1px solid #ccc;margin-bottom:10px;">
+
+  <div id="thumbs" style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+    ${thumbHTML}
+  </div>
+
+  <h2 style="margin:5px 0;">${name}</h2>
+
+  <p style="font-size:18px;">
+    ${offer ? `
+      <span style="text-decoration:line-through;color:#aaa;margin-right:6px;">৳${price}</span>
+      <span style="color:red;font-weight:bold;">৳${offer}</span>
+      <small style="color:limegreen;">(-${discount}%)</small>` 
+      : `<span style="color:red;font-weight:bold;">৳${price}</span>`}
   </p>
-  <p style="color:#ccc;">কোড: ${code} | স্ট্যাটাস: ${status || "N/A"} | ক্যাটাগরি: ${category || "N/A"}</p>
-  <p style="color:#ccc;">ডেলিভারি টাইম: ${delivery || "N/A"}</p>
-  <p style="color:#ccc;">ব্র্যান্ড: ${brand || "N/A"} | সাইজ: ${size || "N/A"} | রঙ: ${color || "N/A"}</p>
-  ${customHTML}
-  <p style="color:#ddd;">${desc || ""}</p>
-  <a href="https://wa.me/${wa}?text=আমি এই প্রোডাক্টটি অর্ডার করতে চাই: ${name} (${code})" 
-     style="display:inline-block;margin-top:10px;padding:10px 15px;background:#25D366;color:#fff;border-radius:5px;text-decoration:none;">
-    WhatsApp অর্ডার করুন
-  </a>
+
+  <p style="text-align:center;margin:10px 0;">
+    <a href="https://wa.me/${wa}?text=📦 আমি একটি পণ্য অর্ডার করতে চাই\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ${offer || price}৳\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি: ${delivery}" 
+       target="_blank"
+       style="display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;font-size:16px;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="height:20px;width:20px;">
+      অর্ডার করুন WhatsApp এ
+    </a>
+  </p>
+
+  <ul style="list-style:none;padding:0;margin:15px auto;text-align:left;max-width:500px;">
+    <li>🔢 কোড: ${code}</li>
+    <li>📦 স্ট্যাটাস: ${status || "IN STOCK"}</li>
+    <li>📁 ক্যাটাগরি: ${category || "N/A"}</li>
+    <li>🚚 ডেলিভারি টাইম: ${delivery || "N/A"}</li>
+    <li>🏷️ ব্র্যান্ড: ${brand || "N/A"}</li>
+    <li>📐 সাইজ: ${size || "N/A"} | 🎨 রঙ: ${color || "N/A"}</li>
+    ${customHTML}
+  </ul>
+
+  <div style="border:1px solid #eee;padding:15px;border-radius:10px;max-width:500px;margin:auto;margin-bottom:20px;">
+    <p style="margin:0;"><strong>Description:</strong><br>${desc || ""}</p>
+  </div>
+
   ${videoEmbed}
-  <div style="display:none;">{getProduct} ${name} {/getProduct}</div>
-</div>`;
+
+  <p style="display:none;">
+    <a href="#">
+      {getProduct} $price={৳${offer || price}} $sale={৳${price}} $style={1}
+    </a>
+  </p>
+</div>
+`;
 
   document.getElementById("output").textContent = html;
   document.getElementById("preview").innerHTML = html;
-});
-
-// কপি ফাংশন
-document.getElementById("copyBtn").addEventListener("click", () => {
-  const code = document.getElementById("output").textContent;
-  navigator.clipboard.writeText(code).then(() => {
-    alert("কোড কপি হয়েছে!");
-  });
 });

@@ -11,10 +11,12 @@
 
 <!-- ✅ সিকিউরিটি চেক: sessionStorage ব্যবহার -->
 <script>
-  if (!sessionStorage.getItem("loggedInUser")) {
-    alert("⚠️ অনুগ্রহ করে প্রথমে লগইন করুন!");
-    window.location.href = "index.html";
-  }
+  document.addEventListener("DOMContentLoaded", () => {
+    if (!sessionStorage.getItem("loggedInUser")) {
+      alert("⚠️ অনুগ্রহ করে প্রথমে লগইন করুন!");
+      window.location.href = "index.html";
+    }
+  });
 </script>
 
 <header class="header">
@@ -33,6 +35,7 @@
 
 <main>
   <div class="form-wrapper">
+    <!-- ✅ ইনপুট ফিল্ডস -->
     <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
     <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
     <input type="number" id="price" placeholder="মূল্য প্রাইস (৳)" required>
@@ -47,6 +50,7 @@
     <input type="text" id="category" placeholder="ক্যাটাগরি">
     <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea>
 
+    <!-- ✅ ইমেজ ইনপুট -->
     <div id="imageInputs">
       <div class="image-group">
         <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
@@ -54,10 +58,11 @@
     </div>
     <button onclick="addImageInput()"><i class="fas fa-plus"></i> আরও ছবি যোগ করুন</button>
 
+    <!-- ✅ ভিডিও ও হোয়াটসঅ্যাপ -->
     <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)">
     <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)" required>
 
-    <!-- ✅ Custom Fields Section -->
+    <!-- ✅ কাস্টম ফিল্ড -->
     <h4 style="margin-top: 20px;">🔧 কাস্টম তথ্য (যেমন: ওয়ারেন্টি, উৎপাদন দেশ)</h4>
     <div id="customFields">
       <div class="custom-field-group">
@@ -67,6 +72,7 @@
     </div>
     <button onclick="addCustomField()"><i class="fas fa-plus"></i> নতুন তথ্য যোগ করুন</button>
 
+    <!-- ✅ বাটনস -->
     <div style="text-align:center;">
       <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট</button>
       <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
@@ -77,7 +83,7 @@
   </div>
 </main>
 
-<!-- Sidebar -->
+<!-- ✅ Sidebar -->
 <div id="sidebar" class="sidebar">
   <button class="close-sidebar" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
   <a href="dashboard.html"><i class="fas fa-home"></i> হোম</a>
@@ -88,15 +94,13 @@
   <a href="index.html" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
 </div>
 
-<!-- ✅ Scripts -->
+<!-- ✅ Script Functions -->
 <script>
 function addImageInput() {
   const container = document.getElementById("imageInputs");
   const group = document.createElement("div");
   group.className = "image-group";
-  group.innerHTML = `
-    <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
-  `;
+  group.innerHTML = `<input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">`;
   container.appendChild(group);
 }
 
@@ -116,7 +120,6 @@ function toggleMenu() {
   sidebar.classList.toggle("active");
 }
 
-// ✅ লগআউট ফাংশন
 function logout() {
   sessionStorage.removeItem("loggedInUser");
 }

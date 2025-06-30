@@ -3,78 +3,68 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>G9Tool Dashboard</title>
+  <title>G9 Tool - Dashboard</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
+  <header>
+    <h1>G9 Tool Dashboard</h1>
+  </header>
 
-<header class="header">
-  <div class="left-icons">
-    <button class="menu-btn" onclick="toggleMenu()">
-      <i class="fas fa-bars"></i>
-    </button>
-    <div class="logo">
-      <i class="fas fa-box-open"></i> G9Tool
-    </div>
-  </div>
-  <a href="https://t.me/G9tool" class="telegram-icon" target="_blank">
-    <i class="fab fa-telegram-plane"></i>
-  </a>
-</header>
+  <main>
+    <section id="form-section">
+      <form id="product-form">
+        <input type="text" id="name" placeholder="পণ্যের নাম" required />
+        <input type="text" id="original-price" placeholder="মূল মূল্য" required />
+        <input type="text" id="discounted-price" placeholder="ডিসকাউন্ট মূল্য" required />
+        <input type="text" id="discount-percent" placeholder="ডিসকাউন্ট %" />
+        <input type="text" id="code" placeholder="পণ্যের কোড" />
+        <input type="text" id="status" placeholder="স্ট্যাটাস" />
+        <input type="text" id="category" placeholder="ক্যাটাগরি" />
+        <input type="text" id="brand" placeholder="ব্র্যান্ড" />
+        <input type="text" id="size" placeholder="সাইজ" />
+        <input type="text" id="color" placeholder="রং" />
+        <input type="text" id="delivery" placeholder="ডেলিভারি" />
+        <input type="text" id="image-url" placeholder="ছবির লিংক" />
+        <textarea id="desc" placeholder="পণ্যের বিবরণ"></textarea>
+        <button type="submit">তৈরি করুন</button>
+      </form>
+    </section>
 
-<main>
-  <div class="form-wrapper">
-    <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
-    <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
-    <input type="number" id="price" placeholder="মূল্য প্রাইস (৳)" required>
-    <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
-    <input type="text" id="unit" placeholder="ইউনিট (যেমন: পিস, কেজি)">
-    <input type="number" id="qty" placeholder="পরিমাণ (Qty)">
-    <input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি">
-    <input type="text" id="size" placeholder="সাইজ অপশন (যেমন: S, M, L)">
-    <input type="text" id="color" placeholder="রঙ অপশন (যেমন: লাল, সবুজ)">
-    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
-    <input type="text" id="status" placeholder="স্ট্যাটাস">
-    <input type="text" id="category" placeholder="ক্যাটাগরি">
-    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea>
+    <!-- ✅ আউটপুট রেন্ডার এরিয়া -->
+    <section id="output" class="product-output">
+      <div class="product-card">
+        <h2 id="output-name"></h2>
+        <p class="price-line">
+          <span class="original-price" id="output-original-price"></span>
+          <span class="discounted-price" id="output-discounted-price"></span>
+          <span class="discount-percent" id="output-discount-percent"></span>
+        </p>
+        <p class="meta-line">
+          <span id="output-code"></span> |
+          <span id="output-status"></span> |
+          <span id="output-category"></span>
+        </p>
+        <p class="delivery" id="output-delivery"></p>
+        <p class="variant-line">
+          <span id="output-brand"></span> |
+          <span id="output-size"></span> |
+          <span id="output-color"></span>
+        </p>
+        <div class="gallery" id="output-gallery"></div>
+        <p class="desc" id="output-desc"></p>
+        <a id="wa-button" class="wa-button" target="_blank">
+          <i class="fab fa-whatsapp"></i> WhatsApp অর্ডার করুন
+        </a>
+      </div>
+    </section>
+  </main>
 
-    <div id="imageInputs">
-      <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
-    </div>
-    <button onclick="addImageInput()"><i class="fas fa-plus"></i> আরও ছবি যোগ করুন</button>
+  <footer>
+    <p>© 2025 G9 Tool</p>
+  </footer>
 
-    <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)">
-    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)" required>
-
-    <!-- ✅ Custom Fields Section -->
-    <h4 style="margin-top: 20px;">🔧 কাস্টম তথ্য (যেমন: ওয়ারেন্টি, উৎপাদন দেশ)</h4>
-    <div id="custom-fields"></div>
-    <button onclick="addCustomField()"><i class="fas fa-plus"></i> নতুন তথ্য যোগ করুন</button>
-
-    <div style="text-align:center;">
-      <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট</button>
-      <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
-    </div>
-
-    <div class="output" id="output"></div>
-    <div class="live-preview" id="preview"></div>
-  </div>
-</main>
-
-<!-- Sidebar -->
-<div id="sidebar" class="sidebar">
-  <button class="close-sidebar" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
-  <a href="dashboard.html"><i class="fas fa-home"></i> হোম</a>
-  <a href="menu/about.html"><i class="fas fa-info-circle"></i> এবাউট</a>
-  <a href="menu/contact.html"><i class="fas fa-phone"></i> কন্টাক্ট</a>
-  <a href="menu/privacy.html"><i class="fas fa-user-shield"></i> প্রাইভেসি</a>
-  <a href="menu/tutorial.html"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
-  <a href="index.html" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
-</div>
-
-<!-- ✅ External Script -->
-<script src="script.js"></script>
-
+  <script src="script.js"></script>
 </body>
 </html>

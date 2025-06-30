@@ -139,3 +139,10 @@ document.getElementById("copyBtn").addEventListener("click", () => {
 function toggleMenu() {
   document.getElementById("sidebar").classList.toggle("active");
 }
+// নতুন তথ্য (কাস্টম ফিল্ড) বাটনের জন্য ক্লিক ইভেন্ট
+document.addEventListener("DOMContentLoaded", () => {
+  const addBtn = document.querySelector("button[onclick='addCustomField()']");
+  if (addBtn) {
+    addBtn.addEventListener("click", addCustomField);
+  }
+});

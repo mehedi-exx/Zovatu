@@ -2,119 +2,101 @@
 :root {
   --primary-color: #28a745;
   --secondary-color: #007bff;
+  --accent-color: #ff9800;
   --background-dark: #121212;
-  --background-light: #1f1f1f;
+  --background-light: #1c1c1c;
+  --sidebar-dark: #1f1f1f;
   --text-color: #ffffff;
   --border-color: #444;
-  --shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 /* Global Styles */
-body {
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  background: var(--background-dark);
-  color: var(--text-color);
-  font-family: 'Segoe UI', sans-serif;
 }
 
-.header {
-  background: var(--background-light);
-  padding: 12px 20px;
-  border-radius: 0 0 20px 20px;
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, var(--background-dark), var(--background-light));
+  color: var(--text-color);
+  min-height: 100vh;
+}
+
+header.header {
+  background: linear-gradient(90deg, #1e1e1e, #2a2a2a);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 0 0 15px 15px;
   box-shadow: var(--shadow);
 }
 
-.header-flex {
+.left-icons {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  max-width: 700px;
-  margin: auto;
+  gap: 10px;
 }
 
-.header-title {
+.menu-btn {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 22px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.menu-btn:hover {
+  transform: scale(1.1);
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: bold;
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 20px;
+  gap: 6px;
+  color: var(--primary-color);
 }
 
-.telegram {
-  background: var(--text-color);
-  color: var(--secondary-color);
-  padding: 8px;
+.telegram-icon {
+  background: #0088cc;
+  color: var(--text-color);
   border-radius: 50%;
-  text-decoration: none;
+  padding: 6px;
+  font-size: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
-}
-
-.login-box {
-  background: var(--background-light);
-  padding: 30px;
-  border-radius: 12px;
-  max-width: 360px;
-  width: 90%;
-  margin: 50px auto;
-  box-shadow: var(--shadow);
-  text-align: center;
-}
-
-input {
-  width: 100%;
-  padding: 14px;
-  margin: 10px 0;
-  border-radius: 8px;
-  border: 1px solid #333;
-  background: #2a2a2a;
-  color: var(--text-color);
-  font-size: 16px;
-}
-
-input:focus {
-  border-color: var(--primary-color);
-  outline: none;
-}
-
-.login-btn {
-  background: var(--primary-color);
-  color: var(--text-color);
-  border: none;
-  padding: 14px;
-  font-size: 16px;
-  border-radius: 8px;
-  width: 100%;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.contact-links {
-  margin-top: 20px;
-  font-size: 15px;
-}
-
-.contact-links a {
-  color: var(--secondary-color);
   text-decoration: none;
-  margin: 0 4px;
+  transition: background 0.3s;
 }
 
-/* Dashboard Styles */
-.form-wrapper {
-  max-width: 800px;
-  margin: 20px auto;
+.telegram-icon:hover {
+  background: #006bb3;
+}
+
+main {
   padding: 20px;
-  background: var(--background-light);
-  border-radius: 10px;
 }
 
-.form-wrapper h3 {
-  text-align: center;
-  color: var(--primary-color);
-  margin-bottom: 20px;
+.form-wrapper {
+  max-width: 600px;
+  margin: 20px auto;
+  background: var(--background-light);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .image-container {
@@ -129,40 +111,126 @@ input:focus {
   border: 1px solid var(--border-color);
 }
 
-button {
-  background: var(--secondary-color);
+input,
+textarea {
+  width: 100%;
+  background: #2a2a2a;
   color: var(--text-color);
-  border: none;
-  padding: 12px 24px;
-  font-size: 16px;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  cursor: pointer;
-  margin: 5px;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  font-size: 16px;
+  transition: border-color 0.3s;
 }
 
-.live-preview {
-  margin-top: 20px;
-  border: 1px solid var(--border-color);
-  padding: 10px;
+input:focus,
+textarea:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+button {
+  border: none;
+  padding: 12px 18px;
+  font-size: 16px;
+  font-weight: bold;
   border-radius: 8px;
-  background: var(--background-light);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+button i {
+  margin-right: 6px;
+}
+
+#generateBtn {
+  background: var(--primary-color);
+  color: var(--text-color);
+  margin-right: 10px;
+}
+
+#copyBtn {
+  background: var(--secondary-color);
+  color: var(--text-color);
+}
+
+#shareBtn {
+  background: var(--accent-color);
+  color: var(--text-color);
+}
+
+button:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+#imageInputs {
+  margin-bottom: 15px;
 }
 
 .sidebar {
-  /* Existing sidebar styles remain unchanged */
+  position: fixed;
+  top: 0;
+  left: -100%;
+  height: 100%;
+  width: 75%;
+  background: var(--sidebar-dark);
+  padding: 60px 20px;
+  transition: left 0.3s ease;
+  z-index: 999;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
 }
 
-@media (max-width: 600px) {
+.sidebar.active {
+  left: 0;
+}
+
+.sidebar a {
+  display: block;
+  background: #2a2a2a;
+  color: var(--text-color);
+  text-decoration: none;
+  margin-bottom: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+.sidebar a:hover {
+  background: #444;
+}
+
+.close-sidebar {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  color: var(--text-color);
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.close-sidebar:hover {
+  color: #ff4444;
+}
+
+@media (max-width: 480px) {
   .form-wrapper {
-    padding: 10px;
+    padding: 15px;
     margin: 10px;
   }
-  .login-box {
-    width: 90%;
-    margin: 20px auto;
+  input,
+  textarea {
+    font-size: 15px;
   }
   button {
     width: 100%;
-    margin: 5px 0;
+    margin-bottom: 10px;
+  }
+  #generateBtn {
+    margin-right: 0;
   }
 }

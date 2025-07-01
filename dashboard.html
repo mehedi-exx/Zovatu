@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="bn">
+<!DOCTYPE html>
+<html lang="bn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -20,56 +21,59 @@
       <i class="fas fa-bars"></i>
     </button>
     <div class="logo">
-      <i class="fas fa-box-open"></i> G9Tool
+      <i class="fas fa-box-open"></i> G9Tool Premium
     </div>
   </div>
   <a href="https://t.me/G9tool" class="telegram-icon" target="_blank">
     <i class="fab fa-telegram-plane"></i>
   </a>
-</header><main>
+</header>
+<main>
   <div class="form-wrapper">
-    <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
-    <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
-    <input type="number" id="price" placeholder="মূল্য প্রাইস (৳)" required>
-    <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
+    <h3 style="text-align:center; color:#28a745;">নতুন প্রোডাক্ট যোগ করুন</h3>
+    <input type="text" id="name" placeholder="প্রোডাক্ট নাম (যেমন: মোবাইল ফোন)" required>
+    <input type="text" id="code" placeholder="একটি অঙ্ক বা শব্দ দিয়ে কোড (যেমন: M001)" required>
+    <input type="number" id="price" placeholder="মূল মূল্য (৳) (যেমন: 5000)" required>
+    <input type="number" id="offer" placeholder="অফার মূল্য (ঐচ্ছিক, যেমন: 4500)">
     <input type="text" id="unit" placeholder="ইউনিট (যেমন: পিস, কেজি)">
-    <input type="number" id="qty" placeholder="পরিমাণ (Qty)">
-    <input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি">
-    <input type="text" id="size" placeholder="সাইজ অপশন (যেমন: S, M, L)">
-    <input type="text" id="color" placeholder="রঙ অপশন (যেমন: লাল, সবুজ)">
-    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
-    <input type="text" id="status" placeholder="স্ট্যাটাস">
-    <input type="text" id="category" placeholder="ক্যাটাগরি">
-    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea><div id="imageInputs">
-  <div class="image-group">
-    <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
+    <input type="number" id="qty" placeholder="পরিমাণ (যেমন: 10)">
+    <input type="text" id="brand" placeholder="ব্র্যান্ড (যেমন: Samsung)">
+    <input type="text" id="size" placeholder="সাইজ (যেমন: S, M, L)">
+    <input type="text" id="color" placeholder="রঙ (যেমন: লাল)">
+    <input type="text" id="delivery" placeholder="ডেলিভারি সময় (যেমন: ২-৩ দিন)">
+    <input type="text" id="status" placeholder="স্ট্যাটাস (যেমন: IN STOCK)">
+    <input type="text" id="category" placeholder="ক্যাটাগরি (যেমন: ইলেকট্রনিক্স)">
+    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা (যেমন: উচ্চমানের মোবাইল)"></textarea>
+    <div id="imageInputs">
+      <div class="image-group">
+        <input type="url" class="img-url" placeholder="প্রথম ছবির লিংক (যেমন: https://example.com/image.jpg)" required>
+      </div>
+    </div>
+    <button onclick="addImageInput()"><i class="fas fa-plus"></i> আরও ছবি যোগ করুন (সর্বোচ্চ 5)</button>
+
+    <input type="url" id="video" placeholder="YouTube ভিডিও লিংক (যেমন: https://youtube.com/watch?v=xyz)">
+    <input type="text" id="wa" placeholder="WhatsApp নম্বর (যেমন: 8801XXXXXXXXXX)" required>
+
+    <h4 style="margin-top:20px; color:#007bff;">🔧 কাস্টম তথ্য যোগ করুন</h4>
+    <div id="customFields">
+      <div class="custom-field-group">
+        <input type="text" class="custom-key" placeholder="শিরোনাম (যেমন: ওয়ারেন্টি)">
+        <input type="text" class="custom-value" placeholder="মান (যেমন: ১ বছর)">
+      </div>
+    </div>
+    <button onclick="addCustomField()"><i class="fas fa-plus"></i> নতুন তথ্য যোগ করুন</button>
+
+    <div style="text-align:center; margin-top:20px;">
+      <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট করুন</button>
+      <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
+      <button id="shareBtn" onclick="shareProduct()"><i class="fas fa-share-alt"></i> শেয়ার করুন</button>
+    </div>
+
+    <div class="output" id="output" style="display:none;"></div>
+    <div class="live-preview" id="preview" style="margin-top:20px; border:1px solid #ddd; padding:10px; border-radius:8px;"></div>
   </div>
-</div>
-<button onclick="addImageInput()"><i class="fas fa-plus"></i> আরও ছবি যোগ করুন</button>
-
-<input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)">
-<input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)" required>
-
-<!-- ✅ Custom Fields Section -->
-<h4 style="margin-top: 20px;">🔧 কাস্টম তথ্য (যেমন: ওয়ারেন্টি, উৎপাদন দেশ)</h4>
-<div id="customFields">
-  <div class="custom-field-group">
-    <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
-    <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
-  </div>
-</div>
-<button onclick="addCustomField()"><i class="fas fa-plus"></i> নতুন তথ্য যোগ করুন</button>
-
-<div style="text-align:center;">
-  <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট</button>
-  <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
-</div>
-
-<div class="output" id="output"></div>
-<div class="live-preview" id="preview"></div>
-
-  </div>
-</main><!-- Sidebar --><div id="sidebar" class="sidebar">
+</main>
+<div id="sidebar" class="sidebar">
   <button class="close-sidebar" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
   <a href="dashboard.html"><i class="fas fa-home"></i> হোম</a>
   <a href="menu/about.html"><i class="fas fa-info-circle"></i> এবাউট</a>
@@ -77,14 +81,15 @@
   <a href="menu/privacy.html"><i class="fas fa-user-shield"></i> প্রাইভেসি</a>
   <a href="menu/tutorial.html"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
   <a href="index.html" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
-</div><!-- ✅ Inline Script for Dynamic Fields --><script>
+</div>
+<script>
 function addImageInput() {
   const container = document.getElementById("imageInputs");
+  const inputs = container.querySelectorAll(".img-url");
+  if (inputs.length >= 5) return;
   const group = document.createElement("div");
   group.className = "image-group";
-  group.innerHTML = `
-    <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
-  `;
+  group.innerHTML = `<input type="url" class="img-url" placeholder="ছবির লিংক (যেমন: https://example.com/image.jpg)">`;
   container.appendChild(group);
 }
 
@@ -92,10 +97,7 @@ function addCustomField() {
   const container = document.getElementById("customFields");
   const group = document.createElement("div");
   group.className = "custom-field-group";
-  group.innerHTML = `
-    <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
-    <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
-  `;
+  group.innerHTML = `<input type="text" class="custom-key" placeholder="শিরোনাম (যেমন: ওয়ারেন্টি)"><input type="text" class="custom-value" placeholder="মান (যেমন: ১ বছর)">`;
   container.appendChild(group);
 }
 
@@ -103,5 +105,15 @@ function toggleMenu() {
   const sidebar = document.getElementById("sidebar");
   sidebar.classList.toggle("active");
 }
-</script><script src="script.js"></script></body>
+
+function shareProduct() {
+  const html = document.getElementById("preview").innerHTML;
+  const shareText = `G9Tool Premium-এ তৈরি প্রোডাক্ট:\n${html}\nআমার টুলটি ব্যবহার করে আপনার ব্যবসা বাড়ান! যোগাযোগ: https://t.me/G9tool`;
+  navigator.clipboard.writeText(shareText)
+    .then(() => alert("✅ শেয়ার করার লিঙ্ক কপি হয়েছে! Telegram-এ পেস্ট করুন।"))
+    .catch(() => alert("❌ শেয়ার করা যায়নি।"));
+}
+</script>
+<script src="script.js"></script>
+</body>
 </html>

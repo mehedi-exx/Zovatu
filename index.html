@@ -1,119 +1,130 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>G9Tool Premium</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>G9Tool - Custom HTML Generator</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
-      background: #121212;
-      color: white;
-      font-family: 'Segoe UI', sans-serif;
+      font-family: sans-serif;
+      padding: 20px;
+      background: #f9f9f9;
     }
-    .header {
-      background: #1f1f1f;
-      padding: 12px 20px;
-      border-radius: 0 0 20px 20px;
-    }
-    .header-flex {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      max-width: 700px;
-      margin: auto;
-    }
-    .header-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 20px;
-    }
-    .telegram {
-      background: white;
-      color: #0088cc;
-      padding: 8px;
-      border-radius: 50%;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-    }
-    .login-box {
-      background: #1f1f1f;
-      padding: 30px;
-      border-radius: 12px;
-      max-width: 360px;
-      width: 90%;
-      margin: auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5);
-      text-align: center;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-    input {
+    input, textarea, select, button {
       width: 100%;
-      padding: 14px;
-      margin: 10px 0;
+      padding: 10px;
+      margin: 5px 0 10px;
+      border: 1px solid #ccc;
       border-radius: 8px;
-      border: none;
-      background: #2a2a2a;
-      color: white;
-      font-size: 16px;
     }
-    .login-btn {
-      background: #28a745;
-      color: white;
-      border: none;
-      padding: 14px;
-      font-size: 16px;
-      border-radius: 8px;
-      width: 100%;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .contact-links {
+    #output {
+      background: #fff;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
       margin-top: 20px;
-      font-size: 15px;
+      white-space: pre-wrap;
     }
-    .contact-links a {
-      color: #00bfff;
-      text-decoration: none;
-      margin: 0 4px;
+    .field-box {
+      background: #eef;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+    }
+    .custom-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .custom-group input,
+    .custom-group select {
+      flex: 1;
     }
   </style>
 </head>
 <body>
 
-<!-- Header -->
-<div class="header">
-  <div class="header-flex">
-    <div class="header-title"><i class="fas fa-lock"></i> G9 Tool</div>
-    <a href="https://t.me/mehedi_exx" target="_blank" class="telegram"><i class="fab fa-telegram-plane"></i></a>
+  <h2>📦 G9Tool প্রোডাক্ট কোড জেনারেটর</h2>
+
+  <div class="field-box">
+    <label>প্রোডাক্ট নাম</label>
+    <input type="text" id="productName" placeholder="যেমন: চা পাতা">
+    
+    <label>দাম</label>
+    <input type="text" id="productPrice" placeholder="যেমন: ২০০ টাকা">
+    
+    <label>বর্ণনা</label>
+    <textarea id="productDesc" placeholder="পণ্যের বিস্তারিত বর্ণনা লিখুন..."></textarea>
   </div>
-</div>
 
-<!-- Login Card -->
-<div class="login-box">
-  <h2><i class="fas fa-user-shield"></i> লগইন করুন</h2>
-  <input type="text" id="username" placeholder="ইউজারনেম" />
-  <input type="password" id="password" placeholder="পাসওয়ার্ড" />
-  <button class="login-btn" onclick="loginUser()"><i class="fas fa-sign-in-alt"></i> লগইন</button>
-
-  <div class="contact-links">
-    প্রিমিয়াম এক্সেস নিতে যোগাযোগ করুন:
-    <br />
-    <a href="https://wa.me/8801627647776" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a> |
-    <a href="https://t.me/mehedi_exx" target="_blank"><i class="fab fa-telegram-plane"></i> Telegram</a>
+  <div id="customFieldsContainer">
+    <h3>➕ কাস্টম ফিল্ড যুক্ত করুন</h3>
+    <div id="customFieldList"></div>
+    <button onclick="addCustomField()">+ Add Custom Field</button>
   </div>
-</div>
 
-<script src="auth.js"></script>
+  <button onclick="generateCode()">✅ কোড তৈরি করুন</button>
+
+  <div id="output"></div>
+
+  <script>
+    let fieldCount = 0;
+
+    function addCustomField() {
+      fieldCount++;
+      const container = document.getElementById('customFieldList');
+
+      const field = document.createElement('div');
+      field.classList.add("custom-group");
+      field.innerHTML = `
+        <input type="text" placeholder="Field Label" id="label${fieldCount}" />
+        <select id="type${fieldCount}">
+          <option value="text">Text</option>
+          <option value="number">Number</option>
+          <option value="textarea">Textarea</option>
+        </select>
+        <input type="text" placeholder="Placeholder" id="placeholder${fieldCount}" />
+      `;
+      container.appendChild(field);
+    }
+
+    function generateCustomFieldsHTML() {
+      let html = '';
+      for (let i = 1; i <= fieldCount; i++) {
+        const label = document.getElementById(`label${i}`)?.value || '';
+        const type = document.getElementById(`type${i}`)?.value || '';
+        const placeholder = document.getElementById(`placeholder${i}`)?.value || '';
+
+        if (!label) continue;
+
+        if (type === 'textarea') {
+          html += `<label>${label}</label><br><textarea placeholder="${placeholder}"></textarea><br>`;
+        } else {
+          html += `<label>${label}</label><br><input type="${type}" placeholder="${placeholder}"><br>`;
+        }
+      }
+      return html;
+    }
+
+    function generateCode() {
+      const name = document.getElementById("productName").value;
+      const price = document.getElementById("productPrice").value;
+      const desc = document.getElementById("productDesc").value;
+
+      const customFields = generateCustomFieldsHTML();
+
+      const result = `
+<!-- ✅ Generated by G9Tool -->
+<div class="product-box" style="border:1px solid #ddd;padding:15px;border-radius:10px;">
+  <h2>${name}</h2>
+  <p><strong>দাম:</strong> ${price}</p>
+  <p>${desc}</p>
+  ${customFields}
+</div>
+      `;
+
+      document.getElementById("output").innerText = result.trim();
+    }
+  </script>
 </body>
 </html>

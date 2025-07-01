@@ -3,10 +3,10 @@
   --primary-color: #28a745;
   --secondary-color: #007bff;
   --background-dark: #121212;
-  --background-light: #1e1e1e;
+  --background-light: #1f1f1f;
   --text-color: #ffffff;
-  --border-color: #ddd;
-  --shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  --border-color: #444;
+  --shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 /* Global Styles */
@@ -50,11 +50,6 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 18px;
-  transition: transform 0.3s;
-}
-
-.telegram:hover {
-  transform: translateY(-2px);
 }
 
 .login-box {
@@ -66,12 +61,6 @@ body {
   margin: 50px auto;
   box-shadow: var(--shadow);
   text-align: center;
-  animation: fadeIn 0.5s ease-in;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }
 
 input {
@@ -79,15 +68,14 @@ input {
   padding: 14px;
   margin: 10px 0;
   border-radius: 8px;
-  border: none;
+  border: 1px solid #333;
   background: #2a2a2a;
   color: var(--text-color);
   font-size: 16px;
-  transition: border-color 0.3s;
 }
 
 input:focus {
-  border: 2px solid var(--primary-color);
+  border-color: var(--primary-color);
   outline: none;
 }
 
@@ -101,11 +89,6 @@ input:focus {
   width: 100%;
   cursor: pointer;
   font-weight: bold;
-  transition: transform 0.3s;
-}
-
-.login-btn:hover {
-  transform: translateY(-2px);
 }
 
 .contact-links {
@@ -117,11 +100,6 @@ input:focus {
   color: var(--secondary-color);
   text-decoration: none;
   margin: 0 4px;
-  transition: color 0.3s;
-}
-
-.contact-links a:hover {
-  color: #00d4ff;
 }
 
 /* Dashboard Styles */
@@ -129,6 +107,8 @@ input:focus {
   max-width: 800px;
   margin: 20px auto;
   padding: 20px;
+  background: var(--background-light);
+  border-radius: 10px;
 }
 
 .form-wrapper h3 {
@@ -145,7 +125,6 @@ input:focus {
 
 .image-container img {
   max-width: 100%;
-  margin: 0 auto;
   border-radius: 10px;
   border: 1px solid var(--border-color);
 }
@@ -159,12 +138,6 @@ button {
   border-radius: 8px;
   cursor: pointer;
   margin: 5px;
-  transition: transform 0.3s, background-color 0.3s;
-}
-
-button:hover {
-  transform: translateY(-2px);
-  background-color: #0056b3;
 }
 
 .live-preview {
@@ -176,12 +149,13 @@ button:hover {
 }
 
 .sidebar {
-  /* Existing sidebar styles remain, add if needed */
+  /* Existing sidebar styles remain unchanged */
 }
 
 @media (max-width: 600px) {
   .form-wrapper {
     padding: 10px;
+    margin: 10px;
   }
   .login-box {
     width: 90%;

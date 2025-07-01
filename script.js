@@ -3,28 +3,27 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   const name = document.getElementById("name").value.trim();
   const code = document.getElementById("code").value.trim();
   const price = parseFloat(document.getElementById("price").value);
-  const offer = parseFloat(document.getElementById("offer").value);
+  const offer = parseFloat(document.getElementById("offer").value) || 0;
   const unit = document.getElementById("unit").value.trim();
-  const qty = parseFloat(document.getElementById("qty").value);
+  const qty = parseFloat(document.getElementById("qty").value) || 0;
   const brand = document.getElementById("brand").value.trim();
   const size = document.getElementById("size").value.trim();
   const color = document.getElementById("color").value.trim();
   const delivery = document.getElementById("delivery").value.trim();
-  const status = document.getElementById("status").value.trim();
-  const category = document.getElementById("category").value.trim();
+  const status = document.getElementById("status").value.trim() || "IN STOCK";
+  const category = document.getElementById("category").value.trim() || "N/A";
   const desc = document.getElementById("desc").value.trim();
   const video = document.getElementById("video").value.trim();
   const wa = document.getElementById("wa").value.trim();
   const imgs = document.querySelectorAll(".img-url");
 
-  if (!name || !code || isNaN(price) || !imgs[0].value || !wa) {
-    alert("প্রোডাক্ট নাম, কোড, প্রাইস, প্রথম ছবি ও WhatsApp নম্বর বাধ্যতামূলক।");
+  if (!name || !code || isNaN(price) || !imgs[0].value || !wa || !/^\d{11}$/.test(wa.replace(/^880/, ''))) {
+    alert("⚠️ প্রোডাক্ট নাম, কোড, প্রাইস, প্রথম ছবি ও ১১ ডিজিটের WhatsApp নম্বর বাধ্যতামূলক।");
     return;
   }
 
   const discount = offer && price ? Math.round(((price - offer) / price) * 100) : 0;
 
-  // ✅ থাম্বনেইল ইমেজ
   let thumbHTML = "";
   const mainImg = imgs[0].value.trim();
   imgs.forEach((input, i) => {
@@ -34,9 +33,8 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   });
 
-  // ✅ কাস্টম তথ্য (key-value)
-  const customFields = document.querySelectorAll(".custom-field-group");
   let customHTML = "";
+  const customFields = document.querySelectorAll(".custom-field-group");
   customFields.forEach(group => {
     const key = group.querySelector(".custom-key").value.trim();
     const value = group.querySelector(".custom-value").value.trim();
@@ -45,7 +43,6 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   });
 
-  // ✅ ইউটিউব ভিডিও
   let videoEmbed = "";
   if (video.includes("youtube.com") || video.includes("youtu.be")) {
     let videoId = "";
@@ -59,7 +56,6 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   }
 
-  // ✅ HTML রেজাল্ট তৈরি
   const html = `
 <div style="text-align:center;">
   <img id="mainImg" src="${mainImg}" style="width:100%;max-width:500px;border-radius:10px;border:1px solid #ccc;margin-bottom:10px;">
@@ -82,8 +78,8 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   </p>
   <ul style="list-style:none;padding:0;margin:15px auto;text-align:left;max-width:500px;">
     <li>🔢 কোড: ${code}</li>
-    <li>📦 স্ট্যাটাস: ${status || "IN STOCK"}</li>
-    <li>📁 ক্যাটাগরি: ${category || "N/A"}</li>
+    <li>📦 স্ট্যাটাস: ${status}</li>
+    <li>📁 ক্যাটাগরি: ${category}</li>
     <li>🚚 ডেলিভারি টাইম: ${delivery || "N/A"}</li>
     <li>🏷️ ব্র্যান্ড: ${brand || "N/A"}</li>
     <li>📐 সাইজ: ${size || "N/A"} | 🎨 রঙ: ${color || "N/A"}</li>

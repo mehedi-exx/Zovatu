@@ -90,22 +90,17 @@
   </style>
 </head>
 <body>
-
-<!-- Header -->
 <div class="header">
   <div class="header-flex">
     <div class="header-title"><i class="fas fa-lock"></i> G9 Tool</div>
     <a href="https://t.me/mehedi_exx" target="_blank" class="telegram"><i class="fab fa-telegram-plane"></i></a>
   </div>
 </div>
-
-<!-- Login Card -->
 <div class="login-box">
   <h2><i class="fas fa-user-shield"></i> লগইন করুন</h2>
   <input type="text" id="username" placeholder="ইউজারনেম" />
   <input type="password" id="password" placeholder="পাসওয়ার্ড" />
   <button class="login-btn" onclick="loginUser()"><i class="fas fa-sign-in-alt"></i> লগইন</button>
-
   <div class="contact-links">
     প্রিমিয়াম এক্সেস নিতে যোগাযোগ করুন:
     <br />
@@ -113,7 +108,29 @@
     <a href="https://t.me/mehedi_exx" target="_blank"><i class="fab fa-telegram-plane"></i> Telegram</a>
   </div>
 </div>
+<script>
+const users = {
+  mehedi: { password: "ifty.hack", isPremium: true }
+};
 
-<script src="auth.js"></script>
+function loginUser() {
+  const uname = document.getElementById("username").value.trim();
+  const pass = document.getElementById("password").value.trim();
+
+  if (!uname || !pass) {
+    alert("⚠️ ইউজারনেম ও পাসওয়ার্ড পূরণ করুন");
+    return;
+  }
+
+  if (users[uname] && users[uname].password === pass && users[uname].isPremium) {
+    localStorage.setItem("loggedInUser", uname);
+    setTimeout(() => {
+      window.location.href = "dashboard.html";
+    }, 100);
+  } else {
+    alert("❌ ইউজার তথ্য সঠিক নয় অথবা প্রিমিয়াম ইউজার নন");
+  }
+}
+</script>
 </body>
 </html>

@@ -1,84 +1,71 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* CSS Variables */
+:root {
+  --primary-color: #28a745;
+  --secondary-color: #007bff;
+  --background-dark: #121212;
+  --background-light: #1e1e1e;
+  --text-color: #ffffff;
+  --border-color: #ddd;
+  --shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
+/* Global Styles */
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #121212, #1e1e1e);
-  color: #fff;
-  padding: 0;
   margin: 0;
-  min-height: 100vh;
+  padding: 0;
+  background: var(--background-dark);
+  color: var(--text-color);
+  font-family: 'Segoe UI', sans-serif;
 }
 
-header.header {
-  background: linear-gradient(90deg, #1e1e1e, #2a2a2a);
+.header {
+  background: var(--background-light);
+  padding: 12px 20px;
+  border-radius: 0 0 20px 20px;
+  box-shadow: var(--shadow);
+}
+
+.header-flex {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  border-radius: 0 0 15px 15px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  max-width: 700px;
+  margin: auto;
 }
 
-.left-icons {
+.header-title {
   display: flex;
   align-items: center;
-  gap: 10px;
-}
-
-.menu-btn {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 22px;
-  cursor: pointer;
-  transition: transform 0.3s;
-}
-
-.menu-btn:hover {
-  transform: scale(1.1);
-}
-
-.logo {
-  font-size: 18px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: #28a745;
-}
-
-.telegram-icon {
-  background: #0088cc;
-  color: white;
-  border-radius: 50%;
-  padding: 6px;
+  gap: 8px;
   font-size: 20px;
+}
+
+.telegram {
+  background: var(--text-color);
+  color: var(--secondary-color);
+  padding: 8px;
+  border-radius: 50%;
+  text-decoration: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  text-decoration: none;
-  transition: background 0.3s;
+  font-size: 18px;
+  transition: transform 0.3s;
 }
 
-.telegram-icon:hover {
-  background: #006bb3;
+.telegram:hover {
+  transform: translateY(-2px);
 }
 
-main {
-  padding: 20px;
-}
-
-.form-wrapper {
-  max-width: 600px;
-  margin: auto;
-  background: #1c1c1c;
-  padding: 20px;
+.login-box {
+  background: var(--background-light);
+  padding: 30px;
   border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.7);
+  max-width: 360px;
+  width: 90%;
+  margin: 50px auto;
+  box-shadow: var(--shadow);
+  text-align: center;
   animation: fadeIn 0.5s ease-in;
 }
 
@@ -87,128 +74,121 @@ main {
   to { opacity: 1; }
 }
 
-input,
-textarea {
+input {
   width: 100%;
-  background: #2a2a2a;
-  color: white;
-  border: 1px solid #444;
+  padding: 14px;
+  margin: 10px 0;
   border-radius: 8px;
-  padding: 12px 15px;
-  margin-bottom: 15px;
+  border: none;
+  background: #2a2a2a;
+  color: var(--text-color);
   font-size: 16px;
   transition: border-color 0.3s;
 }
 
-input:focus,
-textarea:focus {
-  border-color: #28a745;
+input:focus {
+  border: 2px solid var(--primary-color);
   outline: none;
 }
 
-button {
+.login-btn {
+  background: var(--primary-color);
+  color: var(--text-color);
   border: none;
-  padding: 12px 18px;
+  padding: 14px;
   font-size: 16px;
-  font-weight: bold;
   border-radius: 8px;
+  width: 100%;
   cursor: pointer;
-  transition: all 0.3s;
+  font-weight: bold;
+  transition: transform 0.3s;
 }
 
-button i {
-  margin-right: 6px;
-}
-
-#generateBtn {
-  background: #28a745;
-  color: white;
-  margin-right: 10px;
-}
-
-#copyBtn {
-  background: #007bff;
-  color: white;
-}
-
-#shareBtn {
-  background: #ff9800;
-  color: white;
-}
-
-button:hover {
-  opacity: 0.9;
+.login-btn:hover {
   transform: translateY(-2px);
 }
 
-#imageInputs {
-  margin-bottom: 15px;
+.contact-links {
+  margin-top: 20px;
+  font-size: 15px;
 }
 
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: -100%;
-  height: 100%;
-  width: 75%;
-  background: #1f1f1f;
-  padding: 60px 20px;
-  transition: left 0.3s ease;
-  z-index: 999;
-  box-shadow: 2px 0 10px rgba(0,0,0,0.5);
-}
-
-.sidebar.active {
-  left: 0;
-}
-
-.sidebar a {
-  display: block;
-  background: #2a2a2a;
-  color: white;
+.contact-links a {
+  color: var(--secondary-color);
   text-decoration: none;
-  margin-bottom: 10px;
-  padding: 12px;
-  border-radius: 8px;
-  transition: background 0.3s;
-}
-
-.sidebar a:hover {
-  background: #444;
-}
-
-.close-sidebar {
-  position: absolute;
-  top: 15px;
-  right: 20px;
-  background: none;
-  color: white;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
+  margin: 0 4px;
   transition: color 0.3s;
 }
 
-.close-sidebar:hover {
-  color: #ff4444;
+.contact-links a:hover {
+  color: #00d4ff;
 }
 
-@media (max-width: 480px) {
+/* Dashboard Styles */
+.form-wrapper {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.form-wrapper h3 {
+  text-align: center;
+  color: var(--primary-color);
+  margin-bottom: 20px;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.image-container img {
+  max-width: 100%;
+  margin: 0 auto;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+}
+
+button {
+  background: var(--secondary-color);
+  color: var(--text-color);
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 5px;
+  transition: transform 0.3s, background-color 0.3s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  background-color: #0056b3;
+}
+
+.live-preview {
+  margin-top: 20px;
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  border-radius: 8px;
+  background: var(--background-light);
+}
+
+.sidebar {
+  /* Existing sidebar styles remain, add if needed */
+}
+
+@media (max-width: 600px) {
   .form-wrapper {
-    padding: 15px;
+    padding: 10px;
   }
-
-  input,
-  textarea {
-    font-size: 15px;
+  .login-box {
+    width: 90%;
+    margin: 20px auto;
   }
-
   button {
     width: 100%;
-    margin-bottom: 10px;
-  }
-
-  #generateBtn {
-    margin-right: 0;
+    margin: 5px 0;
   }
 }

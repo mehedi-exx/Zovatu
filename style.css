@@ -88,6 +88,7 @@ button {
   font-weight: bold;
   border-radius: 8px;
   cursor: pointer;
+  transition: 0.3s;
 }
 
 button i {
@@ -103,6 +104,12 @@ button i {
 #copyBtn {
   background: #007bff;
   color: white;
+  margin-right: 10px;
+}
+
+#downloadBtn {
+  background: #ffc107;
+  color: black;
 }
 
 button:hover {
@@ -154,6 +161,36 @@ button:hover {
   cursor: pointer;
 }
 
+/* Admin Panel */
+.admin-box input[type="text"],
+.admin-box input[type="password"] {
+  margin-top: 10px;
+}
+
+.user-list {
+  margin-top: 20px;
+}
+
+.user-item {
+  background: #2a2a2a;
+  padding: 10px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.user-item button {
+  background: red;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Mobile Responsive */
 @media (max-width: 480px) {
   .form-wrapper {
     padding: 15px;
@@ -169,7 +206,12 @@ button:hover {
     margin-bottom: 10px;
   }
 
-  #generateBtn {
+  #generateBtn,
+  #copyBtn {
     margin-right: 0;
+  }
+
+  .sidebar {
+    width: 100%;
   }
 }

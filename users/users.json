@@ -1,0 +1,14 @@
+{
+  "mehedi": {
+    "password": "123456",
+    "isPremium": true
+  },
+  "demo": {
+    "password": "demo123",
+    "isPremium": false
+  },
+  "shamim": {
+    "password": "shamim321",
+    "isPremium": true
+  }
+}

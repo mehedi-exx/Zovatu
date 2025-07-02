@@ -1,4 +1,4 @@
-/* ✅ style.css (Full Update with Perfect Match, Mobile Responsive, Hidden Output, Sidebar, Buttons, and Admin Panel Styling) */
+/* ✅ style.css (Full Update with Reset, Admin Panel, Responsive, Clean Layout) */
 
 * {
   box-sizing: border-box;
@@ -105,9 +105,14 @@ button i {
   margin-right: 10px;
 }
 
-#downloadBtn {
-  background: #ffc107;
-  color: black;
+#resetBtn {
+  background: #dc3545;
+  color: white;
+  margin-top: 10px;
+}
+
+#resetBtn:hover {
+  background: #c82333;
 }
 
 button:hover {
@@ -194,6 +199,40 @@ button:hover {
   cursor: pointer;
 }
 
+/* Admin Panel Top Controls */
+.top-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.top-controls button,
+.top-controls label span {
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  transition: 0.3s;
+}
+
+.top-controls button {
+  background: #28a745;
+  color: white;
+}
+
+.top-controls label span {
+  background: #ffc107;
+  color: black;
+  display: inline-block;
+}
+
+.top-controls button:hover {
+  opacity: 0.9;
+}
+
 /* Output Hidden for Copy Only */
 #output {
   height: 0;
@@ -219,10 +258,15 @@ button:hover {
     margin-bottom: 10px;
   }
   #generateBtn,
-  #copyBtn {
+  #copyBtn,
+  #resetBtn {
     margin-right: 0;
   }
   .sidebar {
     width: 100%;
+  }
+  .top-controls {
+    flex-direction: column;
+    align-items: stretch;
   }
 }

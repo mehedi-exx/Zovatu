@@ -1,4 +1,4 @@
-<!-- ✅ admin.html: Delete + Preview ফিচার যুক্ত -->
+<!-- ✅ admin.html: Full-featured version with Edit, Delete, Preview, WhatsApp, and Custom Data -->
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -41,22 +41,22 @@
       margin-top: 10px;
     }
     .product-item button {
-      background: #007bff;
-      color: white;
-      border: none;
-      padding: 8px 14px;
+      flex: 1 1 auto;
+      padding: 10px;
       border-radius: 6px;
-      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
       display: flex;
+      justify-content: center;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
+      cursor: pointer;
+      white-space: nowrap;
     }
-    .product-item .delete-btn {
-      background: #dc3545;
-    }
-    .product-item .preview-btn {
-      background: #17a2b8;
-    }
+    .edit-btn { background: #007bff; color: #fff; }
+    .preview-btn { background: #17a2b8; color: #fff; }
+    .delete-btn { background: #dc3545; color: #fff; }
     .top-controls {
       display: flex;
       flex-wrap: wrap;
@@ -86,6 +86,11 @@
     }
     input[type="file"] {
       display: none;
+    }
+    @media (max-width: 500px) {
+      .product-item .actions button {
+        flex: 100%;
+      }
     }
   </style>
 </head>
@@ -122,9 +127,9 @@ function loadProducts() {
     div.className = "product-item";
     div.innerHTML = `
       <h4>${item.name}</h4>
-      <small>কোড: ${item.code} | মূল্য: ${item.price}৳</small>
+      <small>কোড: ${item.code} | মূল্য: ${item.offer || item.price}৳</small>
       <div class="actions">
-        <button onclick="editProduct(${index})"><i class='fas fa-edit'></i> এডিট</button>
+        <button class="edit-btn" onclick="editProduct(${index})"><i class='fas fa-edit'></i> এডিট</button>
         <button class="preview-btn" onclick="previewProduct(${index})"><i class='fas fa-eye'></i> প্রিভিউ</button>
         <button class="delete-btn" onclick="deleteProduct(${index})"><i class='fas fa-trash'></i> ডিলিট</button>
       </div>
@@ -134,7 +139,11 @@ function loadProducts() {
 }
 
 function editProduct(index) {
+  const products = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+  const data = products[index];
+  if (!data) return;
   localStorage.setItem("edit_product_index", index);
+  localStorage.setItem("formDraft", JSON.stringify(data));
   window.location.href = "dashboard.html?edit=1";
 }
 
@@ -150,12 +159,27 @@ function previewProduct(index) {
   const products = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
   const item = products[index];
   if (!item) return;
-  let html = `<h3>${item.name}</h3><p>কোড: ${item.code}</p><p>মূল্য: ${item.price}৳</p>`;
-  if (item.imgs?.length) {
-    html += `<img src="${item.imgs[0]}" style="max-width:100%;margin-top:10px;border-radius:10px;">`;
-  }
-  const win = window.open();
-  win.document.write(`<html><head><title>Preview</title><meta charset='UTF-8'></head><body style='font-family:sans-serif;padding:20px;'>${html}</body></html>`);
+
+  const discount = item.offer ? Math.round(((item.price - item.offer) / item.price) * 100) : 0;
+  let html = `
+  <div style="max-width:600px;margin:auto;font-family:sans-serif;text-align:center;">
+    <h2>${item.name}</h2>
+    ${item.imgs?.[0] ? `<img src="${item.imgs[0]}" style="max-width:100%;border-radius:10px;margin-bottom:10px;">` : ""}
+    <p><strong>মূল্য:</strong> ${item.offer ? `<span style='text-decoration:line-through;'>${item.price}৳</span> <span style='color:red;font-weight:bold;'>${item.offer}৳</span> <small style='color:limegreen'>(-${discount}%)</small>` : `${item.price}৳`}</p>
+    <p><strong>কোড:</strong> ${item.code}</p>
+    <p><strong>স্ট্যাটাস:</strong> ${item.status || "IN STOCK"}</p>
+    <p><strong>ডেলিভারি:</strong> ${item.delivery || "N/A"}</p>
+    <p><strong>বর্ণনা:</strong><br> ${item.desc || "N/A"}</p>
+    ${item.custom?.length ? `<ul style='text-align:left;max-width:500px;margin:auto;'>${item.custom.map(f => `<li>🔧 ${f.key}: ${f.value}</li>`).join('')}</ul>` : ""}
+    <p style="margin-top:20px;">
+      <a href="https://wa.me/${item.wa}?text=📦 আমি একটি পণ্য অর্ডার করতে চাই%0A🔖 প্রোডাক্ট: ${item.name}%0A💰 মূল্য: ${item.offer || item.price}৳%0A🧾 কোড: ${item.code}%0A📁 ক্যাটাগরি: ${item.category || 'N/A'}%0A🚚 ডেলিভারি: ${item.delivery}" target="_blank" style="display:inline-block;padding:10px 20px;background:#25D366;color:white;border-radius:6px;text-decoration:none;font-weight:bold;">
+        <i class="fab fa-whatsapp"></i> WhatsApp অর্ডার করুন
+      </a>
+    </p>
+  </div>`;
+
+  const win = window.open("", "_blank");
+  win.document.write(`<!DOCTYPE html><html><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Preview</title><link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css'></head><body style='background:#f9f9f9;margin:0;padding:20px;'>${html}</body></html>`);
 }
 
 function exportProducts() {

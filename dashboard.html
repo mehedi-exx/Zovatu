@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="bn">
+<!-- ✅ dashboard.html (পুরোনো ডিজাইন অক্ষুণ্ণ রেখে আপডেট) -->
+<!DOCTYPE html>
+<html lang="bn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,13 +9,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
-  <script>
-  // যদি ইউজার লগইন না করে থাকে, তাহলে index.html-এ রিডাইরেক্ট করে দাও
-  if (!localStorage.getItem("loggedInUser")) {
-    alert("⚠️ অনুগ্রহ করে প্রথমে লগইন করুন!");
-    window.location.href = "index.html";
-  }
+
+<script>
+// 🔐 ইউজার লগইন চেক
+if (!localStorage.getItem("loggedInUser")) {
+  alert("⚠️ অনুগ্রহ করে প্রথমে লগইন করুন!");
+  window.location.href = "index.html";
+}
 </script>
+
 <header class="header">
   <div class="left-icons">
     <button class="menu-btn" onclick="toggleMenu()">
@@ -26,7 +30,9 @@
   <a href="https://t.me/G9tool" class="telegram-icon" target="_blank">
     <i class="fab fa-telegram-plane"></i>
   </a>
-</header><main>
+</header>
+
+<main>
   <div class="form-wrapper">
     <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
     <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
@@ -40,36 +46,39 @@
     <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
     <input type="text" id="status" placeholder="স্ট্যাটাস">
     <input type="text" id="category" placeholder="ক্যাটাগরি">
-    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea><div id="imageInputs">
-  <div class="image-group">
-    <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
+    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea>
+
+    <div id="imageInputs">
+      <div class="image-group">
+        <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
+      </div>
+    </div>
+    <button onclick="addImageInput()"><i class="fas fa-plus"></i> আরও ছবি যোগ করুন</button>
+
+    <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)">
+    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)" required>
+
+    <h4 style="margin-top: 20px;">🔧 কাস্টম তথ্য (যেমন: ওয়ারেন্টি, উৎপাদন দেশ)</h4>
+    <div id="customFields">
+      <div class="custom-field-group">
+        <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
+        <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
+      </div>
+    </div>
+    <button onclick="addCustomField()"><i class="fas fa-plus"></i> নতুন তথ্য যোগ করুন</button>
+
+    <div style="text-align:center;">
+      <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট</button>
+      <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
+      <button id="downloadBtn"><i class="fas fa-download"></i> ডাউনলোড করুন</button>
+    </div>
+
+    <div class="output" id="output"></div>
+    <div class="live-preview" id="preview"></div>
   </div>
-</div>
-<button onclick="addImageInput()"><i class="fas fa-plus"></i> আরও ছবি যোগ করুন</button>
+</main>
 
-<input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)">
-<input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)" required>
-
-<!-- ✅ Custom Fields Section -->
-<h4 style="margin-top: 20px;">🔧 কাস্টম তথ্য (যেমন: ওয়ারেন্টি, উৎপাদন দেশ)</h4>
-<div id="customFields">
-  <div class="custom-field-group">
-    <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
-    <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
-  </div>
-</div>
-<button onclick="addCustomField()"><i class="fas fa-plus"></i> নতুন তথ্য যোগ করুন</button>
-
-<div style="text-align:center;">
-  <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট</button>
-  <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
-</div>
-
-<div class="output" id="output"></div>
-<div class="live-preview" id="preview"></div>
-
-  </div>
-</main><!-- Sidebar --><div id="sidebar" class="sidebar">
+<div id="sidebar" class="sidebar">
   <button class="close-sidebar" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
   <a href="dashboard.html"><i class="fas fa-home"></i> হোম</a>
   <a href="menu/about.html"><i class="fas fa-info-circle"></i> এবাউট</a>
@@ -77,31 +86,49 @@
   <a href="menu/privacy.html"><i class="fas fa-user-shield"></i> প্রাইভেসি</a>
   <a href="menu/tutorial.html"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
   <a href="index.html" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
-</div><!-- ✅ Inline Script for Dynamic Fields --><script>
-function addImageInput() {
-  const container = document.getElementById("imageInputs");
-  const group = document.createElement("div");
-  group.className = "image-group";
-  group.innerHTML = `
-    <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
-  `;
-  container.appendChild(group);
-}
+</div>
 
-function addCustomField() {
-  const container = document.getElementById("customFields");
-  const group = document.createElement("div");
-  group.className = "custom-field-group";
-  group.innerHTML = `
-    <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
-    <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
-  `;
-  container.appendChild(group);
-}
-
+<script src="script.js"></script>
+<script>
+// ✅ মেনু টগল
 function toggleMenu() {
-  const sidebar = document.getElementById("sidebar");
-  sidebar.classList.toggle("active");
+  document.getElementById("sidebar").classList.toggle("active");
 }
-</script><script src="script.js"></script></body>
+
+// ✅ Form Auto-save Draft
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem("formDraft");
+  if (saved) {
+    const data = JSON.parse(saved);
+    for (const id in data) {
+      const el = document.getElementById(id);
+      if (el) el.value = data[id];
+    }
+  }
+});
+
+document.querySelectorAll("input, textarea").forEach(input => {
+  input.addEventListener("input", () => {
+    const draft = {};
+    document.querySelectorAll("input, textarea").forEach(el => {
+      if (el.id) draft[el.id] = el.value;
+    });
+    localStorage.setItem("formDraft", JSON.stringify(draft));
+  });
+});
+
+// ✅ কোড ডাউনলোড বাটন
+const downloadBtn = document.getElementById("downloadBtn");
+if (downloadBtn) {
+  downloadBtn.addEventListener("click", () => {
+    const code = document.getElementById("output").textContent;
+    const blob = new Blob([code], {type: "text/html"});
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "product.html";
+    link.click();
+  });
+}
+</script>
+</body>
 </html>

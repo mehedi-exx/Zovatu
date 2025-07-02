@@ -1,4 +1,4 @@
-/* G9Tool Updated CSS */
+/* G9Tool Updated CSS (Optimized Layout with Fixes Only) */
 
 * {
   box-sizing: border-box;
@@ -14,35 +14,23 @@ body {
   margin: 0;
 }
 
+/* ✅ Header optimized */
 header.header {
   background: #1e1e1e;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 12px 16px;
+  padding: 10px 16px;
   border-radius: 0 0 15px 15px;
+  position: relative;
 }
 
 .left-icons {
   display: flex;
   align-items: center;
   gap: 10px;
-}
-
-.menu-btn {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 22px;
-  cursor: pointer;
-}
-
-.logo {
-  font-size: 18px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  position: absolute;
+  left: 16px;
 }
 
 .telegram-icon {
@@ -55,6 +43,24 @@ header.header {
   align-items: center;
   justify-content: center;
   text-decoration: none;
+  position: absolute;
+  right: 16px;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.menu-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 22px;
+  cursor: pointer;
 }
 
 main {
@@ -113,6 +119,7 @@ button:hover {
   margin-bottom: 15px;
 }
 
+/* ✅ Sidebar stays as is but slightly improved */
 .sidebar {
   position: fixed;
   top: 0;
@@ -143,22 +150,50 @@ button:hover {
   background: #444;
 }
 
+/* ✅ Close button styled nicely */
 .close-sidebar {
   position: absolute;
   top: 15px;
   right: 20px;
-  background: none;
+  background: #333;
   color: white;
   border: none;
-  font-size: 24px;
+  font-size: 22px;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.close-sidebar:hover {
+  background: #555;
+}
+
+/* ✅ Responsive for all devices */
+@media (max-width: 768px) {
+  .form-wrapper {
+    padding: 16px;
+  }
+
+  .left-icons {
+    position: absolute;
+    left: 12px;
+  }
+
+  .telegram-icon {
+    right: 12px;
+  }
+
+  .logo {
+    font-size: 17px;
+  }
 }
 
 @media (max-width: 480px) {
-  .form-wrapper {
-    padding: 15px;
-  }
-
   input,
   textarea {
     font-size: 15px;

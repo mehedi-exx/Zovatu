@@ -1,4 +1,4 @@
-// ✅ প্রোডাক্ট HTML তৈরি (Updated with Hidden Output + Copy support)
+// ✅ প্রোডাক্ট HTML তৈরি (Duplicate কোড চেক + Hidden Output + Copy + Edit Save)
 document.getElementById("generateBtn").addEventListener("click", () => {
   const name = document.getElementById("name").value.trim();
   const code = document.getElementById("code").value.trim();
@@ -18,12 +18,25 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   const imgs = document.querySelectorAll(".img-url");
 
   if (!name || !code || isNaN(price) || !imgs[0].value || !wa) {
-    alert("প্রোডাক্ট নাম, কোড, প্রাইস, প্রথম ছবি ও WhatsApp নম্বর বাধ্যতামূলক।");
+    alert("❌ প্রোডাক্ট নাম, কোড, প্রাইস, প্রথম ছবি ও WhatsApp নম্বর দিতে হবে।");
     return;
   }
 
+  // 🔐 Duplicate কোড চেক
+  const user = localStorage.getItem("loggedInUser") || "guest";
+  const key = `g9_products_${user}`;
+  const products = JSON.parse(localStorage.getItem(key) || "[]");
+  const editIndex = localStorage.getItem("edit_product_index");
+  const duplicate = products.some((p, i) => i != editIndex && p.code === code);
+  if (duplicate) {
+    alert("⚠️ এই কোড দিয়ে ইতিমধ্যে একটি প্রোডাক্ট তৈরি হয়েছে! অনুগ্রহ করে নতুন কোড দিন।");
+    return;
+  }
+
+  // ⬇️ ডিসকাউন্ট ক্যাল্কুলেশন
   const discount = offer && price ? Math.round(((price - offer) / price) * 100) : 0;
 
+  // ✅ থাম্বনেইল
   let thumbHTML = "";
   const mainImg = imgs[0].value.trim();
   imgs.forEach((input, i) => {
@@ -33,16 +46,20 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   });
 
+  // ✅ কাস্টম তথ্য
   const customFields = document.querySelectorAll(".custom-field-group");
   let customHTML = "";
+  const customArray = [];
   customFields.forEach(group => {
     const key = group.querySelector(".custom-key").value.trim();
     const value = group.querySelector(".custom-value").value.trim();
     if (key && value) {
       customHTML += `<li>🔧 ${key}: ${value}</li>`;
+      customArray.push({ key, value });
     }
   });
 
+  // ✅ ইউটিউব ভিডিও
   let videoEmbed = "";
   if (video.includes("youtube.com") || video.includes("youtu.be")) {
     let videoId = "";
@@ -56,6 +73,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   }
 
+  // ✅ প্রোডাক্ট HTML তৈরি
   const html = `
 <div style="text-align:center;">
   <img id="mainImg" src="${mainImg}" style="width:100%;max-width:500px;border-radius:10px;border:1px solid #ccc;margin-bottom:10px;">
@@ -90,51 +108,27 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   </div>
   ${videoEmbed}
   <p style="display:none;"><a href="#">{getProduct} $price={৳${offer || price}} $sale={৳${price}} $style={1}</a></p>
-</div>
-`;
+</div>`;
 
-  document.getElementById("output").textContent = html; // হিডেন রাখা
-  document.getElementById("preview").innerHTML = html; // দেখা যাবে
+  // ✅ Output অ্যাসাইন
+  document.getElementById("output").textContent = html;
+  document.getElementById("preview").innerHTML = html;
+
+  // ✅ Save Product to localStorage
+  const product = {
+    name, code, price, offer, unit, qty, brand, size, color,
+    delivery, status, category, desc, video, wa,
+    imgs: [...imgs].map(i => i.value.trim()).filter(Boolean),
+    custom: customArray
+  };
+
+  if (editIndex !== null) {
+    products[parseInt(editIndex)] = product;
+    localStorage.removeItem("edit_product_index");
+  } else {
+    products.push(product);
+  }
+
+  localStorage.setItem(key, JSON.stringify(products));
+  alert("✅ প্রোডাক্ট সেভ হয়েছে!");
 });
-
-document.getElementById("copyBtn").addEventListener("click", () => {
-  const output = document.getElementById("output").textContent;
-  navigator.clipboard.writeText(output)
-    .then(() => alert("✅ কোড কপি হয়েছে!"))
-    .catch(() => alert("❌ কপি করা যায়নি"));
-});
-
-document.getElementById("downloadBtn").addEventListener("click", () => {
-  const code = document.getElementById("output").textContent;
-  const blob = new Blob([code], {type: "text/html"});
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "product.html";
-  link.click();
-});
-
-function addImageInput() {
-  const container = document.getElementById("imageInputs");
-  const inputs = container.querySelectorAll(".img-url");
-  if (inputs.length >= 5) return;
-  const input = document.createElement("input");
-  input.type = "url";
-  input.className = "img-url";
-  input.placeholder = "ছবির লিংক (Image URL)";
-  container.appendChild(input);
-}
-
-function addCustomField() {
-  const container = document.getElementById("customFields");
-  const group = document.createElement("div");
-  group.className = "custom-field-group";
-  group.innerHTML = `
-    <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
-    <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
-  `;
-  container.appendChild(group);
-}
-
-function toggleMenu() {
-  document.getElementById("sidebar").classList.toggle("active");
-}

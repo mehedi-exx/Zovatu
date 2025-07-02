@@ -173,3 +173,39 @@ button:hover {
     margin-right: 0;
   }
 }
+/* Admin Panel Additions */
+.user-list { margin-top: 20px; }
+.user-item {
+  background: #2a2a2a;
+  padding: 15px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  border-left: 4px solid #28a745;
+}
+.user-item button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin-left: 6px;
+  cursor: pointer;
+}
+.top-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.top-controls input[type="text"] {
+  flex: 1;
+  background: #2a2a2a;
+  color: white;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 10px 12px;
+}

@@ -7,27 +7,31 @@ function loginUser() {
     return;
   }
 
-  fetch(`users/${uname}.json`)
+  fetch("users/users.json")
     .then(res => {
       if (!res.ok) {
-        throw new Error("ইউজার পাওয়া যায়নি");
+        throw new Error("⚠️ ইউজার ডেটা লোড করা যায়নি");
       }
       return res.json();
     })
-    .then(data => {
-      if (data.password === pass && data.isPremium) {
-        // লোকালস্টোরেজে ইউজার তথ্য সংরক্ষণ
-        localStorage.setItem("loggedInUser", uname);
+    .then(users => {
+      const user = users[uname];
+      if (!user) {
+        alert("❌ ইউজার নেই");
+        return;
+      }
 
-        // একটু ডিলে দিয়ে রিডাইরেক্ট, যাতে লোকালস্টোরেজ সেভ হয়
+      if (user.password === pass && user.isPremium) {
+        localStorage.setItem("loggedInUser", uname);
+        alert("✅ সফলভাবে লগইন হয়েছে!");
         setTimeout(() => {
           window.location.href = "dashboard.html";
         }, 100);
       } else {
-        alert("❌ ইউজার তথ্য সঠিক নয় অথবা প্রিমিয়াম ইউজার নন");
+        alert("❌ পাসওয়ার্ড ভুল অথবা আপনি প্রিমিয়াম ইউজার নন");
       }
     })
     .catch(error => {
-      alert("⚠️ লগইন ব্যর্থ: " + error.message);
+      alert("🚫 লগইন ব্যর্থ: " + error.message);
     });
 }

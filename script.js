@@ -1,4 +1,4 @@
-// ✅ প্রোডাক্ট HTML তৈরি
+// ✅ কোড জেনারেট বাটন
 document.getElementById("generateBtn").addEventListener("click", () => {
   const name = document.getElementById("name").value.trim();
   const code = document.getElementById("code").value.trim();
@@ -18,13 +18,13 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   const imgs = document.querySelectorAll(".img-url");
 
   if (!name || !code || isNaN(price) || !imgs[0].value || !wa) {
-    alert("প্রোডাক্ট নাম, কোড, প্রাইস, প্রথম ছবি ও WhatsApp নম্বর বাধ্যতামূলক।");
+    alert("❌ প্রোডাক্ট নাম, কোড, প্রাইস, প্রথম ছবি ও WhatsApp নম্বর দিতে হবে।");
     return;
   }
 
   const discount = offer && price ? Math.round(((price - offer) / price) * 100) : 0;
 
-  // ✅ থাম্বনেইল ইমেজ
+  // ✅ থাম্বনেইল তৈরি
   let thumbHTML = "";
   const mainImg = imgs[0].value.trim();
   imgs.forEach((input, i) => {
@@ -34,7 +34,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   });
 
-  // ✅ কাস্টম তথ্য
+  // ✅ কাস্টম তথ্য তৈরি
   const customFields = document.querySelectorAll(".custom-field-group");
   let customHTML = "";
   customFields.forEach(group => {
@@ -45,11 +45,11 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   });
 
-  // ✅ ইউটিউব ভিডিও এম্বেড
+  // ✅ ইউটিউব ভিডিও ইমবেড
   let videoEmbed = "";
   if (video.includes("youtube.com") || video.includes("youtu.be")) {
     let videoId = "";
-    if (video.includes("v=")) {
+    if (video.includes("youtube.com/watch?v=")) {
       videoId = video.split("v=")[1].split("&")[0];
     } else if (video.includes("youtu.be/")) {
       videoId = video.split("youtu.be/")[1];
@@ -59,7 +59,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   }
 
-  // ✅ HTML Output
+  // ✅ HTML তৈরি
   const html = `
 <div style="text-align:center;">
   <img id="mainImg" src="${mainImg}" style="width:100%;max-width:500px;border-radius:10px;border:1px solid #ccc;margin-bottom:10px;">
@@ -69,7 +69,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     ${offer ? `
       <span style="text-decoration:line-through;color:#aaa;margin-right:6px;">৳${price}</span>
       <span style="color:red;font-weight:bold;">৳${offer}</span>
-      <small style="color:limegreen;">(-${discount}%)</small>` 
+      <small style="color:limegreen;">(-${discount}%)</small>`
       : `<span style="color:red;font-weight:bold;">৳${price}</span>`}
   </p>
   <p style="text-align:center;margin:10px 0;">
@@ -100,3 +100,40 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   document.getElementById("output").textContent = html;
   document.getElementById("preview").innerHTML = html;
 });
+
+// ✅ কপি বাটন
+document.getElementById("copyBtn").addEventListener("click", () => {
+  const output = document.getElementById("output").textContent;
+  navigator.clipboard.writeText(output)
+    .then(() => alert("✅ কোড কপি হয়েছে!"))
+    .catch(() => alert("❌ কপি করা যায়নি"));
+});
+
+// ✅ আরও ছবি ইনপুট যোগ
+function addImageInput() {
+  const container = document.getElementById("imageInputs");
+  const inputs = container.querySelectorAll(".img-url");
+  if (inputs.length >= 5) return;
+  const input = document.createElement("input");
+  input.type = "url";
+  input.className = "img-url";
+  input.placeholder = "ছবির লিংক (Image URL)";
+  container.appendChild(input);
+}
+
+// ✅ কাস্টম তথ্য ইনপুট যোগ
+function addCustomField() {
+  const container = document.getElementById("customFields");
+  const group = document.createElement("div");
+  group.className = "custom-field-group";
+  group.innerHTML = `
+    <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
+    <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
+  `;
+  container.appendChild(group);
+}
+
+// ✅ সাইড মেনু টগল
+function toggleMenu() {
+  document.getElementById("sidebar").classList.toggle("active");
+}

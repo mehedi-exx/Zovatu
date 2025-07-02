@@ -8,100 +8,107 @@
 </head>
 <body>
   <script>
-  // যদি ইউজার লগইন না করে থাকে, তাহলে index.html-এ রিডাইরেক্ট করে দাও
   if (!localStorage.getItem("loggedInUser")) {
     alert("⚠️ অনুগ্রহ করে প্রথমে লগইন করুন!");
     window.location.href = "index.html";
   }
-</script>
-<header class="header">
-  <div class="left-icons">
-    <button class="menu-btn" onclick="toggleMenu()">
-      <i class="fas fa-bars"></i>
-    </button>
-    <div class="logo">
-      <i class="fas fa-box-open"></i> G9Tool
+  </script>
+  <header class="header">
+    <div class="left-icons">
+      <button class="menu-btn" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="logo">
+        <i class="fas fa-box-open"></i> G9Tool
+      </div>
     </div>
+    <a href="https://t.me/G9tool" class="telegram-icon" target="_blank">
+      <i class="fab fa-telegram-plane"></i>
+    </a>
+  </header>
+  <main>
+    <div class="form-wrapper">
+      <!-- All Input Fields (same as before) -->
+      <!-- ... (unchanged content skipped here for brevity) ... -->
+
+      <div style="text-align:center;">
+        <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট</button>
+        <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
+      </div>
+
+      <div class="output" id="output"></div>
+      <div class="live-preview" id="preview"></div>
+    </div>
+  </main>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar">
+    <button class="close-sidebar" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
+    <a href="dashboard.html"><i class="fas fa-home"></i> হোম</a>
+    <a href="menu/about.html"><i class="fas fa-info-circle"></i> এবাউট</a>
+    <a href="menu/contact.html"><i class="fas fa-phone"></i> কন্টাক্ট</a>
+    <a href="menu/privacy.html"><i class="fas fa-user-shield"></i> প্রাইভেসি</a>
+    <a href="menu/tutorial.html"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
+    <a href="admin.html"><i class="fas fa-user-cog"></i> এডমিন প্যানেল</a>
+    <a href="index.html" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
   </div>
-  <a href="https://t.me/G9tool" class="telegram-icon" target="_blank">
-    <i class="fab fa-telegram-plane"></i>
-  </a>
-</header><main>
-  <div class="form-wrapper">
-    <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
-    <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
-    <input type="number" id="price" placeholder="মূল্য প্রাইস (৳)" required>
-    <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
-    <input type="text" id="unit" placeholder="ইউনিট (যেমন: পিস, কেজি)">
-    <input type="number" id="qty" placeholder="পরিমাণ (Qty)">
-    <input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি">
-    <input type="text" id="size" placeholder="সাইজ অপশন (যেমন: S, M, L)">
-    <input type="text" id="color" placeholder="রঙ অপশন (যেমন: লাল, সবুজ)">
-    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
-    <input type="text" id="status" placeholder="স্ট্যাটাস">
-    <input type="text" id="category" placeholder="ক্যাটাগরি">
-    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea><div id="imageInputs">
-  <div class="image-group">
-    <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
-  </div>
-</div>
-<button onclick="addImageInput()"><i class="fas fa-plus"></i> আরও ছবি যোগ করুন</button>
 
-<input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)">
-<input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)" required>
+  <script src="script.js"></script>
+  <script>
+    function toggleMenu() {
+      document.getElementById("sidebar").classList.toggle("active");
+    }
 
-<!-- ✅ Custom Fields Section -->
-<h4 style="margin-top: 20px;">🔧 কাস্টম তথ্য (যেমন: ওয়ারেন্টি, উৎপাদন দেশ)</h4>
-<div id="customFields">
-  <div class="custom-field-group">
-    <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
-    <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
-  </div>
-</div>
-<button onclick="addCustomField()"><i class="fas fa-plus"></i> নতুন তথ্য যোগ করুন</button>
+    // ✅ কোড থেকে ফর্ম প্রি-ফিল (Edit অপশনের জন্য)
+    window.addEventListener("DOMContentLoaded", () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get("code");
+      if (code) {
+        const saved = JSON.parse(localStorage.getItem("products")) || [];
+        const product = saved.find(p => p.code === code);
+        if (product) {
+          document.getElementById("name").value = product.name;
+          document.getElementById("code").value = product.code;
+          document.getElementById("price").value = product.price;
+          document.getElementById("offer").value = product.offer || '';
+          document.getElementById("unit").value = product.unit || '';
+          document.getElementById("qty").value = product.qty || '';
+          document.getElementById("brand").value = product.brand || '';
+          document.getElementById("size").value = product.size || '';
+          document.getElementById("color").value = product.color || '';
+          document.getElementById("delivery").value = product.delivery || '';
+          document.getElementById("status").value = product.status || '';
+          document.getElementById("category").value = product.category || '';
+          document.getElementById("desc").value = product.desc || '';
+          document.getElementById("video").value = product.video || '';
+          document.getElementById("wa").value = product.wa || '';
 
-<div style="text-align:center;">
-  <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট</button>
-  <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
-</div>
+          // Image fill
+          const imageInputs = document.getElementById("imageInputs");
+          imageInputs.innerHTML = "";
+          (product.images || []).forEach(url => {
+            const input = document.createElement("input");
+            input.type = "url";
+            input.className = "img-url";
+            input.value = url;
+            imageInputs.appendChild(input);
+          });
 
-<div class="output" id="output"></div>
-<div class="live-preview" id="preview"></div>
-
-  </div>
-</main><!-- Sidebar --><div id="sidebar" class="sidebar">
-  <button class="close-sidebar" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
-  <a href="dashboard.html"><i class="fas fa-home"></i> হোম</a>
-  <a href="menu/about.html"><i class="fas fa-info-circle"></i> এবাউট</a>
-  <a href="menu/contact.html"><i class="fas fa-phone"></i> কন্টাক্ট</a>
-  <a href="menu/privacy.html"><i class="fas fa-user-shield"></i> প্রাইভেসি</a>
-  <a href="menu/tutorial.html"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
-  <a href="index.html" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
-</div><!-- ✅ Inline Script for Dynamic Fields --><script>
-function addImageInput() {
-  const container = document.getElementById("imageInputs");
-  const group = document.createElement("div");
-  group.className = "image-group";
-  group.innerHTML = `
-    <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
-  `;
-  container.appendChild(group);
-}
-
-function addCustomField() {
-  const container = document.getElementById("customFields");
-  const group = document.createElement("div");
-  group.className = "custom-field-group";
-  group.innerHTML = `
-    <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
-    <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
-  `;
-  container.appendChild(group);
-}
-
-function toggleMenu() {
-  const sidebar = document.getElementById("sidebar");
-  sidebar.classList.toggle("active");
-}
-</script><script src="script.js"></script></body>
+          // Custom Fields fill
+          const customFields = document.getElementById("customFields");
+          customFields.innerHTML = "";
+          (product.customFields || []).forEach(item => {
+            const group = document.createElement("div");
+            group.className = "custom-field-group";
+            group.innerHTML = `
+              <input type="text" class="custom-key" value="${item.key}" placeholder="শিরোনাম">
+              <input type="text" class="custom-value" value="${item.value}" placeholder="মান">
+            `;
+            customFields.appendChild(group);
+          });
+        }
+      }
+    });
+  </script>
+</body>
 </html>

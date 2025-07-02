@@ -1,4 +1,4 @@
-// ✅ প্রোডাক্ট HTML তৈরি
+// ✅ প্রোডাক্ট HTML তৈরি ও সেভ
 document.getElementById("generateBtn").addEventListener("click", () => {
   const name = document.getElementById("name").value.trim();
   const code = document.getElementById("code").value.trim();
@@ -18,7 +18,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   const imgs = document.querySelectorAll(".img-url");
 
   if (!name || !code || isNaN(price) || !imgs[0].value || !wa) {
-    alert("প্রোডাক্ট নাম, কোড, প্রাইস, প্রথম ছবি ও WhatsApp নম্বর বাধ্যতামূলক।");
+    alert("⚠️ প্রোডাক্ট নাম, কোড, প্রাইস, প্রথম ছবি ও WhatsApp নম্বর বাধ্যতামূলক।");
     return;
   }
 
@@ -34,7 +34,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   });
 
-  // ✅ কাস্টম তথ্য (key-value)
+  // ✅ কাস্টম তথ্য
   const customFields = document.querySelectorAll(".custom-field-group");
   let customHTML = "";
   customFields.forEach(group => {
@@ -59,7 +59,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   }
 
-  // ✅ HTML রেজাল্ট তৈরি
+  // ✅ HTML তৈরির অংশ
   const html = `
 <div style="text-align:center;">
   <img id="mainImg" src="${mainImg}" style="width:100%;max-width:500px;border-radius:10px;border:1px solid #ccc;margin-bottom:10px;">
@@ -93,12 +93,19 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     <p style="margin:0;"><strong>Description:</strong><br>${desc || ""}</p>
   </div>
   ${videoEmbed}
-  <p style="display:none;"><a href="#">{getProduct} $price={৳${offer || price}} $sale={৳${price}} $style={1}</a></p>
 </div>
 `;
 
   document.getElementById("output").textContent = html;
   document.getElementById("preview").innerHTML = html;
+
+  // ✅ লোকালস্টোরেজে প্রোডাক্ট সংরক্ষণ
+  const uname = localStorage.getItem("loggedInUser") || "guest";
+  const saved = JSON.parse(localStorage.getItem("g9tool_data")) || [];
+  saved.push({ name, code, price, offer, desc });
+  localStorage.setItem("g9tool_data", JSON.stringify(saved));
+
+  alert("✅ প্রোডাক্ট কোড তৈরি এবং সংরক্ষিত হয়েছে!");
 });
 
 // ✅ আরও ছবি ইনপুট
@@ -113,7 +120,7 @@ function addImageInput() {
   container.appendChild(input);
 }
 
-// ✅ কাস্টম তথ্য ইনপুট যোগ
+// ✅ কাস্টম তথ্য ইনপুট
 function addCustomField() {
   const container = document.getElementById("customFields");
   const group = document.createElement("div");
@@ -125,7 +132,7 @@ function addCustomField() {
   container.appendChild(group);
 }
 
-// ✅ কপি বাটন
+// ✅ কপি
 document.getElementById("copyBtn").addEventListener("click", () => {
   const output = document.getElementById("output").textContent;
   navigator.clipboard.writeText(output)
@@ -133,12 +140,11 @@ document.getElementById("copyBtn").addEventListener("click", () => {
     .catch(() => alert("❌ কপি করা যায়নি"));
 });
 
-// ✅ মেনু টগল
-function toggleMenu() {
-  document.getElementById("sidebar").classList.toggle("active");
-}
-// ✅ Save to localStorage (premium user)
-const uname = localStorage.getItem("loggedInUser");
-const saved = JSON.parse(localStorage.getItem("products_" + uname)) || [];
-saved.push(product);
-localStorage.setItem("products_" + uname, JSON.stringify(saved));
+// ✅ রিসেট
+document.getElementById("resetBtn").addEventListener("click", () => {
+  if (confirm("সব তথ্য মুছে ফেলবেন?")) {
+    document.querySelector("form").reset();
+    document.getElementById("preview").innerHTML = "";
+    document.getElementById("output").textContent = "";
+  }
+});

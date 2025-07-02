@@ -1,4 +1,4 @@
-<!-- ✅ dashboard.html (পুরোনো ডিজাইন অক্ষুণ্ণ রেখে আপডেট) -->
+<!-- ✅ dashboard.html (সেভ সিস্টেমসহ আপডেট) -->
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -11,7 +11,6 @@
 <body>
 
 <script>
-// 🔐 ইউজার লগইন চেক
 if (!localStorage.getItem("loggedInUser")) {
   alert("⚠️ অনুগ্রহ করে প্রথমে লগইন করুন!");
   window.location.href = "index.html";
@@ -85,17 +84,16 @@ if (!localStorage.getItem("loggedInUser")) {
   <a href="menu/contact.html"><i class="fas fa-phone"></i> কন্টাক্ট</a>
   <a href="menu/privacy.html"><i class="fas fa-user-shield"></i> প্রাইভেসি</a>
   <a href="menu/tutorial.html"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
+  <a href="admin.html"><i class="fas fa-database"></i> অ্যাডমিন</a>
   <a href="index.html" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
 </div>
 
 <script src="script.js"></script>
 <script>
-// ✅ মেনু টগল
 function toggleMenu() {
   document.getElementById("sidebar").classList.toggle("active");
 }
 
-// ✅ Form Auto-save Draft
 window.addEventListener('load', () => {
   const saved = localStorage.getItem("formDraft");
   if (saved) {
@@ -117,18 +115,43 @@ document.querySelectorAll("input, textarea").forEach(input => {
   });
 });
 
-// ✅ কোড ডাউনলোড বাটন
-const downloadBtn = document.getElementById("downloadBtn");
-if (downloadBtn) {
-  downloadBtn.addEventListener("click", () => {
-    const code = document.getElementById("output").textContent;
-    const blob = new Blob([code], {type: "text/html"});
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "product.html";
-    link.click();
+document.getElementById("generateBtn").addEventListener("click", () => {
+  const user = localStorage.getItem("loggedInUser") || "guest";
+  const key = `g9_products_${user}`;
+  const products = JSON.parse(localStorage.getItem(key) || "[]");
+
+  const product = {};
+  document.querySelectorAll("input, textarea").forEach(el => {
+    if (el.id) product[el.id] = el.value;
   });
-}
+
+  product.imgs = [...document.querySelectorAll(".img-url")].map(i => i.value.trim()).filter(Boolean);
+  product.custom = [...document.querySelectorAll(".custom-field-group")].map(group => {
+    const key = group.querySelector(".custom-key")?.value.trim();
+    const value = group.querySelector(".custom-value")?.value.trim();
+    return key && value ? { key, value } : null;
+  }).filter(Boolean);
+
+  const editIndex = localStorage.getItem("edit_product_index");
+  if (editIndex !== null) {
+    products[parseInt(editIndex)] = product;
+    localStorage.removeItem("edit_product_index");
+  } else {
+    products.push(product);
+  }
+
+  localStorage.setItem(key, JSON.stringify(products));
+  alert("✅ প্রোডাক্ট সেভ হয়েছে!");
+});
+
+document.getElementById("downloadBtn").addEventListener("click", () => {
+  const code = document.getElementById("output").textContent;
+  const blob = new Blob([code], {type: "text/html"});
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "product.html";
+  link.click();
+});
 </script>
 </body>
 </html>

@@ -1,11 +1,15 @@
+// Menu Toggle for Sidebar
 function toggleMenu() {
   document.getElementById("sidebar").classList.toggle("active");
 }
 
+// Logout Functionality
 function logout() {
   localStorage.removeItem("loggedInUser");
+  window.location.href = "index.html";
 }
 
+// Add Image URL Input
 function addImageInput() {
   const container = document.getElementById("imageInputs");
   const input = document.createElement("input");
@@ -15,6 +19,7 @@ function addImageInput() {
   container.appendChild(input);
 }
 
+// Add Custom Field for Product
 function addCustomField() {
   const container = document.getElementById("customFields");
   const group = document.createElement("div");
@@ -26,7 +31,7 @@ function addCustomField() {
   container.appendChild(group);
 }
 
-// ✅ জেনারেট বাটনে ক্লিক
+// Generate Product Code
 document.getElementById("generateBtn").addEventListener("click", () => {
   const name = document.getElementById("name").value.trim();
   const code = document.getElementById("code").value.trim();
@@ -82,7 +87,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   generateCode(product);
 });
 
-// ✅ Output Generate
+// Generate Product Code Output
 function generateCode(product) {
   const out = document.getElementById("output");
   const imagesHtml = product.images.map(url => `<img src="${url}" style="max-width:100px;margin:5px;">`).join('');
@@ -108,7 +113,7 @@ function generateCode(product) {
   `;
 }
 
-// ✅ Copy
+// Copy Generated Code to Clipboard
 document.getElementById("copyBtn").addEventListener("click", () => {
   const temp = document.createElement("textarea");
   temp.value = document.getElementById("output").innerText;
@@ -118,3 +123,53 @@ document.getElementById("copyBtn").addEventListener("click", () => {
   document.body.removeChild(temp);
   alert("✅ কপি সম্পন্ন!");
 });
+
+// Edit Existing Product
+const editId = new URLSearchParams(window.location.search).get('edit');
+if (editId !== null) {
+  const user = localStorage.getItem("loggedInUser");
+  const allData = JSON.parse(localStorage.getItem("g9tool_data") || "{}");
+  const saved = allData[user] || [];
+  const product = saved[editId];
+
+  if (product) {
+    document.getElementById("name").value = product.name || "";
+    document.getElementById("code").value = product.code || "";
+    document.getElementById("price").value = product.price || "";
+    document.getElementById("offer").value = product.offer || "";
+    document.getElementById("unit").value = product.unit || "";
+    document.getElementById("qty").value = product.qty || "";
+    document.getElementById("brand").value = product.brand || "";
+    document.getElementById("size").value = product.size || "";
+    document.getElementById("color").value = product.color || "";
+    document.getElementById("delivery").value = product.delivery || "";
+    document.getElementById("status").value = product.status || "";
+    document.getElementById("category").value = product.category || "";
+    document.getElementById("desc").value = product.desc || "";
+    document.getElementById("video").value = product.video || "";
+    document.getElementById("wa").value = product.wa || "";
+
+    const imageInputs = document.getElementById("imageInputs");
+    imageInputs.innerHTML = '';
+    (product.images || []).forEach(url => {
+      const div = document.createElement("div");
+      div.className = "image-group";
+      div.innerHTML = `<input type="url" class="img-url" value="${url}" placeholder="ছবির লিংক (Image URL)">`;
+      imageInputs.appendChild(div);
+    });
+
+    const customFields = document.getElementById("customFields");
+    customFields.innerHTML = '';
+    (product.custom || []).forEach(field => {
+      const div = document.createElement("div");
+      div.className = "custom-field-group";
+      div.innerHTML = `
+        <input type="text" class="custom-key" value="${field.key}" placeholder="শিরোনাম">
+        <input type="text" class="custom-value" value="${field.value}" placeholder="মান">
+      `;
+      customFields.appendChild(div);
+    });
+
+    localStorage.setItem("editIndex", editId);
+  }
+}

@@ -1,4 +1,4 @@
-/* ✅ style.css (Full Update with Mobile, Copy Support, Hidden Output, Sidebar, Admin Panel, and Button Styles) */
+/* ✅ style.css (Full Update with Perfect Match, Mobile Responsive, Hidden Output, Sidebar, Buttons, and Admin Panel Styling) */
 
 * {
   box-sizing: border-box;
@@ -10,8 +10,6 @@ body {
   font-family: 'Segoe UI', sans-serif;
   background-color: #121212;
   color: #fff;
-  padding: 0;
-  margin: 0;
 }
 
 header.header {
@@ -161,7 +159,7 @@ button:hover {
   cursor: pointer;
 }
 
-/* Admin Panel */
+/* Admin Panel Styling */
 .admin-box input[type="text"],
 .admin-box input[type="password"] {
   margin-top: 10px;
@@ -196,7 +194,7 @@ button:hover {
   cursor: pointer;
 }
 
-/* Output Hidden (for copy only) */
+/* Output Hidden for Copy Only */
 #output {
   height: 0;
   overflow: hidden;

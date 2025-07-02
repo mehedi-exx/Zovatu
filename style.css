@@ -1,5 +1,6 @@
-/* G9Tool Updated CSS (Optimized Layout with Fixes Only) */
+/* G9Tool – Fully Updated & Responsive CSS */
 
+/* Reset & Base */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -10,49 +11,29 @@ body {
   font-family: 'Segoe UI', sans-serif;
   background-color: #121212;
   color: #fff;
+  line-height: 1.5;
   padding: 0;
   margin: 0;
 }
 
-/* ✅ Header optimized */
+/* Header */
 header.header {
   background: #1e1e1e;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 16px;
+  padding: 14px 16px;
   border-radius: 0 0 15px 15px;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
 }
 
 .left-icons {
+  position: absolute;
+  left: 16px;
   display: flex;
   align-items: center;
   gap: 10px;
-  position: absolute;
-  left: 16px;
-}
-
-.telegram-icon {
-  background: white;
-  color: #0088cc;
-  border-radius: 50%;
-  padding: 6px;
-  font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  position: absolute;
-  right: 16px;
-}
-
-.logo {
-  font-size: 18px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  gap: 6px;
 }
 
 .menu-btn {
@@ -63,16 +44,41 @@ header.header {
   cursor: pointer;
 }
 
+.logo {
+  font-size: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.telegram-icon {
+  position: absolute;
+  right: 16px;
+  background: white;
+  color: #0088cc;
+  border-radius: 50%;
+  padding: 6px;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+/* Main */
 main {
   padding: 20px;
 }
 
+/* Form Layout */
 .form-wrapper {
   max-width: 600px;
   margin: auto;
   background: #1c1c1c;
   padding: 20px;
   border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
 input,
@@ -94,6 +100,7 @@ button {
   font-weight: bold;
   border-radius: 8px;
   cursor: pointer;
+  transition: 0.2s ease-in-out;
 }
 
 button i {
@@ -119,7 +126,7 @@ button:hover {
   margin-bottom: 15px;
 }
 
-/* ✅ Sidebar stays as is but slightly improved */
+/* Sidebar */
 .sidebar {
   position: fixed;
   top: 0;
@@ -128,7 +135,7 @@ button:hover {
   width: 75%;
   background: #1f1f1f;
   padding: 60px 20px;
-  transition: 0.3s;
+  transition: 0.3s ease-in-out;
   z-index: 999;
 }
 
@@ -150,50 +157,52 @@ button:hover {
   background: #444;
 }
 
-/* ✅ Close button styled nicely */
 .close-sidebar {
   position: absolute;
   top: 15px;
   right: 20px;
-  background: #333;
+  background: none;
   color: white;
   border: none;
-  font-size: 22px;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 24px;
   cursor: pointer;
-  transition: background 0.3s ease;
 }
 
-.close-sidebar:hover {
-  background: #555;
+/* Output & Preview */
+.output, .live-preview {
+  margin-top: 20px;
+  background: #1c1c1c;
+  padding: 15px;
+  border-radius: 10px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  overflow-x: auto;
 }
 
-/* ✅ Responsive for all devices */
-@media (max-width: 768px) {
-  .form-wrapper {
-    padding: 16px;
-  }
-
-  .left-icons {
-    position: absolute;
-    left: 12px;
-  }
-
-  .telegram-icon {
-    right: 12px;
+/* Responsive */
+@media (max-width: 480px) {
+  header.header {
+    height: 56px;
+    padding: 12px;
   }
 
   .logo {
-    font-size: 17px;
+    font-size: 18px;
   }
-}
 
-@media (max-width: 480px) {
+  .telegram-icon {
+    font-size: 18px;
+    padding: 5px;
+  }
+
+  .menu-btn {
+    font-size: 20px;
+  }
+
+  .form-wrapper {
+    padding: 15px;
+  }
+
   input,
   textarea {
     font-size: 15px;

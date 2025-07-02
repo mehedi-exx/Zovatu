@@ -2,13 +2,15 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>G9Tool Dashboard</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
 </head>
 <body>
-
 <script>
   if (!localStorage.getItem("loggedInUser")) {
     alert("⚠️ অনুগ্রহ করে প্রথমে লগইন করুন!");
@@ -18,8 +20,12 @@
 
 <header class="header">
   <div class="left-icons">
-    <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
-    <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
+    <button class="menu-btn" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="logo">
+      <i class="fas fa-box-open"></i> G9Tool
+    </div>
   </div>
   <a href="https://t.me/G9tool" class="telegram-icon" target="_blank">
     <i class="fab fa-telegram-plane"></i>
@@ -28,110 +34,377 @@
 
 <main>
   <div class="form-wrapper">
-    <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
-    <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
-    <input type="number" id="price" placeholder="মূল্য প্রাইস (৳)" required>
-    <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
-    <input type="text" id="unit" placeholder="ইউনিট (যেমন: পিস, কেজি)">
-    <input type="number" id="qty" placeholder="পরিমাণ (Qty)">
-    <input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি">
-    <input type="text" id="size" placeholder="সাইজ অপশন (যেমন: S, M, L)">
-    <input type="text" id="color" placeholder="রঙ অপশন (যেমন: লাল, সবুজ)">
-    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
-    <input type="text" id="status" placeholder="স্ট্যাটাস">
-    <input type="text" id="category" placeholder="ক্যাটাগরি">
+    <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required />
+    <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required />
+    <input type="number" id="price" placeholder="মূল্য প্রাইস (৳)" required />
+    <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)" />
+    <input type="text" id="unit" placeholder="ইউনিট (যেমন: পিস, কেজি)" />
+    <input type="number" id="qty" placeholder="পরিমাণ (Qty)" />
+    <input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি" />
+    <input type="text" id="size" placeholder="সাইজ অপশন (যেমন: S, M, L)" />
+    <input type="text" id="color" placeholder="রঙ অপশন (যেমন: লাল, সবুজ)" />
+    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম" />
+    <input type="text" id="status" placeholder="স্ট্যাটাস" />
+    <input type="text" id="category" placeholder="ক্যাটাগরি" />
     <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea>
 
     <div id="imageInputs">
-      <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
-    </div>
-    <button onclick="addImageInput()"><i class="fas fa-plus"></i> আরও ছবি যোগ করুন</button>
-
-    <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)">
-    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)" required>
-
-    <h4 style="margin-top: 20px;">🔧 কাস্টম তথ্য</h4>
-    <div id="customFields">
-      <div class="custom-field-group">
-        <input type="text" class="custom-key" placeholder="শিরোনাম">
-        <input type="text" class="custom-value" placeholder="মান">
+      <div class="image-group">
+        <input
+          type="url"
+          class="img-url"
+          placeholder="ছবির লিংক (Image URL)"
+        />
       </div>
     </div>
-    <button onclick="addCustomField()"><i class="fas fa-plus"></i> নতুন তথ্য যোগ করুন</button>
+    <button onclick="addImageInput()">
+      <i class="fas fa-plus"></i> আরও ছবি যোগ করুন
+    </button>
 
-    <div style="text-align:center;">
-      <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট</button>
-      <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
+    <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)" />
+    <input
+      type="text"
+      id="wa"
+      placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)"
+      required
+    />
+
+    <h4 style="margin-top: 20px;">🔧 কাস্টম তথ্য (যেমন: ওয়ারেন্টি, উৎপাদন দেশ)</h4>
+    <div id="customFields">
+      <div class="custom-field-group">
+        <input
+          type="text"
+          class="custom-key"
+          placeholder="শিরোনাম যেমন: ওয়ারেন্টি"
+        />
+        <input
+          type="text"
+          class="custom-value"
+          placeholder="মান যেমন: ৩ মাস"
+        />
+      </div>
+    </div>
+    <button onclick="addCustomField()">
+      <i class="fas fa-plus"></i> নতুন তথ্য যোগ করুন
+    </button>
+
+    <div style="text-align:center; margin-top: 15px;">
+      <button id="generateBtn">
+        <i class="fas fa-magic"></i> কোড জেনারেট
+      </button>
+      <button id="copyBtn">
+        <i class="fas fa-copy"></i> কপি করুন
+      </button>
+      <button id="resetBtn" style="background:#dc3545; color:white;">
+        <i class="fas fa-undo"></i> রিসেট করুন
+      </button>
+      <button id="saveBtn" style="background:#28a745; color:white;">
+        <i class="fas fa-save"></i> সেভ করুন
+      </button>
     </div>
 
-    <div class="output" id="output"></div>
-    <div class="live-preview" id="preview"></div>
+    <div class="output" id="output" style="white-space: pre-wrap; margin-top: 15px;"></div>
+    <div class="live-preview" id="preview" style="margin-top: 20px;"></div>
   </div>
 </main>
 
 <!-- Sidebar -->
 <div id="sidebar" class="sidebar">
-  <button class="close-sidebar" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
-  <a href="dashboard.html" class="active"><i class="fas fa-home"></i> হোম</a>
+  <button class="close-sidebar" onclick="toggleMenu()">
+    <i class="fas fa-times"></i>
+  </button>
+  <a href="dashboard.html"><i class="fas fa-home"></i> হোম</a>
   <a href="menu/about.html"><i class="fas fa-info-circle"></i> এবাউট</a>
   <a href="menu/contact.html"><i class="fas fa-phone"></i> কন্টাক্ট</a>
   <a href="menu/privacy.html"><i class="fas fa-user-shield"></i> প্রাইভেসি</a>
+  <a href="menu/tutorial.html"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
   <a href="admin.html"><i class="fas fa-tools"></i> এডমিন প্যানেল</a>
   <a href="index.html" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
 </div>
 
-<script src="script.js"></script>
 <script>
-  // ✅ এডিট মোড চেক করুন
-  const editIndex = new URLSearchParams(window.location.search).get("edit");
-  if (editIndex !== null) {
-    const allData = JSON.parse(localStorage.getItem("g9tool_data") || "{}");
-    const user = localStorage.getItem("loggedInUser");
-    const saved = allData[user] || [];
-    const product = saved[parseInt(editIndex)];
+  let editIndex = null;
+  const uname = localStorage.getItem("loggedInUser");
+  let allData = JSON.parse(localStorage.getItem("g9tool_data") || "{}");
+  let userData = allData[uname] || [];
 
-    if (product) {
-      document.getElementById("name").value = product.name || "";
-      document.getElementById("code").value = product.code || "";
-      document.getElementById("price").value = product.price || "";
-      document.getElementById("offer").value = product.offer || "";
-      document.getElementById("unit").value = product.unit || "";
-      document.getElementById("qty").value = product.qty || "";
-      document.getElementById("brand").value = product.brand || "";
-      document.getElementById("size").value = product.size || "";
-      document.getElementById("color").value = product.color || "";
-      document.getElementById("delivery").value = product.delivery || "";
-      document.getElementById("status").value = product.status || "";
-      document.getElementById("category").value = product.category || "";
-      document.getElementById("desc").value = product.desc || "";
-      document.getElementById("video").value = product.video || "";
-      document.getElementById("wa").value = product.wa || "";
+  // DOM ready init
+  window.onload = () => {
+    // এডিট মোড চেক করা
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("edit")) {
+      editIndex = parseInt(params.get("edit"));
+      if (!isNaN(editIndex) && userData[editIndex]) {
+        loadProductForEdit(editIndex);
+      }
+    }
+  };
 
-      const imgCtn = document.getElementById("imageInputs");
-      imgCtn.innerHTML = "";
-      (product.images || []).forEach(url => {
-        const input = document.createElement("input");
-        input.type = "url";
-        input.className = "img-url";
-        input.value = url;
-        input.placeholder = "ছবির লিংক";
-        imgCtn.appendChild(input);
+  function toggleMenu() {
+    document.getElementById("sidebar").classList.toggle("active");
+  }
+
+  function logout() {
+    localStorage.removeItem("loggedInUser");
+  }
+
+  // ফর্ম থেকে প্রোডাক্ট ইনফো নিয়ে অবজেক্ট তৈরি
+  function getProductFromForm() {
+    const name = document.getElementById("name").value.trim();
+    const code = document.getElementById("code").value.trim();
+    const price = document.getElementById("price").value.trim();
+    const offer = document.getElementById("offer").value.trim();
+    const unit = document.getElementById("unit").value.trim();
+    const qty = document.getElementById("qty").value.trim();
+    const brand = document.getElementById("brand").value.trim();
+    const size = document.getElementById("size").value.trim();
+    const color = document.getElementById("color").value.trim();
+    const delivery = document.getElementById("delivery").value.trim();
+    const status = document.getElementById("status").value.trim();
+    const category = document.getElementById("category").value.trim();
+    const desc = document.getElementById("desc").value.trim();
+    const video = document.getElementById("video").value.trim();
+    const wa = document.getElementById("wa").value.trim();
+
+    const images = [...document.querySelectorAll(".img-url")]
+      .map((i) => i.value.trim())
+      .filter((v) => v !== "");
+
+    const custom = [];
+    const keys = document.querySelectorAll(".custom-key");
+    const vals = document.querySelectorAll(".custom-value");
+    keys.forEach((k, idx) => {
+      const val = vals[idx].value.trim();
+      if (k.value.trim() !== "" && val !== "") {
+        custom.push({ key: k.value.trim(), value: val });
+      }
+    });
+
+    return {
+      name,
+      code,
+      price,
+      offer,
+      unit,
+      qty,
+      brand,
+      size,
+      color,
+      delivery,
+      status,
+      category,
+      desc,
+      video,
+      wa,
+      images,
+      custom,
+    };
+  }
+
+  // ফর্মে ডাটা লোড করা (এডিট মোড)
+  function loadProductForEdit(index) {
+    const p = userData[index];
+    if (!p) return;
+
+    document.getElementById("name").value = p.name || "";
+    document.getElementById("code").value = p.code || "";
+    document.getElementById("price").value = p.price || "";
+    document.getElementById("offer").value = p.offer || "";
+    document.getElementById("unit").value = p.unit || "";
+    document.getElementById("qty").value = p.qty || "";
+    document.getElementById("brand").value = p.brand || "";
+    document.getElementById("size").value = p.size || "";
+    document.getElementById("color").value = p.color || "";
+    document.getElementById("delivery").value = p.delivery || "";
+    document.getElementById("status").value = p.status || "";
+    document.getElementById("category").value = p.category || "";
+    document.getElementById("desc").value = p.desc || "";
+    document.getElementById("video").value = p.video || "";
+    document.getElementById("wa").value = p.wa || "";
+
+    // ছবি ইনপুট রেন্ডার করা
+    const imageContainer = document.getElementById("imageInputs");
+    imageContainer.innerHTML = "";
+    if (p.images && p.images.length) {
+      p.images.forEach((url) => {
+        const div = document.createElement("div");
+        div.className = "image-group";
+        div.innerHTML = `<input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)" value="${url}" />`;
+        imageContainer.appendChild(div);
       });
+    } else {
+      imageContainer.innerHTML = `<div class="image-group"><input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)" /></div>`;
+    }
 
-      const customCtn = document.getElementById("customFields");
-      customCtn.innerHTML = "";
-      (product.custom || []).forEach(pair => {
+    // কাস্টম ফিল্ড রেন্ডার করা
+    const customContainer = document.getElementById("customFields");
+    customContainer.innerHTML = "";
+    if (p.custom && p.custom.length) {
+      p.custom.forEach((c) => {
         const div = document.createElement("div");
         div.className = "custom-field-group";
-        div.innerHTML = `<input type="text" class="custom-key" value="${pair.key}" placeholder="শিরোনাম"><input type="text" class="custom-value" value="${pair.value}" placeholder="মান">`;
-        customCtn.appendChild(div);
+        div.innerHTML = `
+          <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি" value="${c.key}" />
+          <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস" value="${c.value}" />
+        `;
+        customContainer.appendChild(div);
       });
-
-      // লোকালস্টোরেজে Edit Index Save
-      localStorage.setItem("editIndex", editIndex);
+    } else {
+      customContainer.innerHTML = `
+      <div class="custom-field-group">
+        <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি" />
+        <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস" />
+      </div>`;
     }
   }
-</script>
 
-</body>
-</html>
+  // নতুন ছবি ইনপুট যোগ করা
+  function addImageInput() {
+  const container = document.getElementById("imageInputs");
+  const div = document.createElement("div");
+  div.className = "image-group";
+  div.innerHTML = `<input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)" /> <button onclick="removeImageInput(this)" title="Remove Image"><i class="fas fa-times"></i></button>`;
+  container.appendChild(div);
+}
+
+function removeImageInput(btn) {
+  const div = btn.parentElement;
+  div.remove();
+}
+
+// নতুন কাস্টম ফিল্ড যোগ করা
+function addCustomField() {
+  const container = document.getElementById("customFields");
+  const div = document.createElement("div");
+  div.className = "custom-field-group";
+  div.innerHTML = `
+    <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি" />
+    <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস" />
+    <button onclick="removeCustomField(this)" title="Remove Field"><i class="fas fa-times"></i></button>
+  `;
+  container.appendChild(div);
+}
+
+function removeCustomField(btn) {
+  const div = btn.parentElement;
+  div.remove();
+}
+
+// কোড জেনারেট করা
+function generateCode() {
+  const product = getProductFromForm();
+
+  if (!product.name || !product.code || !product.price) {
+    alert("⚠️ প্রোডাক্ট নাম, কোড এবং মূল্য অবশ্যই দিতে হবে!");
+    return;
+  }
+
+  // সহজ একটি HTML টেমপ্লেট কোড
+  let imagesHtml = "";
+  product.images.forEach((url) => {
+    imagesHtml += `<img src="${url}" alt="${product.name}" style="max-width:100px; margin:5px;" />`;
+  });
+
+  let customHtml = "";
+  product.custom.forEach(({ key, value }) => {
+    customHtml += `<p><strong>${key}:</strong> ${value}</p>`;
+  });
+
+  const output = `
+  <div class="product-card">
+    <h2>${product.name}</h2>
+    <p><strong>কোড:</strong> ${product.code}</p>
+    <p><strong>মূল্য:</strong> ৳${product.price} ${product.offer ? `(অফার: ৳${product.offer})` : ""}</p>
+    <p><strong>ব্র্যান্ড:</strong> ${product.brand || "-"}</p>
+    <p><strong>পরিমাণ:</strong> ${product.qty || "-"}</p>
+    <p><strong>সাইজ:</strong> ${product.size || "-"}</p>
+    <p><strong>রঙ:</strong> ${product.color || "-"}</p>
+    <p><strong>বর্ণনা:</strong> ${product.desc || "-"}</p>
+    ${imagesHtml}
+    <div>${customHtml}</div>
+    ${product.video ? `<iframe width="300" height="170" src="${product.video}" frameborder="0" allowfullscreen></iframe>` : ""}
+    <p><strong>WhatsApp:</strong> <a href="https://wa.me/${product.wa}" target="_blank">${product.wa}</a></p>
+  </div>`;
+
+  document.getElementById("output").textContent = output;
+  document.getElementById("preview").innerHTML = output;
+}
+
+// ডাটা লোকালস্টোরেজে সেভ করা
+function saveProduct() {
+  const product = getProductFromForm();
+
+  if (!product.name || !product.code || !product.price) {
+    alert("⚠️ প্রোডাক্ট নাম, কোড এবং মূল্য অবশ্যই দিতে হবে!");
+    return;
+  }
+
+  if (editIndex !== null && userData[editIndex]) {
+    // এডিট মোড - আপডেট করা
+    userData[editIndex] = product;
+  } else {
+    // নতুন প্রোডাক্ট যোগ করা
+    userData.push(product);
+  }
+
+  allData[uname] = userData;
+  localStorage.setItem("g9tool_data", JSON.stringify(allData));
+
+  alert("✅ প্রোডাক্ট সফলভাবে সেভ হয়েছে!");
+  clearForm();
+  editIndex = null;
+}
+
+// ফর্ম রিসেট করা
+function clearForm() {
+  document.getElementById("name").value = "";
+  document.getElementById("code").value = "";
+  document.getElementById("price").value = "";
+  document.getElementById("offer").value = "";
+  document.getElementById("unit").value = "";
+  document.getElementById("qty").value = "";
+  document.getElementById("brand").value = "";
+  document.getElementById("size").value = "";
+  document.getElementById("color").value = "";
+  document.getElementById("delivery").value = "";
+  document.getElementById("status").value = "";
+  document.getElementById("category").value = "";
+  document.getElementById("desc").value = "";
+  document.getElementById("video").value = "";
+  document.getElementById("wa").value = "";
+
+  // ছবি ইনপুট রিসেট
+  const imageContainer = document.getElementById("imageInputs");
+  imageContainer.innerHTML = `<div class="image-group"><input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)" /></div>`;
+
+  // কাস্টম ফিল্ড রিসেট
+  const customContainer = document.getElementById("customFields");
+  customContainer.innerHTML = `
+    <div class="custom-field-group">
+      <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি" />
+      <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস" />
+    </div>
+  `;
+
+  // আউটপুট ও প্রিভিউ পরিষ্কার
+  document.getElementById("output").textContent = "";
+  document.getElementById("preview").innerHTML = "";
+}
+
+// কপি করা ক্লিপবোর্ডে
+function copyOutput() {
+  const outputText = document.getElementById("output").textContent;
+  if (!outputText) {
+    alert("প্রথমে কোড জেনারেট করুন!");
+    return;
+  }
+  navigator.clipboard.writeText(outputText).then(() => {
+    alert("✅ কোড কপি করা হয়েছে!");
+  });
+}
+
+// ইভেন্ট লিসেনারস
+document.getElementById("generateBtn").addEventListener("click", generateCode);
+document.getElementById("copyBtn").addEventListener("click", copyOutput);
+document.getElementById("resetBtn").addEventListener("click", clearForm);
+document.getElementById("saveBtn").addEventListener("click", saveProduct);

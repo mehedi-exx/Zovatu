@@ -1,4 +1,4 @@
-/* G9Tool Updated CSS */
+/* ✅ style.css (Full Update with Mobile, Copy Support, Hidden Output, Sidebar, Admin Panel, and Button Styles) */
 
 * {
   box-sizing: border-box;
@@ -165,6 +165,12 @@ button:hover {
 .admin-box input[type="text"],
 .admin-box input[type="password"] {
   margin-top: 10px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 6px;
+  background: #2a2a2a;
+  color: white;
+  border: 1px solid #444;
 }
 
 .user-list {
@@ -190,27 +196,34 @@ button:hover {
   cursor: pointer;
 }
 
+/* Output Hidden (for copy only) */
+#output {
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+  user-select: none;
+  pointer-events: none;
+  position: absolute;
+  z-index: -999;
+}
+
 /* Mobile Responsive */
 @media (max-width: 480px) {
   .form-wrapper {
     padding: 15px;
   }
-
   input,
   textarea {
     font-size: 15px;
   }
-
   button {
     width: 100%;
     margin-bottom: 10px;
   }
-
   #generateBtn,
   #copyBtn {
     margin-right: 0;
   }
-
   .sidebar {
     width: 100%;
   }

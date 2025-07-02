@@ -1,6 +1,4 @@
-<!-- ✅ dashboard.html (ফুল আপডেট — রিসেট + কোড ডুপ্লিকেট চেক + অটো-লোড + ফাংশন ফিক্সড) -->
-<!DOCTYPE html>
-<html lang="bn">
+<!-- ✅ dashboard.html (ফুল আপডেট — কোড জেনারেট + প্রিভিউ + কপি + রিসেট + কোড ডুপ্লিকেট চেক) --><!DOCTYPE html><html lang="bn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,9 +12,7 @@ if (!localStorage.getItem("loggedInUser")) {
   alert("⚠️ অনুগ্রহ করে প্রথমে লগইন করুন!");
   window.location.href = "index.html";
 }
-</script>
-
-<header class="header">
+</script><header class="header">
   <div class="left-icons">
     <button class="menu-btn" onclick="toggleMenu()">
       <i class="fas fa-bars"></i>
@@ -28,9 +24,7 @@ if (!localStorage.getItem("loggedInUser")) {
   <a href="https://t.me/G9tool" class="telegram-icon" target="_blank">
     <i class="fab fa-telegram-plane"></i>
   </a>
-</header>
-
-<main>
+</header><main>
   <div class="form-wrapper">
     <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
     <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
@@ -44,39 +38,36 @@ if (!localStorage.getItem("loggedInUser")) {
     <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
     <input type="text" id="status" placeholder="স্ট্যাটাস">
     <input type="text" id="category" placeholder="ক্যাটাগরি">
-    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea>
-
-    <div id="imageInputs">
-      <div class="image-group">
-        <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
-      </div>
-    </div>
-    <button onclick="addImageInput()"><i class="fas fa-plus"></i> আরও ছবি যোগ করুন</button>
-
-    <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)">
-    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)" required>
-
-    <h4 style="margin-top: 20px;">🔧 কাস্টম তথ্য (যেমন: ওয়ারেন্টি, উৎপাদন দেশ)</h4>
-    <div id="customFields">
-      <div class="custom-field-group">
-        <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
-        <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
-      </div>
-    </div>
-    <button onclick="addCustomField()"><i class="fas fa-plus"></i> নতুন তথ্য যোগ করুন</button>
-
-    <div style="text-align:center;">
-      <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট</button>
-      <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
-      <button id="resetBtn" onclick="formReset()"><i class="fas fa-eraser"></i> রিসেট করুন</button>
-    </div>
-
-    <div class="output" id="output"></div>
-    <div class="live-preview" id="preview"></div>
+    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea><div id="imageInputs">
+  <div class="image-group">
+    <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
   </div>
-</main>
+</div>
+<button onclick="addImageInput()"><i class="fas fa-plus"></i> আরও ছবি যোগ করুন</button>
 
-<div id="sidebar" class="sidebar">
+<input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)">
+<input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)" required>
+
+<h4 style="margin-top: 20px;">🔧 কাস্টম তথ্য (যেমন: ওয়ারেন্টি, উৎপাদন দেশ)</h4>
+<div id="customFields">
+  <div class="custom-field-group">
+    <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
+    <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
+  </div>
+</div>
+<button onclick="addCustomField()"><i class="fas fa-plus"></i> নতুন তথ্য যোগ করুন</button>
+
+<div style="text-align:center;">
+  <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট</button>
+  <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
+  <button id="resetBtn" onclick="formReset()"><i class="fas fa-eraser"></i> রিসেট করুন</button>
+</div>
+
+<div class="output" id="output"></div>
+<div class="live-preview" id="preview"></div>
+
+  </div>
+</main><div id="sidebar" class="sidebar">
   <button class="close-sidebar" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
   <a href="dashboard.html"><i class="fas fa-home"></i> হোম</a>
   <a href="menu/about.html"><i class="fas fa-info-circle"></i> এবাউট</a>
@@ -85,15 +76,11 @@ if (!localStorage.getItem("loggedInUser")) {
   <a href="menu/tutorial.html"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
   <a href="admin.html"><i class="fas fa-database"></i> অ্যাডমিন</a>
   <a href="index.html" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
-</div>
-
-<script>
-// ✅ মেনু টগল
+</div><script>
 function toggleMenu() {
   document.getElementById("sidebar").classList.toggle("active");
 }
 
-// ✅ আরও ছবি যোগ করুন
 function addImageInput() {
   const container = document.getElementById("imageInputs");
   const input = document.createElement("input");
@@ -103,19 +90,32 @@ function addImageInput() {
   container.appendChild(input);
 }
 
-// ✅ নতুন কাস্টম তথ্য যোগ করুন
 function addCustomField() {
   const container = document.getElementById("customFields");
-  const div = document.createElement("div");
-  div.className = "custom-field-group";
-  div.innerHTML = `
+  const group = document.createElement("div");
+  group.className = "custom-field-group";
+  group.innerHTML = `
     <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
     <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
   `;
-  container.appendChild(div);
+  container.appendChild(group);
 }
 
-// ✅ Form Auto-load
+function formReset() {
+  if (!confirm("আপনি কি ফর্ম রিসেট করতে চান?")) return;
+  document.querySelectorAll("input, textarea").forEach(el => el.value = "");
+  document.getElementById("imageInputs").innerHTML = '<input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">';
+  document.getElementById("customFields").innerHTML = `
+    <div class="custom-field-group">
+      <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
+      <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
+    </div>
+  `;
+  localStorage.removeItem("formDraft");
+  document.getElementById("output").textContent = "";
+  document.getElementById("preview").innerHTML = "";
+}
+
 window.addEventListener('load', () => {
   const saved = localStorage.getItem("formDraft");
   if (saved) {
@@ -124,34 +124,9 @@ window.addEventListener('load', () => {
       const el = document.getElementById(id);
       if (el) el.value = data[id];
     }
-
-    if (data.imgs && Array.isArray(data.imgs)) {
-      const container = document.getElementById("imageInputs");
-      container.innerHTML = "";
-      data.imgs.forEach(url => {
-        const input = document.createElement("input");
-        input.type = "url";
-        input.className = "img-url";
-        input.placeholder = "ছবির লিংক (Image URL)";
-        input.value = url;
-        container.appendChild(input);
-      });
-    }
-
-    if (data.custom && Array.isArray(data.custom)) {
-      const container = document.getElementById("customFields");
-      container.innerHTML = "";
-      data.custom.forEach(pair => {
-        const div = document.createElement("div");
-        div.className = "custom-field-group";
-        div.innerHTML = `<input type="text" class="custom-key" value="${pair.key}" placeholder="শিরোনাম"> <input type="text" class="custom-value" value="${pair.value}" placeholder="মান">`;
-        container.appendChild(div);
-      });
-    }
   }
 });
 
-// ✅ Save Draft on Change
 document.querySelectorAll("input, textarea").forEach(input => {
   input.addEventListener("input", () => {
     const draft = {};
@@ -162,31 +137,6 @@ document.querySelectorAll("input, textarea").forEach(input => {
   });
 });
 
-// ✅ রিসেট বাটন ফাংশন
-function formReset() {
-  if (!confirm("আপনি কি ফর্ম রিসেট করতে চান?")) return;
-
-  document.querySelectorAll("input, textarea").forEach(el => el.value = "");
-
-  document.getElementById("imageInputs").innerHTML = `
-    <div class="image-group">
-      <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
-    </div>
-  `;
-
-  document.getElementById("customFields").innerHTML = `
-    <div class="custom-field-group">
-      <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
-      <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
-    </div>
-  `;
-
-  localStorage.removeItem("formDraft");
-  document.getElementById("output").textContent = "";
-  document.getElementById("preview").innerHTML = "";
-}
-
-// ✅ কোড জেনারেট — ডুপ্লিকেট চেক + সেভ
 document.getElementById("generateBtn").addEventListener("click", () => {
   const name = document.getElementById("name").value.trim();
   const code = document.getElementById("code").value.trim();
@@ -230,15 +180,29 @@ document.getElementById("generateBtn").addEventListener("click", () => {
 
   localStorage.setItem(key, JSON.stringify(products));
   alert("✅ প্রোডাক্ট সেভ হয়েছে!");
+
+  // ✅ প্রিভিউ HTML
+  const html = `
+<div style="text-align:center;">
+  <h2>${product.name}</h2>
+  <p>💰 ${product.offer || product.price}৳ | কোড: ${product.code}</p>
+  <img src="${product.imgs[0] || ''}" style="width:100%;max-width:300px;border-radius:10px;">
+  <p>${product.desc || ''}</p>
+</div>`;
+
+  document.getElementById("output").textContent = html;
+  document.getElementById("preview").innerHTML = html;
 });
 
-// ✅ কপি বাটন
 document.getElementById("copyBtn").addEventListener("click", () => {
   const output = document.getElementById("output").textContent;
+  if (!output) {
+    alert("❌ আগে কোড জেনারেট করুন");
+    return;
+  }
   navigator.clipboard.writeText(output)
     .then(() => alert("✅ কোড কপি হয়েছে!"))
     .catch(() => alert("❌ কপি করা যায়নি"));
 });
-</script>
-</body>
+</script></body>
 </html>

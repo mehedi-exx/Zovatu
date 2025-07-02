@@ -1,4 +1,4 @@
-// ✅ প্রোডাক্ট HTML তৈরি
+// ✅ প্রোডাক্ট HTML তৈরি (Updated with Hidden Output + Copy support)
 document.getElementById("generateBtn").addEventListener("click", () => {
   const name = document.getElementById("name").value.trim();
   const code = document.getElementById("code").value.trim();
@@ -24,7 +24,6 @@ document.getElementById("generateBtn").addEventListener("click", () => {
 
   const discount = offer && price ? Math.round(((price - offer) / price) * 100) : 0;
 
-  // ✅ থাম্বনেইল ইমেজ
   let thumbHTML = "";
   const mainImg = imgs[0].value.trim();
   imgs.forEach((input, i) => {
@@ -34,7 +33,6 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   });
 
-  // ✅ কাস্টম তথ্য (key-value)
   const customFields = document.querySelectorAll(".custom-field-group");
   let customHTML = "";
   customFields.forEach(group => {
@@ -45,7 +43,6 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   });
 
-  // ✅ ইউটিউব ভিডিও
   let videoEmbed = "";
   if (video.includes("youtube.com") || video.includes("youtu.be")) {
     let videoId = "";
@@ -59,7 +56,6 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   }
 
-  // ✅ HTML রেজাল্ট তৈরি
   const html = `
 <div style="text-align:center;">
   <img id="mainImg" src="${mainImg}" style="width:100%;max-width:500px;border-radius:10px;border:1px solid #ccc;margin-bottom:10px;">
@@ -97,11 +93,26 @@ document.getElementById("generateBtn").addEventListener("click", () => {
 </div>
 `;
 
-  document.getElementById("output").textContent = html;
-  document.getElementById("preview").innerHTML = html;
+  document.getElementById("output").textContent = html; // হিডেন রাখা
+  document.getElementById("preview").innerHTML = html; // দেখা যাবে
 });
 
-// ✅ আরও ছবি ইনপুট
+document.getElementById("copyBtn").addEventListener("click", () => {
+  const output = document.getElementById("output").textContent;
+  navigator.clipboard.writeText(output)
+    .then(() => alert("✅ কোড কপি হয়েছে!"))
+    .catch(() => alert("❌ কপি করা যায়নি"));
+});
+
+document.getElementById("downloadBtn").addEventListener("click", () => {
+  const code = document.getElementById("output").textContent;
+  const blob = new Blob([code], {type: "text/html"});
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "product.html";
+  link.click();
+});
+
 function addImageInput() {
   const container = document.getElementById("imageInputs");
   const inputs = container.querySelectorAll(".img-url");
@@ -113,7 +124,6 @@ function addImageInput() {
   container.appendChild(input);
 }
 
-// ✅ কাস্টম তথ্য ইনপুট যোগ
 function addCustomField() {
   const container = document.getElementById("customFields");
   const group = document.createElement("div");
@@ -125,15 +135,6 @@ function addCustomField() {
   container.appendChild(group);
 }
 
-// ✅ কপি বাটন
-document.getElementById("copyBtn").addEventListener("click", () => {
-  const output = document.getElementById("output").textContent;
-  navigator.clipboard.writeText(output)
-    .then(() => alert("✅ কোড কপি হয়েছে!"))
-    .catch(() => alert("❌ কপি করা যায়নি"));
-});
-
-// ✅ মেনু টগল
 function toggleMenu() {
   document.getElementById("sidebar").classList.toggle("active");
 }

@@ -1,4 +1,4 @@
-<!-- ✅ dashboard.html (ফুল আপডেট — রিসেট + কোড ডুপ্লিকেট চেক + অটো-লোড) -->
+<!-- ✅ dashboard.html (ফুল আপডেট — রিসেট + কোড ডুপ্লিকেট চেক + অটো-লোড + ফাংশন ফিক্সড) -->
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -88,8 +88,31 @@ if (!localStorage.getItem("loggedInUser")) {
 </div>
 
 <script>
+// ✅ মেনু টগল
 function toggleMenu() {
   document.getElementById("sidebar").classList.toggle("active");
+}
+
+// ✅ আরও ছবি যোগ করুন
+function addImageInput() {
+  const container = document.getElementById("imageInputs");
+  const input = document.createElement("input");
+  input.type = "url";
+  input.className = "img-url";
+  input.placeholder = "ছবির লিংক (Image URL)";
+  container.appendChild(input);
+}
+
+// ✅ নতুন কাস্টম তথ্য যোগ করুন
+function addCustomField() {
+  const container = document.getElementById("customFields");
+  const div = document.createElement("div");
+  div.className = "custom-field-group";
+  div.innerHTML = `
+    <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
+    <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
+  `;
+  container.appendChild(div);
 }
 
 // ✅ Form Auto-load
@@ -163,7 +186,7 @@ function formReset() {
   document.getElementById("preview").innerHTML = "";
 }
 
-// ✅ কোড জেনারেট — Same Code Check + Save
+// ✅ কোড জেনারেট — ডুপ্লিকেট চেক + সেভ
 document.getElementById("generateBtn").addEventListener("click", () => {
   const name = document.getElementById("name").value.trim();
   const code = document.getElementById("code").value.trim();

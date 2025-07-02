@@ -1,0 +1,14 @@
+{
+  "mehedi": {
+    "password": "ifty.hack",
+    "isPremium": true
+  },
+  "sajibul": {
+    "password": "sajibul@#@#",
+    "isPremium": true
+  },
+  "demo": {
+    "password": "123456",
+    "isPremium": false
+  }
+}

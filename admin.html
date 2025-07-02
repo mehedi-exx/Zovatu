@@ -1,244 +1,108 @@
-<!-- ✅ admin.html: Full-featured version with Edit, Delete, Preview, WhatsApp, Custom Data & Search -->
 <!DOCTYPE html>
 <html lang="bn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Panel - G9Tool</title>
+  <title>G9Tool Admin Panel</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    .admin-wrapper {
-      max-width: 800px;
-      margin: auto;
-      padding: 20px;
-      background: #1c1c1c;
-      border-radius: 12px;
-    }
-    .admin-wrapper h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .search-box {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-    .search-box input {
-      width: 100%;
-      max-width: 400px;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #444;
-      background: #2a2a2a;
-      color: white;
-      font-size: 16px;
-    }
-    .product-list {
-      margin-top: 10px;
-    }
-    .product-item {
-      background: #2a2a2a;
-      margin-bottom: 10px;
-      padding: 15px;
-      border-radius: 8px;
-    }
-    .product-item h4 {
-      margin: 0 0 5px;
-    }
-    .product-item small {
-      color: #aaa;
-    }
-    .product-item .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
-    }
-    .product-item button {
-      flex: 1 1 auto;
-      padding: 10px;
-      border-radius: 6px;
-      font-size: 14px;
-      font-weight: 600;
-      border: none;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    .edit-btn { background: #007bff; color: #fff; }
-    .preview-btn { background: #17a2b8; color: #fff; }
-    .delete-btn { background: #dc3545; color: #fff; }
-    .top-controls {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin: 20px 0;
-    }
-    .top-controls button,
-    .top-controls label span {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: bold;
-      padding: 10px 20px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    .top-controls button {
-      background: #28a745;
-      color: white;
-      border: none;
-    }
-    .top-controls label span {
-      background: #ffc107;
-      color: black;
-    }
-    input[type="file"] {
-      display: none;
-    }
-    @media (max-width: 500px) {
-      .product-item .actions button {
-        flex: 100%;
-      }
-    }
+    body { padding: 20px; background: #111; color: #fff; font-family: sans-serif; }
+    h1 { text-align: center; margin-bottom: 20px; }
+    .actions { display: flex; gap: 10px; margin-bottom: 15px; justify-content: center; }
+    .search-input { padding: 8px; border-radius: 6px; border: none; width: 250px; }
+    .btn { padding: 8px 14px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    .btn-export { background: limegreen; color: #000; }
+    .btn-import { background: orange; color: #000; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { padding: 10px; border: 1px solid #333; text-align: left; }
+    th { background: #222; }
+    tr:nth-child(even) { background: #1a1a1a; }
+    .edit-btn { background: #25d366; color: #000; padding: 5px 10px; border: none; border-radius: 4px; cursor: pointer; }
   </style>
 </head>
 <body>
+  <h1>📋 G9Tool এডমিন প্যানেল</h1>
 
-<div class="admin-wrapper">
-  <h2><i class="fas fa-database"></i> জেনারেট করা প্রোডাক্টসমূহ</h2>
-
-  <div class="top-controls">
-    <button onclick="exportProducts()"><i class="fas fa-download"></i> এক্সপোর্ট</button>
-    <label>
-      <input type="file" accept="application/json" onchange="importProducts(event)">
-      <span><i class="fas fa-upload"></i> ইমপোর্ট</span>
+  <div class="actions">
+    <input type="text" id="searchBox" class="search-input" placeholder="প্রোডাক্ট কোড দিয়ে খুঁজুন...">
+    <button class="btn btn-export" onclick="exportData()"><i class="fas fa-download"></i> এক্সপোর্ট</button>
+    <label class="btn btn-import">
+      <i class="fas fa-upload"></i> ইমপোর্ট
+      <input type="file" id="importFile" accept=".json" style="display: none;">
     </label>
   </div>
 
-  <div class="search-box">
-    <input type="text" id="searchInput" placeholder="প্রোডাক্ট খুঁজুন..." oninput="loadProducts()" />
-  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>কোড</th>
+        <th>নাম</th>
+        <th>মূল্য</th>
+        <th>অফার</th>
+        <th>একশন</th>
+      </tr>
+    </thead>
+    <tbody id="productTable"></tbody>
+  </table>
 
-  <div class="product-list" id="productList"></div>
-</div>
+  <script>
+    const table = document.getElementById("productTable");
+    const searchBox = document.getElementById("searchBox");
 
-<script>
-const user = localStorage.getItem("loggedInUser") || "guest";
-const STORAGE_KEY = `g9_products_${user}`;
+    function loadProducts() {
+      const data = JSON.parse(localStorage.getItem("products")) || [];
+      const keyword = searchBox.value.toLowerCase();
+      table.innerHTML = "";
 
-function loadProducts() {
-  const list = document.getElementById("productList");
-  const searchText = document.getElementById("searchInput").value.toLowerCase();
-  list.innerHTML = "";
-  const products = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-  const filtered = products.filter(p =>
-    p.name?.toLowerCase().includes(searchText) ||
-    p.code?.toLowerCase().includes(searchText) ||
-    p.category?.toLowerCase().includes(searchText)
-  );
-
-  if (filtered.length === 0) {
-    list.innerHTML = "<p style='text-align:center;color:#aaa;'>কোনো প্রোডাক্ট পাওয়া যায়নি।</p>";
-    return;
-  }
-
-  filtered.forEach((item, index) => {
-    const div = document.createElement("div");
-    div.className = "product-item";
-    div.innerHTML = `
-      <h4>${item.name}</h4>
-      <small>কোড: ${item.code} | মূল্য: ${item.offer || item.price}৳</small>
-      <div class="actions">
-        <button class="edit-btn" onclick="editProduct(${index})"><i class='fas fa-edit'></i> এডিট</button>
-        <button class="preview-btn" onclick="previewProduct(${index})"><i class='fas fa-eye'></i> প্রিভিউ</button>
-        <button class="delete-btn" onclick="deleteProduct(${index})"><i class='fas fa-trash'></i> ডিলিট</button>
-      </div>
-    `;
-    list.appendChild(div);
-  });
-}
-
-function editProduct(index) {
-  const products = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-  const data = products[index];
-  if (!data) return;
-  localStorage.setItem("edit_product_index", index);
-  localStorage.setItem("formDraft", JSON.stringify(data));
-  window.location.href = "dashboard.html?edit=1";
-}
-
-function deleteProduct(index) {
-  if (!confirm("আপনি কি এই প্রোডাক্টটি মুছতে চান?")) return;
-  const products = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-  products.splice(index, 1);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-  loadProducts();
-}
-
-function previewProduct(index) {
-  const products = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-  const item = products[index];
-  if (!item) return;
-
-  const discount = item.offer ? Math.round(((item.price - item.offer) / item.price) * 100) : 0;
-  let html = `
-  <div style="max-width:600px;margin:auto;font-family:sans-serif;text-align:center;">
-    <h2>${item.name}</h2>
-    ${item.imgs?.[0] ? `<img src="${item.imgs[0]}" style="max-width:100%;border-radius:10px;margin-bottom:10px;">` : ""}
-    <p><strong>মূল্য:</strong> ${item.offer ? `<span style='text-decoration:line-through;'>${item.price}৳</span> <span style='color:red;font-weight:bold;'>${item.offer}৳</span> <small style='color:limegreen'>(-${discount}%)</small>` : `${item.price}৳`}</p>
-    <p><strong>কোড:</strong> ${item.code}</p>
-    <p><strong>স্ট্যাটাস:</strong> ${item.status || "IN STOCK"}</p>
-    <p><strong>ডেলিভারি:</strong> ${item.delivery || "N/A"}</p>
-    <p><strong>বর্ণনা:</strong><br> ${item.desc || "N/A"}</p>
-    ${item.custom?.length ? `<ul style='text-align:left;max-width:500px;margin:auto;'>${item.custom.map(f => `<li>🔧 ${f.key}: ${f.value}</li>`).join('')}</ul>` : ""}
-    <p style="margin-top:20px;">
-      <a href="https://wa.me/${item.wa}?text=📦 আমি একটি পণ্য অর্ডার করতে চাই%0A🔖 প্রোডাক্ট: ${item.name}%0A💰 মূল্য: ${item.offer || item.price}৳%0A🧾 কোড: ${item.code}%0A📁 ক্যাটাগরি: ${item.category || 'N/A'}%0A🚚 ডেলিভারি: ${item.delivery}" target="_blank" style="display:inline-block;padding:10px 20px;background:#25D366;color:white;border-radius:6px;text-decoration:none;font-weight:bold;">
-        <i class="fab fa-whatsapp"></i> WhatsApp অর্ডার করুন
-      </a>
-    </p>
-  </div>`;
-
-  const win = window.open("", "_blank");
-  win.document.write(`<!DOCTYPE html><html><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Preview</title><link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css'></head><body style='background:#f9f9f9;margin:0;padding:20px;'>${html}</body></html>`);
-}
-
-function exportProducts() {
-  const data = localStorage.getItem(STORAGE_KEY);
-  const blob = new Blob([data], {type: "application/json"});
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = `${user}_products.json`;
-  link.click();
-}
-
-function importProducts(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const imported = JSON.parse(e.target.result);
-      if (!Array.isArray(imported)) throw new Error("Invalid format");
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(imported));
-      alert("✅ ডেটা ইমপোর্ট সফল হয়েছে");
-      loadProducts();
-    } catch {
-      alert("❌ ফাইলটি সঠিক JSON ফরম্যাট নয়");
+      data.forEach(p => {
+        if (!keyword || p.code.toLowerCase().includes(keyword)) {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${p.code}</td>
+            <td>${p.name}</td>
+            <td>৳${p.price}</td>
+            <td>${p.offer ? '৳'+p.offer : '-'}</td>
+            <td><button class="edit-btn" onclick="editProduct('${p.code}')"><i class='fas fa-edit'></i> Edit</button></td>
+          `;
+          table.appendChild(row);
+        }
+      });
     }
-  };
-  reader.readAsText(file);
-}
 
-window.onload = loadProducts;
-</script>
+    function editProduct(code) {
+      window.location.href = `dashboard.html?code=${code}`;
+    }
 
+    function exportData() {
+      const data = localStorage.getItem("products") || "[]";
+      const blob = new Blob([data], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "products.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    document.getElementById("importFile").addEventListener("change", function () {
+      const file = this.files[0];
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          localStorage.setItem("products", JSON.stringify(imported));
+          alert("✅ ডাটা ইমপোর্ট হয়েছে!");
+          loadProducts();
+        } catch {
+          alert("❌ ইমপোর্ট ফেইল্ড!");
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    searchBox.addEventListener("input", loadProducts);
+    window.addEventListener("DOMContentLoaded", loadProducts);
+  </script>
 </body>
 </html>

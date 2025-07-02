@@ -1,3 +1,4 @@
+// ✅ auth.js
 function loginUser() {
   const uname = document.getElementById("username").value.trim();
   const pass = document.getElementById("password").value.trim();
@@ -7,27 +8,32 @@ function loginUser() {
     return;
   }
 
-  fetch(`users/${uname}.json`)
+  fetch("users/users.json")
     .then(res => {
       if (!res.ok) {
-        throw new Error("ইউজার পাওয়া যায়নি");
+        throw new Error("⚠️ ইউজার ডেটা লোড করা যায়নি");
       }
       return res.json();
     })
-    .then(data => {
+    .then(users => {
+      const data = users[uname];
+      if (!data) {
+        alert("❌ ইউজার নেই");
+        return;
+      }
+
       if (data.password === pass && data.isPremium) {
-        // লোকালস্টোরেজে ইউজার তথ্য সংরক্ষণ
+        // ✅ সেভ ইনফো লোকালস্টোরেজে
         localStorage.setItem("loggedInUser", uname);
 
-        // একটু ডিলে দিয়ে রিডাইরেক্ট, যাতে লোকালস্টোরেজ সেভ হয়
         setTimeout(() => {
           window.location.href = "dashboard.html";
         }, 100);
       } else {
-        alert("❌ ইউজার তথ্য সঠিক নয় অথবা প্রিমিয়াম ইউজার নন");
+        alert("❌ ভুল পাসওয়ার্ড বা প্রিমিয়াম এক্সেস নেই");
       }
     })
-    .catch(error => {
-      alert("⚠️ লগইন ব্যর্থ: " + error.message);
+    .catch(err => {
+      alert("⚠️ লগইন ব্যর্থ: " + err.message);
     });
 }

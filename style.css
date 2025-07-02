@@ -1,38 +1,51 @@
-/* G9Tool Updated CSS */
+/* G9Tool Updated Pro Dark Theme CSS - 2025 */
+
+:root {
+  --bg-body: #0d0d0d;
+  --bg-card: #1a1a1a;
+  --bg-input: #262626;
+  --bg-hover: #333;
+  --text-main: #ffffff;
+  --text-secondary: #cccccc;
+  --border-color: #444;
+  --green: #28a745;
+  --blue: #0088cc;
+  --whatsapp: #25D366;
+}
 
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
+  background-color: var(--bg-body);
+  color: var(--text-main);
   font-family: 'Segoe UI', sans-serif;
-  background-color: #121212;
-  color: #fff;
-  padding: 0;
-  margin: 0;
+  line-height: 1.6;
 }
 
 header.header {
-  background: #1e1e1e;
+  background: var(--bg-card);
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  border-radius: 0 0 15px 15px;
+  border-radius: 0 0 16px 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
 }
 
 .left-icons {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .menu-btn {
   background: none;
   border: none;
-  color: white;
+  color: var(--text-main);
   font-size: 22px;
   cursor: pointer;
 }
@@ -47,7 +60,7 @@ header.header {
 
 .telegram-icon {
   background: white;
-  color: #0088cc;
+  color: var(--blue);
   border-radius: 50%;
   padding: 6px;
   font-size: 20px;
@@ -62,64 +75,118 @@ main {
 }
 
 .form-wrapper {
-  max-width: 600px;
+  background: var(--bg-card);
+  max-width: 700px;
   margin: auto;
-  background: #1c1c1c;
-  padding: 20px;
-  border-radius: 12px;
+  padding: 24px;
+  border-radius: 14px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
 }
 
 input,
 textarea {
   width: 100%;
-  background: #2a2a2a;
-  color: white;
-  border: 1px solid #444;
-  border-radius: 8px;
-  padding: 12px 15px;
-  margin-bottom: 15px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 14px;
   font-size: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  transition: border-color 0.3s;
+}
+
+input:focus,
+textarea:focus {
+  border-color: var(--blue);
+  outline: none;
 }
 
 button {
-  border: none;
-  padding: 12px 18px;
+  background: var(--bg-hover);
+  color: var(--text-main);
+  padding: 12px 20px;
   font-size: 16px;
   font-weight: bold;
+  border: none;
   border-radius: 8px;
   cursor: pointer;
+  transition: opacity 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+button:hover {
+  opacity: 0.85;
+}
+
+#generateBtn {
+  background-color: var(--green);
+  color: #fff;
+}
+
+#copyBtn {
+  background-color: var(--blue);
+  color: #fff;
 }
 
 button i {
   margin-right: 6px;
 }
 
-#generateBtn {
-  background: #28a745;
-  color: white;
-  margin-right: 10px;
-}
-
-#copyBtn {
-  background: #007bff;
-  color: white;
-}
-
-button:hover {
-  opacity: 0.9;
-}
-
 #imageInputs {
   margin-bottom: 15px;
 }
 
+.image-group {
+  margin-bottom: 10px;
+}
+
+.custom-field-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.custom-field-group input {
+  flex: 1;
+}
+
+.output {
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: #191919;
+  padding: 18px;
+  margin-top: 25px;
+  border-radius: 12px;
+  border: 1px solid #333;
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+
+.live-preview {
+  margin-top: 20px;
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 18px;
+  background: #161616;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Sidebar: NO CHANGES HERE ✅ */
 .sidebar {
   position: fixed;
   top: 0;
   left: -100%;
   height: 100%;
   width: 75%;
-  background: #1f1f1f;
+  background: var(--bg-card);
   padding: 60px 20px;
   transition: 0.3s;
   z-index: 999;
@@ -131,16 +198,16 @@ button:hover {
 
 .sidebar a {
   display: block;
-  background: #2a2a2a;
-  color: white;
+  background: var(--bg-input);
+  color: var(--text-main);
   text-decoration: none;
   margin-bottom: 10px;
-  padding: 12px;
+  padding: 14px;
   border-radius: 8px;
 }
 
 .sidebar a:hover {
-  background: #444;
+  background: var(--bg-hover);
 }
 
 .close-sidebar {
@@ -154,9 +221,24 @@ button:hover {
   cursor: pointer;
 }
 
+/* WhatsApp Button Preview Compatibility */
+a[href^="https://wa.me/"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--whatsapp);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Responsive Design */
 @media (max-width: 480px) {
   .form-wrapper {
-    padding: 15px;
+    padding: 16px;
   }
 
   input,
@@ -171,5 +253,9 @@ button:hover {
 
   #generateBtn {
     margin-right: 0;
+  }
+
+  .custom-field-group {
+    flex-direction: column;
   }
 }

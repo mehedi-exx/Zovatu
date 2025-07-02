@@ -104,4 +104,69 @@ function toggleMenu() {
   sidebar.classList.toggle("active");
 }
 </script><script src="script.js"></script></body>
+  <script src="script.js"></script>
+<script>
+  const uname = localStorage.getItem("loggedInUser");
+
+  // Add admin link if premium
+  fetch("users/users.json")
+    .then(res => res.json())
+    .then(users => {
+      if (users[uname]?.isPremium) {
+        const link = document.createElement("a");
+        link.href = "admin.html";
+        link.innerHTML = `<i class="fas fa-tools"></i> অ্যাডমিন প্যানেল`;
+        document.querySelector(".sidebar").appendChild(link);
+      }
+    });
+
+  // If Edit Mode
+  const editData = JSON.parse(localStorage.getItem("editProduct"));
+  if (editData) {
+    document.getElementById("name").value = editData.name || "";
+    document.getElementById("code").value = editData.code || "";
+    document.getElementById("price").value = editData.price || "";
+    document.getElementById("offer").value = editData.offer || "";
+    document.getElementById("unit").value = editData.unit || "";
+    document.getElementById("qty").value = editData.qty || "";
+    document.getElementById("brand").value = editData.brand || "";
+    document.getElementById("size").value = editData.size || "";
+    document.getElementById("color").value = editData.color || "";
+    document.getElementById("delivery").value = editData.delivery || "";
+    document.getElementById("status").value = editData.status || "";
+    document.getElementById("category").value = editData.category || "";
+    document.getElementById("desc").value = editData.desc || "";
+    document.getElementById("video").value = editData.video || "";
+    document.getElementById("wa").value = editData.wa || "";
+
+    // Images
+    const images = editData.images || [];
+    const imageContainer = document.getElementById("imageInputs");
+    imageContainer.innerHTML = "";
+    images.forEach(img => {
+      const input = document.createElement("input");
+      input.type = "url";
+      input.className = "img-url";
+      input.value = img;
+      input.placeholder = "ছবির লিংক (Image URL)";
+      imageContainer.appendChild(input);
+    });
+
+    // Custom fields
+    const customContainer = document.getElementById("customFields");
+    customContainer.innerHTML = "";
+    (editData.custom || []).forEach(pair => {
+      const group = document.createElement("div");
+      group.className = "custom-field-group";
+      group.innerHTML = `
+        <input type="text" class="custom-key" value="${pair.key}">
+        <input type="text" class="custom-value" value="${pair.value}">
+      `;
+      customContainer.appendChild(group);
+    });
+
+    localStorage.removeItem("editProduct");
+  }
+</script>
+
 </html>

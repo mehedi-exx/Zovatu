@@ -1,0 +1,10 @@
+{
+  "mehedi": {
+    "password": "12345",
+    "isPremium": true
+  },
+  "demo": {
+    "password": "demo",
+    "isPremium": false
+  }
+}

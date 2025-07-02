@@ -1,51 +1,38 @@
-/* G9Tool Updated Pro Dark Theme CSS - 2025 */
-
-:root {
-  --bg-body: #0d0d0d;
-  --bg-card: #1a1a1a;
-  --bg-input: #262626;
-  --bg-hover: #333;
-  --text-main: #ffffff;
-  --text-secondary: #cccccc;
-  --border-color: #444;
-  --green: #28a745;
-  --blue: #0088cc;
-  --whatsapp: #25D366;
-}
+/* G9Tool Updated CSS */
 
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
 body {
-  background-color: var(--bg-body);
-  color: var(--text-main);
   font-family: 'Segoe UI', sans-serif;
-  line-height: 1.6;
+  background-color: #121212;
+  color: #fff;
+  padding: 0;
+  margin: 0;
 }
 
 header.header {
-  background: var(--bg-card);
+  background: #1e1e1e;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  border-radius: 0 0 16px 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  border-radius: 0 0 15px 15px;
 }
 
 .left-icons {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
 }
 
 .menu-btn {
   background: none;
   border: none;
-  color: var(--text-main);
+  color: white;
   font-size: 22px;
   cursor: pointer;
 }
@@ -60,7 +47,7 @@ header.header {
 
 .telegram-icon {
   background: white;
-  color: var(--blue);
+  color: #0088cc;
   border-radius: 50%;
   padding: 6px;
   font-size: 20px;
@@ -75,118 +62,64 @@ main {
 }
 
 .form-wrapper {
-  background: var(--bg-card);
-  max-width: 700px;
+  max-width: 600px;
   margin: auto;
-  padding: 24px;
-  border-radius: 14px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  background: #1c1c1c;
+  padding: 20px;
+  border-radius: 12px;
 }
 
 input,
 textarea {
   width: 100%;
-  background: var(--bg-input);
-  border: 1px solid var(--border-color);
-  color: var(--text-main);
-  padding: 14px;
-  font-size: 16px;
+  background: #2a2a2a;
+  color: white;
+  border: 1px solid #444;
   border-radius: 8px;
-  margin-bottom: 16px;
-  transition: border-color 0.3s;
-}
-
-input:focus,
-textarea:focus {
-  border-color: var(--blue);
-  outline: none;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  font-size: 16px;
 }
 
 button {
-  background: var(--bg-hover);
-  color: var(--text-main);
-  padding: 12px 20px;
+  border: none;
+  padding: 12px 18px;
   font-size: 16px;
   font-weight: bold;
-  border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: opacity 0.3s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-button:hover {
-  opacity: 0.85;
-}
-
-#generateBtn {
-  background-color: var(--green);
-  color: #fff;
-}
-
-#copyBtn {
-  background-color: var(--blue);
-  color: #fff;
 }
 
 button i {
   margin-right: 6px;
 }
 
+#generateBtn {
+  background: #28a745;
+  color: white;
+  margin-right: 10px;
+}
+
+#copyBtn {
+  background: #007bff;
+  color: white;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
 #imageInputs {
   margin-bottom: 15px;
 }
 
-.image-group {
-  margin-bottom: 10px;
-}
-
-.custom-field-group {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-}
-
-.custom-field-group input {
-  flex: 1;
-}
-
-.output {
-  white-space: pre-wrap;
-  word-break: break-word;
-  background: #191919;
-  padding: 18px;
-  margin-top: 25px;
-  border-radius: 12px;
-  border: 1px solid #333;
-  font-size: 15px;
-  color: var(--text-secondary);
-}
-
-.live-preview {
-  margin-top: 20px;
-  border: 1px solid #333;
-  border-radius: 12px;
-  padding: 18px;
-  background: #161616;
-}
-
-textarea {
-  resize: vertical;
-  min-height: 100px;
-}
-
-/* Sidebar: NO CHANGES HERE ✅ */
 .sidebar {
   position: fixed;
   top: 0;
   left: -100%;
   height: 100%;
   width: 75%;
-  background: var(--bg-card);
+  background: #1f1f1f;
   padding: 60px 20px;
   transition: 0.3s;
   z-index: 999;
@@ -198,16 +131,16 @@ textarea {
 
 .sidebar a {
   display: block;
-  background: var(--bg-input);
-  color: var(--text-main);
+  background: #2a2a2a;
+  color: white;
   text-decoration: none;
   margin-bottom: 10px;
-  padding: 14px;
+  padding: 12px;
   border-radius: 8px;
 }
 
 .sidebar a:hover {
-  background: var(--bg-hover);
+  background: #444;
 }
 
 .close-sidebar {
@@ -221,24 +154,9 @@ textarea {
   cursor: pointer;
 }
 
-/* WhatsApp Button Preview Compatibility */
-a[href^="https://wa.me/"] {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--whatsapp);
-  color: #fff;
-  padding: 12px 20px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-/* Responsive Design */
 @media (max-width: 480px) {
   .form-wrapper {
-    padding: 16px;
+    padding: 15px;
   }
 
   input,
@@ -253,9 +171,5 @@ a[href^="https://wa.me/"] {
 
   #generateBtn {
     margin-right: 0;
-  }
-
-  .custom-field-group {
-    flex-direction: column;
   }
 }

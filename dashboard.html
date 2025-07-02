@@ -1,4 +1,4 @@
-<!-- ✅ dashboard.html (পুরোনো ডিজাইন অক্ষুণ্ণ রেখে ছবির অটো-লোড ফিচার ও Admin Menu যুক্ত) -->
+<!-- ✅ dashboard.html (ফুল আপডেট — রিসেট + কোড ডুপ্লিকেট চেক + অটো-লোড) -->
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -68,7 +68,7 @@ if (!localStorage.getItem("loggedInUser")) {
     <div style="text-align:center;">
       <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট</button>
       <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
-      <button id="downloadBtn"><i class="fas fa-download"></i> ডাউনলোড করুন</button>
+      <button id="resetBtn" onclick="formReset()"><i class="fas fa-eraser"></i> রিসেট করুন</button>
     </div>
 
     <div class="output" id="output"></div>
@@ -83,18 +83,16 @@ if (!localStorage.getItem("loggedInUser")) {
   <a href="menu/contact.html"><i class="fas fa-phone"></i> কন্টাক্ট</a>
   <a href="menu/privacy.html"><i class="fas fa-user-shield"></i> প্রাইভেসি</a>
   <a href="menu/tutorial.html"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
-  <a href="admin.html"><i class="fas fa-database"></i> অ্যাডমিন</a> <!-- ✅ Admin Link Added -->
+  <a href="admin.html"><i class="fas fa-database"></i> অ্যাডমিন</a>
   <a href="index.html" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
 </div>
 
-<script src="script.js"></script>
 <script>
-// ✅ মেনু টগল
 function toggleMenu() {
   document.getElementById("sidebar").classList.toggle("active");
 }
 
-// ✅ Form Auto-save Draft
+// ✅ Form Auto-load
 window.addEventListener('load', () => {
   const saved = localStorage.getItem("formDraft");
   if (saved) {
@@ -103,7 +101,7 @@ window.addEventListener('load', () => {
       const el = document.getElementById(id);
       if (el) el.value = data[id];
     }
-    // ✅ Image Inputs Restore
+
     if (data.imgs && Array.isArray(data.imgs)) {
       const container = document.getElementById("imageInputs");
       container.innerHTML = "";
@@ -116,7 +114,7 @@ window.addEventListener('load', () => {
         container.appendChild(input);
       });
     }
-    // ✅ Custom Fields Restore
+
     if (data.custom && Array.isArray(data.custom)) {
       const container = document.getElementById("customFields");
       container.innerHTML = "";
@@ -130,6 +128,7 @@ window.addEventListener('load', () => {
   }
 });
 
+// ✅ Save Draft on Change
 document.querySelectorAll("input, textarea").forEach(input => {
   input.addEventListener("input", () => {
     const draft = {};
@@ -140,18 +139,83 @@ document.querySelectorAll("input, textarea").forEach(input => {
   });
 });
 
-// ✅ কোড ডাউনলোড বাটন
-const downloadBtn = document.getElementById("downloadBtn");
-if (downloadBtn) {
-  downloadBtn.addEventListener("click", () => {
-    const code = document.getElementById("output").textContent;
-    const blob = new Blob([code], { type: "text/html" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "product.html";
-    link.click();
-  });
+// ✅ রিসেট বাটন ফাংশন
+function formReset() {
+  if (!confirm("আপনি কি ফর্ম রিসেট করতে চান?")) return;
+
+  document.querySelectorAll("input, textarea").forEach(el => el.value = "");
+
+  document.getElementById("imageInputs").innerHTML = `
+    <div class="image-group">
+      <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
+    </div>
+  `;
+
+  document.getElementById("customFields").innerHTML = `
+    <div class="custom-field-group">
+      <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
+      <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
+    </div>
+  `;
+
+  localStorage.removeItem("formDraft");
+  document.getElementById("output").textContent = "";
+  document.getElementById("preview").innerHTML = "";
 }
+
+// ✅ কোড জেনারেট — Same Code Check + Save
+document.getElementById("generateBtn").addEventListener("click", () => {
+  const name = document.getElementById("name").value.trim();
+  const code = document.getElementById("code").value.trim();
+  const price = parseFloat(document.getElementById("price").value);
+  const wa = document.getElementById("wa").value.trim();
+  const imgs = document.querySelectorAll(".img-url");
+
+  if (!name || !code || isNaN(price) || !imgs[0].value || !wa) {
+    alert("❌ প্রোডাক্ট নাম, কোড, প্রাইস, প্রথম ছবি ও WhatsApp নম্বর দিতে হবে।");
+    return;
+  }
+
+  const user = localStorage.getItem("loggedInUser") || "guest";
+  const key = `g9_products_${user}`;
+  const products = JSON.parse(localStorage.getItem(key) || "[]");
+  const editIndex = localStorage.getItem("edit_product_index");
+
+  const duplicate = products.some((p, i) => i != editIndex && p.code === code);
+  if (duplicate) {
+    alert("⚠️ এই কোড দিয়ে ইতিমধ্যে একটি প্রোডাক্ট তৈরি হয়েছে! অনুগ্রহ করে নতুন কোড দিন।");
+    return;
+  }
+
+  const product = {};
+  document.querySelectorAll("input, textarea").forEach(el => {
+    if (el.id) product[el.id] = el.value;
+  });
+  product.imgs = [...imgs].map(i => i.value.trim()).filter(Boolean);
+  product.custom = [...document.querySelectorAll(".custom-field-group")].map(g => {
+    const key = g.querySelector(".custom-key")?.value.trim();
+    const val = g.querySelector(".custom-value")?.value.trim();
+    return key && val ? { key, value: val } : null;
+  }).filter(Boolean);
+
+  if (editIndex !== null) {
+    products[parseInt(editIndex)] = product;
+    localStorage.removeItem("edit_product_index");
+  } else {
+    products.push(product);
+  }
+
+  localStorage.setItem(key, JSON.stringify(products));
+  alert("✅ প্রোডাক্ট সেভ হয়েছে!");
+});
+
+// ✅ কপি বাটন
+document.getElementById("copyBtn").addEventListener("click", () => {
+  const output = document.getElementById("output").textContent;
+  navigator.clipboard.writeText(output)
+    .then(() => alert("✅ কোড কপি হয়েছে!"))
+    .catch(() => alert("❌ কপি করা যায়নি"));
+});
 </script>
 </body>
 </html>

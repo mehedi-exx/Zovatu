@@ -1,4 +1,4 @@
-<!-- ✅ admin.html: Product Manager Panel for G9Tool -->
+<!-- ✅ admin.html: Delete + Preview ফিচার যুক্ত -->
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -8,16 +8,85 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    .admin-wrapper { max-width: 800px; margin: auto; padding: 20px; background: #1c1c1c; border-radius: 12px; }
-    .admin-wrapper h2 { text-align: center; margin-bottom: 20px; }
-    .product-list { margin-top: 20px; }
-    .product-item { background: #2a2a2a; margin-bottom: 10px; padding: 15px; border-radius: 8px; }
-    .product-item h4 { margin: 0 0 5px; }
-    .product-item small { color: #aaa; }
-    .product-item button { margin-top: 10px; background: #007bff; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; }
-    .top-controls { display: flex; justify-content: space-between; margin-top: 20px; }
-    .top-controls button { background: #28a745; color: white; padding: 10px 16px; border-radius: 6px; border: none; cursor: pointer; }
-    input[type="file"] { display: none; }
+    .admin-wrapper {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      background: #1c1c1c;
+      border-radius: 12px;
+    }
+    .admin-wrapper h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .product-list {
+      margin-top: 20px;
+    }
+    .product-item {
+      background: #2a2a2a;
+      margin-bottom: 10px;
+      padding: 15px;
+      border-radius: 8px;
+    }
+    .product-item h4 {
+      margin: 0 0 5px;
+    }
+    .product-item small {
+      color: #aaa;
+    }
+    .product-item .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .product-item button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .product-item .delete-btn {
+      background: #dc3545;
+    }
+    .product-item .preview-btn {
+      background: #17a2b8;
+    }
+    .top-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .top-controls button,
+    .top-controls label span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: bold;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .top-controls button {
+      background: #28a745;
+      color: white;
+      border: none;
+    }
+    .top-controls label span {
+      background: #ffc107;
+      color: black;
+    }
+    input[type="file"] {
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -28,7 +97,7 @@
     <button onclick="exportProducts()"><i class="fas fa-download"></i> এক্সপোর্ট</button>
     <label>
       <input type="file" accept="application/json" onchange="importProducts(event)">
-      <span style="cursor:pointer;background:#ffc107;color:#000;padding:10px 16px;border-radius:6px;"><i class="fas fa-upload"></i> ইমপোর্ট</span>
+      <span><i class="fas fa-upload"></i> ইমপোর্ট</span>
     </label>
   </div>
 
@@ -53,8 +122,12 @@ function loadProducts() {
     div.className = "product-item";
     div.innerHTML = `
       <h4>${item.name}</h4>
-      <small>কোড: ${item.code} | মূল্য: ${item.price}৳</small><br>
-      <button onclick="editProduct(${index})"><i class='fas fa-edit'></i> এডিট</button>
+      <small>কোড: ${item.code} | মূল্য: ${item.price}৳</small>
+      <div class="actions">
+        <button onclick="editProduct(${index})"><i class='fas fa-edit'></i> এডিট</button>
+        <button class="preview-btn" onclick="previewProduct(${index})"><i class='fas fa-eye'></i> প্রিভিউ</button>
+        <button class="delete-btn" onclick="deleteProduct(${index})"><i class='fas fa-trash'></i> ডিলিট</button>
+      </div>
     `;
     list.appendChild(div);
   });
@@ -63,6 +136,26 @@ function loadProducts() {
 function editProduct(index) {
   localStorage.setItem("edit_product_index", index);
   window.location.href = "dashboard.html?edit=1";
+}
+
+function deleteProduct(index) {
+  if (!confirm("আপনি কি এই প্রোডাক্টটি মুছতে চান?")) return;
+  const products = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+  products.splice(index, 1);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+  loadProducts();
+}
+
+function previewProduct(index) {
+  const products = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+  const item = products[index];
+  if (!item) return;
+  let html = `<h3>${item.name}</h3><p>কোড: ${item.code}</p><p>মূল্য: ${item.price}৳</p>`;
+  if (item.imgs?.length) {
+    html += `<img src="${item.imgs[0]}" style="max-width:100%;margin-top:10px;border-radius:10px;">`;
+  }
+  const win = window.open();
+  win.document.write(`<html><head><title>Preview</title><meta charset='UTF-8'></head><body style='font-family:sans-serif;padding:20px;'>${html}</body></html>`);
 }
 
 function exportProducts() {

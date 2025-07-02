@@ -1,186 +1,75 @@
-<!DOCTYPE html>
-<html lang="bn">
+<!DOCTYPE html><html lang="bn">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>G9Tool Dashboard - প্রিমিয়াম এডমিন প্যানেল</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>G9Tool Dashboard</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <style>
-    /* অতিরিক্ত স্টাইল Dashboard এর জন্য */
-    .header, main {
-      max-width: 700px;
-      margin: auto;
-    }
-    main {
-      padding: 20px;
-      background: #1c1c1c;
-      border-radius: 12px;
-      margin-top: 20px;
-    }
-    .form-wrapper input,
-    .form-wrapper textarea {
-      margin-bottom: 12px;
-    }
-    .btn-group {
-      margin-top: 12px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .btn-group button {
-      flex: 1 1 150px;
-    }
-    #productList {
-      margin-top: 25px;
-      max-height: 350px;
-      overflow-y: auto;
-      background: #2a2a2a;
-      border-radius: 10px;
-      padding: 10px;
-    }
-    .product-item {
-      background: #1e1e1e;
-      padding: 10px 15px;
-      border-radius: 8px;
-      margin-bottom: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .product-item:hover {
-      background: #333;
-    }
-    .product-info {
-      flex: 1;
-      color: #ddd;
-      font-size: 14px;
-      overflow-wrap: anywhere;
-    }
-    .product-actions button {
-      background: #dc3545;
-      border: none;
-      color: white;
-      padding: 6px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 13px;
-      transition: background 0.3s;
-    }
-    .product-actions button:hover {
-      background: #b02a37;
-    }
-    #searchInput {
-      width: 100%;
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      margin-bottom: 15px;
-      font-size: 15px;
-      background: #2a2a2a;
-      color: white;
-    }
-    /* Scrollbar Styling */
-    #productList::-webkit-scrollbar {
-      width: 8px;
-    }
-    #productList::-webkit-scrollbar-track {
-      background: #1c1c1c;
-      border-radius: 8px;
-    }
-    #productList::-webkit-scrollbar-thumb {
-      background: #444;
-      border-radius: 8px;
-    }
-    /* Responsive */
-    @media (max-width: 480px) {
-      .product-item {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .product-actions {
-        margin-top: 8px;
-        width: 100%;
-        display: flex;
-        justify-content: flex-end;
-      }
-    }
-  </style>
 </head>
 <body>
-
+  <script>
+  // যদি ইউজার লগইন না করে থাকে, তাহলে index.html-এ রিডাইরেক্ট করে দাও
+  if (!localStorage.getItem("loggedInUser")) {
+    alert("⚠️ অনুগ্রহ করে প্রথমে লগইন করুন!");
+    window.location.href = "index.html";
+  }
+</script>
 <header class="header">
   <div class="left-icons">
-    <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
-    <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
+    <button class="menu-btn" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="logo">
+      <i class="fas fa-box-open"></i> G9Tool
+    </div>
   </div>
   <a href="https://t.me/G9tool" class="telegram-icon" target="_blank">
     <i class="fab fa-telegram-plane"></i>
   </a>
-</header>
-
-<main>
-  <h2 style="text-align:center; margin-bottom: 20px;">🛠️ প্রোডাক্ট ম্যানেজার</h2>
-
-  <input type="text" id="searchInput" placeholder="প্রোডাক্ট সার্চ করুন... (নাম, কোড, ক্যাটাগরি)" />
-
+</header><main>
   <div class="form-wrapper">
-    <input type="hidden" id="editIndex" value="-1" />
-    <input type="text" id="name" placeholder="প্রোডাক্ট নাম *" required />
-    <input type="text" id="code" placeholder="প্রোডাক্ট কোড *" required />
-    <input type="number" id="price" placeholder="মূল্য (৳) *" required />
-    <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)" />
-    <input type="text" id="unit" placeholder="ইউনিট (যেমন: পিস, কেজি)" />
-    <input type="number" id="qty" placeholder="পরিমাণ (Qty)" />
-    <input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি" />
-    <input type="text" id="size" placeholder="সাইজ অপশন (যেমন: S, M, L)" />
-    <input type="text" id="color" placeholder="রঙ অপশন (যেমন: লাল, সবুজ)" />
-    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম" />
-    <input type="text" id="status" placeholder="স্ট্যাটাস" />
-    <input type="text" id="category" placeholder="ক্যাটাগরি" />
-    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea>
-
-    <div id="imageInputs">
-      <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)" />
-    </div>
-    <button type="button" onclick="addImageInput()">
-      <i class="fas fa-plus"></i> আরও ছবি যোগ করুন
-    </button>
-
-    <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)" />
-    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX) *" required />
-
-    <h4 style="margin-top: 20px;">🔧 কাস্টম তথ্য (যেমন: ওয়ারেন্টি, উৎপাদন দেশ)</h4>
-    <div id="customFields">
-      <div class="custom-field-group">
-        <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি" />
-        <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস" />
-      </div>
-    </div>
-    <button type="button" onclick="addCustomField()">
-      <i class="fas fa-plus"></i> নতুন তথ্য যোগ করুন
-    </button>
-
-    <div class="btn-group">
-      <button id="saveBtn"><i class="fas fa-save"></i> সেভ করুন</button>
-      <button id="clearBtn" style="background:#dc3545;"><i class="fas fa-trash"></i> ফর্ম রিসেট</button>
-    </div>
+    <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
+    <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
+    <input type="number" id="price" placeholder="মূল্য প্রাইস (৳)" required>
+    <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
+    <input type="text" id="unit" placeholder="ইউনিট (যেমন: পিস, কেজি)">
+    <input type="number" id="qty" placeholder="পরিমাণ (Qty)">
+    <input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি">
+    <input type="text" id="size" placeholder="সাইজ অপশন (যেমন: S, M, L)">
+    <input type="text" id="color" placeholder="রঙ অপশন (যেমন: লাল, সবুজ)">
+    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
+    <input type="text" id="status" placeholder="স্ট্যাটাস">
+    <input type="text" id="category" placeholder="ক্যাটাগরি">
+    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea><div id="imageInputs">
+  <div class="image-group">
+    <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
   </div>
+</div>
+<button onclick="addImageInput()"><i class="fas fa-plus"></i> আরও ছবি যোগ করুন</button>
 
-  <h3 style="margin-top: 40px; text-align:center;">📝 প্রোডাক্ট তালিকা</h3>
-  <div id="productList" aria-live="polite" aria-atomic="true" aria-relevant="all"></div>
+<input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)">
+<input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)" required>
 
-  <div class="btn-group" style="margin-top: 30px;">
-    <button id="exportBtn" style="background:#007bff;"><i class="fas fa-file-export"></i> এক্সপোর্ট JSON</button>
-    <button id="importBtn" style="background:#ffc107; color:#000;"><i class="fas fa-file-import"></i> ইমপোর্ট JSON</button>
-    <input type="file" id="importFile" accept=".json" style="display:none" />
+<!-- ✅ Custom Fields Section -->
+<h4 style="margin-top: 20px;">🔧 কাস্টম তথ্য (যেমন: ওয়ারেন্টি, উৎপাদন দেশ)</h4>
+<div id="customFields">
+  <div class="custom-field-group">
+    <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
+    <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
   </div>
-</main>
+</div>
+<button onclick="addCustomField()"><i class="fas fa-plus"></i> নতুন তথ্য যোগ করুন</button>
 
-<div id="sidebar" class="sidebar">
+<div style="text-align:center;">
+  <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট</button>
+  <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
+</div>
+
+<div class="output" id="output"></div>
+<div class="live-preview" id="preview"></div>
+
+  </div>
+</main><!-- Sidebar --><div id="sidebar" class="sidebar">
   <button class="close-sidebar" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
   <a href="dashboard.html"><i class="fas fa-home"></i> হোম</a>
   <a href="menu/about.html"><i class="fas fa-info-circle"></i> এবাউট</a>
@@ -188,360 +77,31 @@
   <a href="menu/privacy.html"><i class="fas fa-user-shield"></i> প্রাইভেসি</a>
   <a href="menu/tutorial.html"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
   <a href="index.html" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
-</div>
+</div><!-- ✅ Inline Script for Dynamic Fields --><script>
+function addImageInput() {
+  const container = document.getElementById("imageInputs");
+  const group = document.createElement("div");
+  group.className = "image-group";
+  group.innerHTML = `
+    <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
+  `;
+  container.appendChild(group);
+}
 
-<script>
-  // ইউজার লগইন চেক
-  if (!localStorage.getItem("loggedInUser")) {
-    alert("⚠️ অনুগ্রহ করে প্রথমে লগইন করুন!");
-    window.location.href = "index.html";
-  }
+function addCustomField() {
+  const container = document.getElementById("customFields");
+  const group = document.createElement("div");
+  group.className = "custom-field-group";
+  group.innerHTML = `
+    <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
+    <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
+  `;
+  container.appendChild(group);
+}
 
-  const username = localStorage.getItem("loggedInUser");
-
-  // প্রোডাক্ট ডেটা localStorage key
-  const storageKey = `products_${username}`;
-
-  // এলিমেন্টস
-  const productListEl = document.getElementById("productList");
-  const searchInput = document.getElementById("searchInput");
-  const saveBtn = document.getElementById("saveBtn");
-  const clearBtn = document.getElementById("clearBtn");
-  const importBtn = document.getElementById("importBtn");
-  const exportBtn = document.getElementById("exportBtn");
-  const importFileInput = document.getElementById("importFile");
-
-  // ফর্ম এলিমেন্টস
-  const editIndexEl = document.getElementById("editIndex");
-  const nameEl = document.getElementById("name");
-  const codeEl = document.getElementById("code");
-  const priceEl = document.getElementById("price");
-  const offerEl = document.getElementById("offer");
-  const unitEl = document.getElementById("unit");
-  const qtyEl = document.getElementById("qty");
-  const brandEl = document.getElementById("brand");
-  const sizeEl = document.getElementById("size");
-  const colorEl = document.getElementById("color");
-  const deliveryEl = document.getElementById("delivery");
-  const statusEl = document.getElementById("status");
-  const categoryEl = document.getElementById("category");
-  const descEl = document.getElementById("desc");
-  const videoEl = document.getElementById("video");
-  const waEl = document.getElementById("wa");
-  const imageInputsContainer = document.getElementById("imageInputs");
-  const customFieldsContainer = document.getElementById("customFields");
-
-  // Load products from localStorage
-  function loadProducts() {
-    const data = localStorage.getItem(storageKey);
-    if (!data) return [];
-    try {
-      return JSON.parse(data);
-    } catch {
-      return [];
-    }
-  }
-
-  // Save products to localStorage
-  function saveProducts(products) {
-    localStorage.setItem(storageKey, JSON.stringify(products));
-  }
-
-  // Clear form inputs
-  function clearForm() {
-    editIndexEl.value = -1;
-    nameEl.value = "";
-    codeEl.value = "";
-    priceEl.value = "";
-    offerEl.value = "";
-    unitEl.value = "";
-    qtyEl.value = "";
-    brandEl.value = "";
-    sizeEl.value = "";
-    colorEl.value = "";
-    deliveryEl.value = "";
-    statusEl.value = "";
-    categoryEl.value = "";
-    descEl.value = "";
-    videoEl.value = "";
-    waEl.value = "";
-    // Clear image inputs except first one
-    imageInputsContainer.innerHTML = '<input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)" />';
-    // Clear custom fields except one
-    customFieldsContainer.innerHTML = `
-      <div class="custom-field-group">
-        <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি" />
-        <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস" />
-      </div>
-    `;
-  }
-
-  // Render product list with optional filter
-  function renderProducts(filter = "") {
-    const products = loadProducts();
-    productListEl.innerHTML = "";
-
-    let filtered = products;
-    if (filter.trim()) {
-      const lowerFilter = filter.toLowerCase();
-      filtered = products.filter(p => 
-        (p.name && p.name.toLowerCase().includes(lowerFilter)) ||
-        (p.code && p.code.toLowerCase().includes(lowerFilter)) ||
-        (p.category && p.category.toLowerCase().includes(lowerFilter))
-      );
-    }
-
-    if (filtered.length === 0) {
-      productListEl.innerHTML = `<p style="text-align:center;color:#888;">কোনো প্রোডাক্ট পাওয়া যায়নি।</p>`;
-      return;
-    }
-
-    filtered.forEach((p, i) => {
-      const div = document.createElement("div");
-      div.className = "product-item";
-      div.setAttribute("data-index", i);
-
-      div.innerHTML = `
-        <div class="product-info">
-          <strong>${p.name || "-"}</strong> | কোড: ${p.code || "-"} | ক্যাটাগরি: ${p.category || "-"} | মূল্য: ৳${p.price || "0"}
-        </div>
-        <div class="product-actions">
-          <button onclick="editProduct(${i}); event.stopPropagation();" title="এডিট"><i class="fas fa-edit"></i></button>
-          <button onclick="deleteProduct(${i}); event.stopPropagation();" title="মুছে ফেলুন"><i class="fas fa-trash"></i></button>
-        </div>
-      `;
-
-      // ক্লিক করলে এডিট মোডে যাবে
-      div.addEventListener("click", () => {
-        editProduct(i);
-      });
-
-      productListEl.appendChild(div);
-    });
-  }
-
-  // Add image input (Dashboard)
-  function addImageInput() {
-    const inputs = imageInputsContainer.querySelectorAll(".img-url");
-    if (inputs.length >= 5) return;
-    const input = document.createElement("input");
-    input.type = "url";
-    input.className = "img-url";
-    input.placeholder = "ছবির লিংক (Image URL)";
-    imageInputsContainer.appendChild(input);
-  }
-
-  // Add custom field input
-  function addCustomField() {
-    const group = document.createElement("div");
-    group.className = "custom-field-group";
-    group.innerHTML = `
-      <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি" />
-      <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস" />
-    `;
-    customFieldsContainer.appendChild(group);
-  }
-
-  // Save or update product
-  function saveProduct() {
-    const name = nameEl.value.trim();
-    const code = codeEl.value.trim();
-    const price = parseFloat(priceEl.value);
-    const offer = parseFloat(offerEl.value);
-    const unit = unitEl.value.trim();
-    const qty = parseFloat(qtyEl.value);
-    const brand = brandEl.value.trim();
-    const size = sizeEl.value.trim();
-    const color = colorEl.value.trim();
-    const delivery = deliveryEl.value.trim();
-    const status = statusEl.value.trim();
-    const category = categoryEl.value.trim();
-    const desc = descEl.value.trim();
-    const video = videoEl.value.trim();
-    const wa = waEl.value.trim();
-
-    const imgs = Array.from(imageInputsContainer.querySelectorAll(".img-url")).map(i => i.value.trim()).filter(Boolean);
-
-    const customFields = Array.from(customFieldsContainer.querySelectorAll(".custom-field-group")).map(group => {
-      return {
-        key: group.querySelector(".custom-key").value.trim(),
-        value: group.querySelector(".custom-value").value.trim()
-      };
-    }).filter(f => f.key && f.value);
-
-    if (!name || !code || isNaN(price) || imgs.length === 0 || !wa) {
-      alert("প্রোডাক্ট নাম, কোড, প্রাইস, কমপক্ষে একটি ছবি এবং WhatsApp নম্বর বাধ্যতামূলক।");
-      return;
-    }
-
-    let products = loadProducts();
-
-    const productObj = {
-      name, code, price, offer, unit, qty, brand, size, color, delivery, status, category, desc, video, wa, imgs, customFields
-    };
-
-    const editIndex = parseInt(editIndexEl.value);
-    if (editIndex >= 0) {
-      // Update existing product
-      products[editIndex] = productObj;
-      alert("✅ প্রোডাক্ট আপডেট হয়েছে!");
-    } else {
-      // Add new product
-      products.push(productObj);
-      alert("✅ নতুন প্রোডাক্ট সেভ হয়েছে!");
-    }
-
-    saveProducts(products);
-    renderProducts(searchInput.value);
-    clearForm();
-  }
-
-  // Edit product (fill form)
-  function editProduct(index) {
-    const products = loadProducts();
-    if (!products[index]) return;
-
-    const p = products[index];
-
-    editIndexEl.value = index;
-    nameEl.value = p.name || "";
-    codeEl.value = p.code || "";
-    priceEl.value = p.price || "";
-    offerEl.value = p.offer || "";
-    unitEl.value = p.unit || "";
-    qtyEl.value = p.qty || "";
-    brandEl.value = p.brand || "";
-    sizeEl.value = p.size || "";
-    colorEl.value = p.color || "";
-    deliveryEl.value = p.delivery || "";
-    statusEl.value = p.status || "";
-    categoryEl.value = p.category || "";
-    descEl.value = p.desc || "";
-    videoEl.value = p.video || "";
-    waEl.value = p.wa || "";
-
-    // Load images
-    imageInputsContainer.innerHTML = "";
-    if (p.imgs && p.imgs.length > 0) {
-      p.imgs.forEach(url => {
-        const input = document.createElement("input");
-        input.type = "url";
-        input.className = "img-url";
-        input.placeholder = "ছবির লিংক (Image URL)";
-        input.value = url;
-        imageInputsContainer.appendChild(input);
-      });
-    } else {
-      addImageInput();
-    }
-
-    // Load custom fields
-    customFieldsContainer.innerHTML = "";
-    if (p.customFields && p.customFields.length > 0) {
-      p.customFields.forEach(f => {
-        const group = document.createElement("div");
-        group.className = "custom-field-group";
-        group.innerHTML = `
-          <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি" value="${f.key}" />
-          <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস" value="${f.value}" />
-        `;
-        customFieldsContainer.appendChild(group);
-      });
-    } else {
-      addCustomField();
-    }
-  }
-
-  // Delete product
-  function deleteProduct(index) {
-    if (!confirm("প্রোডাক্ট মুছে ফেলতে চান?")) return;
-    let products = loadProducts();
-    products.splice(index, 1);
-    saveProducts(products);
-    renderProducts(searchInput.value);
-    clearForm();
-  }
-
-  // Search event
-  searchInput.addEventListener("input", () => {
-    renderProducts(searchInput.value);
-  });
-
-  // Save button event
-  saveBtn.addEventListener("click", () => {
-    saveProduct();
-  });
-
-  // Clear form button event
-  clearBtn.addEventListener("click", () => {
-    clearForm();
-  });
-
-  // Export JSON
-  exportBtn.addEventListener("click", () => {
-    const products = loadProducts();
-    if (products.length === 0) {
-      alert("কোনো প্রোডাক্ট পাওয়া যায়নি এক্সপোর্ট করার জন্য।");
-      return;
-    }
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(products, null, 2));
-    const dlAnchor = document.createElement("a");
-    dlAnchor.setAttribute("href", dataStr);
-    dlAnchor.setAttribute("download", `products_${username}.json`);
-    dlAnchor.click();
-  });
-
-  // Import JSON
-  importBtn.addEventListener("click", () => {
-    importFileInput.click();
-  });
-
-  importFileInput.addEventListener("change", e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      try {
-        const importedData = JSON.parse(event.target.result);
-        if (!Array.isArray(importedData)) {
-          alert("অবৈধ ফাইল ফরম্যাট!");
-          return;
-        }
-        localStorage.setItem(storageKey, JSON.stringify(importedData));
-        alert("✅ ডেটা সফলভাবে ইমপোর্ট হয়েছে!");
-        renderProducts();
-        clearForm();
-      } catch {
-        alert("ফাইল পড়তে সমস্যা হয়েছে।");
-      }
-    };
-    reader.readAsText(file);
-  });
-
-  // Clear form on page load
-  clearForm();
-  renderProducts();
-
-  // Sidebar toggle
-  function toggleMenu() {
-    document.getElementById("sidebar").classList.toggle("active");
-  }
-
-  // Logout function
-  function logout() {
-    if (confirm("আপনি কি সত্যিই লগআউট করতে চান?")) {
-      localStorage.removeItem("loggedInUser");
-      window.location.href = "index.html";
-    }
-  }
-
-  window.toggleMenu = toggleMenu;
-  window.logout = logout;
-  window.addImageInput = addImageInput;
-  window.addCustomField = addCustomField;
-  window.editProduct = editProduct;
-  window.deleteProduct = deleteProduct;
-</script>
-
-</body>
+function toggleMenu() {
+  const sidebar = document.getElementById("sidebar");
+  sidebar.classList.toggle("active");
+}
+</script><script src="script.js"></script></body>
 </html>

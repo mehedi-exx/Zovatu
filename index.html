@@ -6,8 +6,6 @@
   <title>G9Tool Premium</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <meta name="description" content="G9Tool - প্রিমিয়াম HTML কোড জেনারেটর টুল">
-  <link rel="icon" href="favicon.ico">
   <style>
     body {
       margin: 0;
@@ -101,7 +99,7 @@
   </div>
 </div>
 
-<!-- Login Box -->
+<!-- Login Card -->
 <div class="login-box">
   <h2><i class="fas fa-user-shield"></i> লগইন করুন</h2>
   <input type="text" id="username" placeholder="ইউজারনেম" />
@@ -109,41 +107,13 @@
   <button class="login-btn" onclick="loginUser()"><i class="fas fa-sign-in-alt"></i> লগইন</button>
 
   <div class="contact-links">
-    প্রিমিয়াম এক্সেস নিতে যোগাযোগ করুন:<br />
+    প্রিমিয়াম এক্সেস নিতে যোগাযোগ করুন:
+    <br />
     <a href="https://wa.me/8801627647776" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a> |
     <a href="https://t.me/mehedi_exx" target="_blank"><i class="fab fa-telegram-plane"></i> Telegram</a>
   </div>
 </div>
 
-<!-- ✅ Updated Login Logic -->
-<script>
-async function loginUser() {
-  const uname = document.getElementById("username").value.trim();
-  const pass = document.getElementById("password").value.trim();
-
-  if (!uname || !pass) {
-    alert("⚠️ ইউজারনেম ও পাসওয়ার্ড দিন");
-    return;
-  }
-
-  try {
-    const res = await fetch("users/users.json");
-    const users = await res.json();
-    const data = users[uname];
-
-    if (!data) {
-      alert("❌ ইউজার নেই");
-    } else if (data.password === pass && data.isPremium) {
-      localStorage.setItem("loggedInUser", uname);
-      window.location.href = "dashboard.html";
-    } else {
-      alert("❌ ভুল পাসওয়ার্ড বা প্রিমিয়াম নয়");
-    }
-  } catch (err) {
-    alert("🚫 লগইন সমস্যা: " + err.message);
-  }
-}
-</script>
-
+<script src="auth.js"></script>
 </body>
 </html>

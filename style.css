@@ -1,4 +1,4 @@
-/* ✅ style.css (Full Update with Reset, Admin Panel, Responsive, Clean Layout) */
+/* G9Tool Updated CSS */
 
 * {
   box-sizing: border-box;
@@ -10,6 +10,8 @@ body {
   font-family: 'Segoe UI', sans-serif;
   background-color: #121212;
   color: #fff;
+  padding: 0;
+  margin: 0;
 }
 
 header.header {
@@ -86,7 +88,6 @@ button {
   font-weight: bold;
   border-radius: 8px;
   cursor: pointer;
-  transition: 0.3s;
 }
 
 button i {
@@ -102,17 +103,6 @@ button i {
 #copyBtn {
   background: #007bff;
   color: white;
-  margin-right: 10px;
-}
-
-#resetBtn {
-  background: #dc3545;
-  color: white;
-  margin-top: 10px;
-}
-
-#resetBtn:hover {
-  background: #c82333;
 }
 
 button:hover {
@@ -164,109 +154,22 @@ button:hover {
   cursor: pointer;
 }
 
-/* Admin Panel Styling */
-.admin-box input[type="text"],
-.admin-box input[type="password"] {
-  margin-top: 10px;
-  width: 100%;
-  padding: 12px;
-  border-radius: 6px;
-  background: #2a2a2a;
-  color: white;
-  border: 1px solid #444;
-}
-
-.user-list {
-  margin-top: 20px;
-}
-
-.user-item {
-  background: #2a2a2a;
-  padding: 10px;
-  border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.user-item button {
-  background: red;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-/* Admin Panel Top Controls */
-.top-controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.top-controls button,
-.top-controls label span {
-  padding: 10px 16px;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  border: none;
-  transition: 0.3s;
-}
-
-.top-controls button {
-  background: #28a745;
-  color: white;
-}
-
-.top-controls label span {
-  background: #ffc107;
-  color: black;
-  display: inline-block;
-}
-
-.top-controls button:hover {
-  opacity: 0.9;
-}
-
-/* Output Hidden for Copy Only */
-#output {
-  height: 0;
-  overflow: hidden;
-  opacity: 0;
-  user-select: none;
-  pointer-events: none;
-  position: absolute;
-  z-index: -999;
-}
-
-/* Mobile Responsive */
 @media (max-width: 480px) {
   .form-wrapper {
     padding: 15px;
   }
+
   input,
   textarea {
     font-size: 15px;
   }
+
   button {
     width: 100%;
     margin-bottom: 10px;
   }
-  #generateBtn,
-  #copyBtn,
-  #resetBtn {
+
+  #generateBtn {
     margin-right: 0;
-  }
-  .sidebar {
-    width: 100%;
-  }
-  .top-controls {
-    flex-direction: column;
-    align-items: stretch;
   }
 }

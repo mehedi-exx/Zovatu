@@ -2,26 +2,28 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>G9Tool Dashboard</title>
-  <link rel="stylesheet" href="style.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
 
 <script>
-// ✅ প্রিমিয়াম ইউজার চেক
-if (!localStorage.getItem("loggedInUser")) {
-  alert("⚠️ অনুগ্রহ করে প্রথমে লগইন করুন!");
-  window.location.href = "index.html";
-}
+  if (!localStorage.getItem("loggedInUser")) {
+    alert("⚠️ অনুগ্রহ করে প্রথমে লগইন করুন!");
+    window.location.href = "index.html";
+  }
 </script>
 
-<!-- ✅ Header -->
 <header class="header">
   <div class="left-icons">
-    <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
-    <div class="logo"><i class="fas fa-box-open"></i> G9Tool</div>
+    <button class="menu-btn" onclick="toggleMenu()">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="logo">
+      <i class="fas fa-box-open"></i> G9Tool
+    </div>
   </div>
   <a href="https://t.me/G9tool" class="telegram-icon" target="_blank">
     <i class="fab fa-telegram-plane"></i>
@@ -30,8 +32,6 @@ if (!localStorage.getItem("loggedInUser")) {
 
 <main>
   <div class="form-wrapper">
-    <h2 style="text-align:center;margin-bottom:20px;">📦 প্রোডাক্ট ইনপুট ফর্ম</h2>
-
     <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
     <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
     <input type="number" id="price" placeholder="মূল্য প্রাইস (৳)" required>
@@ -56,7 +56,6 @@ if (!localStorage.getItem("loggedInUser")) {
     <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)">
     <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)" required>
 
-    <!-- ✅ Custom Fields -->
     <h4 style="margin-top: 20px;">🔧 কাস্টম তথ্য (যেমন: ওয়ারেন্টি, উৎপাদন দেশ)</h4>
     <div id="customFields">
       <div class="custom-field-group">
@@ -66,7 +65,7 @@ if (!localStorage.getItem("loggedInUser")) {
     </div>
     <button onclick="addCustomField()"><i class="fas fa-plus"></i> নতুন তথ্য যোগ করুন</button>
 
-    <div style="text-align:center;margin-top:20px;">
+    <div style="text-align:center;">
       <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট</button>
       <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
     </div>
@@ -76,28 +75,66 @@ if (!localStorage.getItem("loggedInUser")) {
   </div>
 </main>
 
-<!-- ✅ Sidebar Menu -->
+<!-- Sidebar -->
 <div id="sidebar" class="sidebar">
   <button class="close-sidebar" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
   <a href="dashboard.html"><i class="fas fa-home"></i> হোম</a>
   <a href="menu/about.html"><i class="fas fa-info-circle"></i> এবাউট</a>
   <a href="menu/contact.html"><i class="fas fa-phone"></i> কন্টাক্ট</a>
-  <a href="menu/privacy.html"><i class="fas fa-user-shield"></i> প্রাইভেসি পলিসি</a>
-  <a href="admin.html"><i class="fas fa-shield-alt"></i> এডমিন প্যানেল</a>
+  <a href="menu/privacy.html"><i class="fas fa-user-shield"></i> প্রাইভেসি</a>
+  <a href="menu/tutorial.html"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
+  <a href="admin.html"><i class="fas fa-tools"></i> এডমিন প্যানেল</a>
   <a href="index.html" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
 </div>
 
-<!-- ✅ Script Files -->
 <script src="script.js"></script>
-
-<!-- ✅ Sidebar Toggle -->
 <script>
-function toggleMenu() {
-  document.getElementById("sidebar").classList.toggle("active");
-}
-function logout() {
-  localStorage.removeItem("loggedInUser");
-}
+  // ✅ রিডাইরেক্ট হয়ে এলে আগে ইনপুট ভরে ফেলা
+  const editId = localStorage.getItem("editProductId");
+  if (editId) {
+    const saved = JSON.parse(localStorage.getItem("savedProducts") || "[]");
+    const match = saved.find(p => p.id === editId);
+    if (match) {
+      document.getElementById("name").value = match.name || "";
+      document.getElementById("code").value = match.code || "";
+      document.getElementById("price").value = match.price || "";
+      document.getElementById("offer").value = match.offer || "";
+      document.getElementById("unit").value = match.unit || "";
+      document.getElementById("qty").value = match.qty || "";
+      document.getElementById("brand").value = match.brand || "";
+      document.getElementById("size").value = match.size || "";
+      document.getElementById("color").value = match.color || "";
+      document.getElementById("delivery").value = match.delivery || "";
+      document.getElementById("status").value = match.status || "";
+      document.getElementById("category").value = match.category || "";
+      document.getElementById("desc").value = match.desc || "";
+      document.getElementById("video").value = match.video || "";
+      document.getElementById("wa").value = match.wa || "";
+
+      // Image reload
+      const container = document.getElementById("imageInputs");
+      container.innerHTML = "";
+      (match.images || []).forEach(url => {
+        const div = document.createElement("div");
+        div.className = "image-group";
+        div.innerHTML = `<input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)" value="${url}">`;
+        container.appendChild(div);
+      });
+
+      // Custom fields
+      const ctn = document.getElementById("customFields");
+      ctn.innerHTML = "";
+      (match.custom || []).forEach(pair => {
+        const div = document.createElement("div");
+        div.className = "custom-field-group";
+        div.innerHTML = `
+          <input type="text" class="custom-key" value="${pair.key}" placeholder="শিরোনাম">
+          <input type="text" class="custom-value" value="${pair.value}" placeholder="মান">
+        `;
+        ctn.appendChild(div);
+      });
+    }
+  }
 </script>
 
 </body>

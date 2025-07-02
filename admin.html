@@ -2,220 +2,161 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>G9Tool Admin Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>G9 Admin Panel</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    .admin-panel {
-      max-width: 800px;
+    .admin-wrapper {
+      max-width: 900px;
       margin: 40px auto;
-      background: #1f1f1f;
+      background: #1c1c1c;
       padding: 20px;
-      border-radius: 10px;
+      border-radius: 12px;
     }
-
-    .admin-panel h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .product-list {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
     .product-item {
       background: #2a2a2a;
       padding: 15px;
       border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    .product-item h3 {
+      margin-bottom: 5px;
+      font-size: 18px;
+    }
+    .product-item small {
+      color: #ccc;
+    }
+    .product-item button {
+      margin-right: 10px;
+      margin-top: 10px;
+    }
+    .top-actions {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .product-info {
-      flex: 1;
-      margin-right: 15px;
-    }
-
-    .product-actions button {
-      margin-left: 5px;
-      padding: 8px 14px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .product-actions .edit {
-      background: #ffc107;
-      color: #000;
-    }
-
-    .product-actions .delete {
-      background: #dc3545;
-      color: #fff;
-    }
-
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
+      margin-bottom: 20px;
       flex-wrap: wrap;
       gap: 10px;
-      margin-bottom: 20px;
     }
-
-    .top-bar input[type="file"] {
-      color: #fff;
-    }
-
-    .top-bar button {
-      padding: 10px 16px;
-      border: none;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-      background: #28a745;
-      color: white;
-    }
-
-    #searchInput {
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #444;
-      width: 100%;
-      background: #2a2a2a;
+    input[type="file"] {
       color: white;
     }
   </style>
 </head>
 <body>
 
+<header class="header">
+  <div class="left-icons">
+    <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+    <div class="logo"><i class="fas fa-cogs"></i> G9 Admin Panel</div>
+  </div>
+  <a href="https://t.me/G9tool" class="telegram-icon" target="_blank">
+    <i class="fab fa-telegram-plane"></i>
+  </a>
+</header>
+
+<main>
+  <div class="admin-wrapper">
+    <div class="top-actions">
+      <button onclick="exportData()"><i class="fas fa-download"></i> Export</button>
+      <label>
+        <span><i class="fas fa-upload"></i> Import</span>
+        <input type="file" accept=".json" onchange="importData(event)" hidden>
+      </label>
+    </div>
+
+    <div id="productList"></div>
+  </div>
+</main>
+
+<!-- Sidebar -->
+<div id="sidebar" class="sidebar">
+  <button class="close-sidebar" onclick="toggleMenu()"><i class="fas fa-times"></i></button>
+  <a href="dashboard.html"><i class="fas fa-home"></i> হোম</a>
+  <a href="menu/about.html"><i class="fas fa-info-circle"></i> এবাউট</a>
+  <a href="menu/contact.html"><i class="fas fa-phone"></i> কন্টাক্ট</a>
+  <a href="menu/privacy.html"><i class="fas fa-user-shield"></i> প্রাইভেসি</a>
+  <a href="admin.html" class="active"><i class="fas fa-cogs"></i> এডমিন প্যানেল</a>
+  <a href="index.html" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
+</div>
+
 <script>
-// ✅ প্রিমিয়াম ইউজার চেক
-if (!localStorage.getItem("loggedInUser")) {
-  alert("⚠️ অনুগ্রহ করে লগইন করুন");
-  window.location.href = "index.html";
+function toggleMenu() {
+  document.getElementById("sidebar").classList.toggle("active");
 }
-</script>
 
-<div class="admin-panel">
-  <h2><i class="fas fa-shield-alt"></i> এডমিন প্যানেল</h2>
+function logout() {
+  localStorage.removeItem("loggedInUser");
+}
 
-  <div class="top-bar">
-    <input type="file" id="importFile" accept=".json">
-    <button onclick="exportData()"><i class="fas fa-download"></i> Export JSON</button>
-  </div>
-
-  <input type="text" id="searchInput" placeholder="🔍 প্রোডাক্ট খুঁজুন (নাম বা কোড)">
-
-  <div class="product-list" id="productList"></div>
-</div>
-
-<!-- ✅ Edit Popup Modal -->
-<div id="editModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000000d9;z-index:999;justify-content:center;align-items:center;">
-  <div style="background:#1f1f1f;padding:20px;border-radius:10px;width:90%;max-width:500px;">
-    <h3 style="margin-bottom:15px;color:#fff;">✏️ প্রোডাক্ট আপডেট</h3>
-    <input type="text" id="editName" placeholder="নাম" />
-    <input type="text" id="editCode" placeholder="কোড" />
-    <input type="number" id="editPrice" placeholder="মূল্য" />
-    <button onclick="saveEdit()" style="margin-top:10px;">✅ সংরক্ষণ</button>
-    <button onclick="closeModal()" style="margin-top:10px;background:red;color:white;">❌ বাতিল</button>
-  </div>
-</div>
-
-<script>
-let products = JSON.parse(localStorage.getItem("g9tool_data")) || [];
-let editIndex = null;
+const uname = localStorage.getItem("loggedInUser");
+const allData = JSON.parse(localStorage.getItem("g9tool_data") || "{}");
+const userData = allData[uname] || [];
 
 function renderList() {
   const list = document.getElementById("productList");
-  const searchValue = document.getElementById("searchInput").value.toLowerCase();
   list.innerHTML = "";
 
-  products
-    .filter(p => p.name.toLowerCase().includes(searchValue) || p.code.toLowerCase().includes(searchValue))
-    .forEach((product, i) => {
-      const div = document.createElement("div");
-      div.className = "product-item";
-      div.innerHTML = `
-        <div class="product-info">
-          <strong>📦 ${product.name}</strong><br/>
-          কোড: ${product.code} | মূল্য: ৳${product.price}
-        </div>
-        <div class="product-actions">
-          <button class="edit" onclick="editProduct(${i})">✏️ Edit</button>
-          <button class="delete" onclick="deleteProduct(${i})">🗑️ Delete</button>
-        </div>
-      `;
-      list.appendChild(div);
-    });
-}
-
-function editProduct(i) {
-  editIndex = i;
-  const p = products[i];
-  document.getElementById("editName").value = p.name;
-  document.getElementById("editCode").value = p.code;
-  document.getElementById("editPrice").value = p.price;
-  document.getElementById("editModal").style.display = "flex";
-}
-
-function closeModal() {
-  document.getElementById("editModal").style.display = "none";
-}
-
-function saveEdit() {
-  if (editIndex !== null) {
-    products[editIndex].name = document.getElementById("editName").value.trim();
-    products[editIndex].code = document.getElementById("editCode").value.trim();
-    products[editIndex].price = parseFloat(document.getElementById("editPrice").value);
-    localStorage.setItem("g9tool_data", JSON.stringify(products));
-    renderList();
-    closeModal();
+  if (userData.length === 0) {
+    list.innerHTML = "<p style='text-align:center;'>কোনো প্রোডাক্ট নেই!</p>";
+    return;
   }
+
+  userData.forEach((item, i) => {
+    list.innerHTML += `
+      <div class="product-item">
+        <h3>${item.name || "Unnamed Product"}</h3>
+        <small>📦 কোড: ${item.code || "N/A"}</small><br>
+        <small>💰 মূল্য: ৳${item.offer || item.price}</small><br>
+        <button onclick="editProduct(${i})"><i class="fas fa-edit"></i> Edit</button>
+        <button onclick="deleteProduct(${i})" style="background:#dc3545;"><i class="fas fa-trash-alt"></i> Delete</button>
+      </div>
+    `;
+  });
 }
 
-function deleteProduct(i) {
-  if (confirm("আপনি কি নিশ্চিত?")) {
-    products.splice(i, 1);
-    localStorage.setItem("g9tool_data", JSON.stringify(products));
-    renderList();
-  }
+function editProduct(index) {
+  window.location.href = `dashboard.html?edit=${index}`;
+}
+
+function deleteProduct(index) {
+  if (!confirm("আপনি কি নিশ্চিতভাবে ডিলিট করতে চান?")) return;
+  userData.splice(index, 1);
+  allData[uname] = userData;
+  localStorage.setItem("g9tool_data", JSON.stringify(allData));
+  renderList();
 }
 
 function exportData() {
-  const blob = new Blob([JSON.stringify(products, null, 2)], { type: "application/json" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "g9tool_data.json";
-  link.click();
+  const dataStr = JSON.stringify(allData[uname], null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${uname}_products.json`;
+  a.click();
 }
 
-document.getElementById("importFile").addEventListener("change", (e) => {
-  const file = e.target.files[0];
+function importData(event) {
+  const file = event.target.files[0];
   if (!file) return;
+
   const reader = new FileReader();
-  reader.onload = function(e) {
+  reader.onload = () => {
     try {
-      const data = JSON.parse(e.target.result);
-      products = data;
-      localStorage.setItem("g9tool_data", JSON.stringify(products));
+      const imported = JSON.parse(reader.result);
+      if (!Array.isArray(imported)) throw new Error("Invalid format");
+      allData[uname] = imported;
+      localStorage.setItem("g9tool_data", JSON.stringify(allData));
       renderList();
-      alert("✅ Import সফল হয়েছে!");
-    } catch (err) {
-      alert("❌ ফাইল সঠিক নয়");
+    } catch (e) {
+      alert("ইমপোর্ট ফেইল্ড: " + e.message);
     }
   };
   reader.readAsText(file);
-});
+}
 
-document.getElementById("searchInput").addEventListener("input", renderList);
-
-// প্রথমবার লোড
 renderList();
 </script>
 </body>

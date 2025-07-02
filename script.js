@@ -137,3 +137,8 @@ document.getElementById("copyBtn").addEventListener("click", () => {
 function toggleMenu() {
   document.getElementById("sidebar").classList.toggle("active");
 }
+// ✅ Save to localStorage (premium user)
+const uname = localStorage.getItem("loggedInUser");
+const saved = JSON.parse(localStorage.getItem("products_" + uname)) || [];
+saved.push(product);
+localStorage.setItem("products_" + uname, JSON.stringify(saved));

@@ -2,8 +2,8 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>G9 Admin Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>G9Tool Admin Panel</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
@@ -13,6 +13,7 @@
       background: #1c1c1c;
       padding: 20px;
       border-radius: 12px;
+      color: white;
     }
     .product-item {
       background: #2a2a2a;
@@ -23,6 +24,7 @@
     .product-item h3 {
       margin-bottom: 5px;
       font-size: 18px;
+      color: #00cc44;
     }
     .product-item small {
       color: #ccc;
@@ -30,6 +32,26 @@
     .product-item button {
       margin-right: 10px;
       margin-top: 10px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .product-item button.edit {
+      background-color: #007bff;
+      color: white;
+    }
+    .product-item button.edit:hover {
+      background-color: #0056b3;
+    }
+    .product-item button.delete {
+      background-color: #dc3545;
+      color: white;
+    }
+    .product-item button.delete:hover {
+      background-color: #a71d2a;
     }
     .top-actions {
       display: flex;
@@ -37,9 +59,34 @@
       margin-bottom: 20px;
       flex-wrap: wrap;
       gap: 10px;
+      align-items: center;
+    }
+    .top-actions button, .top-actions label span {
+      background: #28a745;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+      display: inline-block;
+      user-select: none;
+    }
+    .top-actions button:hover, .top-actions label span:hover {
+      background: #1e7e34;
+    }
+    .top-actions label {
+      cursor: pointer;
+      display: inline-block;
     }
     input[type="file"] {
-      color: white;
+      display: none;
+    }
+    p.no-products {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 18px;
+      color: #888;
     }
   </style>
 </head>
@@ -48,7 +95,7 @@
 <header class="header">
   <div class="left-icons">
     <button class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
-    <div class="logo"><i class="fas fa-cogs"></i> G9 Admin Panel</div>
+    <div class="logo"><i class="fas fa-cogs"></i> G9Tool Admin Panel</div>
   </div>
   <a href="https://t.me/G9tool" class="telegram-icon" target="_blank">
     <i class="fab fa-telegram-plane"></i>
@@ -61,7 +108,7 @@
       <button onclick="exportData()"><i class="fas fa-download"></i> Export</button>
       <label>
         <span><i class="fas fa-upload"></i> Import</span>
-        <input type="file" accept=".json" onchange="importData(event)" hidden>
+        <input type="file" accept=".json" onchange="importData(event)" />
       </label>
     </div>
 
@@ -81,83 +128,103 @@
 </div>
 
 <script>
-function toggleMenu() {
-  document.getElementById("sidebar").classList.toggle("active");
-}
-
-function logout() {
-  localStorage.removeItem("loggedInUser");
-}
-
-const uname = localStorage.getItem("loggedInUser");
-const allData = JSON.parse(localStorage.getItem("g9tool_data") || "{}");
-const userData = allData[uname] || [];
-
-function renderList() {
-  const list = document.getElementById("productList");
-  list.innerHTML = "";
-
-  if (userData.length === 0) {
-    list.innerHTML = "<p style='text-align:center;'>কোনো প্রোডাক্ট নেই!</p>";
-    return;
+  // Toggle Sidebar
+  function toggleMenu() {
+    document.getElementById("sidebar").classList.toggle("active");
   }
 
-  userData.forEach((item, i) => {
-    list.innerHTML += `
-      <div class="product-item">
-        <h3>${item.name || "Unnamed Product"}</h3>
-        <small>📦 কোড: ${item.code || "N/A"}</small><br>
-        <small>💰 মূল্য: ৳${item.offer || item.price}</small><br>
-        <button onclick="editProduct(${i})"><i class="fas fa-edit"></i> Edit</button>
-        <button onclick="deleteProduct(${i})" style="background:#dc3545;"><i class="fas fa-trash-alt"></i> Delete</button>
-      </div>
-    `;
-  });
-}
+  // Logout user and redirect
+  function logout() {
+    localStorage.removeItem("loggedInUser");
+    window.location.href = "index.html";
+  }
 
-function editProduct(index) {
-  window.location.href = `dashboard.html?edit=${index}`;
-}
+  // Get logged in user
+  const uname = localStorage.getItem("loggedInUser");
+  if (!uname) {
+    alert("⚠️ অনুগ্রহ করে লগইন করুন!");
+    window.location.href = "index.html";
+  }
 
-function deleteProduct(index) {
-  if (!confirm("আপনি কি নিশ্চিতভাবে ডিলিট করতে চান?")) return;
-  userData.splice(index, 1);
-  allData[uname] = userData;
-  localStorage.setItem("g9tool_data", JSON.stringify(allData));
-  renderList();
-}
+  // Load all data and user specific data
+  const allData = JSON.parse(localStorage.getItem("g9tool_data") || "{}");
+  let userData = allData[uname] || [];
 
-function exportData() {
-  const dataStr = JSON.stringify(allData[uname], null, 2);
-  const blob = new Blob([dataStr], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
+  // Render product list on admin page
+  function renderList() {
+    const list = document.getElementById("productList");
+    list.innerHTML = "";
 
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `${uname}_products.json`;
-  a.click();
-}
-
-function importData(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = () => {
-    try {
-      const imported = JSON.parse(reader.result);
-      if (!Array.isArray(imported)) throw new Error("Invalid format");
-      allData[uname] = imported;
-      localStorage.setItem("g9tool_data", JSON.stringify(allData));
-      renderList();
-    } catch (e) {
-      alert("ইমপোর্ট ফেইল্ড: " + e.message);
+    if (!userData.length) {
+      list.innerHTML = "<p class='no-products'>কোনো প্রোডাক্ট নেই!</p>";
+      return;
     }
-  };
-  reader.readAsText(file);
-}
 
-renderList();
+    userData.forEach((item, i) => {
+      list.innerHTML += `
+        <div class="product-item">
+          <h3>${item.name || "Unnamed Product"}</h3>
+          <small>📦 কোড: ${item.code || "N/A"}</small><br>
+          <small>💰 মূল্য: ৳${item.offer || item.price}</small><br>
+          <button class="edit" onclick="editProduct(${i})"><i class="fas fa-edit"></i> Edit</button>
+          <button class="delete" onclick="deleteProduct(${i})"><i class="fas fa-trash-alt"></i> Delete</button>
+        </div>
+      `;
+    });
+  }
+
+  // Edit product: redirect to dashboard with edit index
+  function editProduct(index) {
+    window.location.href = `dashboard.html?edit=${index}`;
+  }
+
+  // Delete product with confirmation
+  function deleteProduct(index) {
+    if (!confirm("আপনি কি নিশ্চিতভাবে ডিলিট করতে চান?")) return;
+    userData.splice(index, 1);
+    allData[uname] = userData;
+    localStorage.setItem("g9tool_data", JSON.stringify(allData));
+    renderList();
+  }
+
+  // Export user products as JSON file
+  function exportData() {
+    const dataStr = JSON.stringify(userData, null, 2);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${uname}_products.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // Import products JSON file and update storage
+  function importData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const imported = JSON.parse(reader.result);
+        if (!Array.isArray(imported)) throw new Error("Invalid JSON format");
+        userData = imported;
+        allData[uname] = userData;
+        localStorage.setItem("g9tool_data", JSON.stringify(allData));
+        renderList();
+        alert("✅ ডাটা সফলভাবে ইমপোর্ট হয়েছে!");
+      } catch (e) {
+        alert("ইমপোর্ট ব্যর্থ: " + e.message);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // Initial render
+  renderList();
 </script>
+
 </body>
 </html>

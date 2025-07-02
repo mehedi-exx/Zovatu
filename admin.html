@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>G9Tool Admin Panel</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    .admin-panel {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #1f1f1f;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .admin-panel h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .product-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .product-item {
+      background: #2a2a2a;
+      padding: 15px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .product-info {
+      flex: 1;
+      margin-right: 15px;
+    }
+
+    .product-actions button {
+      margin-left: 5px;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .product-actions .edit {
+      background: #ffc107;
+      color: #000;
+    }
+
+    .product-actions .delete {
+      background: #dc3545;
+      color: #fff;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .top-bar input[type="file"] {
+      color: #fff;
+    }
+
+    .top-bar button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      background: #28a745;
+      color: white;
+    }
+
+    #searchInput {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      width: 100%;
+      background: #2a2a2a;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<script>
+// ✅ প্রিমিয়াম ইউজার চেক
+if (!localStorage.getItem("loggedInUser")) {
+  alert("⚠️ অনুগ্রহ করে লগইন করুন");
+  window.location.href = "index.html";
+}
+</script>
+
+<div class="admin-panel">
+  <h2><i class="fas fa-shield-alt"></i> এডমিন প্যানেল</h2>
+
+  <div class="top-bar">
+    <input type="file" id="importFile" accept=".json">
+    <button onclick="exportData()"><i class="fas fa-download"></i> Export JSON</button>
+  </div>
+
+  <input type="text" id="searchInput" placeholder="🔍 প্রোডাক্ট খুঁজুন (নাম বা কোড)">
+
+  <div class="product-list" id="productList"></div>
+</div>
+
+<!-- ✅ Edit Popup Modal -->
+<div id="editModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000000d9;z-index:999;justify-content:center;align-items:center;">
+  <div style="background:#1f1f1f;padding:20px;border-radius:10px;width:90%;max-width:500px;">
+    <h3 style="margin-bottom:15px;color:#fff;">✏️ প্রোডাক্ট আপডেট</h3>
+    <input type="text" id="editName" placeholder="নাম" />
+    <input type="text" id="editCode" placeholder="কোড" />
+    <input type="number" id="editPrice" placeholder="মূল্য" />
+    <button onclick="saveEdit()" style="margin-top:10px;">✅ সংরক্ষণ</button>
+    <button onclick="closeModal()" style="margin-top:10px;background:red;color:white;">❌ বাতিল</button>
+  </div>
+</div>
+
+<script>
+let products = JSON.parse(localStorage.getItem("g9tool_data")) || [];
+let editIndex = null;
+
+function renderList() {
+  const list = document.getElementById("productList");
+  const searchValue = document.getElementById("searchInput").value.toLowerCase();
+  list.innerHTML = "";
+
+  products
+    .filter(p => p.name.toLowerCase().includes(searchValue) || p.code.toLowerCase().includes(searchValue))
+    .forEach((product, i) => {
+      const div = document.createElement("div");
+      div.className = "product-item";
+      div.innerHTML = `
+        <div class="product-info">
+          <strong>📦 ${product.name}</strong><br/>
+          কোড: ${product.code} | মূল্য: ৳${product.price}
+        </div>
+        <div class="product-actions">
+          <button class="edit" onclick="editProduct(${i})">✏️ Edit</button>
+          <button class="delete" onclick="deleteProduct(${i})">🗑️ Delete</button>
+        </div>
+      `;
+      list.appendChild(div);
+    });
+}
+
+function editProduct(i) {
+  editIndex = i;
+  const p = products[i];
+  document.getElementById("editName").value = p.name;
+  document.getElementById("editCode").value = p.code;
+  document.getElementById("editPrice").value = p.price;
+  document.getElementById("editModal").style.display = "flex";
+}
+
+function closeModal() {
+  document.getElementById("editModal").style.display = "none";
+}
+
+function saveEdit() {
+  if (editIndex !== null) {
+    products[editIndex].name = document.getElementById("editName").value.trim();
+    products[editIndex].code = document.getElementById("editCode").value.trim();
+    products[editIndex].price = parseFloat(document.getElementById("editPrice").value);
+    localStorage.setItem("g9tool_data", JSON.stringify(products));
+    renderList();
+    closeModal();
+  }
+}
+
+function deleteProduct(i) {
+  if (confirm("আপনি কি নিশ্চিত?")) {
+    products.splice(i, 1);
+    localStorage.setItem("g9tool_data", JSON.stringify(products));
+    renderList();
+  }
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify(products, null, 2)], { type: "application/json" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "g9tool_data.json";
+  link.click();
+}
+
+document.getElementById("importFile").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      products = data;
+      localStorage.setItem("g9tool_data", JSON.stringify(products));
+      renderList();
+      alert("✅ Import সফল হয়েছে!");
+    } catch (err) {
+      alert("❌ ফাইল সঠিক নয়");
+    }
+  };
+  reader.readAsText(file);
+});
+
+document.getElementById("searchInput").addEventListener("input", renderList);
+
+// প্রথমবার লোড
+renderList();
+</script>
+</body>
+</html>

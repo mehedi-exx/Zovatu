@@ -1,74 +1,100 @@
-<!-- ✅ admin.html (ইউজার অ্যাড/ডিলিট সিস্টেম - লোকাল json আপডেটের জন্য demo version) -->
+<!-- ✅ admin.html: Product Manager Panel for G9Tool -->
 <!DOCTYPE html>
 <html lang="bn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>G9Tool Admin Panel</title>
+  <title>Admin Panel - G9Tool</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    .admin-box { max-width: 500px; margin: 40px auto; background: #1f1f1f; padding: 20px; border-radius: 12px; }
-    .admin-box h2 { text-align: center; margin-bottom: 20px; }
-    .user-list { margin-top: 20px; }
-    .user-item { background: #2a2a2a; padding: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    .user-item span { font-weight: bold; }
-    .user-item button { background: red; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+    .admin-wrapper { max-width: 800px; margin: auto; padding: 20px; background: #1c1c1c; border-radius: 12px; }
+    .admin-wrapper h2 { text-align: center; margin-bottom: 20px; }
+    .product-list { margin-top: 20px; }
+    .product-item { background: #2a2a2a; margin-bottom: 10px; padding: 15px; border-radius: 8px; }
+    .product-item h4 { margin: 0 0 5px; }
+    .product-item small { color: #aaa; }
+    .product-item button { margin-top: 10px; background: #007bff; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; }
+    .top-controls { display: flex; justify-content: space-between; margin-top: 20px; }
+    .top-controls button { background: #28a745; color: white; padding: 10px 16px; border-radius: 6px; border: none; cursor: pointer; }
+    input[type="file"] { display: none; }
   </style>
 </head>
 <body>
-<div class="admin-box">
-  <h2><i class="fas fa-user-cog"></i> অ্যাডমিন ইউজার ম্যানেজমেন্ট</h2>
 
-  <input type="text" id="newUser" placeholder="নতুন ইউজারনেম" />
-  <input type="text" id="newPass" placeholder="পাসওয়ার্ড" />
-  <label><input type="checkbox" id="newPremium"> প্রিমিয়াম ইউজার</label>
-  <button onclick="addUser()" style="width:100%;margin-top:10px;"><i class="fas fa-user-plus"></i> ইউজার যোগ করুন</button>
+<div class="admin-wrapper">
+  <h2><i class="fas fa-database"></i> জেনারেট করা প্রোডাক্টসমূহ</h2>
+  <div class="top-controls">
+    <button onclick="exportProducts()"><i class="fas fa-download"></i> এক্সপোর্ট</button>
+    <label>
+      <input type="file" accept="application/json" onchange="importProducts(event)">
+      <span style="cursor:pointer;background:#ffc107;color:#000;padding:10px 16px;border-radius:6px;"><i class="fas fa-upload"></i> ইমপোর্ট</span>
+    </label>
+  </div>
 
-  <div class="user-list" id="userList"></div>
+  <div class="product-list" id="productList"></div>
 </div>
 
 <script>
-let users = {
-  "mehedi": { password: "ifty.hack", isPremium: true },
-  "sajibul": { password: "sajibul@#@#", isPremium: true }
-};
+const user = localStorage.getItem("loggedInUser") || "guest";
+const STORAGE_KEY = `g9_products_${user}`;
 
-function renderUsers() {
-  const container = document.getElementById("userList");
-  container.innerHTML = "";
-  Object.keys(users).forEach(username => {
-    const user = users[username];
+function loadProducts() {
+  const list = document.getElementById("productList");
+  list.innerHTML = "";
+  const products = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+  if (products.length === 0) {
+    list.innerHTML = "<p style='text-align:center;color:#aaa;'>কোনো প্রোডাক্ট পাওয়া যায়নি।</p>";
+    return;
+  }
+
+  products.forEach((item, index) => {
     const div = document.createElement("div");
-    div.className = "user-item";
-    div.innerHTML = `<span>${username} (${user.isPremium ? 'Premium' : 'Free'})</span>
-      <button onclick="deleteUser('${username}')"><i class='fas fa-trash'></i></button>`;
-    container.appendChild(div);
+    div.className = "product-item";
+    div.innerHTML = `
+      <h4>${item.name}</h4>
+      <small>কোড: ${item.code} | মূল্য: ${item.price}৳</small><br>
+      <button onclick="editProduct(${index})"><i class='fas fa-edit'></i> এডিট</button>
+    `;
+    list.appendChild(div);
   });
 }
 
-function addUser() {
-  const uname = document.getElementById("newUser").value.trim();
-  const pass = document.getElementById("newPass").value.trim();
-  const prem = document.getElementById("newPremium").checked;
-
-  if (!uname || !pass) return alert("⚠️ ইউজারনেম ও পাসওয়ার্ড দিন");
-  if (users[uname]) return alert("❌ ইউজার আগে থেকেই আছে");
-
-  users[uname] = { password: pass, isPremium: prem };
-  renderUsers();
-  alert("✅ ইউজার যুক্ত হয়েছে (ডেমো মোডে)");
+function editProduct(index) {
+  localStorage.setItem("edit_product_index", index);
+  window.location.href = "dashboard.html?edit=1";
 }
 
-function deleteUser(username) {
-  if (confirm("❌ আপনি কি এই ইউজার মুছে ফেলতে চান?")) {
-    delete users[username];
-    renderUsers();
-    alert("✅ ইউজার মুছে ফেলা হয়েছে (ডেমো মোড)");
-  }
+function exportProducts() {
+  const data = localStorage.getItem(STORAGE_KEY);
+  const blob = new Blob([data], {type: "application/json"});
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = `${user}_products.json`;
+  link.click();
 }
 
-window.onload = renderUsers;
+function importProducts(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (!Array.isArray(imported)) throw new Error("Invalid format");
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(imported));
+      alert("✅ ডেটা ইমপোর্ট সফল হয়েছে");
+      loadProducts();
+    } catch {
+      alert("❌ ফাইলটি সঠিক JSON ফরম্যাট নয়");
+    }
+  };
+  reader.readAsText(file);
+}
+
+window.onload = loadProducts;
 </script>
+
 </body>
 </html>

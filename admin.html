@@ -1,0 +1,74 @@
+<!-- ✅ admin.html (ইউজার অ্যাড/ডিলিট সিস্টেম - লোকাল json আপডেটের জন্য demo version) -->
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>G9Tool Admin Panel</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    .admin-box { max-width: 500px; margin: 40px auto; background: #1f1f1f; padding: 20px; border-radius: 12px; }
+    .admin-box h2 { text-align: center; margin-bottom: 20px; }
+    .user-list { margin-top: 20px; }
+    .user-item { background: #2a2a2a; padding: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .user-item span { font-weight: bold; }
+    .user-item button { background: red; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+  </style>
+</head>
+<body>
+<div class="admin-box">
+  <h2><i class="fas fa-user-cog"></i> অ্যাডমিন ইউজার ম্যানেজমেন্ট</h2>
+
+  <input type="text" id="newUser" placeholder="নতুন ইউজারনেম" />
+  <input type="text" id="newPass" placeholder="পাসওয়ার্ড" />
+  <label><input type="checkbox" id="newPremium"> প্রিমিয়াম ইউজার</label>
+  <button onclick="addUser()" style="width:100%;margin-top:10px;"><i class="fas fa-user-plus"></i> ইউজার যোগ করুন</button>
+
+  <div class="user-list" id="userList"></div>
+</div>
+
+<script>
+let users = {
+  "mehedi": { password: "ifty.hack", isPremium: true },
+  "sajibul": { password: "sajibul@#@#", isPremium: true }
+};
+
+function renderUsers() {
+  const container = document.getElementById("userList");
+  container.innerHTML = "";
+  Object.keys(users).forEach(username => {
+    const user = users[username];
+    const div = document.createElement("div");
+    div.className = "user-item";
+    div.innerHTML = `<span>${username} (${user.isPremium ? 'Premium' : 'Free'})</span>
+      <button onclick="deleteUser('${username}')"><i class='fas fa-trash'></i></button>`;
+    container.appendChild(div);
+  });
+}
+
+function addUser() {
+  const uname = document.getElementById("newUser").value.trim();
+  const pass = document.getElementById("newPass").value.trim();
+  const prem = document.getElementById("newPremium").checked;
+
+  if (!uname || !pass) return alert("⚠️ ইউজারনেম ও পাসওয়ার্ড দিন");
+  if (users[uname]) return alert("❌ ইউজার আগে থেকেই আছে");
+
+  users[uname] = { password: pass, isPremium: prem };
+  renderUsers();
+  alert("✅ ইউজার যুক্ত হয়েছে (ডেমো মোডে)");
+}
+
+function deleteUser(username) {
+  if (confirm("❌ আপনি কি এই ইউজার মুছে ফেলতে চান?")) {
+    delete users[username];
+    renderUsers();
+    alert("✅ ইউজার মুছে ফেলা হয়েছে (ডেমো মোড)");
+  }
+}
+
+window.onload = renderUsers;
+</script>
+</body>
+</html>

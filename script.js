@@ -44,8 +44,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
       customHTML += `<li>🔧 ${key}: ${value}</li>`;
     }
   });
-
-  // YouTube embed
+// YouTube embed
   let videoEmbed = "";
   if (video.includes("youtube.com") || video.includes("youtu.be")) {
     let videoId = "";
@@ -55,7 +54,9 @@ document.getElementById("generateBtn").addEventListener("click", () => {
       videoId = video.split("youtu.be/")[1];
     }
     if (videoId) {
-      videoEmbed = `<div style="margin-top:10px;"><iframe width="100%" height="200" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe></div>`;
+      videoEmbed = `<div style="margin-top:10px;">
+        <iframe width="100%" height="200" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+      </div>`;
     }
   }
 
@@ -102,6 +103,9 @@ document.getElementById("generateBtn").addEventListener("click", () => {
 
   // Save draft automatically after generating product
   saveDraft();
+
+  // Show toast notification
+  showToast("✅ প্রোডাক্ট কোড তৈরি হয়েছে ও ড্রাফট সেভ হয়েছে!");
 });
 
 // ======== Save Draft Function with Edit Support ========
@@ -140,6 +144,11 @@ function saveDraft() {
     }
     localStorage.removeItem("editDraftId");
   } else {
+    // Prevent duplicate codes if not editing
+    if (drafts.some(d => d.code === draft.code)) {
+      alert("❌ এই কোডের প্রোডাক্ট আগে থেকেই আছে। অনুগ্রহ করে অন্য কোড ব্যবহার করুন।");
+      return;
+    }
     draft.id = Date.now();
     drafts.push(draft);
   }
@@ -206,6 +215,16 @@ window.addEventListener("DOMContentLoaded", () => {
   const draftId = localStorage.getItem("editDraftId");
   if (draftId) {
     loadDraftToForm(draftId);
-    // Do NOT remove editDraftId here to allow multiple edits until explicitly saved
+    // DO NOT remove editDraftId here to allow editing until saved
   }
 });
+
+// ======== Toast Notification ========
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.style.opacity = "1";
+  setTimeout(() => {
+    toast.style.opacity = "0";
+  }, 3000);
+}

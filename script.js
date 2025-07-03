@@ -1,16 +1,4 @@
-// ✅ Toast Notification Function
-function showToast(message, bg = '#333') {
-  const toast = document.getElementById("toast");
-  if (!toast) return alert(message);
-  toast.textContent = message;
-  toast.style.backgroundColor = bg;
-  toast.style.opacity = 1;
-  setTimeout(() => {
-    toast.style.opacity = 0;
-  }, 3000);
-}
-
-// ✅ প্রোডাক্ট HTML তৈরি
+// ======= Product Generate Button =======
 document.getElementById("generateBtn").addEventListener("click", () => {
   const name = document.getElementById("name").value.trim();
   const code = document.getElementById("code").value.trim();
@@ -29,13 +17,14 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   const wa = document.getElementById("wa").value.trim();
   const imgs = document.querySelectorAll(".img-url");
 
-  if (!name || !code || isNaN(price) || !imgs[0].value || !wa) {
-    showToast("প্রোডাক্ট নাম, কোড, প্রাইস, প্রথম ছবি ও WhatsApp নম্বর বাধ্যতামূলক।", "#dc3545");
+  if (!name || !code || isNaN(price) || !imgs[0]?.value || !wa) {
+    alert("প্রোডাক্ট নাম, কোড, প্রাইস, প্রথম ছবি ও WhatsApp নম্বর বাধ্যতামূলক।");
     return;
   }
 
   const discount = offer && price ? Math.round(((price - offer) / price) * 100) : 0;
 
+  // Thumbnail images HTML
   let thumbHTML = "";
   const mainImg = imgs[0].value.trim();
   imgs.forEach((input, i) => {
@@ -45,6 +34,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   });
 
+  // Custom key-value fields
   const customFields = document.querySelectorAll(".custom-field-group");
   let customHTML = "";
   customFields.forEach(group => {
@@ -55,6 +45,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   });
 
+  // YouTube embed
   let videoEmbed = "";
   if (video.includes("youtube.com") || video.includes("youtu.be")) {
     let videoId = "";
@@ -68,6 +59,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   }
 
+  // Product HTML Result
   const html = `
 <div style="text-align:center;">
   <img id="mainImg" src="${mainImg}" style="width:100%;max-width:500px;border-radius:10px;border:1px solid #ccc;margin-bottom:10px;">
@@ -108,48 +100,11 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   document.getElementById("output").textContent = html;
   document.getElementById("preview").innerHTML = html;
 
-  const saved = saveDraft();
-  if (!saved) return;
+  // Save draft automatically after generating product
+  saveDraft();
 });
 
-// ✅ আরও ছবি ইনপুট
-function addImageInput() {
-  const container = document.getElementById("imageInputs");
-  const inputs = container.querySelectorAll(".img-url");
-  if (inputs.length >= 5) return;
-  const input = document.createElement("input");
-  input.type = "url";
-  input.className = "img-url";
-  input.placeholder = "ছবির লিংক (Image URL)";
-  container.appendChild(input);
-}
-
-// ✅ কাস্টম তথ্য ইনপুট যোগ
-function addCustomField() {
-  const container = document.getElementById("customFields");
-  const group = document.createElement("div");
-  group.className = "custom-field-group";
-  group.innerHTML = `
-    <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
-    <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
-  `;
-  container.appendChild(group);
-}
-
-// ✅ কপি বাটন
-document.getElementById("copyBtn").addEventListener("click", () => {
-  const output = document.getElementById("output").textContent;
-  navigator.clipboard.writeText(output)
-    .then(() => showToast("✅ কোড কপি হয়েছে!", "#28a745"))
-    .catch(() => showToast("❌ কপি করা যায়নি", "#dc3545"));
-});
-
-// ✅ মেনু টগল
-function toggleMenu() {
-  document.getElementById("sidebar").classList.toggle("active");
-}
-
-// ✅ Draft Save System (with edit & duplicate check)
+// ======== Save Draft Function with Edit Support ========
 function saveDraft() {
   const draft = {
     name: document.getElementById("name").value.trim(),
@@ -177,35 +132,26 @@ function saveDraft() {
   let drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
   const editId = localStorage.getItem("editDraftId");
 
-  const isDuplicate = drafts.some(d => d.code === draft.code && (!editId || d.id != editId));
-  if (isDuplicate) {
-    showToast("⚠️ এই কোড ব্যবহার করে আগেই একটি প্রোডাক্ট সেভ করা হয়েছে। কোড পরিবর্তন করুন!", "#dc3545");
-    return false;
-  }
-
   if (editId) {
     const index = drafts.findIndex(d => d.id == editId);
     if (index !== -1) {
-      draft.id = drafts[index].id;
+      draft.id = parseInt(editId);
       drafts[index] = draft;
     }
     localStorage.removeItem("editDraftId");
-    showToast("✅ প্রোডাক্ট কোড রিজেনারেট হয়েছে এবং সফলভাবে আপডেট হয়েছে!", "#17a2b8");
   } else {
     draft.id = Date.now();
     drafts.push(draft);
-    showToast("✅ প্রোডাক্ট জেনারেট সফল হয়েছে এবং সেভ হয়েছে!", "#28a745");
   }
 
   localStorage.setItem("drafts", JSON.stringify(drafts));
-  return true;
 }
 
-// ✅ Draft Load by ID
+// ======== Load Draft To Form (for Edit Mode) ========
 function loadDraftToForm(draftId) {
   const drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
   const draft = drafts.find(d => d.id == draftId);
-  if (!draft) return showToast("❌ Draft খুঁজে পাওয়া যায়নি", "#dc3545");
+  if (!draft) return;
 
   document.getElementById("name").value = draft.name || "";
   document.getElementById("code").value = draft.code || "";
@@ -223,6 +169,7 @@ function loadDraftToForm(draftId) {
   document.getElementById("video").value = draft.video || "";
   document.getElementById("wa").value = draft.wa || "";
 
+  // Images input fill
   const imageContainer = document.getElementById("imageInputs");
   imageContainer.innerHTML = "";
   (draft.images || []).forEach(url => {
@@ -234,6 +181,7 @@ function loadDraftToForm(draftId) {
     imageContainer.appendChild(input);
   });
 
+  // Custom fields fill
   const customContainer = document.getElementById("customFields");
   customContainer.innerHTML = "";
   (draft.customFields || []).forEach(field => {
@@ -247,17 +195,17 @@ function loadDraftToForm(draftId) {
   });
 }
 
-// ✅ Edit Draft Redirect
+// ======== Edit Draft Redirect Function ========
 function editDraft(id) {
   localStorage.setItem("editDraftId", id);
   window.location.href = "dashboard.html";
 }
 
-// ✅ Auto Load in dashboard.html
+// ======== Auto Load Edit Draft On Page Load ========
 window.addEventListener("DOMContentLoaded", () => {
   const draftId = localStorage.getItem("editDraftId");
   if (draftId) {
     loadDraftToForm(draftId);
-    localStorage.removeItem("editDraftId");
+    // Do NOT remove editDraftId here to allow multiple edits until explicitly saved
   }
 });

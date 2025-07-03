@@ -137,11 +137,9 @@ document.getElementById("copyBtn").addEventListener("click", () => {
 function toggleMenu() {
   document.getElementById("sidebar").classList.toggle("active");
 }
-// ========== [Draft System for admin.html] ==========
-// এখানে থেকে নতুন কোড শুরু হবে → আগের কোড একদমই টাচ হবে না
-// ========== [🔒 Draft Save System (New Feature)] ==========
 
-// ✅ Draft Save to localStorage
+// ========== [Draft System for admin.html] ==========
+// ✅ Draft Save System (with duplicate check)
 function saveDraft() {
   const draft = {
     name: document.getElementById("name").value.trim(),
@@ -166,21 +164,27 @@ function saveDraft() {
     }))
   };
 
-  // Draft ID নির্ধারণ
   let drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
-  draft.id = Date.now(); // timestamp কে ID হিসেবে ব্যবহার
+
+  // ✅ ডুপ্লিকেট চেক (name + code)
+  const isDuplicate = drafts.some(d => d.name === draft.name && d.code === draft.code);
+  if (isDuplicate) {
+    alert("⚠️ এই প্রোডাক্টটি আগেই সেভ করা হয়েছে।");
+    return;
+  }
+
+  draft.id = Date.now();
   drafts.push(draft);
   localStorage.setItem("drafts", JSON.stringify(drafts));
   alert("✅ ড্রাফট সেভ হয়েছে!");
 }
 
-// ✅ Draft Load by ID (used in dashboard.html edit mode)
+// ✅ Draft Load by ID
 function loadDraftToForm(draftId) {
   const drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
   const draft = drafts.find(d => d.id == draftId);
   if (!draft) return alert("❌ Draft খুঁজে পাওয়া যায়নি");
 
-  // ফর্ম ফিলাপ
   document.getElementById("name").value = draft.name || "";
   document.getElementById("code").value = draft.code || "";
   document.getElementById("price").value = draft.price || "";
@@ -197,7 +201,6 @@ function loadDraftToForm(draftId) {
   document.getElementById("video").value = draft.video || "";
   document.getElementById("wa").value = draft.wa || "";
 
-  // ছবি গুলো ফিলাপ
   const imageContainer = document.getElementById("imageInputs");
   imageContainer.innerHTML = "";
   (draft.images || []).forEach(url => {
@@ -209,7 +212,6 @@ function loadDraftToForm(draftId) {
     imageContainer.appendChild(input);
   });
 
-  // কাস্টম ফিল্ড ফিলাপ
   const customContainer = document.getElementById("customFields");
   customContainer.innerHTML = "";
   (draft.customFields || []).forEach(field => {
@@ -229,7 +231,7 @@ function editDraft(id) {
   window.location.href = "dashboard.html";
 }
 
-// ✅ Auto Load in dashboard.html (if editDraftId exists)
+// ✅ Auto Load in dashboard.html
 window.addEventListener("DOMContentLoaded", () => {
   const draftId = localStorage.getItem("editDraftId");
   if (draftId) {
@@ -237,35 +239,3 @@ window.addEventListener("DOMContentLoaded", () => {
     localStorage.removeItem("editDraftId");
   }
 });
-function saveDraft() {
-    const productName = document.getElementById('productName').value.trim();
-    const productPrice = document.getElementById('productPrice').value.trim();
-    const productImage = document.getElementById('productImage').value.trim();
-    const youtubeLink = document.getElementById('youtubeLink').value.trim();
-    const description = document.getElementById('description').value.trim();
-    const features = document.getElementById('features').value.trim();
-
-    if (!productName) return;
-
-    const draft = {
-        name: productName,
-        price: productPrice,
-        image: productImage,
-        video: youtubeLink,
-        description: description,
-        features: features,
-        timestamp: new Date().toISOString()
-    };
-
-    let drafts = JSON.parse(localStorage.getItem('productDrafts')) || [];
-
-    const isDuplicate = drafts.some(item => item.name === draft.name);
-
-    if (!isDuplicate) {
-        drafts.push(draft);
-        localStorage.setItem('productDrafts', JSON.stringify(drafts));
-        console.log('Draft saved successfully.');
-    } else {
-        console.log('Draft not saved. Duplicate product name.');
-    }
-}

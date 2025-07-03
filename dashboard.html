@@ -22,6 +22,7 @@
   <a href="index.html">🔄 নতুন কোড জেনারেট</a>
   <a href="admin.html">📁 সেভ ড্রাফট লিস্ট</a>
   <a href="fieldManager.html">⚙️ ফিল্ড কাস্টমাইজ</a>
+  <a href="login.html">🔓 লগ আউট</a>
 </div>
 
 <main>
@@ -95,7 +96,6 @@
     container.appendChild(group);
   }
 
-  // Apply field visibility on page load
   function applyFieldVisibility() {
     const visibility = JSON.parse(localStorage.getItem("fieldVisibility") || "{}");
     const optionalFields = [
@@ -110,7 +110,6 @@
       }
     });
 
-    // Custom handling for grouped elements
     if (visibility.images === false) {
       document.getElementById("imageInputs").style.display = "none";
     }

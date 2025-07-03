@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>G9Tool Admin Panel</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      background: #121212;
+      color: white;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    header.header {
+      background: #1f1f1f;
+      padding: 14px 20px;
+      border-radius: 0 0 15px 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 900px;
+      margin: auto;
+    }
+    header .logo {
+      font-size: 22px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    #searchInput {
+      width: 100%;
+      max-width: 400px;
+      padding: 12px 15px;
+      border-radius: 8px;
+      border: none;
+      background: #2a2a2a;
+      color: white;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    button {
+      background: #28a745;
+      border: none;
+      color: white;
+      padding: 12px 18px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-right: 10px;
+      transition: 0.2s ease-in-out;
+      font-size: 16px;
+    }
+    button:hover {
+      opacity: 0.85;
+    }
+    #draftList > div {
+      background: #1c1c1c;
+      padding: 15px;
+      margin-bottom: 12px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    #draftList > div > strong {
+      font-size: 18px;
+      flex: 2;
+      min-width: 150px;
+    }
+    #draftList > div > span {
+      flex: 1;
+      min-width: 80px;
+      text-align: center;
+    }
+    #draftList > div > .actions {
+      flex: 3;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      min-width: 220px;
+    }
+    #previewModal {
+      display: none;
+      position: fixed;
+      top: 5%;
+      left: 5%;
+      width: 90%;
+      height: 90%;
+      background: #222;
+      color: white;
+      border-radius: 12px;
+      padding: 20px;
+      overflow-y: auto;
+      z-index: 10000;
+      box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    }
+    #previewModal button.close-btn {
+      background: #e03e3e;
+      border: none;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      float: right;
+      font-size: 16px;
+    }
+    #previewContent {
+      margin-top: 40px;
+      background: #1c1c1c;
+      padding: 20px;
+      border-radius: 10px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      overflow-x: auto;
+      max-height: 80vh;
+    }
+    @media (max-width: 600px) {
+      #draftList > div {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      #draftList > div > .actions {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">
+    <i class="fas fa-cogs"></i> G9Tool Admin Panel
+  </div>
+  <div>
+    <button id="importBtn"><i class="fas fa-file-import"></i> Import JSON</button>
+    <input type="file" id="importFile" accept=".json" style="display:none" />
+    <button id="exportBtn"><i class="fas fa-file-export"></i> Export JSON</button>
+  </div>
+</header>
+
+<main style="max-width:900px; margin:auto; margin-top: 30px;">
+  <input type="text" id="searchInput" placeholder="প্রোডাক্ট অনুসন্ধান করুন..." autocomplete="off" />
+
+  <div id="draftList">
+    <!-- ড্রাফট লিস্ট এখানে লোড হবে -->
+  </div>
+</main>
+
+<!-- Preview Modal -->
+<div id="previewModal" aria-modal="true" role="dialog" aria-labelledby="previewTitle" aria-describedby="previewContent">
+  <button class="close-btn" onclick="closePreview()"><i class="fas fa-times"></i> Close</button>
+  <h2 id="previewTitle" style="margin-top:0;">প্রিভিউ</h2>
+  <div id="previewContent"></div>
+</div>
+
+<script>
+  // ড্রাফট লোড ও রেন্ডার
+  function loadDrafts(filter = "") {
+    const drafts = JSON.parse(localStorage.getItem("adminDrafts") || "[]");
+    const container = document.getElementById("draftList");
+    container.innerHTML = "";
+
+    const filtered = drafts.filter(d =>
+      d.name.toLowerCase().includes(filter.toLowerCase()) ||
+      (d.code && d.code.toLowerCase().includes(filter.toLowerCase()))
+    );
+
+    if (filtered.length === 0) {
+      container.innerHTML = "<p>কোনো প্রোডাক্ট পাওয়া যায়নি।</p>";
+      return;
+    }
+
+    filtered.forEach(draft => {
+      const div = document.createElement("div");
+
+      div.innerHTML = `
+        <strong>${draft.name}</strong>
+        <span>৳${draft.offer || draft.price || 'N/A'}</span>
+        <div class="actions">
+          <button onclick="previewDraft('${draft.id}')"><i class="fas fa-eye"></i> Preview</button>
+          <button onclick="editDraft('${draft.id}')"><i class="fas fa-edit"></i> Edit</button>
+          <button onclick="deleteDraft('${draft.id}')"><i class="fas fa-trash"></i> Delete</button>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  // প্রিভিউ দেখানো
+  function previewDraft(id) {
+    const drafts = JSON.parse(localStorage.getItem("adminDrafts") || "[]");
+    const draft = drafts.find(d => d.id === id);
+    if (!draft) return alert("ড্রাফট পাওয়া যায়নি!");
+
+    // এখানে যদি আপনার generate করা HTML থাকে তাহলে দেখানো যাবে, নইলে fallback
+    const html = draft.generatedHTML || "<p>প্রিভিউ উপলব্ধ নেই।</p>";
+
+    const previewContent = document.getElementById("previewContent");
+    previewContent.innerHTML = html;
+    document.getElementById("previewModal").style.display = "block";
+  }
+
+  function closePreview() {
+    document.getElementById("previewModal").style.display = "none";
+  }
+
+  // এডিট বাটন ক্লিক করলে dashboard.html-এ রিডাইরেক্ট করে query param সহ পাঠাবে
+  function editDraft(id) {
+    window.location.href = `dashboard.html?edit=${id}`;
+  }
+
+  // ড্রাফট ডিলিট
+  function deleteDraft(id) {
+    if (!confirm("আপনি কি নিশ্চিতভাবে ড্রাফটটি মুছে ফেলতে চান?")) return;
+    let drafts = JSON.parse(localStorage.getItem("adminDrafts") || "[]");
+    drafts = drafts.filter(d => d.id !== id);
+    localStorage.setItem("adminDrafts", JSON.stringify(drafts));
+    loadDrafts(document.getElementById("searchInput").value);
+  }
+
+  // এক্সপোর্ট ফাংশন: localStorage থেকে JSON ফাইল ডাউনলোড
+  document.getElementById("exportBtn").addEventListener("click", () => {
+    const drafts = localStorage.getItem("adminDrafts") || "[]";
+    const blob = new Blob([drafts], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "g9tool_drafts.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // ইমপোর্ট ফাংশন: JSON ফাইল থেকে ড্রাফট লোড করে localStorage-এ সংরক্ষণ
+  document.getElementById("importBtn").addEventListener("click", () => {
+    document.getElementById("importFile").click();
+  });
+
+  document.getElementById("importFile").addEventListener("change", e => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      try {
+        const importedDrafts = JSON.parse(event.target.result);
+        if (!Array.isArray(importedDrafts)) throw new Error("অবৈধ JSON ফরম্যাট");
+
+        let drafts = JSON.parse(localStorage.getItem("adminDrafts") || "[]");
+
+        importedDrafts.forEach(impDraft => {
+          const index = drafts.findIndex(d => d.id === impDraft.id);
+          if (index !== -1) {
+            drafts[index] = impDraft; // Update existing draft
+          } else {
+            drafts.push(impDraft); // Add new draft
+          }
+        });
+
+        localStorage.setItem("adminDrafts", JSON.stringify(drafts));
+        loadDrafts(document.getElementById("searchInput").value);
+        alert("Import সম্পন্ন হয়েছে!");
+      } catch (err) {
+        alert("Import ব্যর্থ: " + err.message);
+      }
+    };
+    reader.readAsText(file);
+    // Reset input for consecutive imports
+    e.target.value = "";
+  });
+
+  // সার্চ ইভেন্ট
+  document.getElementById("searchInput").addEventListener("input", e => {
+    loadDrafts(e.target.value);
+  });
+
+  // পেজ লোডের সময় ড্রাফট লোড করুন
+  loadDrafts();
+</script>
+
+</body>
+</html>

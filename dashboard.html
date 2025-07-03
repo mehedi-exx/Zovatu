@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="bn">
+<!DOCTYPE html>
+<html lang="bn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,7 +14,8 @@
     alert("দুঃখিত দয়া করে প্রিমিয়াম ইউজার এক্টিভ করুন");
     window.location.href = "index.html";
   }
-</script>
+  </script>
+
 <header class="header">
   <div class="left-icons">
     <button class="menu-btn" onclick="toggleMenu()">
@@ -26,7 +28,9 @@
   <a href="https://t.me/G9tool" class="telegram-icon" target="_blank">
     <i class="fab fa-telegram-plane"></i>
   </a>
-</header><main>
+</header>
+
+<main>
   <div class="form-wrapper">
     <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
     <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
@@ -40,35 +44,35 @@
     <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
     <input type="text" id="status" placeholder="স্ট্যাটাস">
     <input type="text" id="category" placeholder="ক্যাটাগরি">
-    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea><div id="imageInputs">
-  <div class="image-group">
-    <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
-  </div>
-</div>
-<button onclick="addImageInput()"><i class="fas fa-plus"></i> আরও ছবি যোগ করুন</button>
+    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea>
+    <div id="imageInputs">
+      <div class="image-group">
+        <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
+      </div>
+    </div>
+    <button onclick="addImageInput()"><i class="fas fa-plus"></i> আরও ছবি যোগ করুন</button>
 
-<input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)">
-<input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)" required>
+    <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)">
+    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)" required>
 
-<!-- ✅ Custom Fields Section -->
-<h4 style="margin-top: 20px;">🔧 কাস্টম তথ্য (যেমন: ওয়ারেন্টি,)</h4>
-<div id="customFields">
-  <div class="custom-field-group">
-    <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
-    <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
-  </div>
-</div>
-<button onclick="addCustomField()"><i class="fas fa-plus"></i> নতুন তথ্য যোগ করুন</button>
+    <!-- Custom Fields -->
+    <h4 style="margin-top: 20px;">🔧 কাস্টম তথ্য (যেমন: ওয়ারেন্টি,)</h4>
+    <div id="customFields">
+      <div class="custom-field-group">
+        <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
+        <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
+      </div>
+    </div>
+    <button onclick="addCustomField()"><i class="fas fa-plus"></i> নতুন তথ্য যোগ করুন</button>
 
-<!-- ✅ Updated Buttons -->
-<div style="text-align:center;">
-  <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট</button>
-  <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
-</div>
+    <!-- Buttons -->
+    <div style="text-align:center; margin-top: 20px;">
+      <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট</button>
+      <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
+    </div>
 
-<div class="output" id="output"></div>
-<div class="live-preview" id="preview"></div>
-
+    <div class="output" id="output"></div>
+    <div class="live-preview" id="preview"></div>
   </div>
 </main>
 
@@ -80,20 +84,16 @@
   <a href="menu/contact.html"><i class="fas fa-phone"></i> কন্টাক্ট</a>
   <a href="menu/privacy.html"><i class="fas fa-user-shield"></i> প্রাইভেসি</a>
   <a href="menu/tutorial.html"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
-  <!-- ✅ Admin Panel Button -->
   <a href="admin.html"><i class="fas fa-tools"></i> অ্যাডমিন প্যানেল</a>
   <a href="index.html" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
 </div>
 
-<!-- ✅ Inline Script for Dynamic Fields -->
 <script>
 function addImageInput() {
   const container = document.getElementById("imageInputs");
   const group = document.createElement("div");
   group.className = "image-group";
-  group.innerHTML = `
-    <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
-  `;
+  group.innerHTML = `<input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">`;
   container.appendChild(group);
 }
 
@@ -112,18 +112,25 @@ function toggleMenu() {
   const sidebar = document.getElementById("sidebar");
   sidebar.classList.toggle("active");
 }
+
+function logout() {
+  localStorage.removeItem("loggedInUser");
+  localStorage.removeItem("editDraftId");
+  window.location.href = "index.html";
+}
 </script>
 
-<!-- ✅ Main Script -->
 <script src="script.js"></script>
 
-<!-- ✅ Add saveDraft trigger -->
+<!-- Save Draft on Generate -->
 <script>
   document.getElementById("generateBtn").addEventListener("click", function () {
-    saveDraft(); // ✅ জেনারেটের সাথে সাথে সেভ হবে
+    saveDraft();
   });
 </script>
-<!-- ✅ Toast Notification Box -->
+
+<!-- Toast Notification Box -->
 <div id="toast" style="position:fixed;bottom:20px;right:20px;background:#333;color:#fff;padding:12px 20px;border-radius:6px;opacity:0;transition:opacity 0.4s ease;z-index:9999;font-weight:bold;box-shadow:0 0 10px rgba(0,0,0,0.3);"></div>
+
 </body>
 </html>

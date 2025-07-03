@@ -1,3 +1,13 @@
+// Toast Notification Helper Function
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.style.opacity = "1";
+  setTimeout(() => {
+    toast.style.opacity = "0";
+  }, 3000);
+}
+
 // ======= Product Generate Button =======
 document.getElementById("generateBtn").addEventListener("click", () => {
   const name = document.getElementById("name").value.trim();
@@ -17,13 +27,15 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   const wa = document.getElementById("wa").value.trim();
   const imgs = document.querySelectorAll(".img-url");
 
-  if (!name || !code || isNaN(price) || !imgs[0]?.value || !wa) {
+  // বাধ্যতামূলক ফিল্ড চেক
+  if (!name || !code || isNaN(price) || !imgs[0]?.value.trim() || !wa) {
     alert("প্রোডাক্ট নাম, কোড, প্রাইস, প্রথম ছবি ও WhatsApp নম্বর বাধ্যতামূলক।");
     return;
   }
 
   const discount = offer && price ? Math.round(((price - offer) / price) * 100) : 0;
 
+  // Thumbnail images HTML
   let thumbHTML = "";
   const mainImg = imgs[0].value.trim();
   imgs.forEach((input, i) => {
@@ -33,6 +45,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   });
 
+  // Custom key-value fields
   const customFields = document.querySelectorAll(".custom-field-group");
   let customHTML = "";
   customFields.forEach(group => {
@@ -43,6 +56,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   });
 
+  // YouTube embed
   let videoEmbed = "";
   if (video.includes("youtube.com") || video.includes("youtu.be")) {
     let videoId = "";
@@ -56,6 +70,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   }
 
+  // Product HTML Result
   const html = `
 <div style="text-align:center;">
   <img id="mainImg" src="${mainImg}" style="width:100%;max-width:500px;border-radius:10px;border:1px solid #ccc;margin-bottom:10px;">
@@ -89,19 +104,37 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     <p style="margin:0;"><strong>Description:</strong><br>${desc || ""}</p>
   </div>
   ${videoEmbed}
+  <p style="display:none;"><a href="#">{getProduct} $price={৳${offer || price}} $sale={৳${price}} $style={1}</a></p>
 </div>
 `;
 
   document.getElementById("output").textContent = html;
   document.getElementById("preview").innerHTML = html;
 
-  saveDraft(); // ✅ অটো সেভ
+  // Save draft automatically after generating product
+  saveDraft();
+
+  // Show success toast
+  showToast("✅ প্রোডাক্ট জেনারেট সফল হয়েছে");
 });
 
-// ========== Save Draft ==========
+// ======== Copy Button Functionality ========
+document.getElementById("copyBtn").addEventListener("click", () => {
+  const output = document.getElementById("output").textContent;
+  if (!output) {
+    alert("কপি করার জন্য কোন কোড নেই।");
+    return;
+  }
+  navigator.clipboard.writeText(output).then(() => {
+    showToast("📋 কপি করা হয়েছে");
+  }).catch(() => {
+    alert("কপি করতে সমস্যা হয়েছে। দয়া করে ম্যানুয়ালি কপি করুন।");
+  });
+});
+
+// ======== Save Draft Function with Edit Support ========
 function saveDraft() {
   const draft = {
-    id: localStorage.getItem("editDraftId") || Date.now(),
     name: document.getElementById("name").value.trim(),
     code: document.getElementById("code").value.trim(),
     price: document.getElementById("price").value,
@@ -125,48 +158,58 @@ function saveDraft() {
   };
 
   let drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
-  const index = drafts.findIndex(d => d.id == draft.id);
+  const editId = localStorage.getItem("editDraftId");
 
-  if (index !== -1) drafts[index] = draft;
-  else drafts.push(draft);
+  if (editId) {
+    const index = drafts.findIndex(d => d.id == editId);
+    if (index !== -1) {
+      draft.id = parseInt(editId);
+      drafts[index] = draft;
+    }
+    localStorage.removeItem("editDraftId");
+  } else {
+    draft.id = Date.now();
+    drafts.push(draft);
+  }
 
   localStorage.setItem("drafts", JSON.stringify(drafts));
-  localStorage.removeItem("editDraftId");
 }
 
-// ========== Load for Edit ==========
-function loadDraftToForm(id) {
+// ======== Load Draft To Form (for Edit Mode) ========
+function loadDraftToForm(draftId) {
   const drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
-  const draft = drafts.find(d => d.id == id);
+  const draft = drafts.find(d => d.id == draftId);
   if (!draft) return;
 
-  document.getElementById("name").value = draft.name;
-  document.getElementById("code").value = draft.code;
-  document.getElementById("price").value = draft.price;
-  document.getElementById("offer").value = draft.offer;
-  document.getElementById("unit").value = draft.unit;
-  document.getElementById("qty").value = draft.qty;
-  document.getElementById("brand").value = draft.brand;
-  document.getElementById("size").value = draft.size;
-  document.getElementById("color").value = draft.color;
-  document.getElementById("delivery").value = draft.delivery;
-  document.getElementById("status").value = draft.status;
-  document.getElementById("category").value = draft.category;
-  document.getElementById("desc").value = draft.desc;
-  document.getElementById("video").value = draft.video;
-  document.getElementById("wa").value = draft.wa;
+  document.getElementById("name").value = draft.name || "";
+  document.getElementById("code").value = draft.code || "";
+  document.getElementById("price").value = draft.price || "";
+  document.getElementById("offer").value = draft.offer || "";
+  document.getElementById("unit").value = draft.unit || "";
+  document.getElementById("qty").value = draft.qty || "";
+  document.getElementById("brand").value = draft.brand || "";
+  document.getElementById("size").value = draft.size || "";
+  document.getElementById("color").value = draft.color || "";
+  document.getElementById("delivery").value = draft.delivery || "";
+  document.getElementById("status").value = draft.status || "";
+  document.getElementById("category").value = draft.category || "";
+  document.getElementById("desc").value = draft.desc || "";
+  document.getElementById("video").value = draft.video || "";
+  document.getElementById("wa").value = draft.wa || "";
 
-  const imgContainer = document.getElementById("imageInputs");
-  imgContainer.innerHTML = "";
+  // Images input fill
+  const imageContainer = document.getElementById("imageInputs");
+  imageContainer.innerHTML = "";
   (draft.images || []).forEach(url => {
     const input = document.createElement("input");
     input.type = "url";
     input.className = "img-url";
     input.placeholder = "ছবির লিংক (Image URL)";
     input.value = url;
-    imgContainer.appendChild(input);
+    imageContainer.appendChild(input);
   });
 
+  // Custom fields fill
   const customContainer = document.getElementById("customFields");
   customContainer.innerHTML = "";
   (draft.customFields || []).forEach(field => {
@@ -180,18 +223,17 @@ function loadDraftToForm(id) {
   });
 }
 
-// ========== Field Visibility Control ==========
-function applyFieldVisibility() {
-  const hiddenFields = JSON.parse(localStorage.getItem("hiddenFields") || "[]");
-  hiddenFields.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = "none";
-  });
+// ======== Edit Draft Redirect Function ========
+function editDraft(id) {
+  localStorage.setItem("editDraftId", id);
+  window.location.href = "dashboard.html";
 }
 
-// ========== On Page Load ==========
+// ======== Auto Load Edit Draft On Page Load ========
 window.addEventListener("DOMContentLoaded", () => {
-  applyFieldVisibility();
   const draftId = localStorage.getItem("editDraftId");
-  if (draftId) loadDraftToForm(draftId);
+  if (draftId) {
+    loadDraftToForm(draftId);
+    // Do NOT remove editDraftId here to allow multiple edits until explicitly saved
+  }
 });

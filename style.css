@@ -1,4 +1,4 @@
-/* G9Tool – Fully Updated & Responsive CSS (Dark, Clean, Toast-Ready) */
+/* G9Tool – Fully Updated & Responsive CSS */
 
 /* Reset & Base */
 * {
@@ -12,6 +12,8 @@ body {
   background-color: #121212;
   color: #fff;
   line-height: 1.5;
+  padding: 0;
+  margin: 0;
 }
 
 /* Header */
@@ -69,17 +71,16 @@ main {
   padding: 20px;
 }
 
-/* Form Wrapper */
+/* Form Layout */
 .form-wrapper {
   max-width: 600px;
   margin: auto;
   background: #1c1c1c;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
-/* Form Elements */
 input,
 textarea {
   width: 100%;
@@ -92,14 +93,6 @@ textarea {
   font-size: 16px;
 }
 
-input:focus,
-textarea:focus {
-  outline: none;
-  border-color: #28a745;
-  background: #2f2f2f;
-}
-
-/* Buttons */
 button {
   border: none;
   padding: 12px 18px;
@@ -175,9 +168,8 @@ button:hover {
   cursor: pointer;
 }
 
-/* Output & Live Preview */
-.output,
-.live-preview {
+/* Output & Preview */
+.output, .live-preview {
   margin-top: 20px;
   background: #1c1c1c;
   padding: 15px;
@@ -187,35 +179,7 @@ button:hover {
   overflow-x: auto;
 }
 
-/* Toast Notification */
-.toast {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #28a745;
-  color: white;
-  padding: 14px 24px;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-  font-weight: bold;
-  font-size: 15px;
-  z-index: 10000;
-  animation: fadeSlide 0.3s ease-out;
-}
-
-@keyframes fadeSlide {
-  0% {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-}
-
-/* Responsive Layout */
+/* Responsive */
 @media (max-width: 480px) {
   header.header {
     height: 56px;

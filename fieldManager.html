@@ -126,7 +126,8 @@
     { key: "name", label: "প্রোডাক্ট নাম" },
     { key: "code", label: "প্রোডাক্ট কোড" },
     { key: "price", label: "মূল্য প্রাইস (৳)" },
-    { key: "wa", label: "WhatsApp নম্বর (8801XXXXXXXXXX)" }
+    { key: "wa", label: "WhatsApp নম্বর (8801XXXXXXXXXX)" },
+    { key: "images", label: "ছবির লিংক" } // ✅ এখন বাধ্যতামূলক
   ];
 
   const optionalFields = [
@@ -140,20 +141,17 @@
     { key: "status", label: "স্ট্যাটাস" },
     { key: "category", label: "ক্যাটাগরি" },
     { key: "desc", label: "প্রোডাক্ট বর্ণনা" },
-    { key: "images", label: "ছবির লিংক" },
     { key: "video", label: "ভিডিও লিংক (YouTube)" },
     { key: "customFields", label: "কাস্টম তথ্য" }
   ];
 
   const form = document.getElementById("fieldManagerForm");
 
-  // Load saved visibility settings or default (all optional shown)
   const savedVisibility = JSON.parse(localStorage.getItem("fieldVisibility") || "{}");
 
   function renderFields() {
     form.innerHTML = "";
 
-    // Mandatory fields (disabled checkboxes)
     mandatoryFields.forEach(field => {
       const div = document.createElement("div");
       div.className = "field-group";
@@ -164,12 +162,11 @@
       form.appendChild(div);
     });
 
-    // Optional fields (checkboxes editable)
     optionalFields.forEach(field => {
       const div = document.createElement("div");
       div.className = "field-group";
 
-      const isChecked = savedVisibility[field.key] !== false; // ডিফল্ট true (শো)
+      const isChecked = savedVisibility[field.key] !== false;
       div.innerHTML = `
         <label class="field-label" for="${field.key}">${field.label}</label>
         <input type="checkbox" id="${field.key}" ${isChecked ? "checked" : ""} />
@@ -193,7 +190,6 @@
     window.location.href = "dashboard.html";
   }
 
-  // Initial render
   renderFields();
 </script>
 

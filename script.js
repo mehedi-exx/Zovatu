@@ -17,6 +17,14 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   const wa = document.getElementById("wa").value.trim();
   const imgs = document.querySelectorAll(".img-url");
 
+  // ✅ কোড ডুপ্লিকেট চেক
+  let drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
+  const isCodeUsed = drafts.some(d => d.code === code);
+  if (isCodeUsed) {
+    alert("⚠️ ইতিমধ্যে এই প্রোডাক্ট কোড ব্যবহার করে একটি কোড জেনারেট করেছেন। দয়া করে কোড পরিবর্তন করুন।");
+    return;
+  }
+
   if (!name || !code || isNaN(price) || !imgs[0].value || !wa) {
     alert("প্রোডাক্ট নাম, কোড, প্রাইস, প্রথম ছবি ও WhatsApp নম্বর বাধ্যতামূলক।");
     return;
@@ -99,6 +107,9 @@ document.getElementById("generateBtn").addEventListener("click", () => {
 
   document.getElementById("output").textContent = html;
   document.getElementById("preview").innerHTML = html;
+
+  // ✅ জেনারেট এর পর অটো সেভ
+  saveDraft();
 });
 
 // ✅ আরও ছবি ইনপুট
@@ -138,8 +149,7 @@ function toggleMenu() {
   document.getElementById("sidebar").classList.toggle("active");
 }
 
-// ========== [Draft System for admin.html] ==========
-// ✅ Draft Save System (with duplicate check)
+// ✅ ড্রাফট সেভ ফাংশন (with ডুপ্লিকেট চেক)
 function saveDraft() {
   const draft = {
     name: document.getElementById("name").value.trim(),
@@ -165,18 +175,12 @@ function saveDraft() {
   };
 
   let drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
-
-  // ✅ ডুপ্লিকেট চেক (name + code)
   const isDuplicate = drafts.some(d => d.name === draft.name && d.code === draft.code);
-  if (isDuplicate) {
-    alert("⚠️ এই প্রোডাক্টটি আগেই সেভ করা হয়েছে।");
-    return;
-  }
+  if (isDuplicate) return;
 
   draft.id = Date.now();
   drafts.push(draft);
   localStorage.setItem("drafts", JSON.stringify(drafts));
-  alert("✅ ড্রাফট সেভ হয়েছে!");
 }
 
 // ✅ Draft Load by ID

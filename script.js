@@ -237,3 +237,35 @@ window.addEventListener("DOMContentLoaded", () => {
     localStorage.removeItem("editDraftId");
   }
 });
+function saveDraft() {
+    const productName = document.getElementById('productName').value.trim();
+    const productPrice = document.getElementById('productPrice').value.trim();
+    const productImage = document.getElementById('productImage').value.trim();
+    const youtubeLink = document.getElementById('youtubeLink').value.trim();
+    const description = document.getElementById('description').value.trim();
+    const features = document.getElementById('features').value.trim();
+
+    if (!productName) return;
+
+    const draft = {
+        name: productName,
+        price: productPrice,
+        image: productImage,
+        video: youtubeLink,
+        description: description,
+        features: features,
+        timestamp: new Date().toISOString()
+    };
+
+    let drafts = JSON.parse(localStorage.getItem('productDrafts')) || [];
+
+    const isDuplicate = drafts.some(item => item.name === draft.name);
+
+    if (!isDuplicate) {
+        drafts.push(draft);
+        localStorage.setItem('productDrafts', JSON.stringify(drafts));
+        console.log('Draft saved successfully.');
+    } else {
+        console.log('Draft not saved. Duplicate product name.');
+    }
+}

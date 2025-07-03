@@ -15,32 +15,34 @@
       padding: 20px;
     }
     header.header {
-      background: #1f1f1f;
-      padding: 14px 20px;
+      background: #1e1e1e;
+      padding: 14px 16px;
       border-radius: 0 0 15px 15px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       max-width: 900px;
       margin: auto;
+      height: 60px;
     }
     header .logo {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 600;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
     #searchInput {
       width: 100%;
       max-width: 400px;
       padding: 12px 15px;
       border-radius: 8px;
-      border: none;
+      border: 1px solid #444;
       background: #2a2a2a;
       color: white;
       font-size: 16px;
       margin-bottom: 20px;
+      box-sizing: border-box;
     }
     button {
       background: #28a745;
@@ -53,15 +55,19 @@
       margin-right: 10px;
       transition: 0.2s ease-in-out;
       font-size: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
     button:hover {
-      opacity: 0.85;
+      opacity: 0.9;
     }
     #draftList > div {
       background: #1c1c1c;
       padding: 15px;
       margin-bottom: 12px;
-      border-radius: 10px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -72,11 +78,14 @@
       font-size: 18px;
       flex: 2;
       min-width: 150px;
+      word-break: break-word;
     }
     #draftList > div > span {
       flex: 1;
       min-width: 80px;
       text-align: center;
+      font-weight: 600;
+      color: #28a745;
     }
     #draftList > div > .actions {
       flex: 3;
@@ -93,7 +102,7 @@
       left: 5%;
       width: 90%;
       height: 90%;
-      background: #222;
+      background: #1c1c1c;
       color: white;
       border-radius: 12px;
       padding: 20px;
@@ -110,24 +119,53 @@
       cursor: pointer;
       float: right;
       font-size: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
     #previewContent {
       margin-top: 40px;
-      background: #1c1c1c;
+      background: #2a2a2a;
       padding: 20px;
-      border-radius: 10px;
+      border-radius: 12px;
       font-family: monospace;
       white-space: pre-wrap;
       overflow-x: auto;
       max-height: 80vh;
+      color: #fff;
     }
+    /* Responsive */
     @media (max-width: 600px) {
+      header.header {
+        flex-direction: column;
+        height: auto;
+        padding: 12px 16px;
+        gap: 10px;
+      }
       #draftList > div {
         flex-direction: column;
         align-items: flex-start;
       }
       #draftList > div > .actions {
         justify-content: flex-start;
+        width: 100%;
+        margin-top: 10px;
+      }
+      #draftList > div > strong,
+      #draftList > div > span {
+        flex: unset;
+        min-width: auto;
+      }
+      button {
+        font-size: 14px;
+        padding: 10px 14px;
+        margin-bottom: 8px;
+        width: 100%;
+        justify-content: center;
+      }
+      #searchInput {
+        max-width: 100%;
+        margin-bottom: 15px;
       }
     }
   </style>
@@ -161,7 +199,6 @@
 </div>
 
 <script>
-  // ড্রাফট লোড ও রেন্ডার
   function loadDrafts(filter = "") {
     const drafts = JSON.parse(localStorage.getItem("adminDrafts") || "[]");
     const container = document.getElementById("draftList");
@@ -193,13 +230,11 @@
     });
   }
 
-  // প্রিভিউ দেখানো
   function previewDraft(id) {
     const drafts = JSON.parse(localStorage.getItem("adminDrafts") || "[]");
     const draft = drafts.find(d => d.id === id);
     if (!draft) return alert("ড্রাফট পাওয়া যায়নি!");
 
-    // এখানে যদি আপনার generate করা HTML থাকে তাহলে দেখানো যাবে, নইলে fallback
     const html = draft.generatedHTML || "<p>প্রিভিউ উপলব্ধ নেই।</p>";
 
     const previewContent = document.getElementById("previewContent");
@@ -211,12 +246,10 @@
     document.getElementById("previewModal").style.display = "none";
   }
 
-  // এডিট বাটন ক্লিক করলে dashboard.html-এ রিডাইরেক্ট করে query param সহ পাঠাবে
   function editDraft(id) {
     window.location.href = `dashboard.html?edit=${id}`;
   }
 
-  // ড্রাফট ডিলিট
   function deleteDraft(id) {
     if (!confirm("আপনি কি নিশ্চিতভাবে ড্রাফটটি মুছে ফেলতে চান?")) return;
     let drafts = JSON.parse(localStorage.getItem("adminDrafts") || "[]");
@@ -225,7 +258,6 @@
     loadDrafts(document.getElementById("searchInput").value);
   }
 
-  // এক্সপোর্ট ফাংশন: localStorage থেকে JSON ফাইল ডাউনলোড
   document.getElementById("exportBtn").addEventListener("click", () => {
     const drafts = localStorage.getItem("adminDrafts") || "[]";
     const blob = new Blob([drafts], { type: "application/json" });
@@ -237,7 +269,6 @@
     URL.revokeObjectURL(url);
   });
 
-  // ইমপোর্ট ফাংশন: JSON ফাইল থেকে ড্রাফট লোড করে localStorage-এ সংরক্ষণ
   document.getElementById("importBtn").addEventListener("click", () => {
     document.getElementById("importFile").click();
   });
@@ -257,9 +288,9 @@
         importedDrafts.forEach(impDraft => {
           const index = drafts.findIndex(d => d.id === impDraft.id);
           if (index !== -1) {
-            drafts[index] = impDraft; // Update existing draft
+            drafts[index] = impDraft;
           } else {
-            drafts.push(impDraft); // Add new draft
+            drafts.push(impDraft);
           }
         });
 
@@ -271,16 +302,13 @@
       }
     };
     reader.readAsText(file);
-    // Reset input for consecutive imports
     e.target.value = "";
   });
 
-  // সার্চ ইভেন্ট
   document.getElementById("searchInput").addEventListener("input", e => {
     loadDrafts(e.target.value);
   });
 
-  // পেজ লোডের সময় ড্রাফট লোড করুন
   loadDrafts();
 </script>
 

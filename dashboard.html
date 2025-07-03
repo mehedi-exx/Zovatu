@@ -8,13 +8,12 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
-  <script>
-  // যদি ইউজার লগইন না করে থাকে, তাহলে index.html-এ রিডাইরেক্ট করে দাও
+<script>
   if (!localStorage.getItem("loggedInUser")) {
     alert("দুঃখিত দয়া করে প্রিমিয়াম ইউজার এক্টিভ করুন");
     window.location.href = "index.html";
   }
-  </script>
+</script>
 
 <header class="header">
   <div class="left-icons">
@@ -32,19 +31,21 @@
 
 <main>
   <div class="form-wrapper">
-    <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
-    <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
-    <input type="number" id="price" placeholder="মূল্য প্রাইস (৳)" required>
-    <input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)">
-    <input type="text" id="unit" placeholder="ইউনিট (যেমন: পিস, কেজি)">
-    <input type="number" id="qty" placeholder="পরিমাণ (Qty)">
-    <input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি">
-    <input type="text" id="size" placeholder="সাইজ অপশন (যেমন: S, M, L)">
-    <input type="text" id="color" placeholder="রঙ অপশন (যেমন: লাল, সবুজ)">
-    <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
-    <input type="text" id="status" placeholder="স্ট্যাটাস">
-    <input type="text" id="category" placeholder="ক্যাটাগরি">
-    <textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea>
+
+    <div><input type="text" id="name" placeholder="প্রোডাক্ট নাম" required></div>
+    <div><input type="text" id="code" placeholder="প্রোডাক্ট কোড" required></div>
+    <div><input type="number" id="price" placeholder="মূল্য প্রাইস (৳)" required></div>
+    <div><input type="number" id="offer" placeholder="অফার প্রাইস (ঐচ্ছিক)"></div>
+    <div><input type="text" id="unit" placeholder="ইউনিট (যেমন: পিস, কেজি)"></div>
+    <div><input type="number" id="qty" placeholder="পরিমাণ (Qty)"></div>
+    <div><input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি"></div>
+    <div><input type="text" id="size" placeholder="সাইজ অপশন (যেমন: S, M, L)"></div>
+    <div><input type="text" id="color" placeholder="রঙ অপশন (যেমন: লাল, সবুজ)"></div>
+    <div><input type="text" id="delivery" placeholder="ডেলিভারি টাইম"></div>
+    <div><input type="text" id="status" placeholder="স্ট্যাটাস"></div>
+    <div><input type="text" id="category" placeholder="ক্যাটাগরি"></div>
+    <div><textarea id="desc" placeholder="প্রোডাক্ট বর্ণনা"></textarea></div>
+
     <div id="imageInputs">
       <div class="image-group">
         <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
@@ -52,10 +53,10 @@
     </div>
     <button onclick="addImageInput()"><i class="fas fa-plus"></i> আরও ছবি যোগ করুন</button>
 
-    <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)">
-    <input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)" required>
+    <div><input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)"></div>
+    <div><input type="text" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)" required></div>
 
-    <!-- Custom Fields -->
+    <!-- ✅ Custom Fields Section -->
     <h4 style="margin-top: 20px;">🔧 কাস্টম তথ্য (যেমন: ওয়ারেন্টি,)</h4>
     <div id="customFields">
       <div class="custom-field-group">
@@ -65,14 +66,15 @@
     </div>
     <button onclick="addCustomField()"><i class="fas fa-plus"></i> নতুন তথ্য যোগ করুন</button>
 
-    <!-- Buttons -->
-    <div style="text-align:center; margin-top: 20px;">
+    <!-- ✅ Updated Buttons -->
+    <div style="text-align:center;">
       <button id="generateBtn"><i class="fas fa-magic"></i> কোড জেনারেট</button>
       <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
     </div>
 
     <div class="output" id="output"></div>
     <div class="live-preview" id="preview"></div>
+
   </div>
 </main>
 
@@ -85,9 +87,11 @@
   <a href="menu/privacy.html"><i class="fas fa-user-shield"></i> প্রাইভেসি</a>
   <a href="menu/tutorial.html"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
   <a href="admin.html"><i class="fas fa-tools"></i> অ্যাডমিন প্যানেল</a>
+  <a href="fieldManager.html"><i class="fas fa-eye-slash"></i> ফিল্ড কাস্টমাইজ</a>
   <a href="index.html" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
 </div>
 
+<!-- Scripts -->
 <script>
 function addImageInput() {
   const container = document.getElementById("imageInputs");
@@ -112,25 +116,49 @@ function toggleMenu() {
   const sidebar = document.getElementById("sidebar");
   sidebar.classList.toggle("active");
 }
-
-function logout() {
-  localStorage.removeItem("loggedInUser");
-  localStorage.removeItem("editDraftId");
-  window.location.href = "index.html";
-}
 </script>
 
 <script src="script.js"></script>
 
-<!-- Save Draft on Generate -->
+<!-- ✅ Auto-save on generate -->
 <script>
   document.getElementById("generateBtn").addEventListener("click", function () {
     saveDraft();
   });
 </script>
 
-<!-- Toast Notification Box -->
+<!-- ✅ Toast Box -->
 <div id="toast" style="position:fixed;bottom:20px;right:20px;background:#333;color:#fff;padding:12px 20px;border-radius:6px;opacity:0;transition:opacity 0.4s ease;z-index:9999;font-weight:bold;box-shadow:0 0 10px rgba(0,0,0,0.3);"></div>
+
+<!-- ✅ Field Visibility Logic -->
+<script>
+  const fieldVisibility = JSON.parse(localStorage.getItem("visibleFields") || "{}");
+
+  function applyFieldVisibility() {
+    const optionalFields = {
+      offer: "offer",
+      unit: "unit",
+      qty: "qty",
+      brand: "brand",
+      size: "size",
+      color: "color",
+      delivery: "delivery",
+      status: "status",
+      category: "category",
+      video: "video"
+    };
+
+    Object.keys(optionalFields).forEach(id => {
+      const field = document.getElementById(id);
+      if (field && field.parentElement) {
+        const visible = fieldVisibility[id] !== false;
+        field.parentElement.style.display = visible ? "block" : "none";
+      }
+    });
+  }
+
+  window.addEventListener("DOMContentLoaded", applyFieldVisibility);
+</script>
 
 </body>
 </html>

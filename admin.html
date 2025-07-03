@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Panel - G9Tool</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      margin: 0;
+      background: #121212;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    header {
+      background: #1f1f1f;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #333;
+    }
+    .logo {
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .main-content {
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    input[type="text"], input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      background: #222;
+      border: none;
+      color: #fff;
+      border-radius: 6px;
+    }
+    button {
+      padding: 10px 15px;
+      background: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      margin: 5px 4px 10px 0;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .draft-item {
+      background: #1f1f1f;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 12px;
+    }
+    .draft-header {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .draft-name {
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .actions {
+      display: flex;
+      gap: 8px;
+    }
+    .actions button {
+      background: #444;
+      font-size: 14px;
+      padding: 6px 10px;
+    }
+    .actions button:hover {
+      background: #666;
+    }
+    .preview {
+      padding: 10px;
+      border-top: 1px solid #333;
+      margin-top: 10px;
+    }
+    @media (max-width: 600px) {
+      .draft-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+      }
+      .actions {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><i class="fas fa-cog"></i> Admin Panel</div>
+  <a href="dashboard.html" style="color:#00bfff;text-decoration:none;"><i class="fas fa-arrow-left"></i> Back</a>
+</header>
+
+<div class="main-content">
+  <h2>📦 সেভ করা প্রোডাক্ট লিস্ট</h2>
+
+  <input type="text" id="searchInput" placeholder="🔍 প্রোডাক্ট খুঁজুন (নাম বা কোড)" oninput="renderDrafts()" />
+
+  <div style="margin: 10px 0;">
+    <button onclick="exportDrafts()"><i class="fas fa-download"></i> Export JSON</button>
+    <input type="file" id="importFile" accept=".json" onchange="importDrafts()" />
+  </div>
+
+  <div id="draftList"></div>
+</div>
+
+<script>
+  function getDrafts() {
+    return JSON.parse(localStorage.getItem("drafts") || "[]");
+  }
+
+  function saveDrafts(drafts) {
+    localStorage.setItem("drafts", JSON.stringify(drafts));
+  }
+
+  function renderDrafts() {
+    const drafts = getDrafts();
+    const search = document.getElementById("searchInput").value.toLowerCase();
+    const list = document.getElementById("draftList");
+    list.innerHTML = "";
+
+    const filtered = drafts.filter(d => d.name.toLowerCase().includes(search) || d.code.toLowerCase().includes(search));
+
+    if (!filtered.length) {
+      list.innerHTML = "<p>❌ কোনো ড্রাফট পাওয়া যায়নি</p>";
+      return;
+    }
+
+    filtered.forEach(d => {
+      const div = document.createElement("div");
+      div.className = "draft-item";
+      div.innerHTML = `
+        <div class="draft-header">
+          <div class="draft-name">🔖 ${d.name} (${d.code})</div>
+          <div class="actions">
+            <button onclick="editDraft(${d.id})"><i class="fas fa-edit"></i> Edit</button>
+            <button onclick="deleteDraft(${d.id})"><i class="fas fa-trash"></i> Delete</button>
+            <button onclick="previewDraft(${d.id})"><i class="fas fa-eye"></i> Preview</button>
+          </div>
+        </div>
+        <div class="preview" id="preview-${d.id}" style="display:none;"></div>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  function editDraft(id) {
+    localStorage.setItem("editDraftId", id);
+    window.location.href = "dashboard.html";
+  }
+
+  function deleteDraft(id) {
+    if (confirm("❌ আপনি কি সত্যিই ডিলিট করতে চান?")) {
+      const drafts = getDrafts().filter(d => d.id !== id);
+      saveDrafts(drafts);
+      renderDrafts();
+    }
+  }
+
+  function previewDraft(id) {
+    const previewBox = document.getElementById("preview-" + id);
+    if (previewBox.style.display === "block") {
+      previewBox.style.display = "none";
+      previewBox.innerHTML = "";
+      return;
+    }
+
+    const drafts = getDrafts();
+    const d = drafts.find(d => d.id === id);
+    if (!d) return;
+
+    const html = `
+      <p><strong>নাম:</strong> ${d.name}</p>
+      <p><strong>কোড:</strong> ${d.code}</p>
+      <p><strong>মূল্য:</strong> ৳${d.price}</p>
+      <p><strong>অফার:</strong> ৳${d.offer || "N/A"}</p>
+      <p><strong>হোয়াটসঅ্যাপ:</strong> ${d.wa}</p>
+      <p><strong>বর্ণনা:</strong> ${d.desc}</p>
+    `;
+    previewBox.innerHTML = html;
+    previewBox.style.display = "block";
+  }
+
+  function exportDrafts() {
+    const data = getDrafts();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "drafts.json";
+    a.click();
+  }
+
+  function importDrafts() {
+    const file = document.getElementById("importFile").files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      try {
+        const imported = JSON.parse(e.target.result);
+        if (!Array.isArray(imported)) throw new Error("Invalid format");
+
+        const existing = getDrafts();
+        const merged = [...existing, ...imported.map(d => ({ ...d, id: Date.now() + Math.random() }))];
+        saveDrafts(merged);
+        alert("✅ ডেটা ইমপোর্ট সফল");
+        renderDrafts();
+      } catch (e) {
+        alert("❌ ইমপোর্ট করতে সমস্যা হয়েছে");
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // Initial load
+  renderDrafts();
+</script>
+
+</body>
+</html>

@@ -17,14 +17,6 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   const wa = document.getElementById("wa").value.trim();
   const imgs = document.querySelectorAll(".img-url");
 
-  // ✅ কোড ডুপ্লিকেট চেক
-  let drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
-  const isCodeUsed = drafts.some(d => d.code === code);
-  if (isCodeUsed) {
-    alert("⚠️ ইতিমধ্যে এই প্রোডাক্ট কোড ব্যবহার করে একটি কোড জেনারেট করেছেন। দয়া করে কোড পরিবর্তন করুন।");
-    return;
-  }
-
   if (!name || !code || isNaN(price) || !imgs[0].value || !wa) {
     alert("প্রোডাক্ট নাম, কোড, প্রাইস, প্রথম ছবি ও WhatsApp নম্বর বাধ্যতামূলক।");
     return;
@@ -108,7 +100,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   document.getElementById("output").textContent = html;
   document.getElementById("preview").innerHTML = html;
 
-  // ✅ জেনারেট এর পর অটো সেভ
+  // ✅ সেভ ড্রাফট কল
   saveDraft();
 });
 
@@ -149,7 +141,7 @@ function toggleMenu() {
   document.getElementById("sidebar").classList.toggle("active");
 }
 
-// ✅ ড্রাফট সেভ ফাংশন (with ডুপ্লিকেট চেক)
+// ✅ Draft Save System (Only code check, allow edit overwrite)
 function saveDraft() {
   const draft = {
     name: document.getElementById("name").value.trim(),
@@ -175,15 +167,37 @@ function saveDraft() {
   };
 
   let drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
-  const isDuplicate = drafts.some(d => d.name === draft.name && d.code === draft.code);
-  if (isDuplicate) return;
+  const editId = localStorage.getItem("editDraftId");
 
-  draft.id = Date.now();
-  drafts.push(draft);
+  const isDuplicate = drafts.some(d => d.code === draft.code && (!editId || d.id != editId));
+  if (isDuplicate) {
+    alert("⚠️ এই কোড ব্যবহার করে আগেই একটি প্রোডাক্ট সেভ করা হয়েছে।");
+    return;
+  }
+
+  if (editId) {
+    const index = drafts.findIndex(d => d.id == editId);
+    if (index !== -1) {
+      draft.id = drafts[index].id;
+      drafts[index] = draft;
+    }
+    localStorage.removeItem("editDraftId");
+  } else {
+    draft.id = Date.now();
+    drafts.push(draft);
+  }
+
   localStorage.setItem("drafts", JSON.stringify(drafts));
+  alert("✅ প্রোডাক্ট সেভ হয়েছে!");
 }
 
-// ✅ Draft Load by ID
+// ✅ Edit Draft Redirect
+function editDraft(id) {
+  localStorage.setItem("editDraftId", id);
+  window.location.href = "dashboard.html";
+}
+
+// ✅ Load Draft for Editing
 function loadDraftToForm(draftId) {
   const drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
   const draft = drafts.find(d => d.id == draftId);
@@ -229,17 +243,10 @@ function loadDraftToForm(draftId) {
   });
 }
 
-// ✅ Edit Draft Redirect
-function editDraft(id) {
-  localStorage.setItem("editDraftId", id);
-  window.location.href = "dashboard.html";
-}
-
-// ✅ Auto Load in dashboard.html
+// ✅ Auto Load if Edit Mode
 window.addEventListener("DOMContentLoaded", () => {
   const draftId = localStorage.getItem("editDraftId");
   if (draftId) {
     loadDraftToForm(draftId);
-    localStorage.removeItem("editDraftId");
   }
 });

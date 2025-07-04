@@ -22,7 +22,7 @@
   <a href="index.html">🔄 নতুন কোড জেনারেট</a>
   <a href="admin.html">📁 সেভ ড্রাফট লিস্ট</a>
   <a href="fieldManager.html">⚙️ ফিল্ড কাস্টমাইজ</a>
-  <a href="#" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i> লগ আউট</a>
+  <a href="index.html">🔓 লগ আউট</a>
 </div>
 
 <main>
@@ -71,7 +71,6 @@
 </main>
 
 <script src="script.js"></script>
-<script src="auth.js"></script>
 <script>
   function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("active");
@@ -119,9 +118,7 @@
     }
   }
 
-  window.addEventListener("DOMContentLoaded", () => {
-    applyFieldVisibility();
-  });
+  window.addEventListener("DOMContentLoaded", applyFieldVisibility);
 </script>
 
 </body>

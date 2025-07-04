@@ -1,77 +1,54 @@
-// ======= User Data & Auth System =======
+// auth.js
 
-// Initialize users array from localStorage or empty
-let users = JSON.parse(localStorage.getItem("users") || "[]");
+// 🔐 Check if user is authenticated
+function checkAuth() {
+  const user = localStorage.getItem("g9user");
+  const isLoginPage = location.pathname.endsWith("login.html");
 
-// Function to save users array to localStorage
-function saveUsers() {
-  localStorage.setItem("users", JSON.stringify(users));
+  if (!user && !isLoginPage) {
+    // Not logged in, redirect to login
+    location.href = "login.html";
+  }
 }
 
-// Add new user function
-// Returns true if user added, false if username exists
-function addUser(username, password, premium = true) {
-  username = username.trim();
-  password = password.trim();
-  if (!username || !password) {
-    alert("ইউজারনেম এবং পাসওয়ার্ড দিতে হবে।");
-    return false;
-  }
-  const exists = users.find(u => u.username === username);
-  if (exists) {
-    alert("ইউজারনেমটি ইতিমধ্যেই ব্যবহৃত হচ্ছে!");
-    return false;
-  }
-  users.push({ username, password, premium });
-  saveUsers();
-  alert("নতুন ইউজার সফলভাবে যুক্ত হয়েছে!");
-  return true;
+// 🔓 Log out function
+function logout() {
+  localStorage.removeItem("g9user");
+  location.href = "login.html";
 }
 
-// Login function
+// 🔑 Login function
 function loginUser() {
-  const username = document.getElementById("username").value.trim();
+  const username = document.getElementById("username").value.trim().toLowerCase();
   const password = document.getElementById("password").value.trim();
 
   if (!username || !password) {
-    alert("ইউজারনেম এবং পাসওয়ার্ড লিখুন।");
+    alert("ইউজারনেম ও পাসওয়ার্ড দিতে হবে");
     return;
   }
 
-  const user = users.find(u => u.username === username && u.password === password);
+  const userPath = `users/${username}.json`;
 
-  if (user) {
-    localStorage.setItem("authUser", JSON.stringify(user));
-    alert("লগইন সফল হয়েছে!");
-    window.location.href = "dashboard.html";  // লগইন সফল হলে ড্যাশবোর্ডে নিয়ে যাবে
-  } else {
-    alert("ইউজারনেম অথবা পাসওয়ার্ড ভুল হয়েছে!");
-  }
+  fetch(userPath)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("ইউজার পাওয়া যায়নি");
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data.username === username && data.password === password) {
+        localStorage.setItem("g9user", JSON.stringify(data));
+        location.href = "dashboard.html";
+      } else {
+        alert("ভুল পাসওয়ার্ড!");
+      }
+    })
+    .catch(err => {
+      console.error("Login error:", err);
+      alert("ইউজারনেম বা পাসওয়ার্ড ভুল!");
+    });
 }
 
-// Logout function
-function logoutUser() {
-  localStorage.removeItem("authUser");
-  alert("সফলভাবে লগ আউট হয়েছে।");
-  window.location.href = "login.html";
-}
-
-// Check login status - যে পেজে ব্যবহার করবেন সেখানে কল করবেন
-function checkLogin() {
-  const authUser = localStorage.getItem("authUser");
-  if (!authUser) {
-    window.location.href = "login.html";
-  }
-}
-
-// Get current logged in user object or null
-function getCurrentUser() {
-  const authUser = localStorage.getItem("authUser");
-  return authUser ? JSON.parse(authUser) : null;
-}
-
-// Example: Use this in admin page or wherever নতুন ইউজার যোগ করতে চান
-// addUser("newuser", "newpassword");
-
-// Export functions if using modules (optional)
-// export { addUser, loginUser, logoutUser, checkLogin, getCurrentUser };
+// ✅ Auto-run: Block access if not logged in
+checkAuth();

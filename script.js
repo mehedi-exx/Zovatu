@@ -1,22 +1,24 @@
-// ======= Toast Notification System =======
+// ======= ✅ Toast Notification System =======
 function showToast(message) {
   const toast = document.createElement("div");
   toast.textContent = message;
-  toast.style.position = "fixed";
-  toast.style.bottom = "20px";
-  toast.style.left = "50%";
-  toast.style.transform = "translateX(-50%)";
-  toast.style.background = "#28a745";
-  toast.style.color = "white";
-  toast.style.padding = "12px 20px";
-  toast.style.borderRadius = "6px";
-  toast.style.boxShadow = "0 2px 8px rgba(0,0,0,0.3)";
-  toast.style.zIndex = "9999";
+  Object.assign(toast.style, {
+    position: "fixed",
+    bottom: "20px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    background: "#28a745",
+    color: "white",
+    padding: "12px 20px",
+    borderRadius: "6px",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.3)",
+    zIndex: "9999"
+  });
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 3000);
 }
 
-// ======= Product Generate Button =======
+// ======= ✅ Product Generate Button =======
 document.getElementById("generateBtn").addEventListener("click", () => {
   const name = document.getElementById("name").value.trim();
   const code = document.getElementById("code").value.trim();
@@ -42,6 +44,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
 
   const discount = offer && price ? Math.round(((price - offer) / price) * 100) : 0;
 
+  // ✅ Thumbnail Images
   let thumbHTML = "";
   const mainImg = imgs[0].value.trim();
   imgs.forEach((input, i) => {
@@ -51,6 +54,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   });
 
+  // ✅ Custom Fields
   const customFields = document.querySelectorAll(".custom-field-group");
   let customHTML = "";
   customFields.forEach(group => {
@@ -61,6 +65,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   });
 
+  // ✅ YouTube Video Embed
   let videoEmbed = "";
   if (video.includes("youtube.com") || video.includes("youtu.be")) {
     let videoId = "";
@@ -74,6 +79,18 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     }
   }
 
+  // ✅ Professional WhatsApp Button
+  const whatsappBtn = `
+  <div style="margin:20px 0;">
+    <a href="https://wa.me/${wa}?text=📦 আমি একটি পণ্য অর্ডার করতে চাই%0A🔖 প্রোডাক্ট: ${name}%0A💰 মূল্য: ${offer || price}৳%0A🧾 কোড: ${code}%0A📁 ক্যাটাগরি: ${category}%0A🚚 ডেলিভারি: ${delivery}" 
+       target="_blank"
+       style="display:flex;align-items:center;justify-content:center;gap:10px;background:#25D366;color:#fff;padding:14px 28px;border-radius:12px;font-weight:bold;text-decoration:none;font-size:18px;box-shadow:0 4px 10px rgba(0,0,0,0.1);transition:0.3s;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="height:24px;width:24px;">
+      WhatsApp এ অর্ডার করুন
+    </a>
+  </div>`;
+
+  // ✅ Final HTML Output
   const html = `
 <div style="text-align:center;">
   <img id="mainImg" src="${mainImg}" style="width:100%;max-width:500px;border-radius:10px;border:1px solid #ccc;margin-bottom:10px;">
@@ -86,14 +103,7 @@ document.getElementById("generateBtn").addEventListener("click", () => {
       <small style="color:limegreen;">(-${discount}%)</small>` 
       : `<span style="color:red;font-weight:bold;">৳${price}</span>`}
   </p>
-  <p style="text-align:center;margin:10px 0;">
-    <a href="https://wa.me/${wa}?text=📦 আমি একটি পণ্য অর্ডার করতে চাই%0A🔖 প্রোডাক্ট: ${name}%0A💰 মূল্য: ${offer || price}৳%0A🧾 কোড: ${code}%0A📁 ক্যাটাগরি: ${category}%0A🚚 ডেলিভারি: ${delivery}" 
-       target="_blank"
-       style="display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;padding:12px 24px;border-radius:8px;font-weight:bold;text-decoration:none;font-size:16px;">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="height:20px;width:20px;">
-      অর্ডার করুন WhatsApp এ
-    </a>
-  </p>
+  ${whatsappBtn}
   <ul style="list-style:none;padding:0;margin:15px auto;text-align:left;max-width:500px;">
     <li>🔢 কোড: ${code}</li>
     <li>📦 স্ট্যাটাস: ${status || "IN STOCK"}</li>
@@ -107,8 +117,8 @@ document.getElementById("generateBtn").addEventListener("click", () => {
     <p style="margin:0;"><strong>Description:</strong><br>${desc || ""}</p>
   </div>
   ${videoEmbed}
-</div>
-`;
+  <p style="display:none;"><a href="#">{getProduct} $price={৳${offer || price}} $sale={৳${price}} $style={1}</a></p>
+</div>`;
 
   document.getElementById("output").textContent = html;
   document.getElementById("preview").innerHTML = html;
@@ -117,7 +127,15 @@ document.getElementById("generateBtn").addEventListener("click", () => {
   showToast("✅ প্রোডাক্ট সফলভাবে জেনারেট হয়েছে");
 });
 
-// ======= Save Draft =======
+// ======= ✅ Copy Button =======
+document.getElementById("copyBtn")?.addEventListener("click", () => {
+  const outputText = document.getElementById("output").textContent;
+  navigator.clipboard.writeText(outputText).then(() => {
+    showToast("✅ কপি করা হয়েছে");
+  });
+});
+
+// ======= ✅ Save Draft to localStorage =======
 function saveDraft() {
   const draft = {
     id: localStorage.getItem("editDraftId") || Date.now(),
@@ -153,27 +171,29 @@ function saveDraft() {
   localStorage.removeItem("editDraftId");
 }
 
-// ======= Load for Edit =======
+// ======= ✅ Load Draft to Form =======
 function loadDraftToForm(id) {
   const drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
   const draft = drafts.find(d => d.id == id);
   if (!draft) return;
 
-  document.getElementById("name").value = draft.name;
-  document.getElementById("code").value = draft.code;
-  document.getElementById("price").value = draft.price;
-  document.getElementById("offer").value = draft.offer;
-  document.getElementById("unit").value = draft.unit;
-  document.getElementById("qty").value = draft.qty;
-  document.getElementById("brand").value = draft.brand;
-  document.getElementById("size").value = draft.size;
-  document.getElementById("color").value = draft.color;
-  document.getElementById("delivery").value = draft.delivery;
-  document.getElementById("status").value = draft.status;
-  document.getElementById("category").value = draft.category;
-  document.getElementById("desc").value = draft.desc;
-  document.getElementById("video").value = draft.video;
-  document.getElementById("wa").value = draft.wa;
+  const setValue = (id, val) => document.getElementById(id).value = val || "";
+
+  setValue("name", draft.name);
+  setValue("code", draft.code);
+  setValue("price", draft.price);
+  setValue("offer", draft.offer);
+  setValue("unit", draft.unit);
+  setValue("qty", draft.qty);
+  setValue("brand", draft.brand);
+  setValue("size", draft.size);
+  setValue("color", draft.color);
+  setValue("delivery", draft.delivery);
+  setValue("status", draft.status);
+  setValue("category", draft.category);
+  setValue("desc", draft.desc);
+  setValue("video", draft.video);
+  setValue("wa", draft.wa);
 
   const imgContainer = document.getElementById("imageInputs");
   imgContainer.innerHTML = "";
@@ -199,7 +219,7 @@ function loadDraftToForm(id) {
   });
 }
 
-// ======= Field Visibility =======
+// ======= ✅ Hidden Field Control =======
 function applyFieldVisibility() {
   const hiddenFields = JSON.parse(localStorage.getItem("hiddenFields") || "[]");
   hiddenFields.forEach(id => {
@@ -208,17 +228,9 @@ function applyFieldVisibility() {
   });
 }
 
-// ======= On Load =======
+// ======= ✅ On Page Load =======
 window.addEventListener("DOMContentLoaded", () => {
   applyFieldVisibility();
   const draftId = localStorage.getItem("editDraftId");
   if (draftId) loadDraftToForm(draftId);
-});
-
-// ======= Copy Button (With Toast) =======
-document.getElementById("copyBtn")?.addEventListener("click", () => {
-  const outputText = document.getElementById("output").textContent;
-  navigator.clipboard.writeText(outputText).then(() => {
-    showToast("✅ কপি করা হয়েছে");
-  });
 });

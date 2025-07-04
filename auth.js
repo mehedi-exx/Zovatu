@@ -1,61 +1,77 @@
-// auth.js
+// ======= User Data & Auth System =======
 
-// লগইন ফাংশন
+// Initialize users array from localStorage or empty
+let users = JSON.parse(localStorage.getItem("users") || "[]");
+
+// Function to save users array to localStorage
+function saveUsers() {
+  localStorage.setItem("users", JSON.stringify(users));
+}
+
+// Add new user function
+// Returns true if user added, false if username exists
+function addUser(username, password, premium = true) {
+  username = username.trim();
+  password = password.trim();
+  if (!username || !password) {
+    alert("ইউজারনেম এবং পাসওয়ার্ড দিতে হবে।");
+    return false;
+  }
+  const exists = users.find(u => u.username === username);
+  if (exists) {
+    alert("ইউজারনেমটি ইতিমধ্যেই ব্যবহৃত হচ্ছে!");
+    return false;
+  }
+  users.push({ username, password, premium });
+  saveUsers();
+  alert("নতুন ইউজার সফলভাবে যুক্ত হয়েছে!");
+  return true;
+}
+
+// Login function
 function loginUser() {
-  const usernameInput = document.getElementById("username").value.trim();
-  const passwordInput = document.getElementById("password").value;
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
 
-  // এখানে আপনার ইউজারনেম-পাসওয়ার্ড ভ্যালিডেশন করুন
-  // উদাহরণস্বরূপ:
-  const validUsers = {
-    "admin": "admin123",
-    "user1": "password1",
-    // প্রয়োজনে আরও ব্যবহারকারী যুক্ত করুন
-  };
-
-  if (!usernameInput || !passwordInput) {
-    alert("অনুগ্রহ করে ইউজারনেম ও পাসওয়ার্ড প্রদান করুন।");
+  if (!username || !password) {
+    alert("ইউজারনেম এবং পাসওয়ার্ড লিখুন।");
     return;
   }
 
-  if (validUsers[usernameInput] && validUsers[usernameInput] === passwordInput) {
-    // লগইন সফল
-    localStorage.setItem("isLoggedIn", "true");
-    localStorage.setItem("username", usernameInput);
-    // লগইন পেজ থেকে ড্যাশবোর্ডে নিয়ে যান
-    window.location.href = "dashboard.html";
+  const user = users.find(u => u.username === username && u.password === password);
+
+  if (user) {
+    localStorage.setItem("authUser", JSON.stringify(user));
+    alert("লগইন সফল হয়েছে!");
+    window.location.href = "dashboard.html";  // লগইন সফল হলে ড্যাশবোর্ডে নিয়ে যাবে
   } else {
-    alert("ইউজারনেম অথবা পাসওয়ার্ড সঠিক নয়।");
+    alert("ইউজারনেম অথবা পাসওয়ার্ড ভুল হয়েছে!");
   }
 }
 
-// পেজ লোডে লগইন স্টেট চেক
-function checkAuth() {
-  const isLoggedIn = localStorage.getItem("isLoggedIn");
-  if (isLoggedIn !== "true") {
-    // লগইন না থাকলে লগইন পেজে রিডাইরেক্ট
+// Logout function
+function logoutUser() {
+  localStorage.removeItem("authUser");
+  alert("সফলভাবে লগ আউট হয়েছে।");
+  window.location.href = "login.html";
+}
+
+// Check login status - যে পেজে ব্যবহার করবেন সেখানে কল করবেন
+function checkLogin() {
+  const authUser = localStorage.getItem("authUser");
+  if (!authUser) {
     window.location.href = "login.html";
   }
 }
 
-// লগআউট ফাংশন
-function logoutUser() {
-  localStorage.removeItem("isLoggedIn");
-  localStorage.removeItem("username");
-  localStorage.removeItem("editDraftId"); // যদি প্রয়োজন মনে করেন
-  // অন্য প্রয়োজনীয় localStorage ডাটা মুছে ফেলুন
-
-  // লগইন পেজে নিয়ে যান
-  window.location.href = "login.html";
+// Get current logged in user object or null
+function getCurrentUser() {
+  const authUser = localStorage.getItem("authUser");
+  return authUser ? JSON.parse(authUser) : null;
 }
 
-// DOMContentLoaded ইভেন্টে লগইন চেক করার জন্য
-document.addEventListener("DOMContentLoaded", () => {
-  // যদি এই পেজটি লগইন পেজ না হয়, তাহলে চেক করবেন
-  if (!window.location.href.includes("login.html")) {
-    checkAuth();
-  }
-});
+// Example: Use this in admin page or wherever নতুন ইউজার যোগ করতে চান
+// addUser("newuser", "newpassword");
 
-// যদি আপনার sidebar বা অন্য কোনো জায়গায় লগআউট বাটন থাকে তাহলে নিচের মত কল করুন:
-// <button onclick="logoutUser()">লগ আউট</button>
+// Export functions if using modules (optional)
+// export { addUser, loginUser, logoutUser, checkLogin, getCurrentUser };

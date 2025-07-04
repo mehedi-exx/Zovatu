@@ -1,54 +1,55 @@
-// auth.js
+// ======= Config =======
+const USER_FOLDER_PATH = 'users/'; // Folder where each user JSON file is stored
+const LOGGED_IN_KEY = 'loggedInUser';
 
-// 🔐 Check if user is authenticated
-function checkAuth() {
-  const user = localStorage.getItem("g9user");
-  const isLoginPage = location.pathname.endsWith("login.html");
-
-  if (!user && !isLoginPage) {
-    // Not logged in, redirect to login
-    location.href = "login.html";
-  }
-}
-
-// 🔓 Log out function
-function logout() {
-  localStorage.removeItem("g9user");
-  location.href = "login.html";
-}
-
-// 🔑 Login function
+// ======= Login Function =======
 function loginUser() {
   const username = document.getElementById("username").value.trim().toLowerCase();
   const password = document.getElementById("password").value.trim();
 
   if (!username || !password) {
-    alert("ইউজারনেম ও পাসওয়ার্ড দিতে হবে");
+    alert("⚠️ ইউজারনেম এবং পাসওয়ার্ড দিন।");
     return;
   }
 
-  const userPath = `users/${username}.json`;
-
-  fetch(userPath)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error("ইউজার পাওয়া যায়নি");
-      }
-      return response.json();
+  fetch(`${USER_FOLDER_PATH}${username}.json`)
+    .then(res => {
+      if (!res.ok) throw new Error("❌ ইউজার পাওয়া যায়নি");
+      return res.json();
     })
-    .then(data => {
-      if (data.username === username && data.password === password) {
-        localStorage.setItem("g9user", JSON.stringify(data));
-        location.href = "dashboard.html";
+    .then(userData => {
+      if (userData.password === password) {
+        localStorage.setItem(LOGGED_IN_KEY, username);
+        window.location.href = "dashboard.html";
       } else {
-        alert("ভুল পাসওয়ার্ড!");
+        alert("❌ পাসওয়ার্ড ভুল");
       }
     })
     .catch(err => {
-      console.error("Login error:", err);
-      alert("ইউজারনেম বা পাসওয়ার্ড ভুল!");
+      alert("❌ ইউজার পাওয়া যায়নি");
+      console.error(err);
     });
 }
 
-// ✅ Auto-run: Block access if not logged in
-checkAuth();
+// ======= Logout Function =======
+function logoutUser() {
+  localStorage.removeItem(LOGGED_IN_KEY);
+  window.location.href = "login.html";
+}
+
+// ======= Access Protection =======
+function protectPage() {
+  const currentPage = window.location.pathname;
+  const isLoggedIn = !!localStorage.getItem(LOGGED_IN_KEY);
+
+  if (!isLoggedIn && !currentPage.includes("login.html")) {
+    window.location.href = "login.html";
+  }
+
+  if (isLoggedIn && currentPage.includes("login.html")) {
+    window.location.href = "dashboard.html";
+  }
+}
+
+// Call this function on all protected pages
+protectPage();

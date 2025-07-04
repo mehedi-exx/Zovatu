@@ -22,7 +22,7 @@
   <a href="index.html">🔄 টিউটোরিয়াল </a>
   <a href="admin.html">📁 এডমিন প্যানেল </a>
   <a href="fieldManager.html">⚙️ ফিল্ড কাস্টমাইজ</a>
-  <a href="index.html">🔓 লগ আউট</a>
+  <a href="#" onclick="logout()">🔓 লগ আউট</a>
 </div>
 
 <main>
@@ -118,7 +118,17 @@
     }
   }
 
-  window.addEventListener("DOMContentLoaded", applyFieldVisibility);
+  function logout() {
+    localStorage.removeItem("loggedInUser");
+    window.location.replace("index.html");
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    if (!localStorage.getItem("loggedInUser")) {
+      window.location.replace("index.html");
+    }
+    applyFieldVisibility();
+  });
 </script>
 
 </body>

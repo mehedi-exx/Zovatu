@@ -1,3 +1,4 @@
+<!-- কোডের শুরু -->
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -227,9 +228,19 @@
     reader.readAsText(file);
   }
 
+  function checkLogin() {
+    if (!localStorage.getItem("loggedInUser")) {
+      window.location.replace("index.html");
+    }
+  }
+
   // Initial load
-  renderDrafts();
+  window.addEventListener("DOMContentLoaded", () => {
+    checkLogin();
+    renderDrafts();
+  });
 </script>
 
 </body>
 </html>
+<!-- কোডের শেষ -->

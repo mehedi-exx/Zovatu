@@ -22,7 +22,7 @@
   <a href="index.html">🔄 নতুন কোড জেনারেট</a>
   <a href="admin.html">📁 সেভ ড্রাফট লিস্ট</a>
   <a href="fieldManager.html">⚙️ ফিল্ড কাস্টমাইজ</a>
-  <a href="index.html">🔓 লগ আউট</a>
+  <a href="#" onclick="logoutUser()">🔓 লগ আউট</a> <!-- এখানে পরিবর্তন -->
 </div>
 
 <main>
@@ -118,7 +118,22 @@
     }
   }
 
-  window.addEventListener("DOMContentLoaded", applyFieldVisibility);
+  // ======= নতুন যোগ =======
+  // লগইন চেক: লগইন না থাকলে redirect
+  window.addEventListener("DOMContentLoaded", () => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
+    if (!isLoggedIn) {
+      window.location.replace("login.html");
+    }
+    applyFieldVisibility();
+  });
+
+  // লগআউট ফাংশন
+  function logoutUser() {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("editDraftId");
+    window.location.replace("login.html");
+  }
 </script>
 
 </body>

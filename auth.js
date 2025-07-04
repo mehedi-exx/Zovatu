@@ -1,55 +1,50 @@
-// ======= Config =======
-const USER_FOLDER_PATH = 'users/'; // Folder where each user JSON file is stored
-const LOGGED_IN_KEY = 'loggedInUser';
+// auth.js
 
-// ======= Login Function =======
+// ===== Login Function =====
 function loginUser() {
   const username = document.getElementById("username").value.trim().toLowerCase();
   const password = document.getElementById("password").value.trim();
 
   if (!username || !password) {
-    alert("⚠️ ইউজারনেম এবং পাসওয়ার্ড দিন।");
+    alert("⚠️ ইউজারনেম এবং পাসওয়ার্ড দিন");
     return;
   }
 
-  fetch(`${USER_FOLDER_PATH}${username}.json`)
+  fetch(`users/${username}.json`)
     .then(res => {
-      if (!res.ok) throw new Error("❌ ইউজার পাওয়া যায়নি");
+      if (!res.ok) throw new Error("User not found");
       return res.json();
     })
-    .then(userData => {
-      if (userData.password === password) {
-        localStorage.setItem(LOGGED_IN_KEY, username);
+    .then(data => {
+      if (data.password === password) {
+        localStorage.setItem("loggedIn", "true");
+        localStorage.setItem("username", data.username);
         window.location.href = "dashboard.html";
       } else {
-        alert("❌ পাসওয়ার্ড ভুল");
+        alert("❌ ভুল পাসওয়ার্ড!");
       }
     })
-    .catch(err => {
-      alert("❌ ইউজার পাওয়া যায়নি");
-      console.error(err);
+    .catch(() => {
+      alert("❌ ইউজার পাওয়া যায়নি!");
     });
 }
 
-// ======= Logout Function =======
+// ===== Logout Function =====
 function logoutUser() {
-  localStorage.removeItem(LOGGED_IN_KEY);
+  localStorage.removeItem("loggedIn");
+  localStorage.removeItem("username");
+  localStorage.removeItem("editDraftId"); // draft edit state
   window.location.href = "login.html";
 }
 
-// ======= Access Protection =======
-function protectPage() {
-  const currentPage = window.location.pathname;
-  const isLoggedIn = !!localStorage.getItem(LOGGED_IN_KEY);
-
-  if (!isLoggedIn && !currentPage.includes("login.html")) {
+// ===== Auth Protection =====
+function checkAuth() {
+  if (!localStorage.getItem("loggedIn")) {
     window.location.href = "login.html";
-  }
-
-  if (isLoggedIn && currentPage.includes("login.html")) {
-    window.location.href = "dashboard.html";
   }
 }
 
-// Call this function on all protected pages
-protectPage();
+// Automatically protect pages (except login.html)
+if (!location.pathname.endsWith("login.html")) {
+  checkAuth();
+}

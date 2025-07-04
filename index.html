@@ -114,6 +114,22 @@
   </div>
 </div>
 
-<script src="auth.js"></script>
+<script>
+  function loginUser() {
+    const username = document.getElementById("username").value.trim();
+    const password = document.getElementById("password").value.trim();
+
+    // আপনার সিস্টেমের ইউজারনেম/পাসওয়ার্ড চেক এখানে
+    if (username === "admin" && password === "123456") {
+      // লগইন সফল হলে localStorage তে লগইন স্টেট সেট করা হচ্ছে
+      localStorage.setItem("isLoggedIn", "true");
+      // ড্যাশবোর্ড পেজে রিডাইরেক্ট
+      window.location.href = "dashboard.html";
+    } else {
+      alert("ইউজারনেম অথবা পাসওয়ার্ড ভুল।");
+    }
+  }
+</script>
+
 </body>
 </html>

@@ -1,15 +1,14 @@
-/* G9Tool – Final Full CSS with All Features & Optimizations */
+/* G9Tool – Optimized CSS (Based on Old Version) */
 
-/* ✅ CSS Variables for Theme */
+/* Global Theme Variables */
 :root {
   --primary: #28a745;
   --secondary: #007bff;
   --danger: #dc3545;
-  --bg-dark: #121212;
+  --bg: #121212;
   --bg-light: #1c1c1c;
-  --text-light: #ffffff;
-  --text-dark: #000000;
-  --highlight: #00bcd4;
+  --text: #ffffff;
+  --accent: #00bcd4;
 }
 
 /* Reset & Base */
@@ -21,11 +20,10 @@
 
 body {
   font-family: 'Segoe UI', sans-serif;
-  background-color: var(--bg-dark);
-  color: var(--text-light);
-  line-height: 1.6;
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
   font-size: 16px;
-  scroll-behavior: smooth;
 }
 
 /* Header */
@@ -38,7 +36,6 @@ header.header {
   align-items: center;
   justify-content: center;
   height: 60px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
 
 .left-icons {
@@ -84,17 +81,13 @@ main {
   padding: 20px;
 }
 
-.container {
+.form-wrapper {
   max-width: 720px;
   margin: auto;
-}
-
-/* Form Styling */
-.form-wrapper {
   background: var(--bg-light);
   padding: 25px;
   border-radius: 12px;
-  box-shadow: 0 0 12px rgba(0,0,0,0.4);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
 }
 
 input,
@@ -102,7 +95,7 @@ textarea,
 select {
   width: 100%;
   background: #2a2a2a;
-  color: #fff;
+  color: white;
   border: 1px solid #444;
   border-radius: 8px;
   padding: 12px 15px;
@@ -114,58 +107,60 @@ select {
 input:focus,
 textarea:focus,
 select:focus {
+  border-color: var(--accent);
   outline: none;
-  border-color: var(--highlight);
   background-color: #2e2e2e;
 }
 
-button,
-.btn {
+button {
   border: none;
-  padding: 12px 20px;
+  padding: 12px 18px;
   font-size: 16px;
   font-weight: bold;
   border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out, opacity 0.2s ease;
+  transition: 0.2s ease-in-out;
   display: inline-flex;
   align-items: center;
-}
-
-button i, .btn i {
-  margin-right: 6px;
+  gap: 6px;
 }
 
 #generateBtn {
-  background-color: var(--primary);
-  color: #fff;
-  margin-right: 10px;
+  background: var(--primary);
+  color: white;
 }
 
 #copyBtn {
-  background-color: var(--secondary);
-  color: #fff;
+  background: var(--secondary);
+  color: white;
 }
 
-button:hover, .btn:hover {
+button:hover {
   opacity: 0.9;
 }
 
-#imageInputs {
-  margin-bottom: 15px;
+/* Output */
+.output, .live-preview {
+  margin-top: 20px;
+  background: var(--bg-light);
+  padding: 15px;
+  border-radius: 10px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  overflow-x: auto;
 }
 
-/* Sidebar Menu */
+/* Sidebar */
 .sidebar {
   position: fixed;
   top: 0;
   left: -100%;
-  width: 75%;
   height: 100%;
+  width: 75%;
   background: #1f1f1f;
   padding: 60px 20px;
-  transition: left 0.3s ease-in-out;
-  z-index: 1000;
+  transition: 0.3s ease-in-out;
+  z-index: 999;
 }
 
 .sidebar.active {
@@ -175,16 +170,15 @@ button:hover, .btn:hover {
 .sidebar a {
   display: block;
   background: #2a2a2a;
-  color: #fff;
+  color: white;
   text-decoration: none;
-  margin-bottom: 12px;
-  padding: 14px;
+  margin-bottom: 10px;
+  padding: 12px;
   border-radius: 8px;
-  font-weight: 500;
 }
 
 .sidebar a:hover {
-  background: #333;
+  background: #444;
 }
 
 .close-sidebar {
@@ -192,49 +186,34 @@ button:hover, .btn:hover {
   top: 15px;
   right: 20px;
   background: none;
-  color: #fff;
+  color: white;
   border: none;
   font-size: 24px;
   cursor: pointer;
 }
 
-/* Preview Output Box */
-.preview-box {
-  background: var(--bg-light);
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  margin-top: 20px;
-  position: relative;
+/* Thumbnail Image */
+.image-preview-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
 }
-
-#previewArea {
-  background: white;
-  color: black;
-  padding: 15px;
-  border-radius: 8px;
-  overflow-x: auto;
-  font-family: inherit;
-  min-height: 200px;
-}
-
-/* Hide code but allow copy */
-.code-hidden {
-  display: none;
-}
-
-#copyBtn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: var(--secondary);
-  color: #fff;
-  padding: 8px 12px;
+.image-preview-container img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
   border-radius: 6px;
-  font-size: 14px;
+  border: 1px solid #444;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.image-preview-container img:hover {
+  transform: scale(1.1);
+  border-color: var(--accent);
 }
 
-/* Toast Notification */
+/* Toast */
 .toast {
   position: fixed;
   bottom: 20px;
@@ -253,65 +232,7 @@ button:hover, .btn:hover {
   transform: translateY(-10px);
 }
 
-/* Image Gallery */
-.image-preview-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-.image-preview-container img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 6px;
-  border: 1px solid #444;
-  cursor: pointer;
-  transition: 0.3s;
-}
-.image-preview-container img:hover {
-  transform: scale(1.1);
-  border-color: var(--highlight);
-}
-
-/* Field Grouping */
-.field-group {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-.field-group > * {
-  flex: 1;
-}
-
-/* Toggle Section */
-.toggle-section {
-  background: #2a2a2a;
-  padding: 10px 15px;
-  border-radius: 8px;
-  margin-bottom: 15px;
-  cursor: pointer;
-  transition: 0.2s;
-  border: 1px solid #444;
-}
-.toggle-section:hover {
-  background: #3a3a3a;
-}
-
-/* Scrollbar Styling */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-thumb {
-  background: #555;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #777;
-}
-
-/* Responsive Design */
+/* Responsive */
 @media (max-width: 480px) {
   header.header {
     height: 56px;
@@ -340,8 +261,7 @@ button:hover, .btn:hover {
     font-size: 15px;
   }
 
-  button,
-  .btn {
+  button {
     width: 100%;
     margin-bottom: 10px;
   }

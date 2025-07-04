@@ -1,17 +1,6 @@
-/* G9Tool – Optimized CSS (Based on Old Version) */
+/* G9Tool – Final Optimized CSS v3.0 */
 
-/* Global Theme Variables */
-:root {
-  --primary: #28a745;
-  --secondary: #007bff;
-  --danger: #dc3545;
-  --bg: #121212;
-  --bg-light: #1c1c1c;
-  --text: #ffffff;
-  --accent: #00bcd4;
-}
-
-/* Reset & Base */
+/* Base Reset */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -20,10 +9,9 @@
 
 body {
   font-family: 'Segoe UI', sans-serif;
-  background-color: var(--bg);
-  color: var(--text);
+  background-color: #121212;
+  color: #fff;
   line-height: 1.5;
-  font-size: 16px;
 }
 
 /* Header */
@@ -31,11 +19,12 @@ header.header {
   background: #1e1e1e;
   padding: 14px 16px;
   border-radius: 0 0 15px 15px;
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 60px;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .left-icons {
@@ -49,7 +38,7 @@ header.header {
 .menu-btn {
   background: none;
   border: none;
-  color: white;
+  color: #fff;
   font-size: 22px;
   cursor: pointer;
 }
@@ -76,18 +65,69 @@ header.header {
   text-decoration: none;
 }
 
-/* Main */
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  height: 100%;
+  width: 75%;
+  background: #1f1f1f;
+  padding: 60px 20px;
+  transition: 0.3s ease-in-out;
+  z-index: 1000;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+}
+
+.sidebar.active {
+  left: 0;
+}
+
+.sidebar a {
+  display: block;
+  background: #2a2a2a;
+  color: #fff;
+  text-decoration: none;
+  margin-bottom: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar a:hover {
+  background: #3a3a3a;
+}
+
+.close-sidebar {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  color: #fff;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Main Content */
 main {
   padding: 20px;
 }
 
-.form-wrapper {
-  max-width: 720px;
-  margin: auto;
-  background: var(--bg-light);
-  padding: 25px;
+.form-wrapper,
+.output,
+.live-preview,
+.settings-box,
+.admin-panel,
+.product-card {
+  background: #1c1c1c;
   border-radius: 12px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
 input,
@@ -101,15 +141,6 @@ select {
   padding: 12px 15px;
   margin-bottom: 15px;
   font-size: 16px;
-  transition: 0.3s;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-  border-color: var(--accent);
-  outline: none;
-  background-color: #2e2e2e;
 }
 
 button {
@@ -119,117 +150,61 @@ button {
   font-weight: bold;
   border-radius: 8px;
   cursor: pointer;
-  transition: 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-}
-
-#generateBtn {
-  background: var(--primary);
-  color: white;
-}
-
-#copyBtn {
-  background: var(--secondary);
-  color: white;
 }
 
 button:hover {
   opacity: 0.9;
 }
 
-/* Output */
-.output, .live-preview {
-  margin-top: 20px;
-  background: var(--bg-light);
-  padding: 15px;
-  border-radius: 10px;
+#generateBtn {
+  background: #28a745;
+  color: white;
+}
+
+#copyBtn {
+  background: #007bff;
+  color: white;
+}
+
+#resetBtn {
+  background: #dc3545;
+  color: white;
+}
+
+/* Output box */
+.output {
   font-family: monospace;
   white-space: pre-wrap;
   overflow-x: auto;
 }
 
-/* Sidebar */
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: -100%;
-  height: 100%;
-  width: 75%;
-  background: #1f1f1f;
-  padding: 60px 20px;
-  transition: 0.3s ease-in-out;
-  z-index: 999;
+.preview-only {
+  font-family: 'Segoe UI', sans-serif;
+  background: #2b2b2b;
+  padding: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  color: #ddd;
 }
 
-.sidebar.active {
-  left: 0;
-}
-
-.sidebar a {
-  display: block;
-  background: #2a2a2a;
-  color: white;
-  text-decoration: none;
-  margin-bottom: 10px;
-  padding: 12px;
-  border-radius: 8px;
-}
-
-.sidebar a:hover {
-  background: #444;
-}
-
-.close-sidebar {
+/* Notification badge */
+.badge {
   position: absolute;
-  top: 15px;
-  right: 20px;
-  background: none;
+  top: -5px;
+  right: -5px;
+  background: red;
   color: white;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-}
-
-/* Thumbnail Image */
-.image-preview-container {
+  font-size: 12px;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
   display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
-  flex-wrap: wrap;
-}
-.image-preview-container img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 6px;
-  border: 1px solid #444;
-  cursor: pointer;
-  transition: 0.3s;
-}
-.image-preview-container img:hover {
-  transform: scale(1.1);
-  border-color: var(--accent);
-}
-
-/* Toast */
-.toast {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #323232;
-  color: #fff;
-  padding: 12px 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-  opacity: 0;
-  transition: opacity 0.5s ease, transform 0.5s ease;
-  z-index: 2000;
-}
-.toast.show {
-  opacity: 1;
-  transform: translateY(-10px);
+  align-items: center;
+  justify-content: center;
 }
 
 /* Responsive */
@@ -252,13 +227,12 @@ button:hover {
     font-size: 20px;
   }
 
-  .form-wrapper {
+  .form-wrapper,
+  .output,
+  .live-preview,
+  .settings-box,
+  .admin-panel {
     padding: 15px;
-  }
-
-  input,
-  textarea {
-    font-size: 15px;
   }
 
   button {
@@ -268,9 +242,5 @@ button:hover {
 
   #generateBtn {
     margin-right: 0;
-  }
-
-  .sidebar {
-    width: 100%;
   }
 }

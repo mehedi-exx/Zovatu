@@ -1,0 +1,16 @@
+/* src/pages/TutorialPage.css */
+.tutorial-container .section {
+    background: #1c1c1c;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+.tutorial-container h2 {
+    color: #00e5ff;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+.tutorial-container p {
+    line-height: 1.7;
+    color: #ccc;
+}

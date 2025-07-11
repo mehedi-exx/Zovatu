@@ -6,6 +6,107 @@
   <title>G9Tool Dashboard</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 20px;
+      background-color: #1e1e2f;
+      color: white;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .menu-btn,
+    .close-sidebar {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -250px;
+      width: 250px;
+      height: 100%;
+      background-color: #2d2d44;
+      color: white;
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+      transition: left 0.3s ease;
+      z-index: 1000;
+    }
+
+    .sidebar.active {
+      left: 0;
+    }
+
+    .sidebar .close-sidebar {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      font-size: 22px;
+    }
+
+    .sidebar a {
+      display: block;
+      margin: 15px 0;
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .form-wrapper {
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 15px;
+      margin: 5px;
+      cursor: pointer;
+      border-radius: 6px;
+      border: none;
+      background-color: #1a73e8;
+      color: white;
+    }
+
+    .output, .live-preview {
+      margin-top: 30px;
+      padding: 20px;
+      background: #f5f5f5;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .form-wrapper {
+        margin: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -22,9 +123,12 @@
   <a href="tutorial.html">📚 টিউটোরিয়াল </a>
   <a href="admin.html">🧑‍💻 এডমিন প্যানেল </a>
   <a href="fieldManager.html">⚙️ ফিল্ড কাস্টমাইজ</a>
-  <a href="file%20manager%20/download-theme.html"><i class="fab fa-blogger-b"></i> ডাউনলোড থিম</a>
+  <a href="https://mehedi-exx.github.io/G9-Tool/file%20manager/Theme.html" target="_blank">
+    <i class="fab fa-blogger-b"></i> ডাউনলোড থিম
+  </a>
   <a href="#" onclick="logout()">🔓 লগ আউট</a>
 </div>
+
 <main>
   <div class="form-wrapper">
     <div id="formFields">

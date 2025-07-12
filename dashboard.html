@@ -9,206 +9,125 @@
 </head>
 <body>
 
-  <div class="sidebar" id="sidebar">
-    <button class="close-sidebar" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
-    <a href="tutorial.html">📚 টিউটোরিয়াল </a>
-    <a href="admin.html">🧑‍💻 এডমিন প্যানেল </a>
-    <a href="fieldManager.html">⚙️ ফিল্ড কাস্টমাইজ</a>
-    <a href="Theme.html"><i class="fab fa-blogger-b"></i> ডাউনলোড থিম</a>
-    <a href="#" onclick="logout()">🔓 লগ আউট</a>
+<header class="header">
+  <div class="left-icons">
+    <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
   </div>
-  
-  <main>
-    <div class="form-wrapper">
-      <div id="formFields">
-        <input type="text" id="name" placeholder="প্রোডাক্ট নাম" required>
-        <input type="text" id="code" placeholder="প্রোডাক্ট কোড" required>
-        <input type="number" id="price" placeholder="মূল্য (৳)" required>
-        <input type="number" id="offer" placeholder="অফার মূল্য (ঐচ্ছিক)">
-        <input type="text" id="unit" placeholder="ইউনিট (যেমনঃ পিস, কেজি)">
-        <input type="number" id="qty" placeholder="পরিমাণ (Qty)">
-        <input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি">
-        <input type="text" id="size" placeholder="সাইজ অপশন">
-        <input type="text" id="color" placeholder="রঙ অপশন">
-        <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
-        <input type="text" id="status" placeholder="স্ট্যাটাস">
-        <input type="text" id="category" placeholder="ক্যাটাগরি">
-        <textarea id="desc" rows="3" placeholder="প্রোডাক্ট বর্ণনা"></textarea>
-        <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)">
-        <input type="tel" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)" required>
+  <div class="logo"><i class="fas fa-toolbox"></i> G9Tool</div>
+  <a class="telegram-icon" href="https://t.me/yourchannel" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+</header>
 
-        <div id="imageInputs">
-          <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)" required>
-        </div>
+<div class="sidebar" id="sidebar">
+  <button class="close-sidebar" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
+  <a href="tutorial.html">📚 টিউটোরিয়াল </a>
+  <a href="admin.html">🧑‍💻 এডমিন প্যানেল </a>
+  <a href="fieldManager.html">⚙️ ফিল্ড কাস্টমাইজ</a>
+  <a href="/G9-Tool/file%20manager/Theme.html"><i class="fab fa-blogger-b"></i> ডাউনলোড থিম</a>
+  <a href="#" onclick="logout()">🔓 লগ আউট</a>
+</div>
+<main>
+  <div class="form-wrapper">
+    <div id="formFields">
+      <input type="text" id="name" placeholder="প্রোডাক্ট নাম">
+      <input type="text" id="code" placeholder="প্রোডাক্ট কোড">
+      <input type="number" id="price" placeholder="মূল্য (৳)">
+      <input type="number" id="offer" placeholder="অফার মূল্য (ঐচ্ছিক)">
+      <input type="text" id="unit" placeholder="ইউনিট (যেমনঃ পিস, কেজি)">
+      <input type="number" id="qty" placeholder="পরিমাণ (Qty)">
+      <input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি">
+      <input type="text" id="size" placeholder="সাইজ অপশন">
+      <input type="text" id="color" placeholder="রঙ অপশন">
+      <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
+      <input type="text" id="status" placeholder="স্ট্যাটাস">
+      <input type="text" id="category" placeholder="ক্যাটাগরি">
+      <textarea id="desc" rows="3" placeholder="প্রোডাক্ট বর্ণনা"></textarea>
+      <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)">
+      <input type="tel" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
 
-        <div id="customFields">
-          <div class="custom-field-group">
-            <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
-            <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
-          </div>
-        </div>
-
-        <button onclick="addCustomField()" type="button"><i class="fas fa-plus"></i> কাস্টম তথ্য যোগ করুন</button>
-        <button onclick="addImageField()" type="button"><i class="fas fa-image"></i> আরও ছবি যোগ করুন</button>
-        <button onclick="saveDraft()" type="button"><i class="fas fa-save"></i> ড্রাফট সেভ করুন</button>
+      <div id="imageInputs">
+        <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
       </div>
 
-      <br />
-      <button id="generateBtn"><i class="fas fa-magic"></i> জেনারেট</button>
-      <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
-      <button id="clearBtn"><i class="fas fa-trash"></i> ক্লিয়ার করুন</button>
+      <div id="customFields">
+        <div class="custom-field-group">
+          <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
+          <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
+        </div>
+      </div>
+
+      <button onclick="addCustomField()" type="button"><i class="fas fa-plus"></i> কাস্টম তথ্য যোগ করুন</button>
+      <button onclick="addImageField()" type="button"><i class="fas fa-image"></i> আরও ছবি যোগ করুন</button>
     </div>
 
-    <div class="output" id="output"></div>
-    <div class="live-preview" id="preview"></div>
-  </main>
+    <br />
+    <button id="generateBtn"><i class="fas fa-magic"></i> জেনারেট</button>
+    <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
+  </div>
 
-  <script src="script.js"></script>
-  <script>
-    function toggleSidebar() {
-      document.getElementById("sidebar").classList.toggle("active");
-    }
+  <div class="output" id="output"></div>
+  <div class="live-preview" id="preview"></div>
+</main>
 
-    function addImageField() {
-      const container = document.getElementById("imageInputs");
-      const input = document.createElement("input");
-      input.type = "url";
-      input.placeholder = "ছবির লিংক (Image URL)";
-      input.className = "img-url";
-      container.appendChild(input);
-    }
+<script src="script.js"></script>
+<script>
+  function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("active");
+  }
 
-    function addCustomField() {
-      const container = document.getElementById("customFields");
-      const group = document.createElement("div");
-      group.className = "custom-field-group";
-      group.innerHTML = `
-        <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
-        <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
-        <button onclick="removeCustomField(this)" type="button" class="remove-btn"><i class="fas fa-times"></i></button>
-      `;
-      container.appendChild(group);
-    }
+  function addImageField() {
+    const container = document.getElementById("imageInputs");
+    const input = document.createElement("input");
+    input.type = "url";
+    input.placeholder = "ছবির লিংক (Image URL)";
+    input.className = "img-url";
+    container.appendChild(input);
+  }
 
-    function removeCustomField(btn) {
-      btn.parentElement.remove();
-    }
+  function addCustomField() {
+    const container = document.getElementById("customFields");
+    const group = document.createElement("div");
+    group.className = "custom-field-group";
+    group.innerHTML = `
+      <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
+      <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
+    `;
+    container.appendChild(group);
+  }
 
-    function saveDraft() {
-      const data = collectFormData();
-      if (!data.name || !data.code || !data.price) {
-        alert("⚠️ নাম, কোড এবং মূল্য পূরণ করুন");
-        return;
-      }
-      
-      const drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
-      data.id = Date.now();
-      data.timestamp = new Date().toLocaleString('bn-BD');
-      drafts.push(data);
-      localStorage.setItem("drafts", JSON.stringify(drafts));
-      alert("✅ ড্রাফট সেভ হয়েছে");
-    }
-
-    function clearForm() {
-      document.getElementById("formFields").querySelectorAll("input, textarea").forEach(el => el.value = "");
-      document.getElementById("output").innerHTML = "";
-      document.getElementById("preview").innerHTML = "";
-    }
-
-    function collectFormData() {
-      const images = Array.from(document.querySelectorAll(".img-url")).map(el => el.value).filter(v => v);
-      const customFields = {};
-      document.querySelectorAll(".custom-field-group").forEach(group => {
-        const key = group.querySelector(".custom-key").value;
-        const value = group.querySelector(".custom-value").value;
-        if (key && value) customFields[key] = value;
-      });
-
-      return {
-        name: document.getElementById("name").value,
-        code: document.getElementById("code").value,
-        price: document.getElementById("price").value,
-        offer: document.getElementById("offer").value,
-        unit: document.getElementById("unit").value,
-        qty: document.getElementById("qty").value,
-        brand: document.getElementById("brand").value,
-        size: document.getElementById("size").value,
-        color: document.getElementById("color").value,
-        delivery: document.getElementById("delivery").value,
-        status: document.getElementById("status").value,
-        category: document.getElementById("category").value,
-        desc: document.getElementById("desc").value,
-        video: document.getElementById("video").value,
-        wa: document.getElementById("wa").value,
-        images: images,
-        customFields: customFields
-      };
-    }
-
-    function applyFieldVisibility() {
-      const visibility = JSON.parse(localStorage.getItem("fieldVisibility") || "{}");
-      const optionalFields = [
-        "offer", "unit", "qty", "brand", "size", "color",
-        "delivery", "status", "category", "desc", "images",
-        "video", "customFields"
-      ];
-      optionalFields.forEach(key => {
-        const el = document.getElementById(key);
-        if (el && visibility[key] === false) {
-          el.style.display = "none";
-        }
-      });
-
-      if (visibility.images === false) {
-        document.getElementById("imageInputs").style.display = "none";
-      }
-      if (visibility.customFields === false) {
-        document.getElementById("customFields").style.display = "none";
-      }
-    }
-
-    function logout() {
-      localStorage.removeItem("loggedInUser");
-      window.location.replace("index.html");
-    }
-
-    document.getElementById("clearBtn").addEventListener("click", clearForm);
-
-    window.addEventListener("DOMContentLoaded", () => {
-      if (!localStorage.getItem("loggedInUser")) {
-        window.location.replace("index.html");
-      }
-      applyFieldVisibility();
-      
-      // Load draft if editing
-      const editId = localStorage.getItem("editDraftId");
-      if (editId) {
-        const drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
-        const draft = drafts.find(d => d.id == editId);
-        if (draft) {
-          Object.keys(draft).forEach(key => {
-            const el = document.getElementById(key);
-            if (el) el.value = draft[key];
-          });
-          if (draft.images) {
-            draft.images.forEach((img, i) => {
-              if (i > 0) addImageField();
-              document.querySelectorAll(".img-url")[i].value = img;
-            });
-          }
-        }
-        localStorage.removeItem("editDraftId");
+  function applyFieldVisibility() {
+    const visibility = JSON.parse(localStorage.getItem("fieldVisibility") || "{}");
+    const optionalFields = [
+      "offer", "unit", "qty", "brand", "size", "color",
+      "delivery", "status", "category", "desc", "images",
+      "video", "customFields"
+    ];
+    optionalFields.forEach(key => {
+      const el = document.getElementById(key);
+      if (el && visibility[key] === false) {
+        el.style.display = "none";
       }
     });
-  </script>
 
-  <script>
-    fetch("header.html")
-      .then(response => response.text())
-      .then(data => {
-        document.body.insertAdjacentHTML("afterbegin", data);
-      });
-  </script>
+    if (visibility.images === false) {
+      document.getElementById("imageInputs").style.display = "none";
+    }
+    if (visibility.customFields === false) {
+      document.getElementById("customFields").style.display = "none";
+    }
+  }
+
+  function logout() {
+    localStorage.removeItem("loggedInUser");
+    window.location.replace("index.html");
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    if (!localStorage.getItem("loggedInUser")) {
+      window.location.replace("index.html");
+    }
+    applyFieldVisibility();
+  });
+</script>
+
 </body>
 </html>
-

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>G9Tool Premium</title>
+  <meta name="description" content="G9Tool Premium - Secure File Management and User Dashboard" />
+  <meta name="keywords" content="G9Tool, file management, user dashboard, admin panel, premium, secure" />
+  <meta name="author" content="G9Tool Team" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+  <link rel="stylesheet" href="src/css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+  <!-- Login Card -->
+  <div class="login-box">
+    <h2><i class="fas fa-user-shield"></i> লগইন করুন</h2>
+    <input type="text" id="username" placeholder="ইউজারনেম" />
+    <input type="password" id="password" placeholder="পাসওয়ার্ড" />
+    <button class="login-btn" onclick="loginUser()"><i class="fas fa-sign-in-alt"></i> লগইন</button>
+
+    <div class="contact-links">
+      প্রিমিয়াম এক্সেস নিতে যোগাযোগ করুন:
+      <br />
+      <a href="https://wa.me/8801627647776" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a> |
+      <a href="https://t.me/mehedi_exx" target="_blank"><i class="fab fa-telegram-plane"></i> Telegram</a>
+    </div>
+  </div>
+
+  <script src="src/js/auth.js"></script>
+  <div class="footer">
+    &copy; 2025 G9Tool. All rights reserved.
+  </div>
+
+  <script>
+    fetch("src/html/header.html")
+      .then(response => response.text())
+      .then(data => {
+        document.body.insertAdjacentHTML("afterbegin", data);
+      });
+  </script>
+</body>
+</html>
+

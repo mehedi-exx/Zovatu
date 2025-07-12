@@ -141,28 +141,8 @@
   <button class="save-btn" type="button" onclick="saveSettings()">আপডেট করুন</button>
 </main>
 
-  <script>
-    // ✅ Toast Notification
-    function showToast(message) {
-      const toast = document.createElement("div");
-      toast.textContent = message;
-      toast.style = `
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #28a745;
-        color: white;
-        padding: 12px 20px;
-        border-radius: 6px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        z-index: 9999;
-      `;
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 3000);
-    }
-
-    const mandatoryFields = [
+<script>
+  const mandatoryFields = [
     { key: "name", label: "প্রোডাক্ট নাম" },
     { key: "code", label: "প্রোডাক্ট কোড" },
     { key: "price", label: "মূল্য প্রাইস (৳)" },
@@ -222,7 +202,7 @@
     });
 
     localStorage.setItem("fieldVisibility", JSON.stringify(newVisibility));
-    showToast("✅ আপডেট সফল হয়েছে!");
+    alert("আপডেট সফল হয়েছে!");
   }
 
   function checkLogin() {

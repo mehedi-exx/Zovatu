@@ -158,50 +158,119 @@ function saveDraft() {
   localStorage.removeItem("editDraftId");
 }
 
-// ✅ Load Draft to Form
-function loadDraftToForm(id) {
-  const draft = JSON.parse(localStorage.getItem("drafts") || "[]").find(d => d.id == id);
-  if (!draft) return;
-  const set = (id, val) => document.getElementById(id).value = val || "";
+// ✅ Draft Management
+let currentPage = 1;
+const itemsPerPage = 5;
 
-  for (let key in draft) if (typeof draft[key] === "string") set(key, draft[key]);
+function renderDrafts() {
+  let drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
+  const searchTerm = document.getElementById("draftSearch").value.toLowerCase();
+  const sortBy = document.getElementById("draftSort").value;
 
-  const imgContainer = document.getElementById("imageInputs");
-  imgContainer.innerHTML = "";
-  (draft.images || []).forEach(url => {
-    const input = document.createElement("input");
-    input.type = "url";
-    input.className = "img-url";
-    input.placeholder = "ছবির লিংক (Image URL)";
-    input.value = url;
-    imgContainer.appendChild(input);
+  // Filter
+  if (searchTerm) {
+    drafts = drafts.filter(d => d.name.toLowerCase().includes(searchTerm) || d.code.toLowerCase().includes(searchTerm));
+  }
+
+  // Sort
+  drafts.sort((a, b) => {
+    if (sortBy === "newest") return b.id - a.id;
+    if (sortBy === "oldest") return a.id - b.id;
+    if (sortBy === "nameAsc") return a.name.localeCompare(b.name);
+    if (sortBy === "nameDesc") return b.name.localeCompare(a.name);
+    return 0;
   });
 
-  const customContainer = document.getElementById("customFields");
-  customContainer.innerHTML = "";
-  (draft.customFields || []).forEach(field => {
-    const group = document.createElement("div");
-    group.className = "custom-field-group";
-    group.innerHTML = `
-      <input type="text" class="custom-key" value="${field.key}">
-      <input type="text" class="custom-value" value="${field.value}">
+  // Pagination
+  const totalPages = Math.ceil(drafts.length / itemsPerPage);
+  const start = (currentPage - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  const paginatedDrafts = drafts.slice(start, end);
+
+  const draftListDiv = document.getElementById("draftList");
+  draftListDiv.innerHTML = "";
+
+  if (paginatedDrafts.length === 0) {
+    draftListDiv.innerHTML = "<p style=\"text-align:center;\">কোনো ড্রাফট পাওয়া যায়নি।</p>";
+    document.getElementById("pageInfo").textContent = "";
+    document.getElementById("prevPage").disabled = true;
+    document.getElementById("nextPage").disabled = true;
+    return;
+  }
+
+  paginatedDrafts.forEach(draft => {
+    const draftItem = document.createElement("div");
+    draftItem.className = "draft-item";
+    draftItem.innerHTML = `
+      <h3>${draft.name} (${draft.code})</h3>
+      <p>মূল্য: ৳${draft.price} ${draft.offer ? `(অফার: ৳${draft.offer})` : ""}</p>
+      <p>সেভ করা হয়েছে: ${new Date(draft.id).toLocaleString()}</p>
+      <button onclick="loadDraftToForm(${draft.id})">এডিট</button>
+      <button onclick="deleteDraft(${draft.id})">ডিলিট</button>
     `;
-    customContainer.appendChild(group);
+    draftListDiv.appendChild(draftItem);
   });
+
+  document.getElementById("pageInfo").textContent = `পৃষ্ঠা ${currentPage} এর ${totalPages}`; 
+  document.getElementById("prevPage").disabled = currentPage === 1;
+  document.getElementById("nextPage").disabled = currentPage === totalPages;
 }
 
-// ✅ Field Visibility Control
-function applyFieldVisibility() {
-  const hiddenFields = JSON.parse(localStorage.getItem("hiddenFields") || "[]");
-  hiddenFields.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = "none";
-  });
+function deleteDraft(id) {
+  let drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
+  drafts = drafts.filter(d => d.id !== id);
+  localStorage.setItem("drafts", JSON.stringify(drafts));
+  showToast("✅ ড্রাফট ডিলিট হয়েছে");
+  renderDrafts();
 }
+
+document.getElementById("prevPage").addEventListener("click", () => {
+  if (currentPage > 1) {
+    currentPage--;
+    renderDrafts();
+  }
+});
+
+document.getElementById("nextPage").addEventListener("click", () => {
+  let drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
+  const totalPages = Math.ceil(drafts.length / itemsPerPage);
+  if (currentPage < totalPages) {
+    currentPage++;
+    renderDrafts();
+  }
+});
+
+document.getElementById("draftSearch").addEventListener("keyup", renderDrafts);
+document.getElementById("draftSort").addEventListener("change", () => {
+  currentPage = 1; // Reset to first page on sort change
+  renderDrafts();
+});
 
 // ✅ On Load
 window.addEventListener("DOMContentLoaded", () => {
   applyFieldVisibility();
   const draftId = localStorage.getItem("editDraftId");
   if (draftId) loadDraftToForm(draftId);
+  renderDrafts(); // Initial render of drafts
+});
+
+// ✅ Keyboard Shortcuts
+document.addEventListener("keydown", (e) => {
+  if (e.ctrlKey || e.metaKey) { // Ctrl or Cmd key
+    if (e.key === "s") { // Ctrl/Cmd + S for Save Draft
+      e.preventDefault();
+      saveDraft();
+      showToast("✅ ড্রাফট সেভ হয়েছে (Ctrl+S)");
+    } else if (e.key === "g") { // Ctrl/Cmd + G for Generate
+      e.preventDefault();
+      document.getElementById("generateBtn").click();
+    } else if (e.key === "c") { // Ctrl/Cmd + C for Copy
+      e.preventDefault();
+      document.getElementById("copyBtn").click();
+    } else if (e.key === "l") { // Ctrl/Cmd + L for Clear
+      e.preventDefault();
+      clearForm();
+      showToast("✅ ফর্ম ক্লিয়ার হয়েছে (Ctrl+L)");
+    }
+  }
 });

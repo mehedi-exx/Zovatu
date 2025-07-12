@@ -6,6 +6,7 @@
   <title>G9Tool Dashboard</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 </head>
 <body>
 
@@ -64,12 +65,28 @@
     <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
   </div>
 
-  <div class="output" id="output"></div>
-  <div class="live-preview" id="preview"></div>
-</main>
+    <div class="output" id="output"></div>
+    <div class="live-preview" id="preview"></div>
 
-<script src="script.js"></script>
-<script>
+    <div class="draft-controls">
+      <input type="text" id="draftSearch" placeholder="ড্রাফট খুঁজুন...">
+      <select id="draftSort">
+        <option value="newest">নতুন থেকে পুরাতন</option>
+        <option value="oldest">পুরাতন থেকে নতুন</option>
+        <option value="nameAsc">নাম (A-Z)</option>
+        <option value="nameDesc">নাম (Z-A)</option>
+      </select>
+      <button id="prevPage">পূর্ববর্তী</button>
+      <span id="pageInfo"></span>
+      <button id="nextPage">পরবর্তী</button>
+    </div>
+    <div id="draftList"></div>
+  </main>
+
+  <script src="script.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+  <script>
   function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("active");
   }
@@ -126,6 +143,22 @@
       window.location.replace("index.html");
     }
     applyFieldVisibility();
+
+    // Initialize Summernote
+    $('#desc').summernote({
+      placeholder: 'প্রোডাক্ট বর্ণনা',
+      tabsize: 2,
+      height: 120,
+      toolbar: [
+        ['style', ['style']],
+        ['font', ['bold', 'underline', 'clear']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['table', ['table']],
+        ['insert', ['link', 'picture', 'video']],
+        ['view', ['fullscreen', 'codeview', 'help']]
+      ]
+    });
   });
 </script>
 

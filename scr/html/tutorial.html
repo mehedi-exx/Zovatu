@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tutorial - G9Tool</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    body {
+      background: #121212;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #1e1e1e;
+      padding: 14px 16px;
+      border-radius: 0 0 15px 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .header-left i {
+      color: #fff;
+    }
+    .back-btn {
+      color: #00bfff;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    main {
+      padding: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .section {
+      background: #1c1c1c;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 5px rgba(255,255,255,0.05);
+    }
+    .section h2 {
+      margin-top: 0;
+      color: #00e5ff;
+    }
+    .section p {
+      line-height: 1.6;
+      font-size: 15px;
+      color: #ccc;
+    }
+    @media (max-width: 600px) {
+      .section {
+        padding: 16px;
+      }
+      .section h2 {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+
+  <main>
+    <div class="section">
+      <h2>১. G9Tool কী?</h2>
+      <p>
+        G9Tool একটি HTML-ভিত্তিক প্রোডাক্ট জেনারেটর টুল যা আপনাকে আপনার প্রোডাক্টের কোড তৈরি, প্রিভিউ, কপি, সংরক্ষণ, ওয়াটসঅ্যাপ অর্ডার বাটন, এবং ইউটিউব ভিডিও এম্বেড করার সুবিধা দেয়।
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>২. কীভাবে প্রোডাক্ট কোড তৈরি করবেন?</h2>
+      <p>
+        Dashboard এ গিয়ে প্রোডাক্ট নাম, কোড, ছবি, মূল্য ইত্যাদি তথ্য দিন এবং "Generate" বাটনে ক্লিক করুন। এরপর "Copy" বাটনে ক্লিক করে কোড কপি করে নিন।
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>৩. Field Manager এর কাজ কী?</h2>
+      <p>
+        আপনি যেসব ইনপুট ফিল্ড ব্যবহার করতে চান বা লুকিয়ে রাখতে চান, তা Field Manager থেকে নিয়ন্ত্রণ করতে পারবেন। এটি আপনার ফর্ম কাস্টমাইজ করার সহজ উপায়।
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>৪. Admin Panel</h2>
+      <p>
+        এখানে আপনি আপনার সংরক্ষিত প্রোডাক্টগুলো দেখতে পাবেন, যেকোনো প্রোডাক্ট Edit / Delete / Preview করতে পারবেন। Export / Import সুবিধাও আছে।
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>৫. কোড কপি ও প্রিভিউ</h2>
+      <p>
+        Output অংশে আপনি শুধু প্রিভিউ দেখতে পাবেন। কোড কপি করার জন্য Copy বাটন চাপলেই কোড কপি হয়ে যাবে — কোন কোড দেখাবে না।
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>৬. WhatsApp অর্ডার</h2>
+      <p>
+        প্রোডাক্টের নিচে “Order Now” বাটনে ক্লিক করলে স্বয়ংক্রিয়ভাবে WhatsApp-এ অর্ডার মেসেজ তৈরি হয়ে যাবে।
+      </p>
+    </div>
+
+    <!-- You can add more tutorial steps here -->
+  </main>
+
+</body>
+</html>
+
+
+  <script>
+    fetch("header.html")
+      .then(response => response.text())
+      .then(data => {
+        document.body.insertAdjacentHTML("afterbegin", data);
+      });
+  </script>
+
+

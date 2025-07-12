@@ -8,7 +8,7 @@
   <meta name="keywords" content="G9Tool, file management, user dashboard, admin panel, premium, secure" />
   <meta name="author" content="G9Tool Team" />
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="src/css/style.css" />
+  <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body>
@@ -28,13 +28,13 @@
     </div>
   </div>
 
-  <script src="src/js/auth.js"></script>
+  <script src="auth.js"></script>
   <div class="footer">
     &copy; 2025 G9Tool. All rights reserved.
   </div>
 
   <script>
-    fetch("src/html/header.html")
+    fetch("header.html")
       .then(response => response.text())
       .then(data => {
         document.body.insertAdjacentHTML("afterbegin", data);

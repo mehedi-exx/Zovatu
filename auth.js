@@ -18,7 +18,7 @@ function loginUser() {
   loginBtn.disabled = true;
 
   // Attempt login
-  fetch(`../data/${uname}.json`)
+  fetch(`${uname}.json`)
     .then(res => {
       if (!res.ok) {
         throw new Error("ইউজার পাওয়া যায়নি");

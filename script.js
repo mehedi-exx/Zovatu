@@ -30,7 +30,6 @@ window.addEventListener("DOMContentLoaded", async () => {
   if (!localStorage.getItem("loggedInUser")) {
     window.location.replace("index.html");
   }
-  applyFieldVisibility();
 
   const savedTheme = localStorage.getItem("theme") || "dark";
   applyTheme(savedTheme);
@@ -42,6 +41,9 @@ window.addEventListener("DOMContentLoaded", async () => {
     langSelect.value = savedLang;
     langSelect.addEventListener("change", (e) => applyLanguage(e.target.value));
   }
+
+  // Apply field visibility after DOM is loaded and language is set
+  applyFieldVisibility();
 
   // Attach event listeners for functions moved to productGenerator.js
   document.getElementById("generateBtn").addEventListener("click", generateProduct);

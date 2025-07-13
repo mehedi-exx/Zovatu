@@ -14,6 +14,84 @@ body {
   line-height: 1.5;
 }
 
+body.dark-mode {
+  background-color: #121212;
+  color: #fff;
+}
+
+body.light-mode {
+  background-color: #f0f2f5;
+  color: #333;
+}
+
+/* Adjust elements for light mode */
+body.light-mode header.header {
+  background: #ffffff;
+  color: #333;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+body.light-mode .logo,
+body.light-mode .menu-btn {
+  color: #333;
+}
+
+body.light-mode .form-wrapper,
+body.light-mode .output,
+body.light-mode .live-preview,
+body.light-mode .admin-panel,
+body.light-mode .product-card {
+  background: #ffffff;
+  color: #333;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+body.light-mode input,
+body.light-mode textarea,
+body.light-mode select {
+  background: #f8f8f8;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+body.light-mode .sidebar {
+  background: #f8f8f8;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+}
+
+body.light-mode .sidebar a {
+  background: #e0e0e0;
+  color: #333;
+}
+
+body.light-mode .sidebar a:hover {
+  background: #d0d0d0;
+}
+
+body.light-mode .close-sidebar {
+  background: #ccc;
+  color: #333;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+body.light-mode .close-sidebar:hover {
+  background: #bbb;
+}
+
+body.light-mode .language-selector {
+  background: #e0e0e0;
+}
+
+body.light-mode .language-selector label {
+  color: #555;
+}
+
+body.light-mode .language-selector select {
+  background: #f0f0f0;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
 /* Header */
 header.header {
   background: #1e1e1e;
@@ -103,19 +181,26 @@ header.header {
 
 .close-sidebar {
   position: absolute;
-  top: 10px;
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background: #333;
+  background: #444;
+  color: #fff;
+  border: none;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-  font-size: 24px;
+  font-size: 26px;
   cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+  transition: background 0.3s ease;
+}
+
+.close-sidebar:hover {
+  background: #666;
 }
 
 /* Main Content */
@@ -272,6 +357,45 @@ button:hover {
     font-size: 20px;
     width: 30px;
     height: 30px;
+  }
+}
+
+
+
+
+.language-selector {
+  margin-top: 20px;
+  padding: 10px;
+  background: #2a2a2a;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.language-selector label {
+  font-size: 14px;
+  color: #bbb;
+}
+
+.language-selector select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #444;
+  background: #333;
+  color: #fff;
+  font-size: 14px;
+}
+
+@media (max-width: 480px) {
+  .language-selector {
+    margin-top: 15px;
+    padding: 8px;
+  }
+  .language-selector label,
+  .language-selector select {
+    font-size: 12px;
   }
 }
 

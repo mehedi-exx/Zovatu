@@ -34,11 +34,6 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   const savedTheme = localStorage.getItem("theme") || "dark";
   applyTheme(savedTheme);
-  const themeSelect = document.getElementById("themeSelect");
-  if (themeSelect) {
-    themeSelect.value = savedTheme;
-    themeSelect.addEventListener("change", (e) => applyTheme(e.target.value));
-  }
 
   const savedLang = localStorage.getItem("language") || "bn";
   await applyLanguage(savedLang);

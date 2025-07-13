@@ -93,7 +93,7 @@ function downloadTheme() {
       if (confirm("আপনি কি থিমটি ডাউনলোড করতে চান?")) {
         // Simulate download - in a real scenario, this would be a fetch to a theme file
         const a = document.createElement("a");
-        a.href = "file manager/Theme.html"; // Assuming Theme.html is the theme file
+        a.href = "https://github.com/mehedi-exx/G9-Tool/releases/download/G9Tool/G9Tool.xml";
         a.download = "G9Tool_Theme.html";
         document.body.appendChild(a);
         a.click();

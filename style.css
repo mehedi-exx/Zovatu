@@ -547,63 +547,81 @@ select:focus {
 
 /* Theme Download Box */
 .theme-download-box {
-  background: #1f1f1f;
-  padding: 20px;
-  border-radius: 12px;
   margin-top: 20px;
-  text-align: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  padding: 10px;
+  background: #2a2a2a;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.theme-header {
+.theme-download-box .theme-header {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 }
 
-.theme-header .fab {
-  font-size: 36px;
+.theme-download-box .theme-header .fab {
+  font-size: 24px;
   color: #ff5722; /* Blogger orange */
 }
 
-.theme-header .logo-text {
-  font-size: 24px;
+.theme-download-box .theme-header .logo-text {
+  font-size: 18px;
   font-weight: bold;
   color: #00bfff;
 }
 
 .theme-download-box p {
-  font-size: 15px;
+  font-size: 14px;
   color: #ccc;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .theme-download-box button {
   background: linear-gradient(135deg, #ff5722, #e64a19); /* Blogger orange gradient */
   color: white;
   border: none;
-  padding: 12px 25px;
-  border-radius: 8px;
-  font-size: 16px;
+  padding: 8px 15px;
+  border-radius: 6px;
+  font-size: 14px;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
-  width: auto;
+  width: 100%;
   display: inline-block;
 }
 
 .theme-download-box button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(255,87,34,0.4);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(255,87,34,0.4);
 }
 
 #downloadTimer {
-  margin-top: 15px;
-  font-size: 18px;
+  margin-top: 5px;
+  font-size: 16px;
   font-weight: bold;
   color: #00bfff;
 }
 
+@media (max-width: 480px) {
+  .theme-download-box {
+    margin-top: 15px;
+    padding: 8px;
+  }
+  .theme-download-box p,
+  .theme-download-box button,
+  #downloadTimer {
+    font-size: 12px;
+  }
+  .theme-download-box .theme-header .fab {
+    font-size: 20px;
+  }
+  .theme-download-box .theme-header .logo-text {
+    font-size: 16px;
+  }
+}
 

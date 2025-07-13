@@ -157,11 +157,51 @@ export function loadDraftToForm(id) {
 }
 
 export function applyFieldVisibility() {
-  const hiddenFields = JSON.parse(localStorage.getItem("hiddenFields") || "[]");
-  hiddenFields.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = "none";
+  const fieldVisibility = JSON.parse(localStorage.getItem("fieldVisibility") || "{}");
+  
+  // Map of field keys to their corresponding HTML element IDs or containers
+  const fieldMapping = {
+    offer: "offer",
+    unit: "unit", 
+    qty: "qty",
+    brand: "brand",
+    size: "size",
+    color: "color",
+    delivery: "delivery",
+    status: "status",
+    category: "category",
+    desc: "desc",
+    video: "video",
+    customFields: "customFields"
+  };
+
+  // Hide fields that are set to false in fieldVisibility
+  Object.keys(fieldMapping).forEach(fieldKey => {
+    if (fieldVisibility[fieldKey] === false) {
+      const element = document.getElementById(fieldMapping[fieldKey]);
+      if (element) {
+        element.style.display = "none";
+      }
+    } else {
+      const element = document.getElementById(fieldMapping[fieldKey]);
+      if (element) {
+        element.style.display = "";
+      }
+    }
   });
+
+  // Handle custom fields buttons visibility
+  if (fieldVisibility.customFields === false) {
+    const addCustomBtn = document.querySelector('button[onclick*="addCustomField"]');
+    if (addCustomBtn) {
+      addCustomBtn.style.display = "none";
+    }
+  } else {
+    const addCustomBtn = document.querySelector('button[onclick*="addCustomField"]');
+    if (addCustomBtn) {
+      addCustomBtn.style.display = "";
+    }
+  }
 }
 
 

@@ -3,11 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>G9Tool Dashboard</title>
+  <title data-i18n="g9tool_dashboard">G9Tool Dashboard</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="manifest" href="manifest.json">
 </head>
 <body>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("service-worker.js")
+        .then(registration => {
+          console.log("Service Worker registered: ", registration);
+        })
+        .catch(error => {
+          console.error("Service Worker registration failed: ", error);
+        });
+    });
+  }
+</script>
 
 <header class="header">
   <div class="left-icons">
@@ -19,99 +34,78 @@
 
 <div class="sidebar" id="sidebar">
   <button class="close-sidebar" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
-  <a href="tutorial.html">📚 টিউটোরিয়াল </a>
-  <a href="admin.html">🧑‍💻 এডমিন প্যানেল </a>
-  <a href="fieldManager.html">⚙️ ফিল্ড কাস্টমাইজ</a>
-  <a href="file manager/Theme.html"><i class="fab fa-blogger-b"></i> ডাউনলোড থিম</a>
-  <a href="#" onclick="logout()">🔓 লগ আউট</a>
+  <a href="tutorial.html" data-i18n="tutorial">📚 টিউটোরিয়াল </a>
+  <a href="admin.html" data-i18n="admin_panel">🧑‍💻 এডমিন প্যানেল </a>
+  <a href="fieldManager.html" data-i18n="field_customize">⚙️ ফিল্ড কাস্টমাইজ</a>
+  <a href="file manager/Theme.html" data-i18n="download_theme"><i class="fab fa-blogger-b"></i> ডাউনলোড থিম</a>
+  <a href="#" onclick="logout()" data-i18n="logout">🔓 লগ আউট</a>
 </div>
 <main>
   <div class="form-wrapper">
     <div id="formFields">
-      <input type="text" id="name" placeholder="প্রোডাক্ট নাম">
-      <input type="text" id="code" placeholder="প্রোডাক্ট কোড">
-      <input type="number" id="price" placeholder="মূল্য (৳)">
-      <input type="number" id="offer" placeholder="অফার মূল্য (ঐচ্ছিক)">
-      <input type="text" id="unit" placeholder="ইউনিট (যেমনঃ পিস, কেজি)">
-      <input type="number" id="qty" placeholder="পরিমাণ (Qty)">
-      <input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি">
-      <input type="text" id="size" placeholder="সাইজ অপশন">
-      <input type="text" id="color" placeholder="রঙ অপশন">
-      <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
-      <input type="text" id="status" placeholder="স্ট্যাটাস">
-      <input type="text" id="category" placeholder="ক্যাটাগরি">
-      <textarea id="desc" rows="3" placeholder="প্রোডাক্ট বর্ণনা"></textarea>
-      <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)">
-      <input type="tel" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
+      <input type="text" id="name" placeholder="প্রোডাক্ট নাম" data-i18n="product_name">
+      <input type="text" id="code" placeholder="প্রোডাক্ট কোড" data-i18n="product_code">
+      <input type="number" id="price" placeholder="মূল্য (৳)" data-i18n="price">
+      <input type="number" id="offer" placeholder="অফার মূল্য (ঐচ্ছিক)" data-i18n="offer_price">
+      <input type="text" id="unit" placeholder="ইউনিট (যেমনঃ পিস, কেজি)" data-i18n="unit">
+      <input type="number" id="qty" placeholder="পরিমাণ (Qty)" data-i18n="quantity">
+      <input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি" data-i18n="brand_company">
+      <input type="text" id="size" placeholder="সাইজ অপশন" data-i18n="size_option">
+      <input type="text" id="color" placeholder="রঙ অপশন" data-i18n="color_option">
+      <input type="text" id="delivery" placeholder="ডেলিভারি টাইম" data-i18n="delivery_time">
+      <input type="text" id="status" placeholder="স্ট্যাটাস" data-i18n="status">
+      <input type="text" id="category" placeholder="ক্যাটাগরি" data-i18n="category">
+      <textarea id="desc" rows="3" placeholder="প্রোডাক্ট বর্ণনা" data-i18n="product_description"></textarea>
+      <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)" data-i18n="youtube_video_link">
+      <input type="tel" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)" data-i18n="whatsapp_number">
 
       <div id="imageInputs">
-        <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
+        <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)" data-i18n="image_url">
       </div>
 
       <div id="customFields">
         <div class="custom-field-group">
-          <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
-          <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
+          <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি" data-i18n="custom_field_title">
+          <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস" data-i18n="custom_field_value">
         </div>
       </div>
 
-      <button onclick="addCustomField()" type="button"><i class="fas fa-plus"></i> কাস্টম তথ্য যোগ করুন</button>
-      <button onclick="addImageField()" type="button"><i class="fas fa-image"></i> আরও ছবি যোগ করুন</button>
+      <button onclick="addCustomField()" type="button" data-i18n="add_custom_info"><i class="fas fa-plus"></i> কাস্টম তথ্য যোগ করুন</button>
+      <button onclick="addImageField()" type="button" data-i18n="add_more_images"><i class="fas fa-image"></i> আরও ছবি যোগ করুন</button>
     </div>
 
     <br />
-    <button id="generateBtn"><i class="fas fa-magic"></i> জেনারেট</button>
-    <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
+    <button id="generateBtn" data-i18n="generate"><i class="fas fa-magic"></i> জেনারেট</button>
+    <button id="copyBtn" data-i18n="copy"><i class="fas fa-copy"></i> কপি করুন</button>
   </div>
 
   <div class="output" id="output"></div>
   <div class="live-preview" id="preview"></div>
 </main>
 
-<script src="script.js"></script>
-<script>
-  function toggleSidebar() {
-    document.getElementById("sidebar").classList.toggle("active");
-  }
+<script type="module" src="script.js"></script>
 
-
-
-
-
-  function applyFieldVisibility() {
-    const visibility = JSON.parse(localStorage.getItem("fieldVisibility") || "{}");
-    const optionalFields = [
-      "offer", "unit", "qty", "brand", "size", "color",
-      "delivery", "status", "category", "desc", "images",
-      "video", "customFields"
-    ];
-    optionalFields.forEach(key => {
-      const el = document.getElementById(key);
-      if (el && visibility[key] === false) {
-        el.style.display = "none";
-      }
-    });
-
-    if (visibility.images === false) {
-      document.getElementById("imageInputs").style.display = "none";
-    }
-    if (visibility.customFields === false) {
-      document.getElementById("customFields").style.display = "none";
-    }
-  }
-
-  function logout() {
-    localStorage.removeItem("loggedInUser");
-    window.location.replace("index.html");
-  }
-
-  window.addEventListener("DOMContentLoaded", () => {
-    if (!localStorage.getItem("loggedInUser")) {
-      window.location.replace("index.html");
-    }
-    applyFieldVisibility();
-  });
-</script>
 
 </body>
 </html>
+
+
+<div class="settings-box">
+  <h2>⚙️ অ্যাডভান্সড সেটিংস</h2>
+  <div class="setting-item">
+    <label for="langSelect">ভাষা নির্বাচন করুন:</label>
+    <select id="langSelect">
+      <option value="bn">বাংলা</option>
+      <option value="en">English</option>
+    </select>
+  </div>
+  <div class="setting-item">
+    <label for="themeSelect">থিম নির্বাচন করুন:</label>
+    <select id="themeSelect">
+      <option value="dark">ডার্ক মোড</option>
+      <option value="light">লাইট মোড</option>
+    </select>
+  </div>
+</div>
+
+

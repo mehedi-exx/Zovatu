@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Admin Panel - G9Tool</title>
+  <title data-i18n="admin_panel">Admin Panel - G9Tool</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
@@ -101,24 +101,24 @@
 <body>
 
 <header>
-  <div class="logo"><i class="fas fa-cog"></i> Admin Panel</div>
-  <a href="dashboard.html" style="color:#00bfff;text-decoration:none;"><i class="fas fa-arrow-left"></i> Back</a>
+  <div class="logo"><i class="fas fa-cog"></i> <span data-i18n="admin_panel">Admin Panel</span></div>
+  <a href="dashboard.html" style="color:#00bfff;text-decoration:none;" data-i18n="back"><i class="fas fa-arrow-left"></i> Back</a>
 </header>
 
 <div class="main-content">
-  <h2>📦 সেভ করা প্রোডাক্ট লিস্ট</h2>
+  <h2 data-i18n="saved_product_list">📦 সেভ করা প্রোডাক্ট লিস্ট</h2>
 
-  <input type="text" id="searchInput" placeholder="🔍 প্রোডাক্ট খুঁজুন (নাম বা কোড)" oninput="renderDrafts()" />
+  <input type="text" id="searchInput" placeholder="🔍 প্রোডাক্ট খুঁজুন (নাম বা কোড)" oninput="renderDrafts()" data-i18n="search_product" />
 
   <div style="margin: 10px 0;">
-    <button onclick="exportDrafts()"><i class="fas fa-download"></i> Export JSON</button>
+    <button onclick="exportDrafts()" data-i18n="export_json"><i class="fas fa-download"></i> Export JSON</button>
     <input type="file" id="importFile" accept=".json" onchange="importDrafts()" />
   </div>
 
   <div id="draftList"></div>
 </div>
 
-<script>
+<script type="module" src="js/admin.js"></script>
   function getDrafts() {
     return JSON.parse(localStorage.getItem("drafts") || "[]");
   }
@@ -136,7 +136,7 @@
     const filtered = drafts.filter(d => d.name.toLowerCase().includes(search) || d.code.toLowerCase().includes(search));
 
     if (!filtered.length) {
-      list.innerHTML = "<p>❌ কোনো ড্রাফট পাওয়া যায়নি</p>";
+      list.innerHTML = `<p>❌ ${translateElement("no_drafts_found")}</p>`;
       return;
     }
 
@@ -147,10 +147,10 @@
         <div class="draft-header">
           <div class="draft-name">🔖 ${d.name} (${d.code})</div>
           <div class="actions">
-            <button onclick="editDraft(${d.id})"><i class="fas fa-edit"></i> Edit</button>
-            <button onclick="deleteDraft(${d.id})"><i class="fas fa-trash"></i> Delete</button>
-            <button onclick="previewDraft(${d.id})"><i class="fas fa-eye"></i> Preview</button>
-          </div>
+          <button onclick="editDraft(${d.id})" data-i18n="edit"><i class="fas fa-edit"></i> ${translateElement("edit")}</button>
+          <button onclick="deleteDraft(${d.id})" data-i18n="delete"><i class="fas fa-trash"></i> ${translateElement("delete")}</button>
+          <button onclick="previewDraft(${d.id})" data-i18n="preview"><i class="fas fa-eye"></i> ${translateElement("preview")}</button>
+          <button onclick="verifyDraft(${d.id})" class="verify-btn ${d.verified ? 'verified' : ''}"><i class="fas fa-check-circle"></i> ${d.verified ? translateElement('verified') : translateElement('verify')}</button>
         </div>
         <div class="preview" id="preview-${d.id}" style="display:none;"></div>
       `;
@@ -164,7 +164,7 @@
   }
 
   function deleteDraft(id) {
-    if (confirm("❌ আপনি কি সত্যিই ডিলিট করতে চান?")) {
+    if (confirm(translateElement("confirm_delete"))) {
       const drafts = getDrafts().filter(d => d.id !== id);
       saveDrafts(drafts);
       renderDrafts();
@@ -219,7 +219,7 @@
         const existing = getDrafts();
         const merged = [...existing, ...imported.map(d => ({ ...d, id: Date.now() + Math.random() }))];
         saveDrafts(merged);
-        showToast("✅ ডেটা ইমপোর্ট সফল");
+        showToast(translateElement("data_import_successful"));
         renderDrafts();
       } catch (e) {
         showToast("❌ ইমপোর্ট করতে সমস্যা হয়েছে");
@@ -246,25 +246,6 @@
 <!-- কোডের শেষ -->
 
 
-<script>
-  function showToast(message) {
-    const toast = document.createElement("div");
-    toast.textContent = message;
-    toast.style = `
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #28a745;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 6px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      z-index: 9999;
-    `;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
-  }
-</script>
+
 
 

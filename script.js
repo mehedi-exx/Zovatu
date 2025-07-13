@@ -1,4 +1,4 @@
-// ✅ Enhanced G9Tool JavaScript v4.0 with Modern Features
+// ✅ Enhanced G9Tool JavaScript v5.0 with Template System
 
 // ✅ Enhanced Toast Notification with Animation
 function showToast(message, type = 'success') {
@@ -89,7 +89,7 @@ function validateForm() {
   return true;
 }
 
-// ✅ Enhanced Generate Product HTML with Loading
+// ✅ Enhanced Generate Product HTML with Template System
 document.getElementById("generateBtn").addEventListener("click", async () => {
   const generateBtn = document.getElementById("generateBtn");
   generateBtn.setAttribute('data-original-text', generateBtn.innerHTML);
@@ -98,7 +98,6 @@ document.getElementById("generateBtn").addEventListener("click", async () => {
   
   setLoadingState(generateBtn, true);
   
-  // Simulate processing time for better UX
   await new Promise(resolve => setTimeout(resolve, 500));
   
   try {
@@ -142,45 +141,44 @@ document.getElementById("generateBtn").addEventListener("click", async () => {
       }
     }
 
-    const html = `
-<div style="text-align:center;font-family:'Segoe UI',sans-serif;max-width:600px;margin:auto;background:linear-gradient(135deg,#f8f9fa 0%,#e9ecef 100%);border-radius:15px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,0.1);">
-  <img id="mainImg" src="${mainImg}" style="width:100%;max-width:500px;border-radius:15px;border:3px solid #00bfff;margin-bottom:15px;transition:all 0.3s ease;box-shadow:0 8px 25px rgba(0,0,0,0.15);" onload="this.style.opacity='1'" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
-  <div id="thumbs" style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:15px;padding:10px;background:rgba(255,255,255,0.5);border-radius:10px;">${thumbHTML}</div>
-  <h2 style="margin:10px 0;color:#2c3e50;font-size:28px;font-weight:700;text-shadow:0 2px 4px rgba(0,0,0,0.1);">${name}</h2>
-  <p style="font-size:22px;margin:15px 0;">
-    ${offer ? `<span style="text-decoration:line-through;color:#6c757d;margin-right:10px;font-size:18px;">৳${price}</span><span style="color:#e74c3c;font-weight:bold;font-size:26px;">৳${offer}</span><small style="color:#27ae60;font-weight:600;background:#d4edda;padding:2px 8px;border-radius:15px;margin-left:8px;">-${discount}% ছাড়</small>` : `<span style="color:#e74c3c;font-weight:bold;font-size:26px;">৳${price}</span>`}
-  </p>
-  <div style="margin:25px 0;">
-    <a href="https://wa.me/${wa}?text=📦 আমি একটি পণ্য অর্ডার করতে চাই%0A🔖 প্রোডাক্ট: ${name}%0A💰 মূল্য: ${offer || price}৳%0A🧾 কোড: ${code}%0A📁 ক্যাটাগরি: ${category}%0A🚚 ডেলিভারি: ${delivery}" 
-       target="_blank"
-       style="display:inline-block;background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);color:#fff;padding:16px 40px;border-radius:50px;font-weight:bold;font-size:18px;text-decoration:none;box-shadow: 0 6px 20px rgba(37,211,102,0.3);transition: all 0.3s ease;text-transform:uppercase;letter-spacing:1px;"
-       onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 8px 25px rgba(37,211,102,0.4)'"
-       onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 6px 20px rgba(37,211,102,0.3)'">
-      🛒 অর্ডার করুন
-    </a>
-  </div>
-  <ul style="list-style:none;padding:0;margin:20px auto;text-align:left;max-width:500px;background:rgba(255,255,255,0.7);border-radius:12px;padding:20px;">
-    ${code ? `<li style="margin:8px 0;padding:8px;background:rgba(0,123,255,0.1);border-radius:6px;border-left:4px solid #007bff;">🔢 <strong>কোড:</strong> ${code}</li>` : ""}
-    ${status ? `<li style="margin:8px 0;padding:8px;background:rgba(40,167,69,0.1);border-radius:6px;border-left:4px solid #28a745;">📦 <strong>স্ট্যাটাস:</strong> ${status}</li>` : ""}
-    ${category ? `<li style="margin:8px 0;padding:8px;background:rgba(255,193,7,0.1);border-radius:6px;border-left:4px solid #ffc107;">📁 <strong>ক্যাটাগরি:</strong> ${category}</li>` : ""}
-    ${delivery ? `<li style="margin:8px 0;padding:8px;background:rgba(23,162,184,0.1);border-radius:6px;border-left:4px solid #17a2b8;">🚚 <strong>ডেলিভারি:</strong> ${delivery}</li>` : ""}
-    ${brand ? `<li style="margin:8px 0;padding:8px;background:rgba(108,117,125,0.1);border-radius:6px;border-left:4px solid #6c757d;">🏷️ <strong>ব্র্যান্ড:</strong> ${brand}</li>` : ""}
-    ${(size || color) ? `<li style="margin:8px 0;padding:8px;background:rgba(220,53,69,0.1);border-radius:6px;border-left:4px solid #dc3545;">📐 <strong>সাইজ:</strong> ${size || "N/A"} | 🎨 <strong>রঙ:</strong> ${color || "N/A"}</li>` : ""}
-    ${customHTML}
-  </ul>
-  ${desc ? `<div style="border:2px solid #dee2e6;padding:20px;border-radius:12px;max-width:500px;margin:20px auto;background:rgba(255,255,255,0.8);"><p style="margin:0;color:#495057;line-height:1.6;"><strong style="color:#2c3e50;">বিবরণ:</strong><br><br>${desc}</p></div>` : ""}
-  ${videoEmbed}
-  <p style="display:none;"><a href="#">{getProduct} $price={৳${offer || price}} $sale={৳${price}} $style={1}</a></p>
-</div>
+    const selectedTemplateId = getSelectedTemplateId();
+    let template = getTemplateById(selectedTemplateId);
 
-<script>
-function switchMainImage(thumb, url) {
-  document.getElementById('mainImg').src = url;
-  document.querySelectorAll('#thumbs img').forEach(img => img.style.border = '2px solid transparent');
-  thumb.style.border = '2px solid #00bfff';
-}
-</script>
-`;
+    // If selected template is a custom one, retrieve it from localStorage
+    if (!template) {
+      const customTemplates = JSON.parse(localStorage.getItem("customOutputTemplates") || "[]");
+      template = customTemplates.find(t => t.id == selectedTemplateId);
+    }
+
+    if (!template) {
+      showToast("নির্বাচিত টেমপ্লেট খুঁজে পাওয়া যায়নি। ডিফল্ট টেমপ্লেট ব্যবহার করা হচ্ছে।", 'warning');
+      template = getTemplateById("default");
+    }
+    
+    const data = {
+        name, code, price, offer, brand, size, color, delivery, status, category, desc, video, wa, mainImg, thumbHTML, customHTML, videoEmbed, discount
+    };
+
+    // Simple templating engine to replace placeholders
+    let html = template.html;
+    for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+            const regex = new RegExp(`{{${key}}}`, 'g');
+            html = html.replace(regex, data[key]);
+        }
+    }
+
+    // Evaluate conditional logic (e.g., {{code ? ... : ""}})
+    html = html.replace(/{{(.*?)}}/g, (match, p1) => {
+        try {
+            // Create a function to evaluate the expression within the context of data
+            const func = new Function('data', `with(data) { return ${p1}; }`);
+            return func(data);
+        } catch (e) {
+            console.error("Error evaluating template expression:", p1, e);
+            return ''; // Return empty string on error
+        }
+    });
 
     document.getElementById("output").textContent = html;
     document.getElementById("preview").innerHTML = html;
@@ -410,14 +408,13 @@ function loadDraftToForm(id) {
 
 // ✅ Enhanced Field Visibility Control
 function applyFieldVisibility() {
-  const hiddenFields = JSON.parse(localStorage.getItem("hiddenFields") || "[]");
-  hiddenFields.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.style.display = "none";
-      el.style.opacity = "0";
+  const fieldVisibility = JSON.parse(localStorage.getItem("fieldVisibility") || "{}");
+  for (const fieldId in fieldVisibility) {
+    const element = document.getElementById(fieldId);
+    if (element) {
+      element.closest('.input-group').style.display = fieldVisibility[fieldId] ? '' : 'none';
     }
-  });
+  }
 }
 
 // ✅ Reset Form with Confirmation
@@ -484,7 +481,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
   
-  console.log("G9Tool Enhanced v4.0 loaded successfully!");
+  console.log("G9Tool Enhanced v5.0 loaded successfully!");
 });
 
 // ✅ Keyboard Shortcuts
@@ -517,4 +514,6 @@ window.addCustomField = addCustomField;
 window.removeCustomField = removeCustomField;
 window.loadDraftToForm = loadDraftToForm;
 window.resetForm = resetForm;
+
+
 

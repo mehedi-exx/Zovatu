@@ -171,11 +171,10 @@
 <div class="sidebar" id="sidebar">
   <button class="close-sidebar" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
   <a href="dashboard.html"><i class="fas fa-home"></i> ড্যাশবোর্ড</a>
-  <a href="drafts.html"><i class="fas fa-save"></i> সংরক্ষিত ড্রাফট</a>
   <a href="profile.html"><i class="fas fa-user"></i> প্রোফাইল</a>
   <a href="tutorial.html"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
   <a href="admin.html"><i class="fas fa-cog"></i> এডমিন প্যানেল</a>
-  <a href="fieldManager.html"><i class="fas fa-sliders-h"></i> ফিল্ড কাস্টমাইজ</a>
+  <a href="templates.html"><i class="fas fa-palette"></i> আউটপুট টেমপ্লেট</a>
   <a href="file manager/Theme.html"><i class="fab fa-blogger-b"></i> ডাউনলোড থিম</a>
   <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগ আউট</a>
 </div>
@@ -209,9 +208,9 @@
 
   <!-- Quick Actions -->
   <div class="quick-actions">
-    <button class="quick-btn" onclick="loadTemplate('electronics')"><i class="fas fa-laptop"></i> ইলেকট্রনিক্স টেমপ্লেট</button>
-    <button class="quick-btn" onclick="loadTemplate('fashion')"><i class="fas fa-tshirt"></i> ফ্যাশন টেমপ্লেট</button>
-    <button class="quick-btn" onclick="loadTemplate('food')"><i class="fas fa-utensils"></i> খাবার টেমপ্লেট</button>
+    <button class="quick-btn" onclick="loadTemplate(\'electronics\')"><i class="fas fa-laptop"></i> ইলেকট্রনিক্স টেমপ্লেট</button>
+    <button class="quick-btn" onclick="loadTemplate(\'fashion\')"><i class="fas fa-tshirt"></i> ফ্যাশন টেমপ্লেট</button>
+    <button class="quick-btn" onclick="loadTemplate(\'food\')"><i class="fas fa-utensils"></i> খাবার টেমপ্লেট</button>
     <button class="quick-btn" onclick="clearForm()"><i class="fas fa-eraser"></i> ফর্ম পরিষ্কার</button>
   </div>
 
@@ -229,15 +228,7 @@
       </div>
       <div class="input-group">
         <label for="category">ক্যাটাগরি</label>
-        <select id="category">
-          <option value="">ক্যাটাগরি নির্বাচন করুন</option>
-          <option value="ইলেকট্রনিক্স">ইলেকট্রনিক্স</option>
-          <option value="ফ্যাশন">ফ্যাশন</option>
-          <option value="খাবার">খাবার</option>
-          <option value="বই">বই</option>
-          <option value="খেলনা">খেলনা</option>
-          <option value="অন্যান্য">অন্যান্য</option>
-        </select>
+        <input type="text" id="category" placeholder="ক্যাটাগরি লিখুন">
       </div>
       <div class="input-group">
         <label for="brand">ব্র্যান্ড / কোম্পানি</label>
@@ -415,16 +406,16 @@
           element.value = template[key];
         }
       });
-      showToast(`${type} টেমপ্লেট লোড করা হয়েছে`, 'info');
+      showToast(`${type} টেমপ্লেট লোড করা হয়েছে`, \'info\');
     }
   }
 
   function clearForm() {
     if (confirm("আপনি কি সব ফিল্ড পরিষ্কার করতে চান?")) {
-      document.querySelectorAll('input, textarea, select').forEach(element => {
-        element.value = '';
+      document.querySelectorAll(\'input, textarea, select\').forEach(element => {
+        element.value = \'\';
       });
-      showToast("ফর্ম পরিষ্কার করা হয়েছে", 'info');
+      showToast("ফর্ম পরিষ্কার করা হয়েছে", \'info\');
     }
   }
 
@@ -443,18 +434,18 @@
 
   // Image preview functionality
   function updateImagePreview() {
-    const imageInputs = document.querySelectorAll('.img-url');
-    const previewContainer = document.getElementById('imagePreview');
-    previewContainer.innerHTML = '';
+    const imageInputs = document.querySelectorAll(\'.img-url\');
+    const previewContainer = document.getElementById(\'imagePreview\');
+    previewContainer.innerHTML = \'\';
     
     imageInputs.forEach((input, index) => {
       if (input.value.trim()) {
-        const img = document.createElement('img');
+        const img = document.createElement(\'img\');
         img.src = input.value.trim();
         img.alt = `Preview ${index + 1}`;
         img.onerror = () => {
-          img.style.border = '2px solid #dc3545';
-          img.alt = 'ছবি লোড হয়নি';
+          img.style.border = \'2px solid #dc3545\';
+          img.alt = \'ছবি লোড হয়নি\';
         };
         previewContainer.appendChild(img);
       }
@@ -462,8 +453,8 @@
   }
 
   // Add event listeners for image preview
-  document.addEventListener('input', (e) => {
-    if (e.target.classList.contains('img-url')) {
+  document.addEventListener(\'input\', (e) => {
+    if (e.target.classList.contains(\'img-url\')) {
       updateImagePreview();
     }
   });
@@ -481,16 +472,16 @@
     const output = document.getElementById("output");
     const observer = new MutationObserver(() => {
       if (output.textContent.trim()) {
-        output.style.display = 'block';
+        output.style.display = \'block\';
       } else {
-        output.style.display = 'none';
+        output.style.display = \'none\';
       }
     });
     observer.observe(output, { childList: true, characterData: true, subtree: true });
     
     // Auto-save on form changes
     let autoSaveTimer;
-    document.addEventListener('input', () => {
+    document.addEventListener(\'input\', () => {
       clearTimeout(autoSaveTimer);
       autoSaveTimer = setTimeout(() => {
         if (getVal("name")) {
@@ -505,4 +496,5 @@
 
 </body>
 </html>
+
 

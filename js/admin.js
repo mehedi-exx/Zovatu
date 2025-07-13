@@ -139,3 +139,33 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 
+
+
+// Expose functions to global scope for HTML onclick attributes
+window.getDrafts = getDrafts;
+window.saveDrafts = saveDrafts;
+window.renderDrafts = renderDrafts;
+window.editDraft = editDraft;
+window.deleteDraft = deleteDraft;
+window.previewDraft = previewDraft;
+window.exportDrafts = exportDrafts;
+window.importDrafts = importDrafts;
+window.verifyDraft = verifyDraft;
+window.checkLogin = checkLogin;
+
+
+
+
+// Expose functions to global scope
+window.getDrafts = getDrafts;
+window.saveDrafts = saveDrafts;
+window.renderDrafts = renderDrafts;
+window.editDraft = editDraft;
+window.deleteDraft = deleteDraft;
+window.previewDraft = previewDraft;
+window.exportDrafts = exportDrafts;
+window.importDrafts = importDrafts;
+window.verifyDraft = verifyDraft;
+window.checkLogin = checkLogin;
+
+

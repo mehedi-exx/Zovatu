@@ -3,160 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>G9Tool Dashboard - Enhanced</title>
+  <title>G9Tool Dashboard</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <style>
-    /* Additional Dashboard Specific Styles */
-    .dashboard-header {
-      background: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
-      padding: 20px;
-      border-radius: 15px;
-      margin-bottom: 25px;
-      text-align: center;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-    }
-    
-    .welcome-text {
-      font-size: 24px;
-      font-weight: 600;
-      background: linear-gradient(135deg, #00bfff 0%, #0080ff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 10px;
-    }
-    
-    .stats-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin-bottom: 25px;
-    }
-    
-    .stat-card {
-      background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
-      padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-      border: 1px solid rgba(255,255,255,0.1);
-      transition: all 0.3s ease;
-    }
-    
-    .stat-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    }
-    
-    .stat-number {
-      font-size: 32px;
-      font-weight: 700;
-      color: #00bfff;
-      margin-bottom: 5px;
-    }
-    
-    .stat-label {
-      font-size: 14px;
-      color: #ccc;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    
-    .form-section {
-      background: linear-gradient(135deg, #1c1c1c 0%, #2a2a2a 100%);
-      border-radius: 16px;
-      padding: 25px;
-      margin-bottom: 25px;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    
-    .section-title {
-      font-size: 20px;
-      font-weight: 600;
-      margin-bottom: 20px;
-      color: #00bfff;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 15px;
-    }
-    
-    .input-group {
-      position: relative;
-    }
-    
-    .input-group label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: 500;
-      color: #ccc;
-      font-size: 14px;
-    }
-    
-    .quick-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-    
-    .quick-btn {
-      background: linear-gradient(135deg, #333 0%, #555 100%);
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .quick-btn:hover {
-      background: linear-gradient(135deg, #444 0%, #666 100%);
-      transform: translateY(-1px);
-    }
-    
-    .image-preview {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 10px;
-    }
-    
-    .image-preview img {
-      width: 60px;
-      height: 60px;
-      object-fit: cover;
-      border-radius: 8px;
-      border: 2px solid #444;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .image-preview img:hover {
-      border-color: #00bfff;
-      transform: scale(1.1);
-    }
-    
-    @media (max-width: 768px) {
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .stats-container {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      
-      .quick-actions {
-        justify-content: center;
-      }
-    }
-  </style>
 </head>
 <body>
 
@@ -164,337 +13,105 @@
   <div class="left-icons">
     <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
   </div>
-  <div class="logo"><i class="fas fa-toolbox"></i> G9Tool Enhanced</div>
-  <a class="telegram-icon" href="https://t.me/mehedi_exx" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+  <div class="logo"><i class="fas fa-toolbox"></i> G9Tool</div>
+  <a class="telegram-icon" href="https://t.me/yourchannel" target="_blank"><i class="fab fa-telegram-plane"></i></a>
 </header>
 
 <div class="sidebar" id="sidebar">
   <button class="close-sidebar" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
-  <a href="dashboard.html"><i class="fas fa-home"></i> ড্যাশবোর্ড</a>
-  <a href="profile.html"><i class="fas fa-user"></i> প্রোফাইল</a>
-  <a href="tutorial.html"><i class="fas fa-graduation-cap"></i> টিউটোরিয়াল</a>
-  <a href="admin.html"><i class="fas fa-cog"></i> এডমিন প্যানেল</a>
-  <a href="templates.html"><i class="fas fa-palette"></i> আউটপুট টেমপ্লেট</a>
-  <a href="file manager/Theme.html"><i class="fab fa-blogger-b"></i> ডাউনলোড থিম</a>
-  <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> লগ আউট</a>
+  <a href="tutorial.html">📚 টিউটোরিয়াল </a>
+  <a href="admin.html">🧑‍💻 এডমিন প্যানেল </a>
+  <a href="fieldManager.html">⚙️ ফিল্ড কাস্টমাইজ</a>
+  <a href="/G9-Tool/file%20manager/Theme.html"><i class="fab fa-blogger-b"></i> ডাউনলোড থিম</a>
+  <a href="#" onclick="logout()">🔓 লগ আউট</a>
 </div>
-
 <main>
-  <!-- Dashboard Header -->
-  <div class="dashboard-header">
-    <div class="welcome-text">স্বাগতম G9Tool Enhanced এ</div>
-    <p style="color: #ccc; margin: 0;">আধুনিক ও শক্তিশালী প্রোডাক্ট জেনারেটর</p>
-  </div>
+  <div class="form-wrapper">
+    <div id="formFields">
+      <input type="text" id="name" placeholder="প্রোডাক্ট নাম">
+      <input type="text" id="code" placeholder="প্রোডাক্ট কোড">
+      <input type="number" id="price" placeholder="মূল্য (৳)">
+      <input type="number" id="offer" placeholder="অফার মূল্য (ঐচ্ছিক)">
+      <input type="text" id="unit" placeholder="ইউনিট (যেমনঃ পিস, কেজি)">
+      <input type="number" id="qty" placeholder="পরিমাণ (Qty)">
+      <input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি">
+      <input type="text" id="size" placeholder="সাইজ অপশন">
+      <input type="text" id="color" placeholder="রঙ অপশন">
+      <input type="text" id="delivery" placeholder="ডেলিভারি টাইম">
+      <input type="text" id="status" placeholder="স্ট্যাটাস">
+      <input type="text" id="category" placeholder="ক্যাটাগরি">
+      <textarea id="desc" rows="3" placeholder="প্রোডাক্ট বর্ণনা"></textarea>
+      <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)">
+      <input type="tel" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)">
 
-  <!-- Statistics -->
-  <div class="stats-container">
-    <div class="stat-card">
-      <div class="stat-number" id="totalProducts">0</div>
-      <div class="stat-label">মোট প্রোডাক্ট</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number" id="totalDrafts">0</div>
-      <div class="stat-label">সংরক্ষিত ড্রাফট</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number" id="todayProducts">0</div>
-      <div class="stat-label">আজকের প্রোডাক্ট</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number" id="successRate">100%</div>
-      <div class="stat-label">সফলতার হার</div>
-    </div>
-  </div>
-
-  <!-- Quick Actions -->
-  <div class="quick-actions">
-    <button class="quick-btn" onclick="loadTemplate(\'electronics\')"><i class="fas fa-laptop"></i> ইলেকট্রনিক্স টেমপ্লেট</button>
-    <button class="quick-btn" onclick="loadTemplate(\'fashion\')"><i class="fas fa-tshirt"></i> ফ্যাশন টেমপ্লেট</button>
-    <button class="quick-btn" onclick="loadTemplate(\'food\')"><i class="fas fa-utensils"></i> খাবার টেমপ্লেট</button>
-    <button class="quick-btn" onclick="clearForm()"><i class="fas fa-eraser"></i> ফর্ম পরিষ্কার</button>
-  </div>
-
-  <!-- Basic Information Section -->
-  <div class="form-section">
-    <h3 class="section-title"><i class="fas fa-info-circle"></i> মূল তথ্য</h3>
-    <div class="form-grid">
-      <div class="input-group">
-        <label for="name">প্রোডাক্ট নাম *</label>
-        <input type="text" id="name" placeholder="প্রোডাক্ট নাম লিখুন" required>
-      </div>
-      <div class="input-group">
-        <label for="code">প্রোডাক্ট কোড *</label>
-        <input type="text" id="code" placeholder="প্রোডাক্ট কোড লিখুন" required>
-      </div>
-      <div class="input-group">
-        <label for="category">ক্যাটাগরি</label>
-        <input type="text" id="category" placeholder="ক্যাটাগরি লিখুন">
-      </div>
-      <div class="input-group">
-        <label for="brand">ব্র্যান্ড / কোম্পানি</label>
-        <input type="text" id="brand" placeholder="ব্র্যান্ড নাম লিখুন">
-      </div>
-    </div>
-  </div>
-
-  <!-- Pricing Section -->
-  <div class="form-section">
-    <h3 class="section-title"><i class="fas fa-tags"></i> মূল্য তথ্য</h3>
-    <div class="form-grid">
-      <div class="input-group">
-        <label for="price">মূল্য (৳) *</label>
-        <input type="number" id="price" placeholder="মূল্য লিখুন" required min="0" step="0.01">
-      </div>
-      <div class="input-group">
-        <label for="offer">অফার মূল্য (৳)</label>
-        <input type="number" id="offer" placeholder="অফার মূল্য (ঐচ্ছিক)" min="0" step="0.01">
-      </div>
-      <div class="input-group">
-        <label for="unit">ইউনিট</label>
-        <select id="unit">
-          <option value="">ইউনিট নির্বাচন করুন</option>
-          <option value="পিস">পিস</option>
-          <option value="কেজি">কেজি</option>
-          <option value="গ্রাম">গ্রাম</option>
-          <option value="লিটার">লিটার</option>
-          <option value="মিটার">মিটার</option>
-          <option value="সেট">সেট</option>
-        </select>
-      </div>
-      <div class="input-group">
-        <label for="qty">পরিমাণ (Qty)</label>
-        <input type="number" id="qty" placeholder="পরিমাণ লিখুন" min="1">
-      </div>
-    </div>
-  </div>
-
-  <!-- Product Details Section -->
-  <div class="form-section">
-    <h3 class="section-title"><i class="fas fa-list-alt"></i> প্রোডাক্ট বিবরণ</h3>
-    <div class="form-grid">
-      <div class="input-group">
-        <label for="size">সাইজ অপশন</label>
-        <input type="text" id="size" placeholder="যেমন: S, M, L, XL">
-      </div>
-      <div class="input-group">
-        <label for="color">রঙ অপশন</label>
-        <input type="text" id="color" placeholder="যেমন: লাল, নীল, সবুজ">
-      </div>
-      <div class="input-group">
-        <label for="delivery">ডেলিভারি টাইম</label>
-        <input type="text" id="delivery" placeholder="যেমন: ২৪ ঘন্টা">
-      </div>
-      <div class="input-group">
-        <label for="status">স্ট্যাটাস</label>
-        <select id="status">
-          <option value="">স্ট্যাটাস নির্বাচন করুন</option>
-          <option value="স্টকে আছে">স্টকে আছে</option>
-          <option value="সীমিত স্টক">সীমিত স্টক</option>
-          <option value="প্রি-অর্ডার">প্রি-অর্ডার</option>
-          <option value="শীঘ্রই আসছে">শীঘ্রই আসছে</option>
-        </select>
-      </div>
-    </div>
-    <div class="input-group">
-      <label for="desc">প্রোডাক্ট বর্ণনা</label>
-      <textarea id="desc" rows="4" placeholder="প্রোডাক্ট সম্পর্কে বিস্তারিত লিখুন..."></textarea>
-    </div>
-  </div>
-
-  <!-- Media Section -->
-  <div class="form-section">
-    <h3 class="section-title"><i class="fas fa-images"></i> মিডিয়া</h3>
-    <div class="input-group">
-      <label for="video">ভিডিও লিংক (YouTube)</label>
-      <input type="url" id="video" placeholder="YouTube ভিডিও লিংক">
-    </div>
-    
-    <div class="input-group">
-      <label>প্রোডাক্ট ছবি</label>
       <div id="imageInputs">
-        <input type="url" class="img-url" placeholder="প্রথম ছবির লিংক (বাধ্যতামূলক)">
+        <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">
       </div>
-      <button type="button" onclick="addImageInput()" style="margin-top: 10px;"><i class="fas fa-plus"></i> আরও ছবি যোগ করুন</button>
-      <div class="image-preview" id="imagePreview"></div>
-    </div>
-  </div>
 
-  <!-- Contact Section -->
-  <div class="form-section">
-    <h3 class="section-title"><i class="fas fa-phone"></i> যোগাযোগ</h3>
-    <div class="input-group">
-      <label for="wa">WhatsApp নম্বর *</label>
-      <input type="tel" id="wa" placeholder="8801XXXXXXXXXX" required pattern="880[0-9]{10}">
-      <small style="color: #888; font-size: 12px;">ফরম্যাট: 8801XXXXXXXXXX</small>
-    </div>
-  </div>
-
-  <!-- Custom Fields Section -->
-  <div class="form-section">
-    <h3 class="section-title"><i class="fas fa-plus-circle"></i> কাস্টম তথ্য</h3>
-    <div id="customFields">
-      <div class="custom-field-group">
-        <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
-        <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
+      <div id="customFields">
+        <div class="custom-field-group">
+          <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি">
+          <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস">
+        </div>
       </div>
+
+      <button onclick="addCustomField()" type="button"><i class="fas fa-plus"></i> কাস্টম তথ্য যোগ করুন</button>
+      <button onclick="addImageField()" type="button"><i class="fas fa-image"></i> আরও ছবি যোগ করুন</button>
     </div>
-    <button type="button" onclick="addCustomField()"><i class="fas fa-plus"></i> কাস্টম তথ্য যোগ করুন</button>
+
+    <br />
+    <button id="generateBtn"><i class="fas fa-magic"></i> জেনারেট</button>
+    <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
   </div>
 
-  <!-- Action Buttons -->
-  <div class="form-section">
-    <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
-      <button id="generateBtn"><i class="fas fa-magic"></i> প্রোডাক্ট জেনারেট করুন</button>
-      <button id="copyBtn"><i class="fas fa-copy"></i> কপি করুন</button>
-      <button id="resetBtn" onclick="resetForm()"><i class="fas fa-undo"></i> রিসেট করুন</button>
-      <button onclick="saveDraft()" style="background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%);"><i class="fas fa-save"></i> ড্রাফট সংরক্ষণ</button>
-    </div>
-  </div>
-
-  <!-- Output Section -->
-  <div class="output" id="output" style="display: none;"></div>
-  
-  <!-- Live Preview Section -->
+  <div class="output" id="output"></div>
   <div class="live-preview" id="preview"></div>
 </main>
 
 <script src="script.js"></script>
 <script>
-  // Enhanced Dashboard Functionality
-  
   function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("active");
   }
 
-  function logout() {
-    if (confirm("আপনি কি লগ আউট করতে চান?")) {
-      localStorage.removeItem("loggedInUser");
-      window.location.replace("index.html");
-    }
-  }
 
-  // Load predefined templates
-  function loadTemplate(type) {
-    const templates = {
-      electronics: {
-        category: "ইলেকট্রনিক্স",
-        unit: "পিস",
-        delivery: "২৪-৪৮ ঘন্টা",
-        status: "স্টকে আছে"
-      },
-      fashion: {
-        category: "ফ্যাশন",
-        size: "S, M, L, XL",
-        color: "কালো, সাদা, নেভি",
-        unit: "পিস",
-        delivery: "৩-৫ দিন",
-        status: "স্টকে আছে"
-      },
-      food: {
-        category: "খাবার",
-        unit: "কেজি",
-        delivery: "১২-২৪ ঘন্টা",
-        status: "তাজা স্টক"
-      }
-    };
-    
-    const template = templates[type];
-    if (template) {
-      Object.keys(template).forEach(key => {
-        const element = document.getElementById(key);
-        if (element) {
-          element.value = template[key];
-        }
-      });
-      showToast(`${type} টেমপ্লেট লোড করা হয়েছে`, \'info\');
-    }
-  }
 
-  function clearForm() {
-    if (confirm("আপনি কি সব ফিল্ড পরিষ্কার করতে চান?")) {
-      document.querySelectorAll(\'input, textarea, select\').forEach(element => {
-        element.value = \'\';
-      });
-      showToast("ফর্ম পরিষ্কার করা হয়েছে", \'info\');
-    }
-  }
 
-  // Update statistics
-  function updateStats() {
-    const drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
-    const today = new Date().toDateString();
-    const todayDrafts = drafts.filter(draft => 
-      new Date(draft.timestamp).toDateString() === today
-    );
-    
-    document.getElementById("totalDrafts").textContent = drafts.length;
-    document.getElementById("todayProducts").textContent = todayDrafts.length;
-    document.getElementById("totalProducts").textContent = drafts.length;
-  }
 
-  // Image preview functionality
-  function updateImagePreview() {
-    const imageInputs = document.querySelectorAll(\'.img-url\');
-    const previewContainer = document.getElementById(\'imagePreview\');
-    previewContainer.innerHTML = \'\';
-    
-    imageInputs.forEach((input, index) => {
-      if (input.value.trim()) {
-        const img = document.createElement(\'img\');
-        img.src = input.value.trim();
-        img.alt = `Preview ${index + 1}`;
-        img.onerror = () => {
-          img.style.border = \'2px solid #dc3545\';
-          img.alt = \'ছবি লোড হয়নি\';
-        };
-        previewContainer.appendChild(img);
+  function applyFieldVisibility() {
+    const visibility = JSON.parse(localStorage.getItem("fieldVisibility") || "{}");
+    const optionalFields = [
+      "offer", "unit", "qty", "brand", "size", "color",
+      "delivery", "status", "category", "desc", "images",
+      "video", "customFields"
+    ];
+    optionalFields.forEach(key => {
+      const el = document.getElementById(key);
+      if (el && visibility[key] === false) {
+        el.style.display = "none";
       }
     });
+
+    if (visibility.images === false) {
+      document.getElementById("imageInputs").style.display = "none";
+    }
+    if (visibility.customFields === false) {
+      document.getElementById("customFields").style.display = "none";
+    }
   }
 
-  // Add event listeners for image preview
-  document.addEventListener(\'input\', (e) => {
-    if (e.target.classList.contains(\'img-url\')) {
-      updateImagePreview();
-    }
-  });
+  function logout() {
+    localStorage.removeItem("loggedInUser");
+    window.location.replace("index.html");
+  }
 
-  // Enhanced page load
   window.addEventListener("DOMContentLoaded", () => {
     if (!localStorage.getItem("loggedInUser")) {
       window.location.replace("index.html");
-      return;
     }
-    
-    updateStats();
-    
-    // Show/hide output based on content
-    const output = document.getElementById("output");
-    const observer = new MutationObserver(() => {
-      if (output.textContent.trim()) {
-        output.style.display = \'block\';
-      } else {
-        output.style.display = \'none\';
-      }
-    });
-    observer.observe(output, { childList: true, characterData: true, subtree: true });
-    
-    // Auto-save on form changes
-    let autoSaveTimer;
-    document.addEventListener(\'input\', () => {
-      clearTimeout(autoSaveTimer);
-      autoSaveTimer = setTimeout(() => {
-        if (getVal("name")) {
-          saveDraft();
-        }
-      }, 3000);
-    });
-    
-    console.log("Enhanced Dashboard loaded successfully!");
+    applyFieldVisibility();
   });
 </script>
 
 </body>
 </html>
-
-

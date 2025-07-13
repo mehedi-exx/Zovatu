@@ -1,9 +1,10 @@
+<!-- কোডের শুরু -->
 <!DOCTYPE html>
 <html lang="bn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>এডমিন প্যানেল - G9Tool</title>
+  <title>Admin Panel - G9Tool</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
@@ -29,26 +30,10 @@
     }
     .main-content {
       padding: 20px;
-      max-width: 900px;
+      max-width: 800px;
       margin: auto;
     }
-    .admin-section {
-      background: linear-gradient(135deg, #1c1c1c 0%, #2a2a2a 100%);
-      border-radius: 16px;
-      padding: 25px;
-      margin-bottom: 25px;
-      border: 1px solid rgba(255,255,255,0.1);
-    }
-    .section-title {
-      font-size: 20px;
-      font-weight: 600;
-      margin-bottom: 20px;
-      color: #00bfff;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    input[type="text"], input[type="file"], input[type="number"], textarea {
+    input[type="text"], input[type="file"] {
       width: 100%;
       padding: 10px;
       margin: 10px 0;
@@ -101,88 +86,6 @@
       border-top: 1px solid #333;
       margin-top: 10px;
     }
-    .field-group {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 16px;
-      margin-bottom: 10px;
-      background: #2a2a2a;
-      border-radius: 10px;
-      box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.4);
-    }
-    .field-label {
-      font-weight: 600;
-      font-size: 15px;
-    }
-    input[type="checkbox"] {
-      appearance: none;
-      width: 20px;
-      height: 20px;
-      border: 2px solid #ccc;
-      border-radius: 4px;
-      background-color: transparent;
-      cursor: pointer;
-      transition: all 0.2s ease-in-out;
-      position: relative;
-    }
-    input[type="checkbox"]:checked {
-      background-color: #28a745;
-      border-color: #28a745;
-    }
-    input[type="checkbox"]:checked::after {
-      content: "\f00c";
-      font-family: 'Font Awesome 6 Free';
-      font-weight: 900;
-      color: white;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 12px;
-    }
-    button.save-btn {
-      margin-top: 20px;
-      background: #00bfff;
-      color: white;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 16px;
-      cursor: pointer;
-      width: 100%;
-      transition: 0.3s ease;
-    }
-    button.save-btn:hover {
-      opacity: 0.9;
-    }
-    .filter-tabs {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .filter-tab {
-      background: linear-gradient(135deg, #333 0%, #555 100%);
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 25px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    .filter-tab.active {
-      background: linear-gradient(135deg, #00bfff 0%, #0080ff 100%);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 15px rgba(0,191,255,0.3);
-    }
-    .filter-tab:hover {
-      transform: translateY(-1px);
-    }
     @media (max-width: 600px) {
       .draft-header {
         flex-direction: column;
@@ -198,49 +101,146 @@
 <body>
 
 <header>
-  <div class="logo"><i class="fas fa-cog"></i> এডমিন প্যানেল</div>
-  <a href="dashboard.html" style="color:#00bfff;text-decoration:none;"><i class="fas fa-arrow-left"></i> ড্যাশবোর্ড</a>
+  <div class="logo"><i class="fas fa-cog"></i> Admin Panel</div>
+  <a href="dashboard.html" style="color:#00bfff;text-decoration:none;"><i class="fas fa-arrow-left"></i> Back</a>
 </header>
 
 <div class="main-content">
-  <!-- Admin Panel Section -->
-  <div class="admin-section">
-    <h2 class="section-title"><i class="fas fa-tools"></i> কন্ট্রোল হাব</h2>
-    <p style="color: #ccc; margin: 0;">ড্রাফট, ফিল্ড এবং ক্যাটাগরি পরিচালনা করুন</p>
-    
-    <!-- Drafts -->
-    <h3 class="section-title" style="margin-top: 20px;"><i class="fas fa-save"></i> সংরক্ষিত ড্রাফট</h3>
-    <input type="text" id="draftSearchInput" placeholder="🔍 প্রোডাক্ট খুঁজুন (নাম বা কোড)" oninput="renderDrafts()" />
-    <div class="filter-tabs">
-      <button class="filter-tab active" onclick="setFilter('all')">সব ড্রাফট</button>
-      <button class="filter-tab" onclick="setFilter('today')">আজকের</button>
-      <button class="filter-tab" onclick="setFilter('week')">এই সপ্তাহের</button>
-      <button class="filter-tab" onclick="setFilter('month')">এই মাসের</button>
-    </div>
-    <div style="margin: 10px 0;">
-      <button onclick="exportDrafts()"><i class="fas fa-download"></i> JSON এক্সপোর্ট</button>
-      <input type="file" id="importFile" accept=".json" onchange="importDrafts()" style="display: inline-block; width: auto;" />
-    </div>
-    <div id="draftList"></div>
+  <h2>📦 সেভ করা প্রোডাক্ট লিস্ট</h2>
 
-    <!-- Field Customization -->
-    <h3 class="section-title" style="margin-top: 20px;"><i class="fas fa-sliders-h"></i> ড্যাশবোর্ড ফিল্ড কন্ট্রোল</h3>
-    <form id="fieldManagerForm"></form>
-    <button class="save-btn" type="button" onclick="saveFieldSettings()">ফিল্ড সেটিংস আপডেট করুন</button>
+  <input type="text" id="searchInput" placeholder="🔍 প্রোডাক্ট খুঁজুন (নাম বা কোড)" oninput="renderDrafts()" />
 
-    <!-- Category Management -->
-    <h3 class="section-title" style="margin-top: 20px;"><i class="fas fa-tags"></i> ক্যাটাগরি ম্যানেজমেন্ট</h3>
-    <input type="text" id="newCategoryInput" placeholder="নতুন ক্যাটাগরি যোগ করুন" />
-    <button onclick="addCategory()"><i class="fas fa-plus"></i> ক্যাটাগরি যোগ করুন</button>
-    <div id="categoryList" style="margin-top: 15px;"></div>
+  <div style="margin: 10px 0;">
+    <button onclick="exportDrafts()"><i class="fas fa-download"></i> Export JSON</button>
+    <input type="file" id="importFile" accept=".json" onchange="importDrafts()" />
   </div>
+
+  <div id="draftList"></div>
 </div>
 
 <script>
-  // ... (JavaScript code remains the same) ...
+  function getDrafts() {
+    return JSON.parse(localStorage.getItem("drafts") || "[]");
+  }
+
+  function saveDrafts(drafts) {
+    localStorage.setItem("drafts", JSON.stringify(drafts));
+  }
+
+  function renderDrafts() {
+    const drafts = getDrafts();
+    const search = document.getElementById("searchInput").value.toLowerCase();
+    const list = document.getElementById("draftList");
+    list.innerHTML = "";
+
+    const filtered = drafts.filter(d => d.name.toLowerCase().includes(search) || d.code.toLowerCase().includes(search));
+
+    if (!filtered.length) {
+      list.innerHTML = "<p>❌ কোনো ড্রাফট পাওয়া যায়নি</p>";
+      return;
+    }
+
+    filtered.forEach(d => {
+      const div = document.createElement("div");
+      div.className = "draft-item";
+      div.innerHTML = `
+        <div class="draft-header">
+          <div class="draft-name">🔖 ${d.name} (${d.code})</div>
+          <div class="actions">
+            <button onclick="editDraft(${d.id})"><i class="fas fa-edit"></i> Edit</button>
+            <button onclick="deleteDraft(${d.id})"><i class="fas fa-trash"></i> Delete</button>
+            <button onclick="previewDraft(${d.id})"><i class="fas fa-eye"></i> Preview</button>
+          </div>
+        </div>
+        <div class="preview" id="preview-${d.id}" style="display:none;"></div>
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  function editDraft(id) {
+    localStorage.setItem("editDraftId", id);
+    window.location.href = "dashboard.html";
+  }
+
+  function deleteDraft(id) {
+    if (confirm("❌ আপনি কি সত্যিই ডিলিট করতে চান?")) {
+      const drafts = getDrafts().filter(d => d.id !== id);
+      saveDrafts(drafts);
+      renderDrafts();
+    }
+  }
+
+  function previewDraft(id) {
+    const previewBox = document.getElementById("preview-" + id);
+    if (previewBox.style.display === "block") {
+      previewBox.style.display = "none";
+      previewBox.innerHTML = "";
+      return;
+    }
+
+    const drafts = getDrafts();
+    const d = drafts.find(d => d.id === id);
+    if (!d) return;
+
+    const html = `
+      <p><strong>নাম:</strong> ${d.name}</p>
+      <p><strong>কোড:</strong> ${d.code}</p>
+      <p><strong>মূল্য:</strong> ৳${d.price}</p>
+      <p><strong>অফার:</strong> ৳${d.offer || "N/A"}</p>
+      <p><strong>হোয়াটসঅ্যাপ:</strong> ${d.wa}</p>
+      <p><strong>বর্ণনা:</strong> ${d.desc}</p>
+    `;
+    previewBox.innerHTML = html;
+    previewBox.style.display = "block";
+  }
+
+  function exportDrafts() {
+    const data = getDrafts();
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "drafts.json";
+    a.click();
+  }
+
+  function importDrafts() {
+    const file = document.getElementById("importFile").files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      try {
+        const imported = JSON.parse(e.target.result);
+        if (!Array.isArray(imported)) throw new Error("Invalid format");
+
+        const existing = getDrafts();
+        const merged = [...existing, ...imported.map(d => ({ ...d, id: Date.now() + Math.random() }))];
+        saveDrafts(merged);
+        alert("✅ ডেটা ইমপোর্ট সফল");
+        renderDrafts();
+      } catch (e) {
+        alert("❌ ইমপোর্ট করতে সমস্যা হয়েছে");
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function checkLogin() {
+    if (!localStorage.getItem("loggedInUser")) {
+      window.location.replace("index.html");
+    }
+  }
+
+  // Initial load
+  window.addEventListener("DOMContentLoaded", () => {
+    checkLogin();
+    renderDrafts();
+  });
 </script>
 
 </body>
 </html>
-
-
+<!-- কোডের শেষ -->

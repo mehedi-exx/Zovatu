@@ -3,7 +3,7 @@ function loginUser() {
   const pass = document.getElementById("password").value.trim();
 
   if (!uname || !pass) {
-    alert("⚠️ ইউজারনেম ও পাসওয়ার্ড পূরণ করুন");
+    showToast("⚠️ ইউজারনেম ও পাসওয়ার্ড পূরণ করুন");
     return;
   }
 
@@ -24,10 +24,10 @@ function loginUser() {
           window.location.href = "dashboard.html";
         }, 100);
       } else {
-        alert("❌ ইউজার তথ্য সঠিক নয় অথবা প্রিমিয়াম ইউজার নন");
+        showToast("❌ ইউজার তথ্য সঠিক নয় অথবা প্রিমিয়াম ইউজার নন");
       }
     })
     .catch(error => {
-      alert("⚠️ লগইন ব্যর্থ: " + error.message);
+      showToast("⚠️ লগইন ব্যর্থ: " + error.message);
     });
 }

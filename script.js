@@ -55,17 +55,39 @@ function applyTheme(theme) {
   }
 }
 
+// ✅ Professional Language Switching
+function switchLanguage(lang) {
+  // Update active button state
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.dataset.lang === lang) {
+      btn.classList.add('active');
+    }
+  });
+  
+  // Apply language with smooth transition
+  applyLanguage(lang, true);
+}
+
 // ✅ Enhanced Language Management
 async function applyLanguage(lang, showToastOnUpdate = false) {
-  const langSelect = document.getElementById("langSelect");
-  if (langSelect) {
-    langSelect.disabled = true;
-    langSelect.style.opacity = "0.5";
-  }
-  
   try {
+    // Show loading state
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.style.pointerEvents = 'none';
+      btn.style.opacity = '0.7';
+    });
+    
     await loadLanguage(lang);
     localStorage.setItem("language", lang);
+    
+    // Update active state
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.remove('active');
+      if (btn.dataset.lang === lang) {
+        btn.classList.add('active');
+      }
+    });
     
     if (showToastOnUpdate) {
       showToast(translateElement("language_changed") + `: ${lang === 'bn' ? 'বাংলা' : 'English'}`);
@@ -73,10 +95,11 @@ async function applyLanguage(lang, showToastOnUpdate = false) {
   } catch (error) {
     showToast("ভাষা পরিবর্তনে সমস্যা হয়েছে।", "error");
   } finally {
-    if (langSelect) {
-      langSelect.disabled = false;
-      langSelect.style.opacity = "1";
-    }
+    // Restore button states
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.style.pointerEvents = 'auto';
+      btn.style.opacity = '1';
+    });
   }
 }
 
@@ -316,13 +339,13 @@ window.addEventListener("DOMContentLoaded", async () => {
   const savedLang = localStorage.getItem("language") || "bn";
   await applyLanguage(savedLang, false);
   
-  const langSelect = document.getElementById("langSelect");
-  if (langSelect) {
-    langSelect.value = savedLang;
-    langSelect.addEventListener("change", async (e) => {
-      await applyLanguage(e.target.value, true);
-    });
-  }
+  // Initialize language buttons
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.dataset.lang === savedLang) {
+      btn.classList.add('active');
+    }
+  });
 
   applyFieldVisibility();
 
@@ -375,4 +398,5 @@ window.addCustomField = addCustomField;
 window.downloadTheme = downloadTheme;
 window.copyToClipboard = copyToClipboard;
 window.validateForm = validateForm;
+window.switchLanguage = switchLanguage;
 

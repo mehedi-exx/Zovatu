@@ -40,11 +40,20 @@
 
   <a href="#" onclick="logout()" data-i18n="logout">🔓 লগ আউট</a>
   <div class="language-selector">
-    <label for="langSelect" data-i18n="select_language"></label>
-    <select id="langSelect">
-      <option value="bn">বাংলা</option>
-      <option value="en">English</option>
-    </select>
+    <div class="language-header">
+      <i class="fas fa-globe"></i>
+      <span data-i18n="language_selection">ভাষা নির্বাচন</span>
+    </div>
+    <div class="language-options">
+      <button class="lang-btn active" data-lang="bn" onclick="switchLanguage('bn')">
+        <span class="flag">🇧🇩</span>
+        <span>বাংলা</span>
+      </button>
+      <button class="lang-btn" data-lang="en" onclick="switchLanguage('en')">
+        <span class="flag">🇺🇸</span>
+        <span>English</span>
+      </button>
+    </div>
   </div>
 
   <div class="theme-download-box">

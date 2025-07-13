@@ -1,68 +1,18 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Tutorial - G9Tool</title>
+  <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    body {
-      background: #121212;
-      color: #fff;
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-      line-height: 1.6;
-    }
-    header {
-      background: #1e1e1e;
-      padding: 14px 16px;
-      border-radius: 0 0 15px 15px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 18px;
-      font-weight: bold;
-    }
-    .header-left i {
-      color: #00bfff;
-    }
-    .back-btn {
-      color: #00bfff;
-      font-weight: 600;
-      font-size: 16px;
-      cursor: pointer;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 12px;
-      border-radius: 6px;
-      transition: background 0.3s;
-    }
-    .back-btn:hover {
-      background: rgba(0, 191, 255, 0.1);
-    }
-    main {
-      padding: 20px;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
     .tutorial-nav {
-      background: #1c1c1c;
-      border-radius: 12px;
+      background: #1a1a1a;
+      border-radius: 10px;
       padding: 20px;
       margin-bottom: 30px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
     .nav-grid {
       display: grid;
@@ -72,20 +22,19 @@
     .nav-item {
       background: #2a2a2a;
       padding: 15px;
-      border-radius: 8px;
+      border-radius: 5px;
       text-align: center;
       cursor: pointer;
       transition: all 0.3s;
-      border: 2px solid transparent;
+      border: 1px solid #444;
     }
     .nav-item:hover {
-      background: #333;
-      border-color: #00bfff;
-      transform: translateY(-2px);
+      background: #3a3a3a;
+      border-color: #4CAF50;
     }
     .nav-item.active {
-      background: #00bfff;
-      color: #000;
+      background: #4CAF50;
+      color: white;
     }
     .nav-item i {
       font-size: 24px;
@@ -93,11 +42,11 @@
       display: block;
     }
     .section {
-      background: #1c1c1c;
-      border-radius: 12px;
+      background: #1a1a1a;
+      border-radius: 10px;
       padding: 25px;
       margin-bottom: 25px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
       display: none;
     }
     .section.active {
@@ -110,7 +59,7 @@
     }
     .section h2 {
       margin-top: 0;
-      color: #00bfff;
+      color: #4CAF50;
       font-size: 28px;
       display: flex;
       align-items: center;
@@ -118,7 +67,7 @@
       margin-bottom: 20px;
     }
     .section h3 {
-      color: #28a745;
+      color: #4CAF50;
       font-size: 20px;
       margin: 25px 0 15px 0;
       display: flex;
@@ -132,7 +81,7 @@
     }
     .step-list {
       background: #2a2a2a;
-      border-radius: 8px;
+      border-radius: 5px;
       padding: 20px;
       margin: 20px 0;
     }
@@ -142,7 +91,7 @@
       gap: 15px;
       margin-bottom: 20px;
       padding-bottom: 20px;
-      border-bottom: 1px solid #333;
+      border-bottom: 1px solid #444;
     }
     .step-item:last-child {
       margin-bottom: 0;
@@ -150,8 +99,8 @@
       border-bottom: none;
     }
     .step-number {
-      background: #00bfff;
-      color: #000;
+      background: #4CAF50;
+      color: white;
       width: 30px;
       height: 30px;
       border-radius: 50%;
@@ -178,7 +127,7 @@
     }
     .feature-card {
       background: #2a2a2a;
-      border-radius: 8px;
+      border-radius: 5px;
       padding: 20px;
       text-align: center;
       transition: transform 0.3s;
@@ -188,7 +137,7 @@
     }
     .feature-card i {
       font-size: 36px;
-      color: #00bfff;
+      color: #4CAF50;
       margin-bottom: 15px;
     }
     .feature-card h4 {
@@ -202,8 +151,8 @@
     }
     .code-example {
       background: #000;
-      border: 1px solid #333;
-      border-radius: 8px;
+      border: 1px solid #444;
+      border-radius: 5px;
       padding: 15px;
       margin: 15px 0;
       font-family: 'Courier New', monospace;
@@ -212,8 +161,8 @@
       overflow-x: auto;
     }
     .tip-box {
-      background: linear-gradient(135deg, #28a745, #20c997);
-      border-radius: 8px;
+      background: #4CAF50;
+      border-radius: 5px;
       padding: 15px;
       margin: 20px 0;
       color: #fff;
@@ -222,8 +171,8 @@
       margin-right: 8px;
     }
     .warning-box {
-      background: linear-gradient(135deg, #ffc107, #fd7e14);
-      border-radius: 8px;
+      background: #ff9800;
+      border-radius: 5px;
       padding: 15px;
       margin: 20px 0;
       color: #000;
@@ -263,432 +212,432 @@
 </head>
 <body>
 
-  <header>
-    <div class="header-left">
+  <header class="header">
+    <div class="logo">
       <i class="fas fa-graduation-cap"></i>
       G9Tool Tutorial
     </div>
-    <a class="back-btn" href="dashboard.html">
-      <i class="fas fa-arrow-left"></i> ড্যাশবোর্ড
+    <a href="dashboard.html" style="color:#4CAF50;text-decoration:none;">
+      <i class="fas fa-arrow-left"></i> Dashboard
     </a>
   </header>
 
   <main>
     <!-- Navigation -->
     <div class="tutorial-nav">
-      <h2 style="color: #00bfff; text-align: center; margin-bottom: 20px;">
-        <i class="fas fa-book-open"></i> টিউটোরিয়াল বিষয়সমূহ
+      <h2 style="color: #4CAF50; text-align: center; margin-bottom: 20px;">
+        <i class="fas fa-book-open"></i> Tutorial Topics
       </h2>
       <div class="nav-grid">
         <div class="nav-item active" onclick="showSection('intro')">
           <i class="fas fa-play-circle"></i>
-          <div>পরিচিতি</div>
+          <div>Introduction</div>
         </div>
         <div class="nav-item" onclick="showSection('getting-started')">
           <i class="fas fa-rocket"></i>
-          <div>শুরু করুন</div>
+          <div>Getting Started</div>
         </div>
         <div class="nav-item" onclick="showSection('product-generation')">
           <i class="fas fa-magic"></i>
-          <div>প্রোডাক্ট জেনারেট</div>
+          <div>Product Generation</div>
         </div>
         <div class="nav-item" onclick="showSection('field-customize')">
           <i class="fas fa-cog"></i>
-          <div>ফিল্ড কাস্টমাইজ</div>
+          <div>Field Customize</div>
         </div>
         <div class="nav-item" onclick="showSection('admin-panel')">
           <i class="fas fa-user-shield"></i>
-          <div>অ্যাডমিন প্যানেল</div>
+          <div>Admin Panel</div>
         </div>
         <div class="nav-item" onclick="showSection('advanced')">
           <i class="fas fa-star"></i>
-          <div>অ্যাডভান্সড</div>
+          <div>Advanced</div>
         </div>
       </div>
     </div>
 
     <!-- Introduction Section -->
     <div class="section active" id="intro">
-      <h2><i class="fas fa-info-circle"></i> G9Tool কী?</h2>
+      <h2><i class="fas fa-info-circle"></i> What is G9Tool?</h2>
       
       <p>
-        G9Tool একটি শক্তিশালী এবং ব্যবহারকারী-বান্ধব প্রোডাক্ট জেনারেটর টুল যা আপনাকে সহজেই আপনার ই-কমার্স প্রোডাক্টের জন্য আকর্ষণীয় HTML কোড তৈরি করতে সাহায্য করে।
+        G9Tool is a powerful and user-friendly product generator tool that helps you easily create attractive HTML code for your e-commerce products.
       </p>
 
       <div class="feature-grid">
         <div class="feature-card">
           <i class="fas fa-code"></i>
-          <h4>HTML কোড জেনারেশন</h4>
-          <p>স্বয়ংক্রিয়ভাবে প্রোডাক্টের জন্য সুন্দর HTML কোড তৈরি করুন</p>
+          <h4>HTML Code Generation</h4>
+          <p>Automatically create beautiful HTML code for products</p>
         </div>
         <div class="feature-card">
           <i class="fas fa-eye"></i>
-          <h4>লাইভ প্রিভিউ</h4>
-          <p>রিয়েল-টাইমে আপনার প্রোডাক্টের চেহারা দেখুন</p>
+          <h4>Live Preview</h4>
+          <p>See your product appearance in real-time</p>
         </div>
         <div class="feature-card">
           <i class="fab fa-whatsapp"></i>
-          <h4>WhatsApp অর্ডার</h4>
-          <p>সরাসরি WhatsApp-এ অর্ডার পাঠানোর সুবিধা</p>
+          <h4>WhatsApp Order</h4>
+          <p>Direct order sending facility to WhatsApp</p>
         </div>
         <div class="feature-card">
           <i class="fas fa-save"></i>
-          <h4>ডেটা সংরক্ষণ</h4>
-          <p>আপনার প্রোডাক্ট তথ্য সংরক্ষণ এবং পরিচালনা করুন</p>
+          <h4>Data Storage</h4>
+          <p>Save and manage your product information</p>
         </div>
         <div class="feature-card">
           <i class="fas fa-mobile-alt"></i>
-          <h4>রেসপনসিভ ডিজাইন</h4>
-          <p>সব ডিভাইসে পারফেক্ট প্রদর্শন</p>
+          <h4>Responsive Design</h4>
+          <p>Perfect display on all devices</p>
         </div>
         <div class="feature-card">
           <i class="fas fa-language"></i>
-          <h4>বহুভাষিক সাপোর্ট</h4>
-          <p>বাংলা এবং ইংরেজি ভাষায় ব্যবহার করুন</p>
+          <h4>Multilingual Support</h4>
+          <p>Use in Bengali and English languages</p>
         </div>
       </div>
 
       <div class="tip-box">
         <i class="fas fa-lightbulb"></i>
-        <strong>টিপ:</strong> G9Tool সম্পূর্ণ ফ্রি এবং কোনো রেজিস্ট্রেশনের প্রয়োজন নেই। শুধু লগইন করে ব্যবহার শুরু করুন!
+        <strong>Tip:</strong> G9Tool is completely free and requires no registration. Just login and start using!
       </div>
     </div>
 
     <!-- Getting Started Section -->
     <div class="section" id="getting-started">
-      <h2><i class="fas fa-rocket"></i> কীভাবে শুরু করবেন</h2>
+      <h2><i class="fas fa-rocket"></i> How to Get Started</h2>
       
       <div class="step-list">
         <div class="step-item">
           <div class="step-number">1</div>
           <div class="step-content">
-            <h4>লগইন করুন</h4>
-            <p>প্রথমে index.html পেজে গিয়ে আপনার ইউজারনেম এবং পাসওয়ার্ড দিয়ে লগইন করুন। ডিফল্ট ইউজার: admin, পাসওয়ার্ড: admin</p>
+            <h4>Login</h4>
+            <p>First go to index.html page and login with your username and password. Default user: admin, password: admin123</p>
           </div>
         </div>
         <div class="step-item">
           <div class="step-number">2</div>
           <div class="step-content">
-            <h4>ড্যাশবোর্ডে প্রবেশ</h4>
-            <p>সফল লগইনের পর আপনি স্বয়ংক্রিয়ভাবে ড্যাশবোর্ডে চলে যাবেন যেখানে সব টুলস পাবেন</p>
+            <h4>Enter Dashboard</h4>
+            <p>After successful login you will automatically go to the dashboard where you will find all tools</p>
           </div>
         </div>
         <div class="step-item">
           <div class="step-number">3</div>
           <div class="step-content">
-            <h4>ভাষা নির্বাচন</h4>
-            <p>সাইডবার মেনু থেকে আপনার পছন্দের ভাষা (বাংলা/ইংরেজি) নির্বাচন করুন</p>
+            <h4>Select Language</h4>
+            <p>Select your preferred language (Bengali/English) from the sidebar menu</p>
           </div>
         </div>
         <div class="step-item">
           <div class="step-number">4</div>
           <div class="step-content">
-            <h4>ফিল্ড কাস্টমাইজ (ঐচ্ছিক)</h4>
-            <p>প্রয়োজন অনুযায়ী ফর্ম ফিল্ডগুলো চালু/বন্ধ করুন Field Customize সেকশন থেকে</p>
+            <h4>Field Customize (Optional)</h4>
+            <p>Turn on/off form fields as needed from Field Customize section</p>
           </div>
         </div>
         <div class="step-item">
           <div class="step-number">5</div>
           <div class="step-content">
-            <h4>প্রোডাক্ট তৈরি শুরু করুন</h4>
-            <p>এখন আপনি প্রোডাক্টের তথ্য দিয়ে HTML কোড জেনারেট করতে পারেন</p>
+            <h4>Start Creating Products</h4>
+            <p>Now you can generate HTML code with product information</p>
           </div>
         </div>
       </div>
 
       <div class="warning-box">
         <i class="fas fa-exclamation-triangle"></i>
-        <strong>গুরুত্বপূর্ণ:</strong> প্রথমবার ব্যবহারের আগে অবশ্যই Field Customize সেকশনে গিয়ে আপনার প্রয়োজনীয় ফিল্ডগুলো সেট করে নিন।
+        <strong>Important:</strong> Before first use, make sure to set your required fields in Field Customize section.
       </div>
     </div>
 
     <!-- Product Generation Section -->
     <div class="section" id="product-generation">
-      <h2><i class="fas fa-magic"></i> প্রোডাক্ট কোড জেনারেশন</h2>
+      <h2><i class="fas fa-magic"></i> Product Code Generation</h2>
       
-      <h3><i class="fas fa-edit"></i> তথ্য পূরণ</h3>
-      <p>ড্যাশবোর্ডের ফর্মে নিচের তথ্যগুলো পূরণ করুন:</p>
+      <h3><i class="fas fa-edit"></i> Fill Information</h3>
+      <p>Fill the following information in the dashboard form:</p>
       
       <div class="step-list">
         <div class="step-item">
           <div class="step-number">✓</div>
           <div class="step-content">
-            <h4>বাধ্যতামূলক ফিল্ড</h4>
-            <p><strong>প্রোডাক্ট নাম:</strong> আপনার প্রোডাক্টের নাম<br>
-            <strong>প্রোডাক্ট কোড:</strong> ইউনিক প্রোডাক্ট কোড<br>
-            <strong>মূল্য:</strong> প্রোডাক্টের দাম<br>
-            <strong>WhatsApp নম্বর:</strong> অর্ডারের জন্য নম্বর<br>
-            <strong>ছবির লিংক:</strong> প্রোডাক্টের ছবির URL</p>
+            <h4>Required Fields</h4>
+            <p><strong>Product Name:</strong> Your product name<br>
+            <strong>Product Code:</strong> Unique product code<br>
+            <strong>Price:</strong> Product price<br>
+            <strong>WhatsApp Number:</strong> Number for orders<br>
+            <strong>Image Link:</strong> Product image URL</p>
           </div>
         </div>
         <div class="step-item">
           <div class="step-number">+</div>
           <div class="step-content">
-            <h4>ঐচ্ছিক ফিল্ড</h4>
-            <p>অফার প্রাইস, ব্র্যান্ড, সাইজ, রঙ, ডেলিভারি টাইম, ক্যাটাগরি, বর্ণনা, ভিডিও লিংক ইত্যাদি</p>
+            <h4>Optional Fields</h4>
+            <p>Offer price, brand, size, color, delivery time, category, description, video link etc.</p>
           </div>
         </div>
       </div>
 
-      <h3><i class="fas fa-cogs"></i> জেনারেট প্রক্রিয়া</h3>
+      <h3><i class="fas fa-cogs"></i> Generation Process</h3>
       <div class="step-list">
         <div class="step-item">
           <div class="step-number">1</div>
           <div class="step-content">
-            <h4>তথ্য পূরণ করুন</h4>
-            <p>সব প্রয়োজনীয় ফিল্ড পূরণ করুন</p>
+            <h4>Fill Information</h4>
+            <p>Fill all required fields</p>
           </div>
         </div>
         <div class="step-item">
           <div class="step-number">2</div>
           <div class="step-content">
-            <h4>"জেনারেট" বাটনে ক্লিক</h4>
-            <p>সব তথ্য দেওয়ার পর জেনারেট বাটনে ক্লিক করুন</p>
+            <h4>Click "Generate" Button</h4>
+            <p>After providing all information click the generate button</p>
           </div>
         </div>
         <div class="step-item">
           <div class="step-number">3</div>
           <div class="step-content">
-            <h4>প্রিভিউ দেখুন</h4>
-            <p>আউটপুট সেকশনে আপনার প্রোডাক্টের প্রিভিউ দেখুন</p>
+            <h4>View Preview</h4>
+            <p>See your product preview in the output section</p>
           </div>
         </div>
         <div class="step-item">
           <div class="step-number">4</div>
           <div class="step-content">
-            <h4>কোড কপি করুন</h4>
-            <p>"কপি করুন" বাটনে ক্লিক করে HTML কোড কপি করুন</p>
+            <h4>Copy Code</h4>
+            <p>Click "Copy" button to copy the HTML code</p>
           </div>
         </div>
       </div>
 
       <div class="tip-box">
         <i class="fas fa-lightbulb"></i>
-        <strong>প্রো টিপ:</strong> একাধিক ছবি যোগ করতে "আরও ছবি যোগ করুন" বাটন ব্যবহার করুন। কাস্টম তথ্যের জন্য "কাস্টম তথ্য যোগ করুন" ব্যবহার করুন।
+        <strong>Pro Tip:</strong> Use "Add More Images" button to add multiple images. Use "Add Custom Info" for custom information.
       </div>
     </div>
 
     <!-- Field Customize Section -->
     <div class="section" id="field-customize">
-      <h2><i class="fas fa-cog"></i> ফিল্ড কাস্টমাইজেশন</h2>
+      <h2><i class="fas fa-cog"></i> Field Customization</h2>
       
       <p>
-        ফিল্ড কাস্টমাইজেশন ফিচার আপনাকে ড্যাশবোর্ডে প্রদর্শিত ফর্ম ফিল্ডগুলো নিয়ন্ত্রণ করার সুবিধা দেয়। এর মাধ্যমে আপনি শুধুমাত্র প্রয়োজনীয় ফিল্ডগুলো দেখাতে পারেন।
+        Field customization feature gives you the ability to control the form fields displayed on the dashboard. Through this you can show only the necessary fields.
       </p>
 
-      <h3><i class="fas fa-list-check"></i> কীভাবে ব্যবহার করবেন</h3>
+      <h3><i class="fas fa-list-check"></i> How to Use</h3>
       <div class="step-list">
         <div class="step-item">
           <div class="step-number">1</div>
           <div class="step-content">
-            <h4>Field Customize এ যান</h4>
-            <p>সাইডবার মেনু থেকে "⚙️ ফিল্ড কাস্টমাইজ" এ ক্লিক করুন</p>
+            <h4>Go to Field Customize</h4>
+            <p>Click on "Field Customize" from the sidebar menu</p>
           </div>
         </div>
         <div class="step-item">
           <div class="step-number">2</div>
           <div class="step-content">
-            <h4>ফিল্ড নির্বাচন করুন</h4>
-            <p>যে ফিল্ডগুলো দরকার সেগুলো চেক করুন, অপ্রয়োজনীয়গুলো আনচেক করুন</p>
+            <h4>Select Fields</h4>
+            <p>Check the fields you need, uncheck the unnecessary ones</p>
           </div>
         </div>
         <div class="step-item">
           <div class="step-number">3</div>
           <div class="step-content">
-            <h4>প্রিভিউ দেখুন</h4>
-            <p>নিচের প্রিভিউ সেকশনে সক্রিয় ফিল্ডগুলো দেখুন</p>
+            <h4>View Preview</h4>
+            <p>See active fields in the preview section below</p>
           </div>
         </div>
         <div class="step-item">
           <div class="step-number">4</div>
           <div class="step-content">
-            <h4>আপডেট করুন</h4>
-            <p>"আপডেট করুন" বাটনে ক্লিক করে সেটিংস সেভ করুন</p>
+            <h4>Update</h4>
+            <p>Click "Update" button to save settings</p>
           </div>
         </div>
       </div>
 
-      <h3><i class="fas fa-info-circle"></i> ফিল্ড প্রকারভেদ</h3>
+      <h3><i class="fas fa-info-circle"></i> Field Types</h3>
       <div class="feature-grid">
         <div class="feature-card">
-          <i class="fas fa-lock" style="color: #28a745;"></i>
-          <h4>বাধ্যতামূলক ফিল্ড</h4>
-          <p>এগুলো সবসময় দেখানো হবে এবং বন্ধ করা যাবে না</p>
+          <i class="fas fa-lock" style="color: #4CAF50;"></i>
+          <h4>Required Fields</h4>
+          <p>These will always be shown and cannot be turned off</p>
         </div>
         <div class="feature-card">
-          <i class="fas fa-toggle-on" style="color: #ffc107;"></i>
-          <h4>ঐচ্ছিক ফিল্ড</h4>
-          <p>এগুলো আপনার প্রয়োজন অনুযায়ী চালু/বন্ধ করতে পারেন</p>
+          <i class="fas fa-toggle-on" style="color: #ff9800;"></i>
+          <h4>Optional Fields</h4>
+          <p>These can be turned on/off according to your needs</p>
         </div>
       </div>
 
       <div class="warning-box">
         <i class="fas fa-exclamation-triangle"></i>
-        <strong>মনে রাখুন:</strong> ফিল্ড সেটিংস পরিবর্তনের পর ড্যাশবোর্ডে ফিরে গিয়ে পরিবর্তনগুলো দেখুন।
+        <strong>Remember:</strong> After changing field settings, go back to dashboard to see the changes.
       </div>
     </div>
 
     <!-- Admin Panel Section -->
     <div class="section" id="admin-panel">
-      <h2><i class="fas fa-user-shield"></i> অ্যাডমিন প্যানেল</h2>
+      <h2><i class="fas fa-user-shield"></i> Admin Panel</h2>
       
       <p>
-        অ্যাডমিন প্যানেল আপনার সংরক্ষিত প্রোডাক্টগুলো পরিচালনার জন্য একটি শক্তিশালী টুল। এখানে আপনি সব প্রোডাক্ট দেখতে, এডিট করতে, ডিলিট করতে এবং ভেরিফাই করতে পারেন।
+        Admin panel is a powerful tool for managing your saved products. Here you can view, edit, delete and verify all products.
       </p>
 
-      <h3><i class="fas fa-chart-bar"></i> স্ট্যাটিস্টিক্স ড্যাশবোর্ড</h3>
+      <h3><i class="fas fa-chart-bar"></i> Statistics Dashboard</h3>
       <div class="feature-grid">
         <div class="feature-card">
           <i class="fas fa-box"></i>
-          <h4>মোট প্রোডাক্ট</h4>
-          <p>আপনার সংরক্ষিত সব প্রোডাক্টের সংখ্যা</p>
+          <h4>Total Products</h4>
+          <p>Number of all your saved products</p>
         </div>
         <div class="feature-card">
-          <i class="fas fa-check-circle" style="color: #28a745;"></i>
-          <h4>ভেরিফাইড প্রোডাক্ট</h4>
-          <p>যে প্রোডাক্টগুলো ভেরিফাই করা হয়েছে</p>
+          <i class="fas fa-check-circle" style="color: #4CAF50;"></i>
+          <h4>Verified Products</h4>
+          <p>Products that have been verified</p>
         </div>
         <div class="feature-card">
-          <i class="fas fa-clock" style="color: #ffc107;"></i>
-          <h4>পেন্ডিং প্রোডাক্ট</h4>
-          <p>যে প্রোডাক্টগুলো এখনো ভেরিফাই হয়নি</p>
+          <i class="fas fa-clock" style="color: #ff9800;"></i>
+          <h4>Pending Products</h4>
+          <p>Products that are not yet verified</p>
         </div>
       </div>
 
-      <h3><i class="fas fa-tools"></i> প্রোডাক্ট ম্যানেজমেন্ট</h3>
+      <h3><i class="fas fa-tools"></i> Product Management</h3>
       <div class="step-list">
         <div class="step-item">
           <div class="step-number"><i class="fas fa-search"></i></div>
           <div class="step-content">
-            <h4>সার্চ ফিচার</h4>
-            <p>প্রোডাক্ট নাম, কোড বা ব্র্যান্ড দিয়ে খুঁজুন</p>
+            <h4>Search Feature</h4>
+            <p>Search by product name, code or brand</p>
           </div>
         </div>
         <div class="step-item">
           <div class="step-number"><i class="fas fa-edit"></i></div>
           <div class="step-content">
-            <h4>এডিট করুন</h4>
-            <p>যেকোনো প্রোডাক্ট এডিট করতে এডিট বাটনে ক্লিক করুন</p>
+            <h4>Edit</h4>
+            <p>Click edit button to edit any product</p>
           </div>
         </div>
         <div class="step-item">
           <div class="step-number"><i class="fas fa-eye"></i></div>
           <div class="step-content">
-            <h4>প্রিভিউ দেখুন</h4>
-            <p>প্রোডাক্টের বিস্তারিত তথ্য দেখতে প্রিভিউ বাটন ব্যবহার করুন</p>
+            <h4>View Preview</h4>
+            <p>Use preview button to see detailed product information</p>
           </div>
         </div>
         <div class="step-item">
           <div class="step-number"><i class="fas fa-check"></i></div>
           <div class="step-content">
-            <h4>ভেরিফাই করুন</h4>
-            <p>প্রোডাক্ট যাচাই করে ভেরিফাই স্ট্যাটাস দিন</p>
+            <h4>Verify</h4>
+            <p>Verify product and give verification status</p>
           </div>
         </div>
         <div class="step-item">
           <div class="step-number"><i class="fas fa-trash"></i></div>
           <div class="step-content">
-            <h4>ডিলিট করুন</h4>
-            <p>অপ্রয়োজনীয় প্রোডাক্ট ডিলিট করুন</p>
+            <h4>Delete</h4>
+            <p>Delete unnecessary products</p>
           </div>
         </div>
       </div>
 
-      <h3><i class="fas fa-exchange-alt"></i> ডেটা ইমপোর্ট/এক্সপোর্ট</h3>
+      <h3><i class="fas fa-exchange-alt"></i> Data Import/Export</h3>
       <div class="feature-grid">
         <div class="feature-card">
           <i class="fas fa-download"></i>
           <h4>Export JSON</h4>
-          <p>আপনার সব প্রোডাক্ট ডেটা JSON ফরম্যাটে ডাউনলোড করুন</p>
+          <p>Download all your product data in JSON format</p>
         </div>
         <div class="feature-card">
           <i class="fas fa-upload"></i>
           <h4>Import JSON</h4>
-          <p>পূর্বে এক্সপোর্ট করা JSON ফাইল আপলোড করুন</p>
+          <p>Upload previously exported JSON file</p>
         </div>
       </div>
 
       <div class="tip-box">
         <i class="fas fa-lightbulb"></i>
-        <strong>টিপ:</strong> নিয়মিত আপনার ডেটা এক্সপোর্ট করে ব্যাকআপ রাখুন। এতে ডেটা হারানোর ঝুঁকি কমবে।
+        <strong>Tip:</strong> Regularly export your data to keep backups. This will reduce the risk of data loss.
       </div>
     </div>
 
     <!-- Advanced Section -->
     <div class="section" id="advanced">
-      <h2><i class="fas fa-star"></i> অ্যাডভান্সড ফিচার</h2>
+      <h2><i class="fas fa-star"></i> Advanced Features</h2>
       
-      <h3><i class="fab fa-whatsapp"></i> WhatsApp অর্ডার সিস্টেম</h3>
+      <h3><i class="fab fa-whatsapp"></i> WhatsApp Order System</h3>
       <p>
-        G9Tool এর একটি বিশেষ ফিচার হলো স্বয়ংক্রিয় WhatsApp অর্ডার সিস্টেম। যখন কাস্টমার "Order Now" বাটনে ক্লিক করবে, তখন স্বয়ংক্রিয়ভাবে একটি অর্ডার মেসেজ তৈরি হয়ে WhatsApp এ পাঠানো হবে।
+        A special feature of G9Tool is the automatic WhatsApp order system. When customer clicks "Order Now" button, an order message will be automatically created and sent to WhatsApp.
       </p>
 
       <div class="code-example">
-অর্ডার মেসেজ ফরম্যাট:
-🛒 নতুন অর্ডার
-📦 প্রোডাক্ট: [প্রোডাক্ট নাম]
-🏷️ কোড: [প্রোডাক্ট কোড]
-💰 মূল্য: ৳[দাম]
-📞 অর্ডার করতে চাই
+Order Message Format:
+🛒 New Order
+📦 Product: [Product Name]
+🏷️ Code: [Product Code]
+💰 Price: ৳[Price]
+📞 Want to order
       </div>
 
-      <h3><i class="fab fa-youtube"></i> ভিডিও ইন্টিগ্রেশন</h3>
+      <h3><i class="fab fa-youtube"></i> Video Integration</h3>
       <p>
-        YouTube ভিডিও লিংক দিলে স্বয়ংক্রিয়ভাবে প্রোডাক্ট পেজে ভিডিও এম্বেড হয়ে যাবে। এটি কাস্টমারদের প্রোডাক্ট সম্পর্কে আরও ভালো ধারণা দিতে সাহায্য করে।
+        If you provide YouTube video link, the video will be automatically embedded in the product page. This helps customers get a better idea about the product.
       </p>
 
-      <h3><i class="fas fa-mobile-alt"></i> রেসপনসিভ ডিজাইন</h3>
+      <h3><i class="fas fa-mobile-alt"></i> Responsive Design</h3>
       <p>
-        G9Tool দিয়ে তৈরি সব প্রোডাক্ট পেজ সম্পূর্ণ রেসপনসিভ। এর মানে হলো:
+        All product pages created with G9Tool are fully responsive. This means:
       </p>
       <div class="feature-grid">
         <div class="feature-card">
           <i class="fas fa-desktop"></i>
-          <h4>ডেস্কটপ</h4>
-          <p>বড় স্ক্রিনে পারফেক্ট প্রদর্শন</p>
+          <h4>Desktop</h4>
+          <p>Perfect display on large screens</p>
         </div>
         <div class="feature-card">
           <i class="fas fa-tablet-alt"></i>
-          <h4>ট্যাবলেট</h4>
-          <p>মিডিয়াম সাইজ স্ক্রিনে অপ্টিমাইজড</p>
+          <h4>Tablet</h4>
+          <p>Optimized for medium size screens</p>
         </div>
         <div class="feature-card">
           <i class="fas fa-mobile-alt"></i>
-          <h4>মোবাইল</h4>
-          <p>ছোট স্ক্রিনে টাচ-ফ্রেন্ডলি</p>
+          <h4>Mobile</h4>
+          <p>Touch-friendly on small screens</p>
         </div>
       </div>
 
-      <h3><i class="fas fa-palette"></i> কাস্টম স্টাইলিং</h3>
+      <h3><i class="fas fa-palette"></i> Custom Styling</h3>
       <p>
-        জেনারেট করা HTML কোডে CSS স্টাইল ইনক্লুড থাকে যা আপনি প্রয়োজন অনুযায়ী কাস্টমাইজ করতে পারেন:
+        The generated HTML code includes CSS styles that you can customize as needed:
       </p>
       <div class="code-example">
-/* প্রোডাক্ট কার্ডের রঙ পরিবর্তন */
+/* Change product card color */
 .product-card {
   background: #your-color;
   border: 2px solid #your-border-color;
 }
 
-/* বাটনের স্টাইল */
+/* Button style */
 .order-btn {
   background: linear-gradient(45deg, #color1, #color2);
 }
       </div>
 
-      <h3><i class="fas fa-download"></i> থিম ডাউনলোড</h3>
+      <h3><i class="fas fa-download"></i> Theme Download</h3>
       <p>
-        সাইডবার মেনুতে "G9Theme" বক্স থেকে আপনি ব্লগার থিম ডাউনলোড করতে পারেন। এই থিমটি G9Tool এর সাথে সামঞ্জস্যপূর্ণ এবং আপনার ব্লগে প্রোডাক্ট প্রদর্শনের জন্য অপ্টিমাইজড।
+        From the "G9Theme" box in the sidebar menu you can download blogger theme. This theme is compatible with G9Tool and optimized for displaying products on your blog.
       </p>
 
       <div class="warning-box">
         <i class="fas fa-exclamation-triangle"></i>
-        <strong>সতর্কতা:</strong> কাস্টম CSS যোগ করার সময় সাবধান থাকুন যাতে রেসপনসিভ ডিজাইন নষ্ট না হয়।
+        <strong>Warning:</strong> Be careful when adding custom CSS so that responsive design is not damaged.
       </div>
 
       <div class="tip-box">
         <i class="fas fa-lightbulb"></i>
-        <strong>প্রো টিপ:</strong> আরও ভালো ফলাফলের জন্য উচ্চ মানের প্রোডাক্ট ছবি ব্যবহার করুন এবং বিস্তারিত বর্ণনা দিন।
+        <strong>Pro Tip:</strong> Use high quality product images and detailed descriptions for better results.
       </div>
     </div>
   </main>

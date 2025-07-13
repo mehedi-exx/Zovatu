@@ -1,6 +1,5 @@
-<!-- কোডের শুরু -->
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,39 +7,17 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    body {
-      margin: 0;
-      background: #121212;
-      color: #fff;
-      font-family: 'Segoe UI', sans-serif;
-    }
-    header {
-      background: #1f1f1f;
-      padding: 12px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid #333;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    }
-    .logo {
-      font-size: 18px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: #00bfff;
-    }
     .main-content {
       padding: 20px;
       max-width: 1200px;
       margin: auto;
     }
     .admin-controls {
-      background: #1f1f1f;
+      background: #1a1a1a;
       padding: 20px;
-      border-radius: 12px;
+      border-radius: 10px;
       margin-bottom: 20px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
     .search-section {
       display: grid;
@@ -49,53 +26,17 @@
       align-items: center;
       margin-bottom: 20px;
     }
-    input[type="text"], input[type="file"] {
-      width: 100%;
-      padding: 12px 16px;
-      background: #2a2a2a;
-      border: 2px solid #333;
-      color: #fff;
-      border-radius: 8px;
-      font-size: 16px;
-      transition: all 0.3s;
-    }
-    input[type="text"]:focus {
-      outline: none;
-      border-color: #28a745;
-      box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
-    }
-    button {
-      padding: 12px 20px;
-      background: #28a745;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      margin: 5px;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 14px;
-      transition: all 0.3s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-    button:hover {
-      background: #218838;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
-    }
     .draft-item {
-      background: #1f1f1f;
-      border: 2px solid #333;
-      border-radius: 12px;
+      background: #1a1a1a;
+      border: 1px solid #444;
+      border-radius: 10px;
       padding: 20px;
       margin-bottom: 20px;
       transition: all 0.3s;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
     .draft-item:hover {
-      border-color: #28a745;
-      transform: translateY(-2px);
+      border-color: #4CAF50;
     }
     .draft-header {
       display: flex;
@@ -106,7 +47,7 @@
     .draft-name {
       font-size: 18px;
       font-weight: bold;
-      color: #00bfff;
+      color: #4CAF50;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -118,7 +59,7 @@
       margin-bottom: 15px;
       padding: 15px;
       background: #2a2a2a;
-      border-radius: 8px;
+      border-radius: 5px;
     }
     .meta-item {
       display: flex;
@@ -127,7 +68,7 @@
     }
     .meta-label {
       font-size: 12px;
-      color: #888;
+      color: #bbb;
       text-transform: uppercase;
       font-weight: 600;
     }
@@ -142,37 +83,37 @@
       flex-wrap: wrap;
     }
     .actions button {
-      background: #444;
+      background: #4CAF50;
       font-size: 13px;
       padding: 8px 12px;
       margin: 0;
     }
     .actions button.edit-btn {
-      background: #007bff;
+      background: #2196f3;
     }
     .actions button.delete-btn {
-      background: #dc3545;
+      background: #f44336;
     }
     .actions button.preview-btn {
-      background: #6f42c1;
+      background: #9c27b0;
     }
     .actions button.verify-btn {
-      background: #28a745;
+      background: #4CAF50;
     }
     .actions button.verify-btn.verified {
-      background: #20c997;
+      background: #00bcd4;
     }
     .preview {
       padding: 15px;
-      border-top: 2px solid #333;
+      border-top: 1px solid #444;
       margin-top: 15px;
       background: #2a2a2a;
-      border-radius: 8px;
+      border-radius: 5px;
     }
     .preview img {
       max-width: 80px;
       max-height: 80px;
-      border-radius: 6px;
+      border-radius: 5px;
       margin: 2px;
     }
     .stats-section {
@@ -182,20 +123,20 @@
       margin-bottom: 30px;
     }
     .stat-card {
-      background: #1f1f1f;
+      background: #1a1a1a;
       padding: 20px;
-      border-radius: 12px;
+      border-radius: 10px;
       text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
     .stat-number {
       font-size: 32px;
       font-weight: bold;
-      color: #28a745;
+      color: #4CAF50;
     }
     .stat-label {
       font-size: 14px;
-      color: #888;
+      color: #bbb;
       margin-top: 5px;
     }
     @media (max-width: 768px) {
@@ -222,9 +163,9 @@
 </head>
 <body>
 
-<header>
+<header class="header">
   <div class="logo"><i class="fas fa-cog"></i> <span data-i18n="admin_panel">Admin Panel</span></div>
-  <a href="dashboard.html" style="color:#00bfff;text-decoration:none;" data-i18n="back"><i class="fas fa-arrow-left"></i> Back</a>
+  <a href="dashboard.html" style="color:#4CAF50;text-decoration:none;" data-i18n="back"><i class="fas fa-arrow-left"></i> Back</a>
 </header>
 
 <div class="main-content">
@@ -232,26 +173,26 @@
   <div class="stats-section">
     <div class="stat-card">
       <div class="stat-number" id="totalProducts">0</div>
-      <div class="stat-label">মোট প্রোডাক্ট</div>
+      <div class="stat-label">Total Products</div>
     </div>
     <div class="stat-card">
       <div class="stat-number" id="verifiedProducts">0</div>
-      <div class="stat-label">ভেরিফাইড প্রোডাক্ট</div>
+      <div class="stat-label">Verified Products</div>
     </div>
     <div class="stat-card">
       <div class="stat-number" id="pendingProducts">0</div>
-      <div class="stat-label">পেন্ডিং প্রোডাক্ট</div>
+      <div class="stat-label">Pending Products</div>
     </div>
   </div>
 
   <!-- Admin Controls -->
   <div class="admin-controls">
-    <h2 data-i18n="saved_product_list">📦 সেভ করা প্রোডাক্ট ম্যানেজমেন্ট</h2>
+    <h2 data-i18n="saved_product_list"><i class="fas fa-box"></i> Saved Product Management</h2>
     
     <div class="search-section">
-      <input type="text" id="searchInput" placeholder="🔍 প্রোডাক্ট খুঁজুন (নাম বা কোড)" oninput="renderDrafts()" data-i18n="search_product" />
+      <input type="text" id="searchInput" placeholder="Search products (name or code)" oninput="renderDrafts()" data-i18n="search_product" />
       <button onclick="exportDrafts()" data-i18n="export_json"><i class="fas fa-download"></i> Export JSON</button>
-      <label for="importFile" style="background: #007bff; padding: 12px 20px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-weight: 600;">
+      <label for="importFile" style="background: #4CAF50; padding: 12px 20px; border-radius: 5px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: white;">
         <i class="fas fa-upload"></i> Import JSON
         <input type="file" id="importFile" accept=".json" onchange="importDrafts()" style="display: none;" />
       </label>
@@ -261,37 +202,7 @@
   <div id="draftList"></div>
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</html>
-<!-- কোডের শেষ -->
-
-
-
-
-
-
 <script type="module" src="js/admin.js"></script>
-
+</body>
+</html>
 

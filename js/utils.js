@@ -3,42 +3,67 @@ let translations = {};
 export const getVal = id => document.getElementById(id)?.value.trim();
 
 export function showToast(message, type = "success") {
-  const toastContainer = document.getElementById("toast-container");
-  if (!toastContainer) {
-    const newContainer = document.createElement("div");
-    newContainer.id = "toast-container";
-    document.body.appendChild(newContainer);
-  }
+  // Remove existing toasts to prevent stacking
+  const existingToasts = document.querySelectorAll('.toast');
+  existingToasts.forEach(toast => {
+    toast.classList.add('hide');
+    setTimeout(() => toast.remove(), 300);
+  });
 
   const toast = document.createElement("div");
-  toast.className = `toast toast-${type}`;
-  toast.innerHTML = `<i class="fas fa-info-circle"></i> ${message}`;
+  toast.className = `toast ${type}`;
+  
+  let icon = "fas fa-info-circle";
+  if (type === "success") icon = "fas fa-check-circle";
+  else if (type === "error") icon = "fas fa-times-circle";
+  else if (type === "warning") icon = "fas fa-exclamation-triangle";
+  else if (type === "info") icon = "fas fa-info-circle";
 
-  if (type === "success") {
-    toast.querySelector("i").className = "fas fa-check-circle";
-  } else if (type === "error") {
-    toast.querySelector("i").className = "fas fa-times-circle";
-  } else if (type === "warning") {
-    toast.querySelector("i").className = "fas fa-exclamation-triangle";
-  } else if (type === "info") {
-    toast.querySelector("i").className = "fas fa-info-circle";
-  }
+  toast.innerHTML = `<i class="${icon}"></i> <span>${message}</span>`;
+  
+  document.body.appendChild(toast);
 
-  document.getElementById("toast-container").appendChild(toast);
+  // Trigger animation
+  setTimeout(() => toast.classList.add("show"), 100);
 
+  // Auto remove after 4 seconds
   setTimeout(() => {
-    toast.classList.add("hide");
-    toast.addEventListener("transitionend", () => toast.remove());
-  }, 3000);
+    toast.classList.remove("show");
+    setTimeout(() => {
+      if (toast.parentNode) {
+        toast.remove();
+      }
+    }, 400);
+  }, 4000);
+
+  // Click to dismiss
+  toast.addEventListener('click', () => {
+    toast.classList.remove("show");
+    setTimeout(() => {
+      if (toast.parentNode) {
+        toast.remove();
+      }
+    }, 400);
+  });
 }
 
 export async function loadLanguage(lang) {
   try {
     const response = await fetch(`./languages/${lang}.json`);
+    if (!response.ok) {
+      throw new Error(`Failed to load language file: ${lang}.json`);
+    }
     translations = await response.json();
     applyTranslations();
+    
+    // Update document language
+    document.documentElement.lang = lang;
+    
+    return true;
   } catch (error) {
     console.error("Error loading language file:", error);
+    showToast(`Language loading failed: ${error.message}`, "error");
+    return false;
   }
 }
 
@@ -59,4 +84,66 @@ function applyTranslations() {
   });
 }
 
+// Enhanced form validation utilities
+export function validateEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+export function validatePhone(phone) {
+  const phoneRegex = /^8801[0-9]{9}$/;
+  return phoneRegex.test(phone);
+}
+
+export function validateURL(url) {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function sanitizeInput(input) {
+  const div = document.createElement('div');
+  div.textContent = input;
+  return div.innerHTML;
+}
+
+// Enhanced localStorage utilities
+export function setStorageItem(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch (error) {
+    console.error('Storage error:', error);
+    showToast('Storage operation failed', 'error');
+    return false;
+  }
+}
+
+export function getStorageItem(key, defaultValue = null) {
+  try {
+    const item = localStorage.getItem(key);
+    return item ? JSON.parse(item) : defaultValue;
+  } catch (error) {
+    console.error('Storage retrieval error:', error);
+    return defaultValue;
+  }
+}
+
+// Enhanced error handling
+export function handleError(error, context = '') {
+  console.error(`Error in ${context}:`, error);
+  showToast(`An error occurred${context ? ` in ${context}` : ''}: ${error.message}`, 'error');
+}
+
+// Performance monitoring
+export function measurePerformance(name, fn) {
+  const start = performance.now();
+  const result = fn();
+  const end = performance.now();
+  console.log(`${name} took ${end - start} milliseconds`);
+  return result;
+}
 

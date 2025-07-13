@@ -219,10 +219,10 @@
         const existing = getDrafts();
         const merged = [...existing, ...imported.map(d => ({ ...d, id: Date.now() + Math.random() }))];
         saveDrafts(merged);
-        alert("✅ ডেটা ইমপোর্ট সফল");
+        showToast("✅ ডেটা ইমপোর্ট সফল");
         renderDrafts();
       } catch (e) {
-        alert("❌ ইমপোর্ট করতে সমস্যা হয়েছে");
+        showToast("❌ ইমপোর্ট করতে সমস্যা হয়েছে");
       }
     };
     reader.readAsText(file);
@@ -244,3 +244,27 @@
 </body>
 </html>
 <!-- কোডের শেষ -->
+
+
+<script>
+  function showToast(message) {
+    const toast = document.createElement("div");
+    toast.textContent = message;
+    toast.style = `
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #28a745;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      z-index: 9999;
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
+</script>
+
+

@@ -2,7 +2,7 @@
   "name": "G9Tool",
   "short_name": "G9Tool",
   "description": "A powerful tool for product generation and management.",
-  "start_url": "/G9-Tool-main/index.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#121212",
   "theme_color": "#1f1f1f",

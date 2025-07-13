@@ -4,20 +4,27 @@ import { generateProduct, addImageInput, addCustomField, saveDraft, loadDraftToF
 // ✅ Enhanced Sidebar Toggle with Animation
 function toggleSidebar() {
   const sidebar = document.getElementById("sidebar");
-  const isActive = sidebar.classList.contains("active");
+  const isOpen = sidebar.classList.contains("open");
   
-  if (isActive) {
-    sidebar.classList.remove("active");
-    sidebar.classList.add("closing");
-    setTimeout(() => sidebar.classList.remove("closing"), 300);
+  if (isOpen) {
+    sidebar.classList.remove("open");
   } else {
-    sidebar.classList.add("active");
+    sidebar.classList.add("open");
   }
   
   // Add backdrop for mobile
-  if (!isActive) {
+  if (!isOpen) {
     const backdrop = document.createElement("div");
     backdrop.className = "sidebar-backdrop";
+    backdrop.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    `;
     backdrop.onclick = toggleSidebar;
     document.body.appendChild(backdrop);
   } else {
@@ -319,7 +326,7 @@ function setupKeyboardShortcuts() {
     // Escape to close sidebar
     if (e.key === 'Escape') {
       const sidebar = document.getElementById("sidebar");
-      if (sidebar.classList.contains("active")) {
+      if (sidebar.classList.contains("open")) {
         toggleSidebar();
       }
     }

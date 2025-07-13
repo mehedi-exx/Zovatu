@@ -1,4 +1,4 @@
-/* G9Tool Base CSS - Old Version Inspired */
+/* G9Tool Professional CSS - Pure Dark Mode (Black, White, Yellow) */
 
 /* ✅ Global Styles */
 * {
@@ -9,17 +9,17 @@
 
 body {
   font-family: 'Segoe UI', sans-serif;
-  background-color: #121212; /* Dark background */
-  color: #fff; /* White text */
+  background-color: #000000; /* Pure Black Background */
+  color: #ffffff; /* White Text */
   line-height: 1.5;
   overflow-x: hidden;
 }
 
 /* ✅ Header Styles */
 header.header {
-  background-color: #1a1a1a; /* Slightly lighter dark for header */
+  background-color: #1a1a1a; /* Dark Gray for Header */
   padding: 15px 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -34,18 +34,18 @@ header.header {
   gap: 10px;
   font-size: 20px;
   font-weight: 700;
-  color: #fff;
+  color: #ffffff;
 }
 
 .logo i {
-  color: #4CAF50; /* Green accent for icon */
+  color: #FFD700; /* Gold/Yellow accent for icon */
   font-size: 22px;
 }
 
 .menu-btn {
-  background-color: #333; /* Darker button */
+  background-color: #333333; /* Darker button */
   border: none;
-  color: #fff;
+  color: #ffffff;
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
@@ -54,12 +54,12 @@ header.header {
 }
 
 .menu-btn:hover {
-  background-color: #555;
+  background-color: #555555;
 }
 
 .telegram-icon {
-  background-color: #0088cc; /* Telegram blue */
-  color: white;
+  background-color: #FFD700; /* Gold/Yellow for Telegram icon */
+  color: #000000; /* Black text for contrast */
   padding: 10px;
   border-radius: 50%;
   text-decoration: none;
@@ -68,7 +68,7 @@ header.header {
 }
 
 .telegram-icon:hover {
-  background-color: #005f8c;
+  background-color: #DAA520; /* Darker Gold on hover */
 }
 
 /* ✅ Sidebar Styles */
@@ -78,12 +78,12 @@ header.header {
   left: -280px;
   width: 280px;
   height: 100vh;
-  background-color: #1a1a1a; /* Dark background for sidebar */
+  background-color: #1a1a1a; /* Dark Gray for sidebar */
   padding: 20px;
   transition: left 0.3s ease;
   z-index: 1000;
   overflow-y: auto;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .sidebar.open {
@@ -114,7 +114,7 @@ header.header {
   padding: 12px 15px;
   margin: 8px 0;
   background-color: #2a2a2a; /* Slightly lighter dark for links */
-  color: #fff;
+  color: #ffffff;
   text-decoration: none;
   border-radius: 5px;
   font-weight: 500;
@@ -126,8 +126,8 @@ header.header {
 }
 
 .sidebar a i {
+  color: #FFD700; /* Gold/Yellow accent for icons */
   font-size: 16px;
-  color: #4CAF50; /* Green accent for icons */
 }
 
 /* ✅ Language Selector */
@@ -144,12 +144,12 @@ header.header {
   gap: 8px;
   margin-bottom: 10px;
   font-weight: 600;
-  color: #fff;
+  color: #ffffff;
   font-size: 15px;
 }
 
 .language-header i {
-  color: #4CAF50;
+  color: #FFD700;
   font-size: 16px;
 }
 
@@ -165,9 +165,9 @@ header.header {
   gap: 10px;
   padding: 10px 12px;
   background-color: #3a3a3a;
-  border: 1px solid #555;
+  border: 1px solid #555555;
   border-radius: 5px;
-  color: #fff;
+  color: #ffffff;
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 500;
@@ -175,13 +175,13 @@ header.header {
 
 .lang-btn:hover {
   background-color: #4a4a4a;
-  border-color: #4CAF50;
+  border-color: #FFD700;
 }
 
 .lang-btn.active {
-  background-color: #4CAF50; /* Green for active */
-  border-color: #4CAF50;
-  color: white;
+  background-color: #FFD700; /* Gold/Yellow for active */
+  border-color: #FFD700;
+  color: #000000; /* Black text for contrast */
 }
 
 .flag {
@@ -207,24 +207,24 @@ header.header {
 
 .theme-header i {
   font-size: 22px;
-  color: #4CAF50;
+  color: #FFD700;
 }
 
 .logo-text {
   font-size: 16px;
   font-weight: 700;
-  color: #fff;
+  color: #ffffff;
 }
 
 .theme-download-box p {
-  color: #ccc;
+  color: #cccccc;
   margin-bottom: 10px;
   font-size: 13px;
 }
 
 .theme-download-box button {
-  background-color: #4CAF50;
-  color: white;
+  background-color: #FFD700;
+  color: #000000;
   border: none;
   padding: 10px 20px;
   border-radius: 5px;
@@ -235,7 +235,7 @@ header.header {
 }
 
 .theme-download-box button:hover {
-  background-color: #45a049;
+  background-color: #DAA520;
 }
 
 /* ✅ Main Content */
@@ -249,7 +249,7 @@ main {
   background-color: #1a1a1a;
   padding: 25px;
   border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
   margin-bottom: 20px;
 }
 
@@ -259,26 +259,26 @@ input, textarea, select {
   padding: 12px 15px;
   margin: 8px 0;
   background-color: #2a2a2a;
-  border: 1px solid #444;
+  border: 1px solid #444444;
   border-radius: 5px;
-  color: #fff;
+  color: #ffffff;
   font-size: 15px;
   transition: border-color 0.3s ease;
 }
 
 input:focus, textarea:focus, select:focus {
   outline: none;
-  border-color: #4CAF50;
+  border-color: #FFD700;
 }
 
 input::placeholder, textarea::placeholder {
-  color: #bbb;
+  color: #bbbbbb;
 }
 
 /* ✅ Buttons */
 button {
-  background-color: #4CAF50;
-  color: white;
+  background-color: #FFD700;
+  color: #000000;
   border: none;
   padding: 12px 20px;
   border-radius: 5px;
@@ -292,11 +292,11 @@ button {
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #DAA520;
 }
 
 button.success {
-  background-color: #4CAF50;
+  background-color: #FFD700;
 }
 
 button.warning {
@@ -313,11 +313,11 @@ button.error {
   padding: 20px;
   border-radius: 10px;
   margin: 15px 0;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 .output h3, .live-preview h3 {
-  color: #4CAF50;
+  color: #FFD700;
   margin-bottom: 10px;
   font-size: 17px;
   font-weight: 600;
@@ -345,7 +345,8 @@ button.error {
 }
 
 .toast.success {
-  background-color: #4CAF50;
+  background-color: #FFD700;
+  color: #000000;
 }
 
 .toast.error {
@@ -439,15 +440,13 @@ button.error {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #4CAF50;
+  background: #FFD700;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #45a049;
+  background: #DAA520;
 }
-
-
 
 /* ✅ Enhanced Mobile Responsiveness */
 @media (max-width: 1024px) {
@@ -639,7 +638,7 @@ textarea:focus-visible,
 select:focus-visible,
 .lang-btn:focus-visible,
 .sidebar a:focus-visible {
-  outline: 3px solid #4CAF50;
+  outline: 3px solid #FFD700;
   outline-offset: 2px;
 }
 
@@ -671,13 +670,13 @@ html {
 
 /* ✅ Selection Styling */
 ::selection {
-  background-color: #4CAF50;
-  color: white;
+  background-color: #FFD700;
+  color: #000000;
 }
 
 ::-moz-selection {
-  background-color: #4CAF50;
-  color: white;
+  background-color: #FFD700;
+  color: #000000;
 }
 
 /* ✅ Improved Form Validation */
@@ -686,7 +685,7 @@ input:invalid {
 }
 
 input:valid {
-  border-color: #4CAF50;
+  border-color: #FFD700;
 }
 
 /* ✅ Better Button States */
@@ -697,7 +696,7 @@ button:disabled {
 }
 
 button:disabled:hover {
-  background-color: #4CAF50;
+  background-color: #FFD700;
   transform: none;
 }
 
@@ -734,7 +733,7 @@ button:disabled:hover {
 
 /* ✅ Success States */
 .success-message {
-  color: #4CAF50;
+  color: #FFD700;
   font-size: 14px;
   margin-top: 5px;
   display: none;

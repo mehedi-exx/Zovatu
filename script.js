@@ -336,7 +336,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   const savedTheme = localStorage.getItem("theme") || "dark";
   applyTheme(savedTheme);
 
-  const savedLang = localStorage.getItem("language") || "bn";
+  const savedLang = localStorage.getItem("language") || "en"; // Default to English
   await applyLanguage(savedLang, false);
   
   // Initialize language buttons

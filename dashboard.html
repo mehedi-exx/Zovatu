@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -34,22 +34,22 @@
 
 <div class="sidebar" id="sidebar">
   <button class="close-sidebar" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
-  <a href="tutorial.html" data-i18n="tutorial">📚 টিউটোরিয়াল </a>
-  <a href="admin.html" data-i18n="admin_panel">🧑‍💻 এডমিন প্যানেল </a>
-  <a href="fieldManager.html" data-i18n="field_customize">⚙️ ফিল্ড কাস্টমাইজ</a>
+  <a href="tutorial.html" data-i18n="tutorial"><i class="fas fa-book"></i> টিউটোরিয়াল </a>
+  <a href="admin.html" data-i18n="admin_panel"><i class="fas fa-user-shield"></i> এডমিন প্যানেল </a>
+  <a href="fieldManager.html" data-i18n="field_customize"><i class="fas fa-cogs"></i> ফিল্ড কাস্টমাইজ</a>
 
-  <a href="#" onclick="logout()" data-i18n="logout">🔓 লগ আউট</a>
+  <a href="#" onclick="logout()" data-i18n="logout"><i class="fas fa-sign-out-alt"></i> লগ আউট</a>
   <div class="language-selector">
     <div class="language-header">
       <i class="fas fa-globe"></i>
       <span data-i18n="language_selection">ভাষা নির্বাচন</span>
     </div>
     <div class="language-options">
-      <button class="lang-btn active" data-lang="bn" onclick="switchLanguage('bn')">
+      <button class="lang-btn" data-lang="bn" onclick="switchLanguage('bn')">
         <span class="flag">🇧🇩</span>
         <span>বাংলা</span>
       </button>
-      <button class="lang-btn" data-lang="en" onclick="switchLanguage('en')">
+      <button class="lang-btn active" data-lang="en" onclick="switchLanguage('en')">
         <span class="flag">🇺🇸</span>
         <span>English</span>
       </button>

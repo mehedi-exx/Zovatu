@@ -37,7 +37,7 @@
   <a href="tutorial.html" data-i18n="tutorial">📚 টিউটোরিয়াল </a>
   <a href="admin.html" data-i18n="admin_panel">🧑‍💻 এডমিন প্যানেল </a>
   <a href="fieldManager.html" data-i18n="field_customize">⚙️ ফিল্ড কাস্টমাইজ</a>
-  <a href="file manager/Theme.html" data-i18n="download_theme"><i class="fab fa-blogger-b"></i> ডাউনলোড থিম</a>
+
   <a href="#" onclick="logout()" data-i18n="logout">🔓 লগ আউট</a>
   <div class="language-selector">
     <label for="langSelect" data-i18n="select_language"></label>
@@ -102,5 +102,18 @@
 
 
 
+
+
+
+
+  <div class="theme-download-box">
+    <div class="theme-header">
+      <i class="fab fa-blogger-b"></i>
+      <div class="logo-text">G9Tool</div>
+    </div>
+    <p data-i18n="theme_download_description">আপনার ব্লগের জন্য থিম ডাউনলোড করুন।</p>
+    <button id="downloadThemeBtn" data-i18n="download_theme_button" onclick="downloadTheme()">ডাউনলোড থিম</button>
+    <div id="downloadTimer" style="display:none;"></div>
+  </div>
 
 

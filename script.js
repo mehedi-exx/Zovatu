@@ -19,10 +19,12 @@ function applyTheme(theme) {
   localStorage.setItem("theme", theme);
 }
 
-async function applyLanguage(lang) {
+async function applyLanguage(lang, showToastOnUpdate = false) {
   await loadLanguage(lang);
   localStorage.setItem("language", lang);
-  showToast(translateElement("language_changed") + `: ${lang}`);
+  if (showToastOnUpdate) {
+    showToast(translateElement("language_changed") + `: ${lang}`);
+  }
 }
 
 // ✅ Event Listeners
@@ -35,11 +37,11 @@ window.addEventListener("DOMContentLoaded", async () => {
   applyTheme(savedTheme);
 
   const savedLang = localStorage.getItem("language") || "bn";
-  await applyLanguage(savedLang);
+  await applyLanguage(savedLang, false); // Initial load, no toast
   const langSelect = document.getElementById("langSelect");
   if (langSelect) {
     langSelect.value = savedLang;
-    langSelect.addEventListener("change", (e) => applyLanguage(e.target.value));
+    langSelect.addEventListener("change", async (e) => await applyLanguage(e.target.value, true)); // User change, show toast
   }
 
   // Apply field visibility after DOM is loaded and language is set
@@ -66,5 +68,46 @@ window.logout = logout;
 window.addImageField = addImageInput;
 window.addCustomField = addCustomField;
 
+
+
+
+
+// ✅ Theme Download Functionality
+function downloadTheme() {
+  const downloadBtn = document.getElementById("downloadThemeBtn");
+  const downloadTimer = document.getElementById("downloadTimer");
+  let timeLeft = 5;
+
+  downloadBtn.disabled = true;
+  downloadTimer.style.display = "block";
+  downloadTimer.textContent = `ডাউনলোড শুরু হচ্ছে ${timeLeft} সেকেন্ড পর...`;
+
+  const timerInterval = setInterval(() => {
+    timeLeft--;
+    if (timeLeft > 0) {
+      downloadTimer.textContent = `ডাউনলোড শুরু হচ্ছে ${timeLeft} সেকেন্ড পর...`;
+    } else {
+      clearInterval(timerInterval);
+      downloadTimer.style.display = "none";
+      
+      if (confirm("আপনি কি থিমটি ডাউনলোড করতে চান?")) {
+        // Simulate download - in a real scenario, this would be a fetch to a theme file
+        const a = document.createElement("a");
+        a.href = "file manager/Theme.html"; // Assuming Theme.html is the theme file
+        a.download = "G9Tool_Theme.html";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        showToast("থিম ডাউনলোড শুরু হয়েছে!");
+      } else {
+        showToast("ডাউনলোড বাতিল করা হয়েছে।");
+      }
+      downloadBtn.disabled = false;
+    }
+  }, 1000);
+}
+
+// Expose to global scope
+window.downloadTheme = downloadTheme;
 
 

@@ -353,8 +353,6 @@ window.addEventListener("DOMContentLoaded", async () => {
   const savedLang = localStorage.getItem("language") || "en";
   await loadLanguage(savedLang);
   
-  // Load saved settings
-  loadGlobalSettings();
   
   renderDrafts();
   
@@ -375,59 +373,6 @@ window.addEventListener("DOMContentLoaded", async () => {
     renderDrafts();
   }, 30000);
 });
-
-// Global Settings Functions
-export function loadGlobalSettings() {
-  // Load currency setting
-  const savedCurrency = localStorage.getItem("globalCurrency") || "BDT";
-  const currencySelect = document.getElementById("currencySelect");
-  if (currencySelect) {
-    currencySelect.value = savedCurrency;
-  }
-
-  // Load output language setting
-  const savedOutputLang = localStorage.getItem("outputLanguage") || "bn";
-  const outputLangSelect = document.getElementById("outputLanguageSelect");
-  if (outputLangSelect) {
-    outputLangSelect.value = savedOutputLang;
-  }
-
-  // Load WhatsApp language setting
-  const savedWhatsappLang = localStorage.getItem("whatsappLanguage") || "bn";
-  const whatsappLangSelect = document.getElementById("whatsappLanguageSelect");
-  if (whatsappLangSelect) {
-    whatsappLangSelect.value = savedWhatsappLang;
-  }
-}
-
-export function saveCurrencySettings() {
-  const currencySelect = document.getElementById("currencySelect");
-  if (currencySelect) {
-    localStorage.setItem("globalCurrency", currencySelect.value);
-    showToast("✅ Currency settings saved successfully!");
-  }
-}
-
-export function saveOutputLanguageSettings() {
-  const outputLangSelect = document.getElementById("outputLanguageSelect");
-  if (outputLangSelect) {
-    localStorage.setItem("outputLanguage", outputLangSelect.value);
-    showToast("✅ Output language settings saved successfully!");
-  }
-}
-
-export function saveWhatsappLanguageSettings() {
-  const whatsappLangSelect = document.getElementById("whatsappLanguageSelect");
-  if (whatsappLangSelect) {
-    localStorage.setItem("whatsappLanguage", whatsappLangSelect.value);
-    showToast("✅ WhatsApp language settings saved successfully!");
-  }
-}
-
-// Expose functions to global scope
-window.saveCurrencySettings = saveCurrencySettings;
-window.saveOutputLanguageSettings = saveOutputLanguageSettings;
-window.saveWhatsappLanguageSettings = saveWhatsappLanguageSettings;
 
 
 

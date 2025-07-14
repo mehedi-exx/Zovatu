@@ -1,9 +1,18 @@
+import { LanguageManager } from './languageManager.js';
+
 let translations = {};
+let languageManager = null;
 
 export const getVal = id => document.getElementById(id)?.value.trim();
 
 export function showToast(message, type = "success") {
-  // Remove existing toasts to prevent stacking
+  // Use language manager's toast if available
+  if (window.languageManager) {
+    window.languageManager.showToast(message, type);
+    return;
+  }
+
+  // Fallback toast implementation
   const existingToasts = document.querySelectorAll('.toast');
   existingToasts.forEach(toast => {
     toast.classList.add('hide');
@@ -23,10 +32,8 @@ export function showToast(message, type = "success") {
   
   document.body.appendChild(toast);
 
-  // Trigger animation
   setTimeout(() => toast.classList.add("show"), 100);
 
-  // Auto remove after 4 seconds
   setTimeout(() => {
     toast.classList.remove("show");
     setTimeout(() => {
@@ -36,7 +43,6 @@ export function showToast(message, type = "success") {
     }, 400);
   }, 4000);
 
-  // Click to dismiss
   toast.addEventListener('click', () => {
     toast.classList.remove("show");
     setTimeout(() => {
@@ -68,6 +74,10 @@ export async function loadLanguage(lang) {
 }
 
 export function translateElement(key) {
+  // Use language manager's translate if available
+  if (window.languageManager) {
+    return window.languageManager.translate(key);
+  }
   return translations[key] || key;
 }
 
@@ -145,5 +155,34 @@ export function measurePerformance(name, fn) {
   const end = performance.now();
   console.log(`${name} took ${end - start} milliseconds`);
   return result;
+}
+
+// Currency formatting utility
+export function formatPrice(price, includeSymbol = true) {
+  if (window.languageManager) {
+    return window.languageManager.formatPrice(price, includeSymbol);
+  }
+  
+  // Fallback formatting
+  const formattedPrice = parseFloat(price).toLocaleString();
+  return includeSymbol ? `৳${formattedPrice}` : formattedPrice;
+}
+
+// WhatsApp message generation utility
+export function generateWhatsAppMessage(productData) {
+  if (window.languageManager) {
+    return window.languageManager.generateWhatsAppMessage(productData);
+  }
+  
+  // Fallback message generation
+  const { name, code, price, offer, category, delivery } = productData;
+  const finalPrice = offer || price;
+  
+  return `📦 আমি একটি পণ্য অর্ডার করতে চাই
+🔖 প্রোডাক্ট: ${name}
+💰 মূল্য: ৳${finalPrice}
+🧾 কোড: ${code}
+📁 ক্যাটাগরি: ${category || 'N/A'}
+🚚 ডেলিভারি: ${delivery || 'N/A'}`;
 }
 

@@ -22,25 +22,6 @@ export function generateProduct() {
     return;
   }
 
-  // Get global settings
-  const globalCurrency = localStorage.getItem("globalCurrency") || "BDT";
-  const outputLanguage = localStorage.getItem("outputLanguage") || "bn";
-  const whatsappLanguage = localStorage.getItem("whatsappLanguage") || "bn";
-
-  // Currency symbols
-  const currencySymbols = {
-    USD: "$",
-    BDT: "৳",
-    EUR: "€",
-    GBP: "£",
-    INR: "₹",
-    JPY: "¥",
-    CAD: "C$",
-    AUD: "A$"
-  };
-
-  const currencySymbol = currencySymbols[globalCurrency] || "৳";
-
   const discount = offer && price ? Math.round(((price - offer) / price) * 100) : 0;
   const mainImg = imgs[0].value.trim();
   
@@ -92,14 +73,6 @@ export function generateProduct() {
     }
   }
 
-  // Generate WhatsApp message based on language
-  let whatsappMessage = "";
-  if (whatsappLanguage === "en") {
-    whatsappMessage = `📦 I want to order a product\n🔖 Product: ${name}\n💰 Price: ${currencySymbol}${offer || price}\n🧾 Code: ${code}\n📁 Category: ${category}\n🚚 Delivery: ${delivery}`;
-  } else {
-    whatsappMessage = `📦 আমি একটি পণ্য অর্ডার করতে চাই\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ${currencySymbol}${offer || price}\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি: ${delivery}`;
-  }
-
   // Generate HTML based on selected theme
   let html = generateOldVersionTheme();
 
@@ -126,11 +99,11 @@ export function generateProduct() {
 
   <h2 style="margin:5px 0;">${name}</h2>
   <p style="font-size:18px;">
-    ${offer ? `<span style="text-decoration:line-through;color:#aaa;margin-right:6px;">${currencySymbol}${price.toLocaleString()}</span><span style="color:red;font-weight:bold;">${currencySymbol}${offer.toLocaleString()}</span><small style="color:limegreen;">(-${discount}%)</small>` : `<span style="color:red;font-weight:bold;">${currencySymbol}${price.toLocaleString()}</span>`}
+    ${offer ? `<span style="text-decoration:line-through;color:#aaa;margin-right:6px;">৳${price.toLocaleString()}</span><span style="color:red;font-weight:bold;">৳${offer.toLocaleString()}</span><small style="color:limegreen;">(-${discount}%)</small>` : `<span style="color:red;font-weight:bold;">৳${price.toLocaleString()}</span>`}
   </p>
 
   <div style="margin:20px 0;">
-    <a href="https://wa.me/${wa}?text=${encodeURIComponent(whatsappMessage)}" 
+    <a href="https://wa.me/${wa}?text=${encodeURIComponent(`📦 আমি একটি পণ্য অর্ডার করতে চাই\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ${offer || price}৳\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি: ${delivery}`)}" 
        target="_blank"
        style="display:inline-block;background: linear-gradient(135deg, #25D366, #128C7E);color:#fff;padding:14px 32px;border-radius:50px;font-weight:bold;font-size:17px;text-decoration:none;box-shadow: 0 4px 10px rgba(0,0,0,0.15);transition: all 0.3s ease;">
       Order Now
@@ -146,7 +119,7 @@ export function generateProduct() {
   ${desc ? `<div style="border:1px solid #eee;padding:15px;border-radius:10px;max-width:500px;margin:auto;margin-bottom:20px;"><p style="margin:0;"><strong>Description:</strong><br>${desc}</p></div>` : ''}
   ${videoEmbed ? videoEmbed.replace(/border-radius:10px/g, 'border-radius:10px;max-width:500px;margin:auto;').replace(/background:#f8f9fa/g, 'background:#f5f5f5') : ''}
   
-  <p style="display:none;"><a href="#">{getProduct} $price={${currencySymbol}${price}} $sale={${currencySymbol}${offer}} $style={1}</a></p>
+  <p style="display:none;"><a href="#">{getProduct} $price={৳${price}} $sale={৳${offer}} $style={1}</a></p>
 </div>
 
 <script>
@@ -417,4 +390,5 @@ style.textContent = `
 }
 `;
 document.head.appendChild(style);
+
 

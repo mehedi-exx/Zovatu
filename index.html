@@ -77,6 +77,27 @@
       width: 100%;
       cursor: pointer;
       font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    .login-btn:hover {
+      background: #218838;
+      transform: translateY(-2px);
+    }
+    .login-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    .loading {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s ease-in-out infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
     .contact-links {
       margin-top: 20px;

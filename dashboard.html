@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title data-i18n="g9tool_dashboard">G9Tool Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+
+<script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("service-worker.js")
+        .then(registration => {
+          console.log("Service Worker registered: ", registration);
+        })
+        .catch(error => {
+          console.error("Service Worker registration failed: ", error);
+        });
+    });
+  }
+</script>
+
+<header class="header">
+  <div class="left-icons">
+    <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+  </div>
+  <div class="logo"><i class="fas fa-toolbox"></i> G9Tool</div>
+  <a class="telegram-icon" href="https://t.me/yourchannel" target="_blank"><i class="fab fa-telegram"></i></a>
+</header>
+
+<div class="sidebar" id="sidebar">
+  <button class="close-sidebar" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
+  <a href="tutorial.html" data-i18n="tutorial"><i class="fas fa-book"></i> টিউটোরিয়াল </a>
+  <a href="admin.html" data-i18n="admin_panel"><i class="fas fa-user-shield"></i> এডমিন প্যানেল </a>
+  <a href="fieldManager.html" data-i18n="field_customize"><i class="fas fa-cogs"></i> ফিল্ড কাস্টমাইজ</a>
+
+  <a href="#" onclick="logout()" data-i18n="logout"><i class="fas fa-sign-out-alt"></i> লগ আউট</a>
+  <div class="language-selector">
+    <div class="language-header">
+      <i class="fas fa-globe"></i>
+      <span data-i18n="language_selection">ভাষা নির্বাচন</span>
+    </div>
+    <div class="language-options">
+      <button class="lang-btn" data-lang="bn" onclick="switchLanguage('bn')">
+        <span class="flag">🇧🇩</span>
+        <span>বাংলা</span>
+      </button>
+      <button class="lang-btn active" data-lang="en" onclick="switchLanguage('en')">
+        <span class="flag">🇺🇸</span>
+        <span>English</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="theme-download-box">
+    <div class="theme-header">
+      <i class="fab fa-blogger-b"></i>
+      <div class="logo-text">G9Theme</div>
+    </div>
+    <p data-i18n="theme_download_description">আপনার ব্লগের জন্য থিম ডাউনলোড করুন।</p>
+    <button id="downloadThemeBtn" data-i18n="download_theme_button" onclick="downloadTheme()">ডাউনলোড থিম</button>
+    <div id="downloadTimer" style="display:none;"></div>
+  </div>
+</div>
+<main>
+  <div class="form-wrapper">
+    <div id="formFields">
+      <input type="text" id="name" placeholder="প্রোডাক্ট নাম" data-i18n="product_name">
+      <input type="text" id="code" placeholder="প্রোডাক্ট কোড" data-i18n="product_code">
+      <input type="number" id="price" placeholder="মূল্য (৳)" data-i18n="price">
+      <input type="number" id="offer" placeholder="অফার মূল্য (ঐচ্ছিক)" data-i18n="offer_price">
+      <input type="text" id="unit" placeholder="ইউনিট (যেমনঃ পিস, কেজি)" data-i18n="unit">
+      <input type="number" id="qty" placeholder="পরিমাণ (Qty)" data-i18n="quantity">
+      <input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি" data-i18n="brand_company">
+      <input type="text" id="size" placeholder="সাইজ অপশন" data-i18n="size_option">
+      <input type="text" id="color" placeholder="রঙ অপশন" data-i18n="color_option">
+      <input type="text" id="delivery" placeholder="ডেলিভারি টাইম" data-i18n="delivery_time">
+      <input type="text" id="status" placeholder="স্ট্যাটাস" data-i18n="status">
+      <input type="text" id="category" placeholder="ক্যাটাগরি" data-i18n="category">
+      <textarea id="desc" rows="3" placeholder="প্রোডাক্ট বর্ণনা" data-i18n="product_description"></textarea>
+      <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)" data-i18n="youtube_video_link">
+      <input type="tel" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)" data-i18n="whatsapp_number">
+
+      <div id="imageInputs">
+        <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)" data-i18n="image_url">
+      </div>
+
+      <div id="customFields">
+        <div class="custom-field-group">
+          <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি" data-i18n="custom_field_title">
+          <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস" data-i18n="custom_field_value">
+        </div>
+      </div>
+    <div class="button-group">
+      <button id="generateBtn" data-i18n="generate"><i class="fas fa-magic"></i> জেনারেট</button>
+      <button id="copyBtn" data-i18n="copy"><i class="fas fa-copy"></i> কপি করুন</button>
+      <button onclick="addCustomField()" type="button" data-i18n="add_custom_info"><i class="fas fa-plus"></i> কাস্টম তথ্য যোগ করুন</button>
+      <button onclick="addImageField()" type="button" data-i18n="add_more_images"><i class="fas fa-image"></i> আরও ছবি যোগ করুন</button>
+    </div>
+    </div>
+  </div>
+
+  <div class="output-section">
+    <h3><i class="fas fa-code"></i> Generated Code</h3>
+    <textarea id="output" readonly></textarea>
+    
+    <h3><i class="fas fa-eye"></i> Preview</h3>
+    <div id="preview"></div>
+  </div>
+</main>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

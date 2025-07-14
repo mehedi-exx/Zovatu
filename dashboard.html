@@ -26,14 +26,45 @@
 
 <header class="header">
   <div class="left-icons">
-    <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+    <button class="menu-btn" onclick="toggleSidebar()" aria-label="Toggle Menu">
+      <i class="fas fa-bars"></i>
+    </button>
   </div>
-  <div class="logo"><i class="fas fa-toolbox"></i> G9Tool</div>
-  <a class="telegram-icon" href="https://t.me/yourchannel" target="_blank"><i class="fab fa-telegram"></i></a>
+  
+  <div class="logo">
+    <i class="fas fa-toolbox"></i> 
+    <span>G9Tool</span>
+  </div>
+  
+  <div class="header-actions">
+    <!-- Language Toggle (Mini) -->
+    <div class="header-language-toggle">
+      <button class="lang-btn compact" data-lang="bn" onclick="window.languageManager?.switchLanguage('bn')" aria-label="Switch to Bengali">
+        <span class="flag">🇧🇩</span>
+        <span class="lang-text">BN</span>
+      </button>
+      <button class="lang-btn compact active" data-lang="en" onclick="window.languageManager?.switchLanguage('en')" aria-label="Switch to English">
+        <span class="flag">🇺🇸</span>
+        <span class="lang-text">EN</span>
+      </button>
+    </div>
+    
+    <!-- Telegram Icon -->
+    <a class="telegram-icon" href="https://t.me/yourchannel" target="_blank" aria-label="Join our Telegram channel">
+      <i class="fab fa-telegram"></i>
+      <span class="tooltip">Join Telegram</span>
+    </a>
+    
+    <!-- Theme Toggle (Optional) -->
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+      <i class="fas fa-moon"></i>
+    </button>
+  </div>
 </header>
 
 <div class="sidebar" id="sidebar">
   <button class="close-sidebar" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
+  <a href="dashboard.html" data-i18n="dashboard"><i class="fas fa-home"></i> Dashboard</a>
   <a href="tutorial.html" data-i18n="tutorial"><i class="fas fa-book"></i> টিউটোরিয়াল </a>
   <a href="admin.html" data-i18n="admin_panel"><i class="fas fa-user-shield"></i> এডমিন প্যানেল </a>
   <a href="fieldManager.html" data-i18n="field_customize"><i class="fas fa-cogs"></i> ফিল্ড কাস্টমাইজ</a>
@@ -45,11 +76,11 @@
       <span data-i18n="language_selection">ভাষা নির্বাচন</span>
     </div>
     <div class="language-options">
-      <button class="lang-btn" data-lang="bn" onclick="switchLanguage('bn')">
+      <button class="lang-btn" data-lang="bn">
         <span class="flag">🇧🇩</span>
         <span>বাংলা</span>
       </button>
-      <button class="lang-btn active" data-lang="en" onclick="switchLanguage('en')">
+      <button class="lang-btn active" data-lang="en">
         <span class="flag">🇺🇸</span>
         <span>English</span>
       </button>
@@ -68,52 +99,249 @@
 </div>
 <main>
   <div class="form-wrapper">
+    <div class="form-header">
+      <h2 data-i18n="product_form_title">
+        <i class="fas fa-plus-circle"></i>
+        প্রোডাক্ট তথ্য ফর্ম
+      </h2>
+      <p data-i18n="form_description">নিচের ফর্মটি পূরণ করে আপনার প্রোডাক্টের জন্য প্রফেশনাল কোড জেনারেট করুন</p>
+    </div>
+
     <div id="formFields">
-      <input type="text" id="name" placeholder="প্রোডাক্ট নাম" data-i18n="product_name">
-      <input type="text" id="code" placeholder="প্রোডাক্ট কোড" data-i18n="product_code">
-      <input type="number" id="price" placeholder="মূল্য (৳)" data-i18n="price">
-      <input type="number" id="offer" placeholder="অফার মূল্য (ঐচ্ছিক)" data-i18n="offer_price">
-      <input type="text" id="unit" placeholder="ইউনিট (যেমনঃ পিস, কেজি)" data-i18n="unit">
-      <input type="number" id="qty" placeholder="পরিমাণ (Qty)" data-i18n="quantity">
-      <input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি" data-i18n="brand_company">
-      <input type="text" id="size" placeholder="সাইজ অপশন" data-i18n="size_option">
-      <input type="text" id="color" placeholder="রঙ অপশন" data-i18n="color_option">
-      <input type="text" id="delivery" placeholder="ডেলিভারি টাইম" data-i18n="delivery_time">
-      <input type="text" id="status" placeholder="স্ট্যাটাস" data-i18n="status">
-      <input type="text" id="category" placeholder="ক্যাটাগরি" data-i18n="category">
-      <textarea id="desc" rows="3" placeholder="প্রোডাক্ট বর্ণনা" data-i18n="product_description"></textarea>
-      <input type="url" id="video" placeholder="ভিডিও লিংক (YouTube)" data-i18n="youtube_video_link">
-      <input type="tel" id="wa" placeholder="WhatsApp নম্বর (8801XXXXXXXXXX)" data-i18n="whatsapp_number">
+      <!-- Basic Product Information -->
+      <div class="form-section">
+        <h3 class="section-title" data-i18n="basic_info">
+          <i class="fas fa-info-circle"></i>
+          মৌলিক তথ্য
+        </h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name" data-i18n="product_name_label">প্রোডাক্ট নাম *</label>
+            <input type="text" id="name" placeholder="প্রোডাক্ট নাম" data-i18n="product_name" required>
+            <div class="field-hint" data-i18n="name_hint">আপনার প্রোডাক্টের সঠিক নাম লিখুন</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="code" data-i18n="product_code_label">প্রোডাক্ট কোড *</label>
+            <input type="text" id="code" placeholder="প্রোডাক্ট কোড" data-i18n="product_code" required>
+            <div class="field-hint" data-i18n="code_hint">ইউনিক প্রোডাক্ট কোড (যেমন: P001)</div>
+          </div>
+        </div>
 
-      <div id="imageInputs">
-        <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)" data-i18n="image_url">
-      </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="price" data-i18n="price_label">মূল্য *</label>
+            <div class="input-with-icon">
+              <span class="input-icon">৳</span>
+              <input type="number" id="price" placeholder="মূল্য" data-i18n="price" required min="0" step="0.01">
+            </div>
+            <div class="field-hint" data-i18n="price_hint">প্রোডাক্টের বর্তমান মূল্য</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="offer" data-i18n="offer_price_label">অফার মূল্য</label>
+            <div class="input-with-icon">
+              <span class="input-icon">৳</span>
+              <input type="number" id="offer" placeholder="অফার মূল্য (ঐচ্ছিক)" data-i18n="offer_price" min="0" step="0.01">
+            </div>
+            <div class="field-hint" data-i18n="offer_hint">বিশেষ ছাড়ের মূল্য (ঐচ্ছিক)</div>
+          </div>
+        </div>
 
-      <div id="customFields">
-        <div class="custom-field-group">
-          <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি" data-i18n="custom_field_title">
-          <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস" data-i18n="custom_field_value">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="unit" data-i18n="unit_label">ইউনিট</label>
+            <input type="text" id="unit" placeholder="ইউনিট (যেমনঃ পিস, কেজি)" data-i18n="unit">
+            <div class="field-hint" data-i18n="unit_hint">পরিমাপের একক (পিস, কেজি, লিটার)</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="qty" data-i18n="quantity_label">পরিমাণ</label>
+            <input type="number" id="qty" placeholder="পরিমাণ (Qty)" data-i18n="quantity" min="1">
+            <div class="field-hint" data-i18n="qty_hint">স্টকে থাকা পরিমাণ</div>
+          </div>
         </div>
       </div>
-    <div class="button-group">
-      <button id="generateBtn" data-i18n="generate"><i class="fas fa-magic"></i> জেনারেট</button>
-      <button id="copyBtn" data-i18n="copy"><i class="fas fa-copy"></i> কপি করুন</button>
-      <button onclick="addCustomField()" type="button" data-i18n="add_custom_info"><i class="fas fa-plus"></i> কাস্টম তথ্য যোগ করুন</button>
-      <button onclick="addImageField()" type="button" data-i18n="add_more_images"><i class="fas fa-image"></i> আরও ছবি যোগ করুন</button>
+
+      <!-- Product Details -->
+      <div class="form-section">
+        <h3 class="section-title" data-i18n="product_details">
+          <i class="fas fa-list-alt"></i>
+          প্রোডাক্ট বিবরণ
+        </h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="brand" data-i18n="brand_label">ব্র্যান্ড / কোম্পানি</label>
+            <input type="text" id="brand" placeholder="ব্র্যান্ড / কোম্পানি" data-i18n="brand_company">
+            <div class="field-hint" data-i18n="brand_hint">প্রোডাক্টের ব্র্যান্ড বা কোম্পানির নাম</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="category" data-i18n="category_label">ক্যাটাগরি</label>
+            <input type="text" id="category" placeholder="ক্যাটাগরি" data-i18n="category">
+            <div class="field-hint" data-i18n="category_hint">প্রোডাক্টের ধরন বা বিভাগ</div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="size" data-i18n="size_label">সাইজ অপশন</label>
+            <input type="text" id="size" placeholder="সাইজ অপশন" data-i18n="size_option">
+            <div class="field-hint" data-i18n="size_hint">উপলব্ধ সাইজ (S, M, L, XL)</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="color" data-i18n="color_label">রঙ অপশন</label>
+            <input type="text" id="color" placeholder="রঙ অপশন" data-i18n="color_option">
+            <div class="field-hint" data-i18n="color_hint">উপলব্ধ রঙের তালিকা</div>
+          </div>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="desc" data-i18n="description_label">প্রোডাক্ট বর্ণনা</label>
+          <textarea id="desc" rows="4" placeholder="প্রোডাক্ট বর্ণনা" data-i18n="product_description"></textarea>
+          <div class="field-hint" data-i18n="desc_hint">প্রোডাক্ট সম্পর্কে বিস্তারিত তথ্য</div>
+        </div>
+      </div>
+
+      <!-- Delivery & Contact -->
+      <div class="form-section">
+        <h3 class="section-title" data-i18n="delivery_contact">
+          <i class="fas fa-shipping-fast"></i>
+          ডেলিভারি ও যোগাযোগ
+        </h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="delivery" data-i18n="delivery_label">ডেলিভারি টাইম</label>
+            <input type="text" id="delivery" placeholder="ডেলিভারি টাইম" data-i18n="delivery_time">
+            <div class="field-hint" data-i18n="delivery_hint">ডেলিভারি সময় (যেমন: ২৪ ঘন্টা)</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="status" data-i18n="status_label">স্ট্যাটাস</label>
+            <select id="status" data-i18n="status">
+              <option value="">স্ট্যাটাস নির্বাচন করুন</option>
+              <option value="স্টকে আছে">স্টকে আছে</option>
+              <option value="স্টক শেষ">স্টক শেষ</option>
+              <option value="প্রি-অর্ডার">প্রি-অর্ডার</option>
+              <option value="আসছে শীঘ্রই">আসছে শীঘ্রই</option>
+            </select>
+            <div class="field-hint" data-i18n="status_hint">প্রোডাক্টের বর্তমান অবস্থা</div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="wa" data-i18n="whatsapp_label">WhatsApp নম্বর *</label>
+            <div class="input-with-icon">
+              <span class="input-icon">
+                <i class="fab fa-whatsapp"></i>
+              </span>
+              <input type="tel" id="wa" placeholder="8801XXXXXXXXX" data-i18n="whatsapp_number" required pattern="8801[0-9]{9}">
+            </div>
+            <div class="field-hint" data-i18n="wa_hint">বাংলাদেশি নম্বর (8801XXXXXXXXX)</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="video" data-i18n="video_label">ভিডিও লিংক</label>
+            <div class="input-with-icon">
+              <span class="input-icon">
+                <i class="fab fa-youtube"></i>
+              </span>
+              <input type="url" id="video" placeholder="YouTube ভিডিও লিংক" data-i18n="youtube_video_link">
+            </div>
+            <div class="field-hint" data-i18n="video_hint">প্রোডাক্টের YouTube ভিডিও লিংক</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Images Section -->
+      <div class="form-section">
+        <h3 class="section-title" data-i18n="images_section">
+          <i class="fas fa-images"></i>
+          প্রোডাক্ট ছবি
+        </h3>
+        
+        <div id="imageInputs">
+          <div class="form-group">
+            <label data-i18n="first_image_label">প্রধান ছবি *</label>
+            <div class="input-with-icon">
+              <span class="input-icon">
+                <i class="fas fa-image"></i>
+              </span>
+              <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)" data-i18n="image_url" required>
+            </div>
+            <div class="field-hint" data-i18n="image_hint">প্রোডাক্টের প্রধান ছবির URL</div>
+          </div>
+        </div>
+        
+        <button type="button" class="add-field-btn" onclick="addImageField()" data-i18n="add_more_images">
+          <i class="fas fa-plus"></i>
+          আরও ছবি যোগ করুন
+        </button>
+      </div>
+
+      <!-- Custom Fields Section -->
+      <div class="form-section">
+        <h3 class="section-title" data-i18n="custom_fields_section">
+          <i class="fas fa-cogs"></i>
+          অতিরিক্ত তথ্য
+        </h3>
+        
+        <div id="customFields">
+          <div class="custom-field-group">
+            <div class="form-group">
+              <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি" data-i18n="custom_field_title">
+            </div>
+            <div class="form-group">
+              <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস" data-i18n="custom_field_value">
+            </div>
+          </div>
+        </div>
+        
+        <button type="button" class="add-field-btn" onclick="addCustomField()" data-i18n="add_custom_info">
+          <i class="fas fa-plus"></i>
+          কাস্টম তথ্য যোগ করুন
+        </button>
+      </div>
     </div>
+
+    <!-- Action Buttons -->
+    <div class="form-actions">
+      <button id="generateBtn" type="button" data-i18n="generate">
+        <i class="fas fa-magic"></i>
+        জেনারেট করুন
+      </button>
+      
+      <div class="secondary-actions">
+        <button id="copyBtn" type="button" data-i18n="copy">
+          <i class="fas fa-copy"></i>
+          কপি করুন
+        </button>
+        
+        <button type="button" onclick="saveDraft()" class="save-draft-btn" data-i18n="save_draft">
+          <i class="fas fa-save"></i>
+          ড্রাফট সংরক্ষণ
+        </button>
+        
+        <button type="button" onclick="clearForm()" class="clear-form-btn" data-i18n="clear_form">
+          <i class="fas fa-eraser"></i>
+          ফর্ম পরিষ্কার
+        </button>
+      </div>
     </div>
   </div>
 
-  <div class="output-section">
-    <h3><i class="fas fa-code"></i> Generated Code</h3>
-    <textarea id="output" readonly></textarea>
-    
-    <h3><i class="fas fa-eye"></i> Preview</h3>
-    <div id="preview"></div>
-  </div>
+  <div class="output" id="output"></div>
+  <div class="live-preview" id="preview"></div>
 </main>
 
-<script type="module" src="script.js"></script>
+<script type="module" src="js/app.js"></script>
+
+
 </body>
 </html>
 

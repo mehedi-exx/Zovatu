@@ -165,40 +165,140 @@
       outline: none;
       border-color: #4CAF50;
     }
-    .setting-group {
-      background: #2a2a2a;
+    
+    /* New Admin Settings Styles */
+    .admin-settings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .settings-card {
+      background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+      border: 1px solid #444;
+      border-radius: 12px;
       padding: 20px;
-      border-radius: 8px;
-      border: 1px solid #444;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
     }
-    .setting-group label {
+    
+    .settings-card:hover {
+      border-color: #FFA500;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.4);
+    }
+    
+    .settings-card h3 {
+      color: #FFA500;
+      margin: 0 0 15px 0;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .settings-card h3 i {
+      font-size: 20px;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group label {
       display: block;
-      margin-bottom: 10px;
-      color: #fff;
-      font-weight: 600;
+      color: #ccc;
+      margin-bottom: 8px;
+      font-weight: 500;
       font-size: 14px;
     }
-    .setting-group label i {
-      color: #4CAF50;
-      margin-right: 8px;
-    }
-    .setting-group select {
+    
+    .form-group select,
+    .form-group input {
       width: 100%;
-      padding: 12px;
-      background: #1a1a1a;
+      padding: 12px 14px;
+      background: linear-gradient(135deg, #2a2a2a, #333333);
       border: 1px solid #444;
-      border-radius: 5px;
+      border-radius: 8px;
       color: #fff;
       font-size: 14px;
-      transition: border-color 0.3s ease;
+      transition: all 0.3s ease;
     }
-    .setting-group select:focus {
+    
+    .form-group select:focus,
+    .form-group input:focus {
       outline: none;
-      border-color: #4CAF50;
+      border-color: #FFA500;
+      box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.2);
     }
-    .setting-group select:hover {
-      border-color: #666;
+    
+    .currency-preview {
+      margin-top: 10px;
+      padding: 10px;
+      background: #333;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #ccc;
     }
+    
+    .language-toggle {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    
+    .lang-toggle-btn {
+      flex: 1;
+      padding: 10px;
+      background: #333;
+      border: 1px solid #555;
+      border-radius: 6px;
+      color: #ccc;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      font-size: 13px;
+    }
+    
+    .lang-toggle-btn.active {
+      background: #FFA500;
+      color: #000;
+      border-color: #FFA500;
+    }
+    
+    .lang-toggle-btn:hover {
+      background: #444;
+      border-color: #FFA500;
+    }
+    
+    .lang-toggle-btn.active:hover {
+      background: #FF8C00;
+    }
+    
+    .save-settings-btn {
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      margin-top: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .save-settings-btn:hover {
+      background: linear-gradient(135deg, #45a049, #3d8b40);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+    }
+    
     @media (max-width: 768px) {
       .search-section {
         grid-template-columns: 1fr;
@@ -218,83 +318,141 @@
       .draft-meta {
         grid-template-columns: 1fr;
       }
+      .admin-settings-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
 
 <header class="header">
+  <div class="left-icons">
+    <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+  </div>
   <div class="logo"><i class="fas fa-cog"></i> <span data-i18n="admin_panel">Admin Panel</span></div>
-  <a href="dashboard.html" style="color:#4CAF50;text-decoration:none;" data-i18n="back"><i class="fas fa-arrow-left"></i> Back</a>
+  <div style="display: flex; align-items: center; gap: 15px;">
+    <!-- Language Toggle -->
+    <div class="language-selector" style="margin: 0;">
+      <div class="language-options" style="flex-direction: row; gap: 5px;">
+        <button class="lang-btn" data-lang="bn" onclick="switchLanguage('bn')" style="padding: 8px 12px; font-size: 12px;">
+          <span class="flag">🇧🇩</span>
+          <span>BN</span>
+        </button>
+        <button class="lang-btn active" data-lang="en" onclick="switchLanguage('en')" style="padding: 8px 12px; font-size: 12px;">
+          <span class="flag">🇺🇸</span>
+          <span>EN</span>
+        </button>
+      </div>
+    </div>
+    <a href="dashboard.html" style="color:#4CAF50;text-decoration:none;" data-i18n="back"><i class="fas fa-arrow-left"></i> Back</a>
+  </div>
 </header>
 
+<!-- Mini Sidebar -->
+<div class="sidebar" id="sidebar">
+  <button class="close-sidebar" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
+  <a href="dashboard.html" data-i18n="dashboard"><i class="fas fa-home"></i> Dashboard</a>
+  <a href="tutorial.html" data-i18n="tutorial"><i class="fas fa-book"></i> Tutorial</a>
+  <a href="fieldManager.html" data-i18n="field_customize"><i class="fas fa-cogs"></i> Field Customize</a>
+  <a href="#" onclick="logout()" data-i18n="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+</div>
+
 <div class="main-content">
+  <!-- Admin Settings Section -->
+  <div class="admin-settings-grid">
+    <!-- Currency Settings -->
+    <div class="settings-card">
+      <h3><i class="fas fa-coins"></i> <span data-i18n="currency_settings">Currency Settings</span></h3>
+      <div class="form-group">
+        <label for="currencySelect" data-i18n="select_currency">Select Currency:</label>
+        <select id="currencySelect" onchange="updateCurrencyPreview()">
+          <option value="BDT">৳ BDT - Bangladeshi Taka</option>
+          <option value="USD">$ USD - US Dollar</option>
+          <option value="EUR">€ EUR - Euro</option>
+          <option value="GBP">£ GBP - British Pound</option>
+          <option value="INR">₹ INR - Indian Rupee</option>
+          <option value="JPY">¥ JPY - Japanese Yen</option>
+          <option value="CNY">¥ CNY - Chinese Yuan</option>
+          <option value="CAD">$ CAD - Canadian Dollar</option>
+          <option value="AUD">$ AUD - Australian Dollar</option>
+          <option value="SAR">﷼ SAR - Saudi Riyal</option>
+          <option value="AED">د.إ AED - UAE Dirham</option>
+          <option value="PKR">₨ PKR - Pakistani Rupee</option>
+        </select>
+        <div class="currency-preview" id="currencyPreview">
+          <span data-i18n="preview">Preview:</span> <span id="currencyExample">৳1,500</span>
+        </div>
+      </div>
+      <button class="save-settings-btn" onclick="saveCurrencySettings()">
+        <i class="fas fa-save"></i>
+        <span data-i18n="save_currency">Save Currency</span>
+      </button>
+    </div>
+
+    <!-- Output Language Settings -->
+    <div class="settings-card">
+      <h3><i class="fas fa-language"></i> <span data-i18n="output_language_settings">Output Language Settings</span></h3>
+      <div class="form-group">
+        <label data-i18n="product_description_language">Product Description & Generated Code Language:</label>
+        <div class="language-toggle">
+          <button class="lang-toggle-btn active" data-output-lang="bn" onclick="setOutputLanguage('bn')">
+            🇧🇩 <span data-i18n="bangla">বাংলা</span>
+          </button>
+          <button class="lang-toggle-btn" data-output-lang="en" onclick="setOutputLanguage('en')">
+            🇺🇸 <span data-i18n="english">English</span>
+          </button>
+        </div>
+      </div>
+      <button class="save-settings-btn" onclick="saveOutputLanguageSettings()">
+        <i class="fas fa-save"></i>
+        <span data-i18n="save_output_language">Save Output Language</span>
+      </button>
+    </div>
+
+    <!-- WhatsApp Message Language Settings -->
+    <div class="settings-card">
+      <h3><i class="fab fa-whatsapp"></i> <span data-i18n="whatsapp_language_settings">WhatsApp Message Language</span></h3>
+      <div class="form-group">
+        <label data-i18n="whatsapp_message_language">WhatsApp Order Message Language:</label>
+        <div class="language-toggle">
+          <button class="lang-toggle-btn active" data-wa-lang="bn" onclick="setWhatsAppLanguage('bn')">
+            🇧🇩 <span data-i18n="bangla">বাংলা</span>
+          </button>
+          <button class="lang-toggle-btn" data-wa-lang="en" onclick="setWhatsAppLanguage('en')">
+            🇺🇸 <span data-i18n="english">English</span>
+          </button>
+        </div>
+      </div>
+      <div class="currency-preview" id="whatsappPreview">
+        <span data-i18n="preview">Preview:</span><br>
+        <span id="whatsappExample" style="font-size: 12px;">📦 আমি একটি পণ্য অর্ডার করতে চাই...</span>
+      </div>
+      <button class="save-settings-btn" onclick="saveWhatsAppLanguageSettings()">
+        <i class="fas fa-save"></i>
+        <span data-i18n="save_whatsapp_language">Save WhatsApp Language</span>
+      </button>
+    </div>
+  </div>
+
   <!-- Statistics Section -->
   <div class="admin-controls">
     <h2 data-i18n="product_statistics"><i class="fas fa-chart-bar"></i> Product Statistics</h2>
     <div class="stats-summary">
       <div class="stat-item">
         <div class="stat-number" id="totalProducts">0</div>
-        <div class="stat-label">Total Products</div>
+        <div class="stat-label" data-i18n="total_products">Total Products</div>
       </div>
       <div class="stat-item">
         <div class="stat-number" id="verifiedProducts">0</div>
-        <div class="stat-label">Verified Products</div>
+        <div class="stat-label" data-i18n="verified_products">Verified Products</div>
       </div>
       <div class="stat-item">
         <div class="stat-number" id="pendingProducts">0</div>
-        <div class="stat-label">Pending Products</div>
+        <div class="stat-label" data-i18n="pending_products">Pending Products</div>
       </div>
     </div>
   </div>
-
-  <!-- Global Settings Section -->
-  <div class="admin-controls">
-    <h2><i class="fas fa-cog"></i> Global Settings</h2>
-    
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 15px;">
-      <!-- Currency Selection -->
-      <div class="setting-group">
-        <label for="currencySelect" data-i18n="currency_selection">
-          <i class="fas fa-dollar-sign"></i> Currency Selection
-        </label>
-        <select id="currencySelect" onchange="saveCurrencySettings()">
-          <option value="USD" data-i18n="usd">USD ($)</option>
-          <option value="BDT" data-i18n="bdt">BDT (৳)</option>
-          <option value="EUR" data-i18n="eur">EUR (€)</option>
-          <option value="GBP" data-i18n="gbp">GBP (£)</option>
-          <option value="INR" data-i18n="inr">INR (₹)</option>
-          <option value="JPY" data-i18n="jpy">JPY (¥)</option>
-          <option value="CAD" data-i18n="cad">CAD (C$)</option>
-          <option value="AUD" data-i18n="aud">AUD (A$)</option>
-        </select>
-      </div>
-
-      <!-- Output Language -->
-      <div class="setting-group">
-        <label for="outputLanguageSelect" data-i18n="output_language">
-          <i class="fas fa-code"></i> Output Language
-        </label>
-        <select id="outputLanguageSelect" onchange="saveOutputLanguageSettings()">
-          <option value="en" data-i18n="english">English</option>
-          <option value="bn" data-i18n="bengali">Bengali</option>
-        </select>
-      </div>
-
-      <!-- WhatsApp Language -->
-      <div class="setting-group">
-        <label for="whatsappLanguageSelect" data-i18n="whatsapp_language">
-          <i class="fab fa-whatsapp"></i> WhatsApp Language
-        </label>
-        <select id="whatsappLanguageSelect" onchange="saveWhatsappLanguageSettings()">
-          <option value="en" data-i18n="english">English</option>
-          <option value="bn" data-i18n="bengali">Bengali</option>
-        </select>
-      </div>
-    </div>
-  </div>
-
-
 
   <!-- Admin Controls -->
   <div class="admin-controls">
@@ -304,7 +462,7 @@
       <input type="text" id="searchInput" placeholder="Search products (name or code)" oninput="renderDrafts()" data-i18n="search_product" />
       <button onclick="exportDrafts()" data-i18n="export_json"><i class="fas fa-download"></i> Export JSON</button>
       <label for="importFile" style="background: #4CAF50; padding: 12px 20px; border-radius: 5px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: white;">
-        <i class="fas fa-upload"></i> Import JSON
+        <i class="fas fa-upload"></i> <span data-i18n="import_json">Import JSON</span>
         <input type="file" id="importFile" accept=".json" onchange="importDrafts()" style="display: none;" />
       </label>
     </div>
@@ -313,7 +471,157 @@
   <div id="draftList"></div>
 </div>
 
-<script type="module" src="js/admin.js"></script>
+<script type="module" src="js/app.js"></script>
+<script>
+// Global functions for admin settings
+function toggleSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  sidebar.classList.toggle("open");
+}
+
+function switchLanguage(lang) {
+  // Update active button state
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.dataset.lang === lang) {
+      btn.classList.add('active');
+    }
+  });
+  
+  // Apply language
+  localStorage.setItem("language", lang);
+  window.location.reload();
+}
+
+function updateCurrencyPreview() {
+  const currencySelect = document.getElementById('currencySelect');
+  const currencyExample = document.getElementById('currencyExample');
+  const selectedCurrency = currencySelect.value;
+  
+  const currencySymbols = {
+    'BDT': '৳',
+    'USD': '$',
+    'EUR': '€',
+    'GBP': '£',
+    'INR': '₹',
+    'JPY': '¥',
+    'CNY': '¥',
+    'CAD': '$',
+    'AUD': '$',
+    'SAR': '﷼',
+    'AED': 'د.إ',
+    'PKR': '₨'
+  };
+  
+  const symbol = currencySymbols[selectedCurrency] || '৳';
+  currencyExample.textContent = `${symbol}1,500`;
+}
+
+function setOutputLanguage(lang) {
+  document.querySelectorAll('[data-output-lang]').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  document.querySelector(`[data-output-lang="${lang}"]`).classList.add('active');
+}
+
+function setWhatsAppLanguage(lang) {
+  document.querySelectorAll('[data-wa-lang]').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  document.querySelector(`[data-wa-lang="${lang}"]`).classList.add('active');
+  
+  // Update preview
+  const whatsappExample = document.getElementById('whatsappExample');
+  if (lang === 'bn') {
+    whatsappExample.textContent = '📦 আমি একটি পণ্য অর্ডার করতে চাই\n🔖 প্রোডাক্ট: [Product Name]\n💰 মূল্য: ৳[Price]';
+  } else {
+    whatsappExample.textContent = '📦 I want to order a product\n🔖 Product: [Product Name]\n💰 Price: $[Price]';
+  }
+}
+
+function saveCurrencySettings() {
+  const selectedCurrency = document.getElementById('currencySelect').value;
+  localStorage.setItem('selectedCurrency', selectedCurrency);
+  
+  // Show success toast
+  showToast('✅ Currency settings saved successfully!', 'success');
+}
+
+function saveOutputLanguageSettings() {
+  const activeBtn = document.querySelector('[data-output-lang].active');
+  const selectedLang = activeBtn.dataset.outputLang;
+  localStorage.setItem('outputLanguage', selectedLang);
+  
+  // Show success toast
+  showToast('✅ Output language settings saved successfully!', 'success');
+}
+
+function saveWhatsAppLanguageSettings() {
+  const activeBtn = document.querySelector('[data-wa-lang].active');
+  const selectedLang = activeBtn.dataset.waLang;
+  localStorage.setItem('whatsappLanguage', selectedLang);
+  
+  // Show success toast
+  showToast('✅ WhatsApp language settings saved successfully!', 'success');
+}
+
+function logout() {
+  if (confirm("Are you sure you want to logout?")) {
+    localStorage.removeItem("loggedInUser");
+    localStorage.removeItem("editDraftId");
+    window.location.replace("index.html");
+  }
+}
+
+// Simple toast function for this page
+function showToast(message, type = 'success') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type} show`;
+  toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+  toast.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #4CAF50;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    z-index: 10000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  `;
+  
+  document.body.appendChild(toast);
+  
+  setTimeout(() => {
+    toast.remove();
+  }, 3000);
+}
+
+// Load saved settings on page load
+document.addEventListener('DOMContentLoaded', function() {
+  // Load currency setting
+  const savedCurrency = localStorage.getItem('selectedCurrency') || 'BDT';
+  document.getElementById('currencySelect').value = savedCurrency;
+  updateCurrencyPreview();
+  
+  // Load output language setting
+  const savedOutputLang = localStorage.getItem('outputLanguage') || 'bn';
+  setOutputLanguage(savedOutputLang);
+  
+  // Load WhatsApp language setting
+  const savedWhatsAppLang = localStorage.getItem('whatsappLanguage') || 'bn';
+  setWhatsAppLanguage(savedWhatsAppLang);
+  
+  // Load UI language setting
+  const savedLang = localStorage.getItem('language') || 'en';
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.dataset.lang === savedLang) {
+      btn.classList.add('active');
+    }
+  });
+});
+</script>
 </body>
 </html>
 

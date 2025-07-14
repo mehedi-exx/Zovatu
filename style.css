@@ -38,7 +38,7 @@ header.header {
 }
 
 .logo i {
-  color: #FFA500; /* Reduced yellow to orange */
+  color: #FF8C00; /* Slightly less yellow orange */
   font-size: 22px;
 }
 
@@ -138,7 +138,7 @@ header.header {
 }
 
 .sidebar a i {
-  color: #FFA500; /* Reduced yellow to orange */
+  color: #FF8C00; /* Slightly less yellow orange */
   font-size: 18px;
 }
 
@@ -162,7 +162,7 @@ header.header {
 }
 
 .language-header i {
-  color: #FFA500;
+  color: #FF8C00;
   font-size: 18px;
 }
 
@@ -189,15 +189,15 @@ header.header {
 
 .lang-btn:hover {
   background: linear-gradient(135deg, #4a4a4a, #555555);
-  border-color: #FFA500;
+  border-color: #FF8C00;
   transform: translateY(-1px);
 }
 
 .lang-btn.active {
-  background: linear-gradient(135deg, #FFA500, #FF8C00);
-  border-color: #FFA500;
+  background: linear-gradient(135deg, #FF8C00, #FF7F00);
+  border-color: #FF8C00;
   color: #000000;
-  box-shadow: 0 4px 8px rgba(255, 165, 0, 0.3);
+  box-shadow: 0 4px 8px rgba(255, 140, 0, 0.3);
 }
 
 .flag {
@@ -224,7 +224,7 @@ header.header {
 
 .theme-header i {
   font-size: 24px;
-  color: #FFA500;
+  color: #FF8C00;
 }
 
 .logo-text {
@@ -240,7 +240,7 @@ header.header {
 }
 
 .theme-download-box button {
-  background: linear-gradient(135deg, #FFA500, #FF8C00);
+  background: linear-gradient(135deg, #FF8C00, #FF7F00);
   color: #000000;
   border: none;
   padding: 12px 24px;
@@ -253,7 +253,7 @@ header.header {
 }
 
 .theme-download-box button:hover {
-  background: linear-gradient(135deg, #FF8C00, #FF7F00);
+  background: linear-gradient(135deg, #FF7F00, #FF6F00);
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
@@ -289,8 +289,8 @@ input, textarea, select {
 
 input:focus, textarea:focus, select:focus {
   outline: none;
-  border-color: #FFA500;
-  box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.2);
+  border-color: #FF8C00;
+  box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.2);
   transform: translateY(-1px);
 }
 
@@ -299,8 +299,19 @@ input::placeholder, textarea::placeholder {
 }
 
 /* ✅ Professional Button System */
-button {
-  background: linear-gradient(135deg, #FFA500, #FF8C00);
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+  justify-content: center; /* Center buttons */
+}
+
+.button-group button {
+  flex: 1; /* Allow buttons to grow and shrink */
+  min-width: 150px; /* Minimum width for buttons */
+  max-width: 250px; /* Maximum width for buttons */
+  background: linear-gradient(135deg, #FFA500, #FF8C00); /* Default orange gradient */
   color: #000000;
   border: none;
   padding: 14px 24px;
@@ -314,29 +325,24 @@ button {
   justify-content: center;
   gap: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  margin: 5px;
   min-height: 48px;
 }
 
-button:hover {
+.button-group button:hover {
   background: linear-gradient(135deg, #FF8C00, #FF7F00);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 165, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 140, 0, 0.3);
 }
 
-button:active {
+.button-group button:active {
   transform: translateY(0);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Primary Button (Generate) */
+/* Specific Button Styles */
 #generateBtn {
   background: linear-gradient(135deg, #4CAF50, #45a049);
   color: #ffffff;
-  font-size: 16px;
-  padding: 16px 32px;
-  width: 100%;
-  margin: 15px 0;
 }
 
 #generateBtn:hover {
@@ -344,12 +350,9 @@ button:active {
   box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
 }
 
-/* Secondary Button (Copy) */
 #copyBtn {
   background: linear-gradient(135deg, #2196F3, #1976D2);
   color: #ffffff;
-  width: 100%;
-  margin: 10px 0;
 }
 
 #copyBtn:hover {
@@ -357,51 +360,44 @@ button:active {
   box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
 }
 
-/* Add Field Buttons */
-button[onclick*="addCustomField"], 
-button[onclick*="addImageField"] {
+button[onclick*="addCustomField"] {
   background: linear-gradient(135deg, #9C27B0, #7B1FA2);
   color: #ffffff;
-  width: 48%;
-  margin: 10px 1%;
 }
 
-button[onclick*="addCustomField"]:hover, 
-button[onclick*="addImageField"]:hover {
+button[onclick*="addCustomField"]:hover {
   background: linear-gradient(135deg, #7B1FA2, #6A1B9A);
   box-shadow: 0 4px 12px rgba(156, 39, 176, 0.4);
 }
 
+button[onclick*="addImageField"] {
+  background: linear-gradient(135deg, #FF5722, #E64A19);
+  color: #ffffff;
+}
+
+button[onclick*="addImageField"]:hover {
+  background: linear-gradient(135deg, #E64A19, #D84315);
+  box-shadow: 0 4px 12px rgba(255, 87, 34, 0.4);
+}
+
 /* Remove Buttons */
-button[onclick*="remove"], 
-button[onclick*="parentElement.remove"] {
+.remove-btn {
   background: linear-gradient(135deg, #f44336, #d32f2f);
   color: #ffffff;
   padding: 8px 12px;
   min-width: 36px;
   min-height: 36px;
   border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-button[onclick*="remove"]:hover, 
-button[onclick*="parentElement.remove"]:hover {
+.remove-btn:hover {
   background: linear-gradient(135deg, #d32f2f, #c62828);
+  transform: scale(1.1);
   box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
-}
-
-button.success {
-  background: linear-gradient(135deg, #4CAF50, #45a049);
-  color: #ffffff;
-}
-
-button.warning {
-  background: linear-gradient(135deg, #ff9800, #f57c00);
-  color: #ffffff;
-}
-
-button.error {
-  background: linear-gradient(135deg, #f44336, #d32f2f);
-  color: #ffffff;
 }
 
 /* ✅ Output Styles */
@@ -414,7 +410,7 @@ button.error {
 }
 
 .output h3, .live-preview h3 {
-  color: #FFA500;
+  color: #FF8C00;
   margin-bottom: 15px;
   font-size: 18px;
   font-weight: 600;
@@ -496,18 +492,9 @@ button.error {
     padding: 12px 14px;
   }
   
-  button {
-    padding: 12px 20px;
-  }
-  
-  #generateBtn {
-    padding: 14px 28px;
-  }
-  
-  button[onclick*="addCustomField"], 
-  button[onclick*="addImageField"] {
+  .button-group button {
     width: 100%;
-    margin: 5px 0;
+    max-width: none;
   }
   
   .toast {
@@ -526,14 +513,8 @@ button.error {
     flex-direction: column;
   }
   
-  button {
-    padding: 10px 16px;
+  .button-group button {
     font-size: 14px;
-  }
-  
-  #generateBtn {
-    padding: 12px 24px;
-    font-size: 15px;
   }
 }
 
@@ -558,12 +539,12 @@ button.error {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #FFA500, #FF8C00);
+  background: linear-gradient(135deg, #FF8C00, #FF7F00);
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #FF8C00, #FF7F00);
+  background: linear-gradient(135deg, #FF7F00, #FF6F00);
 }
 
 /* ✅ Enhanced Mobile Responsiveness */
@@ -607,11 +588,6 @@ button.error {
   input, textarea, select {
     padding: 12px 14px;
     font-size: 16px;
-  }
-  
-  button {
-    padding: 12px 18px;
-    font-size: 14px;
   }
   
   .language-selector {
@@ -675,20 +651,15 @@ button.error {
     font-size: 16px;
   }
   
-  button {
+  .button-group button {
     padding: 10px 14px;
     font-size: 13px;
-  }
-  
-  #generateBtn {
-    padding: 12px 20px;
-    font-size: 14px;
   }
 }
 
 /* ✅ Touch-Friendly Enhancements */
 @media (hover: none) and (pointer: coarse) {
-  button, .lang-btn, .nav-item, .sidebar a {
+  .button-group button, .lang-btn, .nav-item, .sidebar a {
     min-height: 48px; /* Apple's recommended touch target size */
     display: flex;
     align-items: center;
@@ -728,7 +699,7 @@ button.error {
     color: #fff;
   }
   
-  button {
+  .button-group button {
     background-color: #fff;
     color: #000;
     border: 2px solid #fff;
@@ -755,13 +726,13 @@ button.error {
 }
 
 /* ✅ Focus Indicators for Accessibility */
-button:focus-visible,
+.button-group button:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible,
 .lang-btn:focus-visible,
 .sidebar a:focus-visible {
-  outline: 3px solid #FFA500;
+  outline: 3px solid #FF8C00;
   outline-offset: 2px;
 }
 
@@ -793,12 +764,12 @@ html {
 
 /* ✅ Selection Styling */
 ::selection {
-  background-color: #FFA500;
+  background-color: #FF8C00;
   color: #000000;
 }
 
 ::-moz-selection {
-  background-color: #FFA500;
+  background-color: #FF8C00;
   color: #000000;
 }
 
@@ -812,14 +783,14 @@ input:valid {
 }
 
 /* ✅ Better Button States */
-button:disabled {
+.button-group button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   transform: none !important;
 }
 
-button:disabled:hover {
-  background: linear-gradient(135deg, #FFA500, #FF8C00);
+.button-group button:disabled:hover {
+  background: linear-gradient(135deg, #FF8C00, #FF7F00);
   transform: none;
 }
 
@@ -958,4 +929,6 @@ button:disabled:hover {
     margin: 8px 0;
   }
 }
+
+
 

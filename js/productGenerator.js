@@ -73,25 +73,8 @@ export function generateProduct() {
     }
   }
 
-  // Get selected theme
-  const selectedTheme = localStorage.getItem("outputTheme") || "old_version";
-  
   // Generate HTML based on selected theme
-  let html = "";
-  
-  switch(selectedTheme) {
-    case "old_version":
-      html = generateOldVersionTheme();
-      break;
-    case "updated":
-      html = generateUpdatedTheme();
-      break;
-    case "professional":
-      html = generateProfessionalTheme();
-      break;
-    default:
-      html = generateOldVersionTheme();
-  }
+  let html = generateOldVersionTheme();
 
   document.getElementById("output").textContent = html;
   document.getElementById("preview").innerHTML = html;
@@ -144,152 +127,6 @@ function changeMainImage(thumb, src) {
   document.getElementById('mainImg').src = src;
   document.querySelectorAll('#thumbs img').forEach(img => img.style.border = '2px solid transparent');
   thumb.style.border = '2px solid green';
-}
-</script>`;
-  }
-
-  function generateUpdatedTheme() {
-    return `
-<div style="text-align:center;font-family:Arial,sans-serif;max-width:600px;margin:auto;padding:20px;background:#fff;border-radius:15px;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
-  <img id="mainImg" src="${mainImg}" style="width:100%;max-width:500px;border-radius:12px;border:1px solid #ddd;margin-bottom:15px;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
-  <div id="thumbs" style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:15px;">${thumbHTML}</div>
-  
-  <h2 style="margin:10px 0;color:#2c3e50;font-size:24px;font-weight:700;">${name}</h2>
-  <div style="font-size:20px;margin:15px 0;">
-    ${offer ? `<span style="text-decoration:line-through;color:#999;margin-right:8px;">৳${price.toLocaleString()}</span><span style="color:#e74c3c;font-weight:bold;font-size:24px;">৳${offer.toLocaleString()}</span><span style="background:#27ae60;color:white;padding:3px 8px;border-radius:12px;font-size:14px;margin-left:8px;">-${discount}%</span>` : `<span style="color:#e74c3c;font-weight:bold;font-size:24px;">৳${price.toLocaleString()}</span>`}
-  </div>
-  
-  <div style="margin:25px 0;">
-    <a href="https://wa.me/${wa}?text=${encodeURIComponent(`🛒 নতুন অর্ডার\n📦 প্রোডাক্ট: ${name}\n💰 মূল্য: ${offer || price}৳\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি: ${delivery}`)}" 
-       target="_blank"
-       style="display:inline-block;background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;padding:16px 40px;border-radius:50px;font-weight:bold;font-size:18px;text-decoration:none;box-shadow:0 6px 20px rgba(37,211,102,0.3);transition:all 0.3s ease;"
-       onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 25px rgba(37,211,102,0.4)'"
-       onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 6px 20px rgba(37,211,102,0.3)'">
-      📱 অর্ডার করুন
-    </a>
-  </div>
-  
-  <div style="background:#f8f9fa;padding:20px;border-radius:12px;margin:20px 0;text-align:left;">
-    <h3 style="margin:0 0 15px 0;color:#2c3e50;font-size:18px;text-align:center;">📋 প্রোডাক্ট তথ্য</h3>
-    <ul style="list-style:none;padding:0;margin:0;">
-      ${code ? `<li style="padding:8px 0;border-bottom:1px solid #eee;">🔢 <strong>কোড:</strong> ${code}</li>` : ''}
-      ${status ? `<li style="padding:8px 0;border-bottom:1px solid #eee;">✅ <strong>স্ট্যাটাস:</strong> ${status}</li>` : ''}
-      ${category ? `<li style="padding:8px 0;border-bottom:1px solid #eee;">📁 <strong>ক্যাটাগরি:</strong> ${category}</li>` : ''}
-      ${delivery ? `<li style="padding:8px 0;border-bottom:1px solid #eee;">🚚 <strong>ডেলিভারি:</strong> ${delivery}</li>` : ''}
-      ${brand ? `<li style="padding:8px 0;border-bottom:1px solid #eee;">🏢 <strong>ব্র্যান্ড:</strong> ${brand}</li>` : ''}
-      ${qty ? `<li style="padding:8px 0;border-bottom:1px solid #eee;">📊 <strong>পরিমাণ:</strong> ${qty}</li>` : ''}
-      ${size ? `<li style="padding:8px 0;border-bottom:1px solid #eee;">📏 <strong>সাইজ:</strong> ${size}</li>` : ''}
-      ${color ? `<li style="padding:8px 0;border-bottom:1px solid #eee;">🎨 <strong>রঙ:</strong> ${color}</li>` : ''}
-      ${customHTML}
-    </ul>
-  </div>
-  
-  ${desc ? `<div style="background:#fff;border:2px solid #e9ecef;padding:20px;border-radius:12px;margin:20px 0;text-align:left;"><h3 style="margin:0 0 10px 0;color:#2c3e50;font-size:18px;text-align:center;">📝 বিস্তারিত</h3><p style="margin:0;line-height:1.6;color:#495057;">${desc}</p></div>` : ''}
-  
-  ${videoEmbed ? videoEmbed.replace(/border-radius:10px/g, 'border-radius:12px;max-width:500px;margin:auto;').replace(/background:#f8f9fa/g, 'background:#f5f5f5') : ''}
-  
-  <div style="text-align:center;margin-top:25px;padding-top:20px;border-top:2px solid #e9ecef;">
-    <p style="margin:0;color:#6c757d;font-size:14px;">🛡️ ১০০% অরিজিনাল প্রোডাক্ট গ্যারান্টি</p>
-  </div>
-  
-  <p style="display:none;"><a href="#">{getProduct} $price={৳${price}} $sale={৳${offer}} $style={2}</a></p>
-</div>
-
-<script>
-function changeMainImage(thumb, src) {
-  document.getElementById('mainImg').src = src;
-  document.querySelectorAll('#thumbs img').forEach(img => img.style.border = '2px solid transparent');
-  thumb.style.border = '2px solid #27ae60';
-}
-</script>`;
-  }
-
-  function generateProfessionalTheme() {
-    return `
-<div style="text-align:center;font-family:Arial,sans-serif;max-width:650px;margin:auto;padding:25px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;color:white;">
-  <div style="background:rgba(255,255,255,0.95);padding:30px;border-radius:15px;color:#333;margin-bottom:20px;">
-    <h1 style="margin:0 0 15px 0;color:#2d3748;font-size:28px;font-weight:800;">${name}</h1>
-    <p style="margin:0;color:#718096;font-size:16px;">প্রিমিয়াম কোয়ালিটি প্রোডাক্ট</p>
-  </div>
-  
-  <div style="background:rgba(255,255,255,0.98);padding:30px;border-radius:15px;color:#333;margin-bottom:20px;">
-    <img id="mainImg" src="${mainImg}" style="width:100%;max-width:450px;border-radius:20px;box-shadow:0 15px 35px rgba(0,0,0,0.2);margin-bottom:20px;">
-    <div id="thumbs" style="display:flex;justify-content:center;gap:15px;flex-wrap:wrap;">${thumbHTML}</div>
-  </div>
-  
-  <div style="background:rgba(255,255,255,0.95);padding:25px;border-radius:15px;color:#333;margin-bottom:20px;">
-    <div style="background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);padding:20px;border-radius:15px;margin-bottom:20px;color:white;">
-      ${offer ? `
-        <div style="font-size:18px;opacity:0.8;margin-bottom:5px;">
-          <span style="text-decoration:line-through;">৳${price.toLocaleString()}</span>
-        </div>
-        <div style="font-size:36px;font-weight:900;text-shadow:0 2px 10px rgba(0,0,0,0.2);">৳${offer.toLocaleString()}</div>
-        <div style="font-size:14px;opacity:0.9;margin-top:5px;">সাশ্রয় ৳${(price - offer).toLocaleString()}</div>
-      ` : `
-        <div style="font-size:36px;font-weight:900;text-shadow:0 2px 10px rgba(0,0,0,0.2);">৳${price.toLocaleString()}</div>
-      `}
-    </div>
-    
-    <a href="https://wa.me/${wa}?text=${encodeURIComponent(`🌟 প্রিমিয়াম অর্ডার\n📦 প্রোডাক্ট: ${name}\n💎 মূল্য: ৳${offer || price}\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি: ${delivery}`)}" 
-       target="_blank"
-       style="display:inline-block;background:linear-gradient(135deg,#25D366,#128C7E,#075e54);color:#fff;padding:18px 45px;border-radius:50px;font-weight:800;font-size:20px;text-decoration:none;box-shadow:0 10px 25px rgba(37,211,102,0.4);transition:all 0.3s ease;"
-       onmouseover="this.style.transform='translateY(-3px) scale(1.02)';this.style.boxShadow='0 15px 30px rgba(37,211,102,0.5)'"
-       onmouseout="this.style.transform='translateY(0) scale(1)';this.style.boxShadow='0 10px 25px rgba(37,211,102,0.4)'">
-      💎 এখনই অর্ডার করুন
-    </a>
-  </div>
-  
-  <div style="background:rgba(255,255,255,0.95);padding:25px;border-radius:15px;color:#333;margin-bottom:20px;">
-    <h3 style="margin:0 0 20px 0;color:#2d3748;font-size:22px;font-weight:700;text-align:center;">⭐ প্রোডাক্ট স্পেসিফিকেশন</h3>
-    
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;text-align:center;">
-      ${code ? `<div style="background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:15px;border-radius:12px;"><div style="font-size:12px;opacity:0.8;">প্রোডাক্ট কোড</div><div style="font-size:16px;font-weight:bold;margin-top:3px;">${code}</div></div>` : ""}
-      ${status ? `<div style="background:linear-gradient(135deg,#11998e,#38ef7d);color:white;padding:15px;border-radius:12px;"><div style="font-size:12px;opacity:0.8;">স্ট্যাটাস</div><div style="font-size:16px;font-weight:bold;margin-top:3px;">${status}</div></div>` : ""}
-      ${category ? `<div style="background:linear-gradient(135deg,#ff9a9e,#fecfef);color:#2d3748;padding:15px;border-radius:12px;"><div style="font-size:12px;opacity:0.7;">ক্যাটাগরি</div><div style="font-size:16px;font-weight:bold;margin-top:3px;">${category}</div></div>` : ""}
-      ${delivery ? `<div style="background:linear-gradient(135deg,#a8edea,#fed6e3);color:#2d3748;padding:15px;border-radius:12px;"><div style="font-size:12px;opacity:0.7;">ডেলিভারি</div><div style="font-size:16px;font-weight:bold;margin-top:3px;">${delivery}</div></div>` : ""}
-    </div>
-    
-    ${(brand || qty || size || color) ? `
-    <div style="margin-top:20px;padding:20px;background:linear-gradient(135deg,#ffecd2,#fcb69f);border-radius:15px;">
-      <h4 style="margin:0 0 10px 0;color:#2d3748;font-size:16px;font-weight:600;text-align:center;">অতিরিক্ত তথ্য</h4>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;text-align:center;font-size:14px;">
-        ${brand ? `<div><strong>ব্র্যান্ড:</strong> ${brand}</div>` : ""}
-        ${qty ? `<div><strong>পরিমাণ:</strong> ${qty}</div>` : ""}
-        ${size ? `<div><strong>সাইজ:</strong> ${size}</div>` : ""}
-        ${color ? `<div><strong>রঙ:</strong> ${color}</div>` : ""}
-      </div>
-    </div>` : ""}
-  </div>
-  
-  ${desc ? `
-  <div style="background:rgba(255,255,255,0.95);padding:25px;border-radius:15px;color:#333;margin-bottom:20px;">
-    <h3 style="margin:0 0 15px 0;color:#2d3748;font-size:22px;font-weight:700;text-align:center;">📝 বিস্তারিত বর্ণনা</h3>
-    <div style="background:linear-gradient(135deg,#f093fb,#f5576c);padding:20px;border-radius:15px;color:white;">
-      <p style="margin:0;line-height:1.6;font-size:16px;text-align:center;">${desc}</p>
-    </div>
-  </div>` : ""}
-  
-  ${videoEmbed ? `
-  <div style="background:rgba(255,255,255,0.95);padding:25px;border-radius:15px;color:#333;margin-bottom:20px;">
-    ${videoEmbed.replace(/background:#f8f9fa/g, 'background:linear-gradient(135deg,#667eea,#764ba2)').replace(/color:#333/g, 'color:white').replace(/border-radius:10px/g, 'border-radius:15px')}
-  </div>` : ""}
-  
-  <div style="background:linear-gradient(135deg,#2d3748,#4a5568);padding:20px;border-radius:15px;text-align:center;">
-    <div style="display:flex;justify-content:center;align-items:center;gap:15px;flex-wrap:wrap;font-size:14px;">
-      <div style="display:flex;align-items:center;gap:5px;"><span style="color:#4ade80;">🛡️</span><span>১০০% অরিজিনাল গ্যারান্টি</span></div>
-      <div style="display:flex;align-items:center;gap:5px;"><span style="color:#60a5fa;">🚚</span><span>দ্রুত ডেলিভারি</span></div>
-      <div style="display:flex;align-items:center;gap:5px;"><span style="color:#f59e0b;">🎧</span><span>২৪/৭ সাপোর্ট</span></div>
-    </div>
-  </div>
-  
-  <p style="display:none;"><a href="#">{getProduct} $price={৳${price}} $sale={৳${offer}} $style={3}</a></p>
-</div>
-
-<script>
-function changeMainImage(thumb, src) {
-  document.getElementById('mainImg').src = src;
-  document.querySelectorAll('#thumbs img').forEach(img => img.style.border = '3px solid transparent');
-  thumb.style.border = '3px solid #667eea';
 }
 </script>`;
   }
@@ -553,4 +390,5 @@ style.textContent = `
 }
 `;
 document.head.appendChild(style);
+
 

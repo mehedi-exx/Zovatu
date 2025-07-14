@@ -73,8 +73,114 @@ export function generateProduct() {
     }
   }
 
-  // Enhanced product HTML with better styling
-  const html = `
+  // Get selected theme
+  const selectedTheme = localStorage.getItem("outputTheme") || "old_version";
+  
+  // Generate HTML based on selected theme
+  let html = "";
+  
+  switch(selectedTheme) {
+    case "old_version":
+      html = generateOldVersionTheme();
+      break;
+    case "updated":
+      html = generateUpdatedTheme();
+      break;
+    case "professional":
+      html = generateProfessionalTheme();
+      break;
+    default:
+      html = generateOldVersionTheme();
+  }
+
+  document.getElementById("output").textContent = html;
+  document.getElementById("preview").innerHTML = html;
+  saveDraft();
+  showToast("✅ প্রোডাক্ট সফলভাবে তৈরি হয়েছে!");
+  
+  // Add success animation
+  const generateBtn = document.getElementById("generateBtn");
+  generateBtn.style.background = "#28a745";
+  generateBtn.innerHTML = '<i class="fas fa-check"></i> সম্পন্ন!';
+  setTimeout(() => {
+    generateBtn.style.background = "";
+    generateBtn.innerHTML = '<i class="fas fa-magic"></i> জেনারেট';
+  }, 2000);
+
+  // Theme generation functions
+  function generateOldVersionTheme() {
+    return `
+<div style="max-width:500px;margin:0 auto;font-family:Arial,sans-serif;background:#fff;border:1px solid #ddd;padding:15px;">
+  <!-- Product Images -->
+  <div style="text-align:center;margin-bottom:15px;">
+    <img id="mainImg" src="${mainImg}" style="width:100%;max-width:350px;height:250px;object-fit:cover;border:1px solid #ccc;">
+    
+    ${thumbHTML ? `
+    <div id="thumbs" style="display:flex;justify-content:center;gap:5px;margin-top:10px;">
+      ${thumbHTML.replace(/width:60px;height:60px;border-radius:8px;/g, 'width:50px;height:50px;border:1px solid #ccc;')}
+    </div>` : ''}
+  </div>
+
+  <!-- Product Info -->
+  <div>
+    <h2 style="margin:0 0 10px 0;color:#333;font-size:20px;font-weight:bold;">${name}</h2>
+    
+    <!-- Price Section -->
+    <div style="margin:15px 0;text-align:center;padding:10px;background:#f5f5f5;border:1px solid #ddd;">
+      ${offer ? `
+        <div style="font-size:14px;color:#666;text-decoration:line-through;">৳${price.toLocaleString()}</div>
+        <div style="font-size:24px;color:#d9534f;font-weight:bold;">৳${offer.toLocaleString()}</div>
+        <div style="font-size:12px;color:#5cb85c;">ছাড় ${discount}%</div>
+      ` : `
+        <div style="font-size:24px;color:#d9534f;font-weight:bold;">৳${price.toLocaleString()}</div>
+      `}
+    </div>
+
+    <!-- Order Button -->
+    <div style="text-align:center;margin:15px 0;">
+      <a href="https://wa.me/${wa}?text=${encodeURIComponent(`অর্ডার: ${name}\nকোড: ${code}\nমূল্য: ৳${offer || price}`)}" 
+         target="_blank"
+         style="display:inline-block;background:#25D366;color:#fff;padding:12px 25px;text-decoration:none;font-weight:bold;">
+        অর্ডার করুন
+      </a>
+    </div>
+
+    <!-- Product Details -->
+    <div style="border:1px solid #ddd;padding:10px;margin:10px 0;">
+      <h3 style="margin:0 0 10px 0;color:#333;font-size:16px;">প্রোডাক্ট বিবরণ</h3>
+      <table style="width:100%;font-size:14px;">
+        ${code ? `<tr><td style="padding:3px 0;"><strong>কোড:</strong></td><td>${code}</td></tr>` : ""}
+        ${status ? `<tr><td style="padding:3px 0;"><strong>স্ট্যাটাস:</strong></td><td>${status}</td></tr>` : ""}
+        ${category ? `<tr><td style="padding:3px 0;"><strong>ক্যাটাগরি:</strong></td><td>${category}</td></tr>` : ""}
+        ${delivery ? `<tr><td style="padding:3px 0;"><strong>ডেলিভারি:</strong></td><td>${delivery}</td></tr>` : ""}
+        ${brand ? `<tr><td style="padding:3px 0;"><strong>ব্র্যান্ড:</strong></td><td>${brand}</td></tr>` : ""}
+        ${qty ? `<tr><td style="padding:3px 0;"><strong>পরিমাণ:</strong></td><td>${qty}</td></tr>` : ""}
+        ${size ? `<tr><td style="padding:3px 0;"><strong>সাইজ:</strong></td><td>${size}</td></tr>` : ""}
+        ${color ? `<tr><td style="padding:3px 0;"><strong>রঙ:</strong></td><td>${color}</td></tr>` : ""}
+      </table>
+    </div>
+
+    ${desc ? `
+    <div style="border:1px solid #ddd;padding:10px;margin:10px 0;">
+      <h3 style="margin:0 0 10px 0;color:#333;font-size:16px;">বিস্তারিত</h3>
+      <p style="margin:0;line-height:1.4;color:#555;font-size:14px;">${desc}</p>
+    </div>` : ""}
+
+    ${videoEmbed ? videoEmbed.replace(/border-radius:10px/g, 'border:1px solid #ddd').replace(/background:#f8f9fa/g, 'background:#f5f5f5') : ""}
+  </div>
+</div>
+
+<script>
+function changeMainImage(thumb, src) {
+  document.getElementById('mainImg').src = src;
+  document.querySelectorAll('#thumbs img').forEach(img => img.style.border = '1px solid #ccc');
+  thumb.style.border = '2px solid #5cb85c';
+}
+</script>`;
+  }
+
+  function generateUpdatedTheme() {
+    return `
 <div style="max-width:600px;margin:0 auto;font-family:'Segoe UI',sans-serif;background:#fff;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.1);overflow:hidden;">
   <!-- Product Images -->
   <div style="position:relative;background:#f8f9fa;padding:20px;text-align:center;">
@@ -179,22 +285,178 @@ function changeMainImage(thumb, src) {
   .order-btn { padding: 15px 30px !important; font-size: 16px !important; }
   #thumbs img { width: 50px !important; height: 50px !important; }
 }
-</style>
-`;
+</style>`;
+  }
 
-  document.getElementById("output").textContent = html;
-  document.getElementById("preview").innerHTML = html;
-  saveDraft();
-  showToast("✅ প্রোডাক্ট সফলভাবে তৈরি হয়েছে!");
-  
-  // Add success animation
-  const generateBtn = document.getElementById("generateBtn");
-  generateBtn.style.background = "#28a745";
-  generateBtn.innerHTML = '<i class="fas fa-check"></i> সম্পন্ন!';
-  setTimeout(() => {
-    generateBtn.style.background = "";
-    generateBtn.innerHTML = '<i class="fas fa-magic"></i> জেনারেট';
-  }, 2000);
+  function generateProfessionalTheme() {
+    return `
+<div style="max-width:700px;margin:0 auto;font-family:'Inter','Segoe UI',sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:20px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+  <!-- Header -->
+  <div style="background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);padding:30px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.2);">
+    <h1 style="margin:0;color:#2d3748;font-size:32px;font-weight:800;letter-spacing:-0.5px;">${name}</h1>
+    <p style="margin:10px 0 0 0;color:#718096;font-size:16px;font-weight:500;">প্রিমিয়াম কোয়ালিটি প্রোডাক্ট</p>
+  </div>
+
+  <!-- Product Images -->
+  <div style="background:rgba(255,255,255,0.98);padding:40px;text-align:center;">
+    <div style="position:relative;display:inline-block;">
+      <img id="mainImg" src="${mainImg}" 
+           style="width:100%;max-width:450px;height:350px;object-fit:cover;border-radius:20px;
+                  box-shadow:0 25px 50px rgba(0,0,0,0.25);transition:all 0.4s ease;"
+           onmouseover="this.style.transform='scale(1.05) rotateY(5deg)';this.style.boxShadow='0 30px 60px rgba(0,0,0,0.3)'"
+           onmouseout="this.style.transform='scale(1) rotateY(0deg)';this.style.boxShadow='0 25px 50px rgba(0,0,0,0.25)'">
+      
+      ${offer ? `
+      <div style="position:absolute;top:-10px;right:-10px;background:linear-gradient(135deg,#ff6b6b,#ee5a24);
+                  color:white;padding:8px 15px;border-radius:25px;font-weight:bold;font-size:14px;
+                  box-shadow:0 8px 20px rgba(238,90,36,0.4);transform:rotate(15deg);">
+        ${discount}% ছাড়
+      </div>` : ''}
+    </div>
+    
+    ${thumbHTML ? `
+    <div id="thumbs" style="display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin-top:25px;">
+      ${thumbHTML.replace(/width:60px;height:60px;border-radius:8px;/g, 'width:70px;height:70px;border-radius:15px;')}
+    </div>` : ''}
+  </div>
+
+  <!-- Price & Order Section -->
+  <div style="background:rgba(255,255,255,0.95);padding:30px;text-align:center;">
+    <div style="background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%);padding:25px;border-radius:20px;margin-bottom:25px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;bottom:0;background:url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><defs><pattern id=\"grain\" width=\"100\" height=\"100\" patternUnits=\"userSpaceOnUse\"><circle cx=\"50\" cy=\"50\" r=\"1\" fill=\"%23ffffff\" opacity=\"0.1\"/></pattern></defs><rect width=\"100\" height=\"100\" fill=\"url(%23grain)\"/></svg>');"></div>
+      
+      ${offer ? `
+        <div style="position:relative;z-index:1;">
+          <div style="font-size:20px;color:rgba(255,255,255,0.8);margin-bottom:8px;">
+            <span style="text-decoration:line-through;">৳${price.toLocaleString()}</span>
+          </div>
+          <div style="font-size:42px;color:#fff;font-weight:900;text-shadow:0 2px 10px rgba(0,0,0,0.2);">৳${offer.toLocaleString()}</div>
+          <div style="font-size:16px;color:rgba(255,255,255,0.9);margin-top:8px;font-weight:600;">আপনি সাশ্রয় করছেন ৳${(price - offer).toLocaleString()}</div>
+        </div>
+      ` : `
+        <div style="position:relative;z-index:1;">
+          <div style="font-size:42px;color:#fff;font-weight:900;text-shadow:0 2px 10px rgba(0,0,0,0.2);">৳${price.toLocaleString()}</div>
+        </div>
+      `}
+      ${unit ? `<div style="position:relative;z-index:1;color:rgba(255,255,255,0.8);margin-top:8px;font-size:14px;">প্রতি ${unit}</div>` : ''}
+    </div>
+
+    <!-- Order Button -->
+    <a href="https://wa.me/${wa}?text=${encodeURIComponent(`🌟 প্রিমিয়াম অর্ডার\n📦 প্রোডাক্ট: ${name}\n🏷️ কোড: ${code}\n💎 মূল্য: ৳${offer || price}\n${qty ? `📊 পরিমাণ: ${qty}` : ''}\n${category ? `📁 ক্যাটাগরি: ${category}` : ''}\n${delivery ? `🚚 ডেলিভারি: ${delivery}` : ''}\n\n✨ এখনই অর্ডার করতে চাই`)}" 
+       target="_blank"
+       style="display:inline-block;background:linear-gradient(135deg,#25D366,#128C7E,#075e54);
+              color:#fff;padding:20px 50px;border-radius:60px;font-weight:800;font-size:20px;
+              text-decoration:none;box-shadow:0 15px 35px rgba(37,211,102,0.4);
+              transition:all 0.4s ease;border:none;cursor:pointer;position:relative;overflow:hidden;"
+       onmouseover="this.style.transform='translateY(-5px) scale(1.05)';this.style.boxShadow='0 20px 40px rgba(37,211,102,0.5)'"
+       onmouseout="this.style.transform='translateY(0) scale(1)';this.style.boxShadow='0 15px 35px rgba(37,211,102,0.4)'">
+      <i class="fab fa-whatsapp" style="margin-right:12px;font-size:24px;"></i>
+      এখনই অর্ডার করুন
+    </a>
+  </div>
+
+  <!-- Product Details -->
+  <div style="background:rgba(255,255,255,0.95);padding:30px;">
+    <h3 style="margin:0 0 20px 0;color:#2d3748;font-size:24px;font-weight:700;text-align:center;">
+      <i class="fas fa-star" style="color:#ffd700;margin-right:10px;"></i>
+      প্রোডাক্ট স্পেসিফিকেশন
+    </h3>
+    
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;">
+      ${code ? `
+      <div style="background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:20px;border-radius:15px;text-align:center;">
+        <i class="fas fa-barcode" style="font-size:24px;margin-bottom:10px;display:block;"></i>
+        <div style="font-size:14px;opacity:0.8;">প্রোডাক্ট কোড</div>
+        <div style="font-size:18px;font-weight:bold;margin-top:5px;">${code}</div>
+      </div>` : ""}
+      
+      ${status ? `
+      <div style="background:linear-gradient(135deg,#11998e,#38ef7d);color:white;padding:20px;border-radius:15px;text-align:center;">
+        <i class="fas fa-check-circle" style="font-size:24px;margin-bottom:10px;display:block;"></i>
+        <div style="font-size:14px;opacity:0.8;">স্ট্যাটাস</div>
+        <div style="font-size:18px;font-weight:bold;margin-top:5px;">${status}</div>
+      </div>` : ""}
+      
+      ${category ? `
+      <div style="background:linear-gradient(135deg,#ff9a9e,#fecfef);color:#2d3748;padding:20px;border-radius:15px;text-align:center;">
+        <i class="fas fa-folder" style="font-size:24px;margin-bottom:10px;display:block;"></i>
+        <div style="font-size:14px;opacity:0.7;">ক্যাটাগরি</div>
+        <div style="font-size:18px;font-weight:bold;margin-top:5px;">${category}</div>
+      </div>` : ""}
+      
+      ${delivery ? `
+      <div style="background:linear-gradient(135deg,#a8edea,#fed6e3);color:#2d3748;padding:20px;border-radius:15px;text-align:center;">
+        <i class="fas fa-truck" style="font-size:24px;margin-bottom:10px;display:block;"></i>
+        <div style="font-size:14px;opacity:0.7;">ডেলিভারি</div>
+        <div style="font-size:18px;font-weight:bold;margin-top:5px;">${delivery}</div>
+      </div>` : ""}
+    </div>
+
+    ${(brand || qty || size || color) ? `
+    <div style="margin-top:25px;padding:25px;background:linear-gradient(135deg,#ffecd2,#fcb69f);border-radius:20px;">
+      <h4 style="margin:0 0 15px 0;color:#2d3748;font-size:18px;font-weight:600;text-align:center;">অতিরিক্ত তথ্য</h4>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;text-align:center;">
+        ${brand ? `<div><i class="fas fa-building" style="color:#667eea;margin-right:8px;"></i><strong>ব্র্যান্ড:</strong> ${brand}</div>` : ""}
+        ${qty ? `<div><i class="fas fa-sort-numeric-up" style="color:#667eea;margin-right:8px;"></i><strong>পরিমাণ:</strong> ${qty}</div>` : ""}
+        ${size ? `<div><i class="fas fa-expand-arrows-alt" style="color:#667eea;margin-right:8px;"></i><strong>সাইজ:</strong> ${size}</div>` : ""}
+        ${color ? `<div><i class="fas fa-palette" style="color:#667eea;margin-right:8px;"></i><strong>রঙ:</strong> ${color}</div>` : ""}
+      </div>
+    </div>` : ""}
+  </div>
+
+  ${desc ? `
+  <div style="background:rgba(255,255,255,0.95);padding:30px;border-top:1px solid rgba(255,255,255,0.2);">
+    <h3 style="margin:0 0 20px 0;color:#2d3748;font-size:24px;font-weight:700;text-align:center;">
+      <i class="fas fa-align-left" style="color:#667eea;margin-right:10px;"></i>
+      বিস্তারিত বর্ণনা
+    </h3>
+    <div style="background:linear-gradient(135deg,#f093fb,#f5576c);padding:25px;border-radius:20px;color:white;">
+      <p style="margin:0;line-height:1.8;font-size:16px;text-align:center;">${desc}</p>
+    </div>
+  </div>` : ""}
+
+  ${videoEmbed ? `
+  <div style="background:rgba(255,255,255,0.95);padding:30px;">
+    ${videoEmbed.replace(/background:#f8f9fa/g, 'background:linear-gradient(135deg,#667eea,#764ba2)').replace(/color:#333/g, 'color:white')}
+  </div>` : ""}
+
+  <!-- Footer -->
+  <div style="background:linear-gradient(135deg,#2d3748,#4a5568);color:white;padding:25px;text-align:center;">
+    <div style="display:flex;justify-content:center;align-items:center;gap:20px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <i class="fas fa-shield-alt" style="color:#4ade80;font-size:20px;"></i>
+        <span style="font-weight:600;">১০০% অরিজিনাল গ্যারান্টি</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <i class="fas fa-truck" style="color:#60a5fa;font-size:20px;"></i>
+        <span style="font-weight:600;">দ্রুত ডেলিভারি</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <i class="fas fa-headset" style="color:#f59e0b;font-size:20px;"></i>
+        <span style="font-weight:600;">২৪/৭ সাপোর্ট</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function changeMainImage(thumb, src) {
+  document.getElementById('mainImg').src = src;
+  document.querySelectorAll('#thumbs img').forEach(img => img.style.border = '3px solid transparent');
+  thumb.style.border = '3px solid #667eea';
+}
+</script>
+
+<style>
+@media (max-width: 768px) {
+  .product-container { margin: 10px; }
+  .product-title { font-size: 28px !important; }
+  .price-text { font-size: 36px !important; }
+  .order-btn { padding: 18px 35px !important; font-size: 18px !important; }
+  #thumbs img { width: 60px !important; height: 60px !important; }
+}
+</style>`;
+  }
 }
 
 function highlightMissingFields() {

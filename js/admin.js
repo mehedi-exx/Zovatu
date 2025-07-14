@@ -350,8 +350,11 @@ window.addEventListener("DOMContentLoaded", async () => {
   checkLogin();
   
   // Load language
-  const savedLang = localStorage.getItem("language") || "bn";
+  const savedLang = localStorage.getItem("language") || "en";
   await loadLanguage(savedLang);
+  
+  // Load output theme
+  loadOutputTheme();
   
   renderDrafts();
   
@@ -372,4 +375,33 @@ window.addEventListener("DOMContentLoaded", async () => {
     renderDrafts();
   }, 30000);
 });
+
+
+// Output Theme Management
+export function saveOutputTheme(theme) {
+  localStorage.setItem("outputTheme", theme);
+  showToast(`✅ আউটপুট থিম "${getThemeName(theme)}" সেট করা হয়েছে।`);
+}
+
+function getThemeName(theme) {
+  const themeNames = {
+    'old_version': 'ওল্ড ভার্সন',
+    'updated': 'আপডেটেড',
+    'professional': 'প্রফেশনাল'
+  };
+  return themeNames[theme] || theme;
+}
+
+export function loadOutputTheme() {
+  const savedTheme = localStorage.getItem("outputTheme") || "old_version";
+  const themeSelect = document.getElementById("themeSelect");
+  if (themeSelect) {
+    themeSelect.value = savedTheme;
+  }
+  return savedTheme;
+}
+
+// Expose theme functions to global scope
+window.saveOutputTheme = saveOutputTheme;
+window.loadOutputTheme = loadOutputTheme;
 

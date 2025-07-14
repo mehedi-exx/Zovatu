@@ -1,0 +1,18 @@
+{
+  "name": "G9 Tool Dashboard",
+  "short_name": "G9Tool",
+  "description": "Professional Product Generator Dashboard",
+  "start_url": "./dashboard.html",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#4CAF50",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiByeD0iMjQiIGZpbGw9IiM0Q0FGNTAI+CjxwYXRoIGQ9Ik05NiA0OEM3NC4xIDQ4IDU2IDY2LjEgNTYgODhWMTA0QzU2IDEyNS45IDc0LjEgMTQ0IDk2IDE0NEMxMTcuOSAxNDQgMTM2IDEyNS45IDEzNiAxMDRWODhDMTM2IDY2LjEgMTE3LjkgNDggOTYgNDhaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}
+

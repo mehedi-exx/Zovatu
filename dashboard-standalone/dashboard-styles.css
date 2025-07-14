@@ -1,0 +1,934 @@
+/* G9Tool Professional CSS - Pure Dark Mode (Black, White, Orange) */
+
+/* ✅ Global Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #000000; /* Pure Black Background */
+  color: #ffffff; /* White Text */
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* ✅ Header Styles */
+header.header {
+  background-color: #1a1a1a; /* Dark Gray for Header */
+  padding: 15px 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.logo i {
+  color: #FF8C00; /* Slightly less yellow orange */
+  font-size: 22px;
+}
+
+.menu-btn {
+  background: linear-gradient(135deg, #333333, #444444);
+  border: none;
+  color: #ffffff;
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.menu-btn:hover {
+  background: linear-gradient(135deg, #444444, #555555);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.telegram-icon {
+  background: linear-gradient(135deg, #0088cc, #0077b3);
+  color: #ffffff;
+  padding: 12px;
+  border-radius: 50%;
+  text-decoration: none;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.telegram-icon:hover {
+  background: linear-gradient(135deg, #0077b3, #006699);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* ✅ Sidebar Styles */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: 280px;
+  height: 100vh;
+  background-color: #1a1a1a; /* Dark Gray for sidebar */
+  padding: 20px;
+  transition: left 0.3s ease;
+  z-index: 1000;
+  overflow-y: auto;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.close-sidebar {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: linear-gradient(135deg, #f44336, #d32f2f);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.close-sidebar:hover {
+  background: linear-gradient(135deg, #d32f2f, #c62828);
+  transform: scale(1.1);
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  margin: 10px 0;
+  background: linear-gradient(135deg, #2a2a2a, #333333);
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar a:hover {
+  background: linear-gradient(135deg, #3a3a3a, #444444);
+  transform: translateX(5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar a i {
+  color: #FF8C00; /* Slightly less yellow orange */
+  font-size: 18px;
+}
+
+/* ✅ Language Selector */
+.language-selector {
+  margin: 20px 0;
+  background: linear-gradient(135deg, #2a2a2a, #333333);
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.language-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 15px;
+}
+
+.language-header i {
+  color: #FF8C00;
+  font-size: 18px;
+}
+
+.language-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lang-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: linear-gradient(135deg, #3a3a3a, #444444);
+  border: 1px solid #555555;
+  border-radius: 8px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.lang-btn:hover {
+  background: linear-gradient(135deg, #4a4a4a, #555555);
+  border-color: #FF8C00;
+  transform: translateY(-1px);
+}
+
+.lang-btn.active {
+  background: linear-gradient(135deg, #FF8C00, #FF7F00);
+  border-color: #FF8C00;
+  color: #000000;
+  box-shadow: 0 4px 8px rgba(255, 140, 0, 0.3);
+}
+
+.flag {
+  font-size: 20px;
+}
+
+/* ✅ Theme Download Box */
+.theme-download-box {
+  margin: 20px 0;
+  background: linear-gradient(135deg, #2a2a2a, #333333);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.theme-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.theme-header i {
+  font-size: 24px;
+  color: #FF8C00;
+}
+
+.logo-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.theme-download-box p {
+  color: #cccccc;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.theme-download-box button {
+  background: linear-gradient(135deg, #FF8C00, #FF7F00);
+  color: #000000;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.theme-download-box button:hover {
+  background: linear-gradient(135deg, #FF7F00, #FF6F00);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* ✅ Main Content */
+main {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.form-wrapper {
+  background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  margin-bottom: 20px;
+}
+
+/* ✅ Form Elements */
+input, textarea, select {
+  width: 100%;
+  padding: 14px 16px;
+  margin: 10px 0;
+  background: linear-gradient(135deg, #2a2a2a, #333333);
+  border: 1px solid #444444;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: #FF8C00;
+  box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.2);
+  transform: translateY(-1px);
+}
+
+input::placeholder, textarea::placeholder {
+  color: #bbbbbb;
+}
+
+/* ✅ Professional Button System */
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+  justify-content: center; /* Center buttons */
+}
+
+.button-group button {
+  flex: 1; /* Allow buttons to grow and shrink */
+  min-width: 150px; /* Minimum width for buttons */
+  max-width: 250px; /* Maximum width for buttons */
+  background: linear-gradient(135deg, #FFA500, #FF8C00); /* Default orange gradient */
+  color: #000000;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  min-height: 48px;
+}
+
+.button-group button:hover {
+  background: linear-gradient(135deg, #FF8C00, #FF7F00);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 140, 0, 0.3);
+}
+
+.button-group button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Specific Button Styles */
+#generateBtn {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: #ffffff;
+}
+
+#generateBtn:hover {
+  background: linear-gradient(135deg, #45a049, #3d8b40);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+#copyBtn {
+  background: linear-gradient(135deg, #2196F3, #1976D2);
+  color: #ffffff;
+}
+
+#copyBtn:hover {
+  background: linear-gradient(135deg, #1976D2, #1565C0);
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+}
+
+button[onclick*="addCustomField"] {
+  background: linear-gradient(135deg, #9C27B0, #7B1FA2);
+  color: #ffffff;
+}
+
+button[onclick*="addCustomField"]:hover {
+  background: linear-gradient(135deg, #7B1FA2, #6A1B9A);
+  box-shadow: 0 4px 12px rgba(156, 39, 176, 0.4);
+}
+
+button[onclick*="addImageField"] {
+  background: linear-gradient(135deg, #FF5722, #E64A19);
+  color: #ffffff;
+}
+
+button[onclick*="addImageField"]:hover {
+  background: linear-gradient(135deg, #E64A19, #D84315);
+  box-shadow: 0 4px 12px rgba(255, 87, 34, 0.4);
+}
+
+/* Remove Buttons */
+.remove-btn {
+  background: linear-gradient(135deg, #f44336, #d32f2f);
+  color: #ffffff;
+  padding: 8px 12px;
+  min-width: 36px;
+  min-height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.remove-btn:hover {
+  background: linear-gradient(135deg, #d32f2f, #c62828);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
+}
+
+/* ✅ Output Styles */
+.output, .live-preview {
+  background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+  padding: 25px;
+  border-radius: 12px;
+  margin: 20px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.output h3, .live-preview h3 {
+  color: #FF8C00;
+  margin-bottom: 15px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* ✅ Toast Notifications */
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 16px 24px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 500;
+  z-index: 10000;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-out;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.toast.show {
+  transform: translateX(0);
+}
+
+.toast.success {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: #ffffff;
+}
+
+.toast.error {
+  background: linear-gradient(135deg, #f44336, #d32f2f);
+}
+
+.toast.warning {
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+}
+
+.toast.info {
+  background: linear-gradient(135deg, #2196f3, #1976D2);
+}
+
+.toast i {
+  font-size: 18px;
+}
+
+/* ✅ Loading Animation */
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ✅ Responsive Design */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 250px;
+  }
+  
+  main {
+    padding: 15px;
+  }
+  
+  .form-wrapper {
+    padding: 20px;
+  }
+  
+  input, textarea, select {
+    padding: 12px 14px;
+  }
+  
+  .button-group button {
+    width: 100%;
+    max-width: none;
+  }
+  
+  .toast {
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 100vw;
+  }
+  
+  .language-options {
+    flex-direction: column;
+  }
+  
+  .button-group button {
+    font-size: 14px;
+  }
+}
+
+/* ✅ Utility Classes */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+.mb-10 { margin-bottom: 10px; }
+.mb-20 { margin-bottom: 20px; }
+.mt-10 { margin-top: 10px; }
+.mt-20 { margin-top: 20px; }
+.hidden { display: none; }
+.visible { display: block; }
+
+/* ✅ Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #FF8C00, #FF7F00);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #FF7F00, #FF6F00);
+}
+
+/* ✅ Enhanced Mobile Responsiveness */
+@media (max-width: 1024px) {
+  .form-wrapper {
+    padding: 25px;
+  }
+  
+  .sidebar {
+    width: 260px;
+  }
+  
+  input, textarea, select {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+@media (max-width: 768px) {
+  header.header {
+    padding: 12px 15px;
+  }
+  
+  .logo {
+    font-size: 18px;
+  }
+  
+  .menu-btn, .telegram-icon {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+  
+  main {
+    padding: 15px;
+  }
+  
+  .form-wrapper {
+    margin: 10px;
+    padding: 20px;
+  }
+  
+  input, textarea, select {
+    padding: 12px 14px;
+    font-size: 16px;
+  }
+  
+  .language-selector {
+    margin: 15px 0;
+    padding: 15px;
+  }
+  
+  .lang-btn {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+  
+  .theme-download-box {
+    margin: 15px 0;
+    padding: 15px;
+  }
+  
+  .theme-download-box button {
+    padding: 12px 18px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 100vw;
+    left: -100vw;
+  }
+  
+  .sidebar.open {
+    left: 0;
+  }
+  
+  .form-wrapper {
+    margin: 5px;
+    padding: 15px;
+  }
+  
+  .language-options {
+    flex-direction: column;
+  }
+  
+  .lang-btn {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+  
+  .toast {
+    right: 5px;
+    left: 5px;
+    max-width: none;
+    transform: translateY(-100px);
+  }
+  
+  .toast.show {
+    transform: translateY(0);
+  }
+  
+  input, textarea, select {
+    padding: 10px 12px;
+    font-size: 16px;
+  }
+  
+  .button-group button {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+}
+
+/* ✅ Touch-Friendly Enhancements */
+@media (hover: none) and (pointer: coarse) {
+  .button-group button, .lang-btn, .nav-item, .sidebar a {
+    min-height: 48px; /* Apple's recommended touch target size */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .menu-btn, .close-sidebar, .telegram-icon {
+    min-width: 48px;
+    min-height: 48px;
+  }
+}
+
+/* ✅ Accessibility Improvements */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ✅ High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  body {
+    background-color: #000;
+    color: #fff;
+  }
+  
+  .sidebar, .form-wrapper, .output, .live-preview {
+    background-color: #000;
+    border: 2px solid #fff;
+  }
+  
+  input, textarea, select {
+    background-color: #000;
+    border: 2px solid #fff;
+    color: #fff;
+  }
+  
+  .button-group button {
+    background-color: #fff;
+    color: #000;
+    border: 2px solid #fff;
+  }
+}
+
+/* ✅ Print Styles */
+@media print {
+  .sidebar, .menu-btn, .telegram-icon, .toast {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .form-wrapper, .output {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+    border: 1px solid #000 !important;
+  }
+}
+
+/* ✅ Focus Indicators for Accessibility */
+.button-group button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+.lang-btn:focus-visible,
+.sidebar a:focus-visible {
+  outline: 3px solid #FF8C00;
+  outline-offset: 2px;
+}
+
+/* ✅ Loading States */
+.btn-loading {
+  position: relative;
+  color: transparent !important;
+}
+
+.btn-loading::after {
+  content: "";
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  top: 50%;
+  left: 50%;
+  margin-left: -9px;
+  margin-top: -9px;
+  border: 2px solid transparent;
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* ✅ Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ✅ Selection Styling */
+::selection {
+  background-color: #FF8C00;
+  color: #000000;
+}
+
+::-moz-selection {
+  background-color: #FF8C00;
+  color: #000000;
+}
+
+/* ✅ Improved Form Validation */
+input:invalid {
+  border-color: #f44336;
+}
+
+input:valid {
+  border-color: #4CAF50;
+}
+
+/* ✅ Better Button States */
+.button-group button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.button-group button:disabled:hover {
+  background: linear-gradient(135deg, #FF8C00, #FF7F00);
+  transform: none;
+}
+
+/* ✅ Improved Sidebar Overlay */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ✅ Better Error States */
+.error-message {
+  color: #f44336;
+  font-size: 14px;
+  margin-top: 5px;
+  display: none;
+}
+
+.error-message.show {
+  display: block;
+}
+
+/* ✅ Success States */
+.success-message {
+  color: #4CAF50;
+  font-size: 14px;
+  margin-top: 5px;
+  display: none;
+}
+
+.success-message.show {
+  display: block;
+}
+
+/* Admin Panel - Consolidated Statistics */
+.stats-summary {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.stat-item {
+  flex: 1;
+  min-width: 150px;
+  padding: 15px;
+  background: linear-gradient(135deg, #2a2a2a, #333333);
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+.stat-item:hover {
+  transform: translateY(-2px);
+}
+
+.stat-item .stat-number {
+  font-size: 32px;
+  font-weight: bold;
+  color: #4CAF50; /* Green color for numbers */
+  margin-bottom: 8px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.stat-item .stat-label {
+  font-size: 14px;
+  color: #bbb;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Custom Field Groups */
+.custom-field-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.custom-field-group input {
+  margin: 0;
+}
+
+/* Image Input Wrapper */
+#imageInputs > div {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 10px 0;
+}
+
+#imageInputs > div input {
+  margin: 0;
+}
+
+/* Professional Button Arrangement */
+.button-row {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0;
+  flex-wrap: wrap;
+}
+
+.button-row button {
+  flex: 1;
+  min-width: 200px;
+}
+
+@media (max-width: 768px) {
+  .button-row {
+    flex-direction: column;
+  }
+  
+  .button-row button {
+    width: 100%;
+    margin: 5px 0;
+  }
+  
+  button[onclick*="addCustomField"], 
+  button[onclick*="addImageField"] {
+    width: 100%;
+    margin: 8px 0;
+  }
+}
+
+
+

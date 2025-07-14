@@ -743,3 +743,76 @@ button:disabled:hover {
   display: block;
 }
 
+
+
+/* Admin Panel - Consolidated Statistics */
+.stats-summary {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.stat-item {
+  flex: 1;
+  min-width: 150px;
+  padding: 15px;
+  background: #2a2a2a;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stat-item .stat-number {
+  font-size: 28px;
+  font-weight: bold;
+  color: #4CAF50; /* Green color for numbers */
+  margin-bottom: 5px;
+}
+
+.stat-item .stat-label {
+  font-size: 13px;
+  color: #bbb;
+  text-transform: uppercase;
+}
+
+
+
+
+/* Admin Panel - Output Theme Selection */
+.theme-selector {
+  margin-top: 15px;
+}
+
+.theme-selector label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #bbb;
+}
+
+.theme-selector select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #444;
+  background-color: #2a2a2a;
+  color: #fff;
+  font-size: 14px;
+  appearance: none; /* Remove default select arrow */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20256%20256%22%3E%3Cpath%20fill%3D%22%23FFFFFF%22%20d%3D%22M208.5%2096.5L128%20177L47.5%2096.5z%22%2F%3E%3C%2Fsvg%3E'); /* Custom arrow */
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+}
+
+.theme-selector select:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.5);
+}
+
+

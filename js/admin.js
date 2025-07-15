@@ -36,17 +36,17 @@ export function renderDrafts(customDrafts = null) {
   container.innerHTML = filteredDrafts.map(draft => {
     const createdDate = draft.timestamp ? new Date(draft.timestamp).toLocaleDateString('bn-BD') : 'অজানা';
     const isVerified = draft.verified || false;
-    
+    const currencySymbol = localStorage.getItem("selectedCurrency") || "৳";
+
     return `
       <div class="draft-item" data-id="${draft.id}">
         <div class="draft-header">
           <div class="draft-name">
-            <i class="fas fa-box" style="color:#00bfff;"></i>
             ${draft.name || 'নামহীন প্রোডাক্ট'}
-            ${isVerified ? '<i class="fas fa-check-circle" style="color:#28a745;margin-left:8px;" title="ভেরিফাইড"></i>' : '<i class="fas fa-clock" style="color:#ffc107;margin-left:8px;" title="পেন্ডিং"></i>'}
+            ${isVerified ? '<span style="color:#28a745;margin-left:8px;" title="ভেরিফাইড">✔</span>' : '<span style="color:#ffc107;margin-left:8px;" title="পেন্ডিং">⏳</span>'}
           </div>
           <div style="font-size:12px;color:#888;">
-            <i class="fas fa-calendar-alt"></i> ${createdDate}
+            ${createdDate}
           </div>
         </div>
 
@@ -58,7 +58,7 @@ export function renderDrafts(customDrafts = null) {
           <div class="meta-item">
             <div class="meta-label">মূল্য</div>
             <div class="meta-value">
-              ${draft.offer ? `<span style="text-decoration:line-through;color:#888;">৳${draft.price}</span> <span style="color:#28a745;">৳${draft.offer}</span>` : `৳${draft.price || '0'}`}
+              ${draft.offer ? `<span style="text-decoration:line-through;color:#888;">${currencySymbol}${draft.price}</span> <span style="color:#28a745;">${currencySymbol}${draft.offer}</span>` : `${currencySymbol}${draft.price || '0'}`}
             </div>
           </div>
           <div class="meta-item">
@@ -81,21 +81,21 @@ export function renderDrafts(customDrafts = null) {
 
         <div class="actions">
           <button class="edit-btn" onclick="editDraft(${draft.id})" title="এডিট করুন">
-            <i class="fas fa-edit"></i> এডিট
+            এডিট
           </button>
           <button class="preview-btn" onclick="togglePreview(${draft.id})" title="প্রিভিউ দেখুন">
-            <i class="fas fa-eye"></i> প্রিভিউ
+            প্রিভিউ
           </button>
           <button class="verify-btn ${isVerified ? 'verified' : ''}" onclick="toggleVerification(${draft.id})" title="${isVerified ? 'ভেরিফিকেশন বাতিল' : 'ভেরিফাই করুন'}">
-            <i class="fas fa-${isVerified ? 'times' : 'check'}"></i> ${isVerified ? 'আনভেরিফাই' : 'ভেরিফাই'}
+            ${isVerified ? 'আনভেরিফাই' : 'ভেরিফাই'}
           </button>
           <button class="delete-btn" onclick="deleteDraft(${draft.id})" title="ডিলিট করুন">
-            <i class="fas fa-trash"></i> ডিলিট
+            ডিলিট
           </button>
         </div>
 
         <div class="preview" id="preview-${draft.id}" style="display:none;">
-          <h4 style="color:#00bfff;margin:0 0 15px 0;"><i class="fas fa-eye"></i> প্রোডাক্ট প্রিভিউ</h4>
+          <h4 style="color:#00bfff;margin:0 0 15px 0;">প্রোডাক্ট প্রিভিউ</h4>
           
           ${draft.images && draft.images.length > 0 ? `
             <div style="margin-bottom:15px;">
@@ -118,7 +118,7 @@ export function renderDrafts(customDrafts = null) {
               <div>
                 <strong style="color:#ccc;">ভিডিও:</strong><br>
                 <a href="${draft.video}" target="_blank" style="color:#00bfff;font-size:14px;">
-                  <i class="fab fa-youtube"></i> ভিডিও দেখুন
+                  ভিডিও দেখুন
                 </a>
               </div>
             ` : ''}
@@ -133,9 +133,9 @@ export function renderDrafts(customDrafts = null) {
           
           <div style="margin-top:15px;padding-top:15px;border-top:1px solid #444;">
             <strong style="color:#ccc;">WhatsApp অর্ডার লিংক:</strong><br>
-            <a href="https://wa.me/${draft.wa}?text=${encodeURIComponent(`🛒 নতুন অর্ডার\n📦 প্রোডাক্ট: ${draft.name}\n🏷️ কোড: ${draft.code}\n💰 মূল্য: ৳${draft.offer || draft.price}`)}" 
+            <a href="https://wa.me/${draft.wa}?text=${encodeURIComponent(`New Order\nProduct: ${draft.name}\nCode: ${draft.code}\nPrice: ${currencySymbol}${draft.offer || draft.price}`)}" 
                target="_blank" style="color:#25D366;font-size:14px;">
-              <i class="fab fa-whatsapp"></i> WhatsApp এ অর্ডার করুন
+              WhatsApp এ অর্ডার করুন
             </a>
           </div>
         </div>
@@ -171,7 +171,7 @@ export function deleteDraft(id) {
   localStorage.setItem("drafts", JSON.stringify(drafts));
   
   renderDrafts();
-  showToast('<i class="fas fa-check-circle"></i> প্রোডাক্ট ডিলিট করা হয়েছে।');
+  showToast('প্রোডাক্ট ডিলিট করা হয়েছে।');
 }
 
 export function togglePreview(id) {
@@ -180,11 +180,11 @@ export function togglePreview(id) {
   
   if (preview.style.display === "none") {
     preview.style.display = "block";
-    button.innerHTML = '<i class="fas fa-eye-slash"></i> লুকান';
+    button.innerHTML = 'লুকান';
     button.style.background = "#6c757d";
   } else {
     preview.style.display = "none";
-    button.innerHTML = '<i class="fas fa-eye"></i> প্রিভিউ';
+    button.innerHTML = 'প্রিভিউ';
     button.style.background = "#6f42c1";
   }
 }
@@ -198,7 +198,7 @@ export function toggleVerification(id) {
     localStorage.setItem("drafts", JSON.stringify(drafts));
     
     const isVerified = drafts[draftIndex].verified;
-    showToast(isVerified ? '<i class="fas fa-check-circle"></i> প্রোডাক্ট ভেরিফাই করা হয়েছে।' : '<i class="fas fa-exclamation-triangle"></i> প্রোডাক্ট আনভেরিফাই করা হয়েছে।');
+    showToast(isVerified ? 'প্রোডাক্ট ভেরিফাই করা হয়েছে।' : 'প্রোডাক্ট আনভেরিফাই করা হয়েছে।');
     
     renderDrafts();
   }
@@ -208,7 +208,7 @@ export function exportDrafts() {
   const drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
   
   if (drafts.length === 0) {
-    showToast('<i class="fas fa-exclamation-triangle"></i> এক্সপোর্ট করার জন্য কোনো ডেটা নেই।');
+    showToast('এক্সপোর্ট করার জন্য কোনো ডেটা নেই।');
     return;
   }
   
@@ -220,7 +220,7 @@ export function exportDrafts() {
   link.download = `G9Tool_Products_${new Date().toISOString().split('T')[0]}.json`;
   link.click();
   
-  showToast('<i class="fas fa-check-circle"></i> ডেটা সফলভাবে এক্সপোর্ট করা হয়েছে।');
+  showToast('ডেটা সফলভাবে এক্সপোর্ট করা হয়েছে।');
 }
 
 export function importDrafts() {
@@ -228,12 +228,12 @@ export function importDrafts() {
   const file = fileInput.files[0];
   
   if (!file) {
-    showToast('<i class="fas fa-exclamation-triangle"></i> অনুগ্রহ করে একটি JSON ফাইল নির্বাচন করুন।');
+    showToast('অনুগ্রহ করে একটি JSON ফাইল নির্বাচন করুন।');
     return;
   }
   
   if (file.type !== "application/json") {
-    showToast('<i class="fas fa-times-circle"></i> শুধুমাত্র JSON ফাইল সাপোর্ট করা হয়।');
+    showToast('শুধুমাত্র JSON ফাইল সাপোর্ট করা হয়।');
     return;
   }
   
@@ -279,10 +279,10 @@ export function importDrafts() {
       localStorage.setItem("drafts", JSON.stringify(mergedDrafts));
       renderDrafts();
       
-      showToast(`<i class="fas fa-check-circle"></i> ইমপোর্ট সম্পন্ন! নতুন: ${importedCount}টি, আপডেট: ${updatedCount}টি`);
+      showToast(`ইমপোর্ট সম্পন্ন! নতুন: ${importedCount}টি, আপডেট: ${updatedCount}টি`);
       
     } catch (error) {
-      showToast('<i class="fas fa-times-circle"></i> ফাইল ইমপোর্ট করতে সমস্যা হয়েছে। সঠিক JSON ফাইল নিশ্চিত করুন।');
+      showToast('ফাইল ইমপোর্ট করতে সমস্যা হয়েছে। সঠিক JSON ফাইল নিশ্চিত করুন।');
       console.error("Import error:", error);
     }
   };
@@ -301,7 +301,7 @@ export function bulkAction(action) {
   const selectedIds = Array.from(checkboxes).map(cb => cb.value);
   
   if (selectedIds.length === 0) {
-    showToast('<i class="fas fa-exclamation-triangle"></i> অনুগ্রহ করে কমপক্ষে একটি প্রোডাক্ট নির্বাচন করুন।');
+    showToast('অনুগ্রহ করে কমপক্ষে একটি প্রোডাক্ট নির্বাচন করুন।');
     return;
   }
   
@@ -312,7 +312,7 @@ export function bulkAction(action) {
     drafts = drafts.filter(draft => !selectedIds.includes(draft.id.toString()));
     localStorage.setItem("drafts", JSON.stringify(drafts));
     
-    showToast(`<i class="fas fa-check-circle"></i> ${selectedIds.length}টি প্রোডাক্ট ডিলিট করা হয়েছে।`);
+    showToast(`${selectedIds.length}টি প্রোডাক্ট ডিলিট করা হয়েছে।`);
   } else if (action === 'verify') {
     let drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
     drafts.forEach(draft => {
@@ -322,10 +322,36 @@ export function bulkAction(action) {
     });
     localStorage.setItem("drafts", JSON.stringify(drafts));
     
-    showToast(`<i class="fas fa-check-circle"></i> ${selectedIds.length}টি প্রোডাক্ট ভেরিফাই করা হয়েছে।`);
+    showToast(`${selectedIds.length}টি প্রোডাক্ট ভেরিফাই করা হয়েছে।`);
   }
   
   renderDrafts();
+}
+
+// New functions for currency and WhatsApp language settings
+export function saveSettings() {
+  const currencySelect = document.getElementById("currencySelect");
+  const whatsappLangSelect = document.getElementById("whatsappLangSelect");
+
+  if (currencySelect) {
+    localStorage.setItem("selectedCurrency", currencySelect.value);
+  }
+  if (whatsappLangSelect) {
+    localStorage.setItem("whatsappLanguage", whatsappLangSelect.value);
+  }
+  showToast('সেটিংস সংরক্ষণ করা হয়েছে।');
+}
+
+export function loadSettings() {
+  const currencySelect = document.getElementById("currencySelect");
+  const whatsappLangSelect = document.getElementById("whatsappLangSelect");
+
+  if (currencySelect) {
+    currencySelect.value = localStorage.getItem("selectedCurrency") || "৳";
+  }
+  if (whatsappLangSelect) {
+    whatsappLangSelect.value = localStorage.getItem("whatsappLanguage") || "bn";
+  }
 }
 
 // Expose functions to global scope
@@ -338,6 +364,8 @@ window.importDrafts = importDrafts;
 window.renderDrafts = renderDrafts;
 window.filterProducts = filterProducts;
 window.bulkAction = bulkAction;
+window.saveSettings = saveSettings;
+window.loadSettings = loadSettings;
 
 export function checkLogin() {
   if (!localStorage.getItem("loggedInUser")) {
@@ -353,7 +381,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   const savedLang = localStorage.getItem("language") || "en";
   await loadLanguage(savedLang);
   
-  
+  loadSettings(); // Load settings on page load
   renderDrafts();
   
   // Add search functionality with debounce
@@ -434,12 +462,13 @@ function showSearchResults(count, query) {
   }
   
   if (count > 0) {
-    searchInfo.innerHTML = `<i class="fas fa-search"></i> ${count}টি ফলাফল পাওয়া গেছে "${query}" এর জন্য`;
+    searchInfo.innerHTML = `${count}টি ফলাফল পাওয়া গেছে "${query}" এর জন্য`;
     searchInfo.style.display = 'block';
   } else {
-    searchInfo.innerHTML = `<i class="fas fa-exclamation-triangle"></i> "${query}" এর জন্য কোনো ফলাফল পাওয়া যায়নি`;
+    searchInfo.innerHTML = `"${query}" এর জন্য কোনো ফলাফল পাওয়া যায়নি`;
     searchInfo.style.display = 'block';
     searchInfo.style.borderLeftColor = '#ff9800';
   }
 }
+
 

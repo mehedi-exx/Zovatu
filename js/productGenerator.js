@@ -17,6 +17,8 @@ export function generateProduct() {
   const delivery = getVal("delivery"), status = getVal("status"), category = getVal("category");
   const desc = getVal("desc"), video = getVal("video"), wa = getVal("wa");
   const imgs = document.querySelectorAll(".img-url");
+  const currency = localStorage.getItem("selectedCurrency") || "৳"; // Get selected currency
+  const whatsappLang = localStorage.getItem("whatsappLanguage") || "bn"; // Get selected WhatsApp language
 
   // Enhanced validation with specific error messages
   const errors = [];
@@ -28,14 +30,14 @@ export function generateProduct() {
   if (!wa) errors.push("WhatsApp নম্বর");
 
   if (errors.length > 0) {
-    showToast(`<i class="fas fa-exclamation-triangle"></i> অনুগ্রহ করে ${errors.join(", ")} দিন।`, "error");
+    showToast(`অনুগ্রহ করে ${errors.join(", ")} দিন।`, "error");
     highlightMissingFields();
     return;
   }
 
   // Enhanced WhatsApp number validation
   if (!wa.match(/^8801[0-9]{9}$/)) {
-    showToast('<i class="fas fa-exclamation-triangle"></i> WhatsApp নম্বর সঠিক ফরম্যাটে দিন (8801XXXXXXXXX)', "error");
+    showToast("WhatsApp নম্বর সঠিক ফরম্যাটে দিন (8801XXXXXXXXX)", "error");
     document.getElementById("wa").focus();
     return;
   }
@@ -50,13 +52,13 @@ export function generateProduct() {
   });
 
   if (invalidImages.length > 0) {
-    showToast(`<i class="fas fa-exclamation-triangle"></i> ${invalidImages.join(", ")} এর লিংক সঠিক নয়।`, "error");
+    showToast(`${invalidImages.join(", ")} এর লিংক সঠিক নয়।`, "error");
     return;
   }
 
   // Validate offer price
   if (offer && (isNaN(offer) || offer >= price)) {
-    showToast('<i class="fas fa-exclamation-triangle"></i> অফার প্রাইস মূল প্রাইসের চেয়ে কম হতে হবে।', "error");
+    showToast("অফার প্রাইস মূল প্রাইসের চেয়ে কম হতে হবে।", "error");
     document.getElementById("offer").focus();
     return;
   }
@@ -80,17 +82,17 @@ export function generateProduct() {
     }
   });
 
-  // Generate custom fields HTML
+  // Generate custom fields HTML (removed icons)
   let customHTML = "";
   document.querySelectorAll(".custom-field-group").forEach(group => {
     const key = group.querySelector(".custom-key").value.trim();
     const value = group.querySelector(".custom-value").value.trim();
     if (key && value) {
-      customHTML += `<li><i class="fas fa-check-circle" style="color:#28a745;margin-right:8px;"></i><strong>${key}:</strong> ${value}</li>`;
+      customHTML += `<li><strong>${key}:</strong> ${value}</li>`;
     }
   });
 
-  // Enhanced video embedding
+  // Enhanced video embedding (removed icons)
   let videoEmbed = "";
   if (video && (video.includes("youtube.com") || video.includes("youtu.be"))) {
     let videoId = "";
@@ -102,7 +104,7 @@ export function generateProduct() {
     if (videoId) {
       videoEmbed = `
         <div style="margin:20px 0;padding:15px;background:#f8f9fa;border-radius:10px;">
-          <h3 style="margin:0 0 10px 0;color:#333;"><i class="fab fa-youtube" style="color:#ff0000;margin-right:8px;"></i>প্রোডাক্ট ভিডিও</h3>
+          <h3 style="margin:0 0 10px 0;color:#333;">প্রোডাক্ট ভিডিও</h3>
           <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
             <iframe src="https://www.youtube.com/embed/${videoId}" 
                     style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;border-radius:8px;" 
@@ -112,27 +114,32 @@ export function generateProduct() {
     }
   }
 
+  // WhatsApp message content based on selected language (removed emojis)
+  let whatsappMessage;
+  if (whatsappLang === "en") {
+    whatsappMessage = `I want to order a product\nProduct: ${name}\nPrice: ${currency}${offer || price}\nCode: ${code}${category ? `\nCategory: ${category}` : ''}${delivery ? `\nDelivery: ${delivery}` : ''}`;
+  } else {
+    whatsappMessage = `আমি একটি পণ্য অর্ডার করতে চাই\nপ্রোডাক্ট: ${name}\nমূল্য: ${currency}${offer || price}\nকোড: ${code}${category ? `\nক্যাটাগরি: ${category}` : ''}${delivery ? `\nডেলিভারি: ${delivery}` : ''}`;
+  }
+
   // Generate HTML based on selected theme
-  let html = generateOldVersionTheme();
+  let html = generateOldVersionTheme(currency, whatsappMessage);
 
   document.getElementById("output").textContent = html;
   document.getElementById("preview").innerHTML = html;
   saveDraft();
-  showToast('<i class="fas fa-check-circle"></i> প্রোডাক্ট সফলভাবে তৈরি হয়েছে!', "success");
+  showToast("প্রোডাক্ট সফলভাবে তৈরি হয়েছে!", "success");
   
   // Enhanced success animation with multiple visual feedback
   const generateBtn = document.getElementById("generateBtn");
   const originalContent = generateBtn.innerHTML;
   const originalBackground = generateBtn.style.background;
   
-  // Success state with animation
+  // Success state with animation (reduced animation)
   generateBtn.style.background = "linear-gradient(135deg, #28a745, #20c997)";
-  generateBtn.innerHTML = '<i class="fas fa-check"></i> সম্পন্ন!';
-  generateBtn.style.transform = "scale(1.05)";
-  generateBtn.style.boxShadow = "0 6px 20px rgba(40, 167, 69, 0.4)";
-  
-  // Add pulse animation
-  generateBtn.style.animation = "pulse 0.6s ease-in-out";
+  generateBtn.innerHTML = "সম্পন্ন!";
+  generateBtn.style.transform = "scale(1.02)"; // Slightly reduced scale
+  generateBtn.style.boxShadow = "0 4px 10px rgba(0,0,0,0.1)"; // Slightly reduced shadow
   
   // Reset after animation
   setTimeout(() => {
@@ -140,8 +147,7 @@ export function generateProduct() {
     generateBtn.innerHTML = originalContent;
     generateBtn.style.transform = "";
     generateBtn.style.boxShadow = "";
-    generateBtn.style.animation = "";
-  }, 2500);
+  }, 1500); // Reduced timeout
 
   // Scroll to preview section smoothly
   const previewSection = document.getElementById("preview");
@@ -150,7 +156,7 @@ export function generateProduct() {
   }
 
   // Theme generation functions
-  function generateOldVersionTheme() {
+  function generateOldVersionTheme(currencySymbol, whatsappMsg) {
     return `
 <div style="text-align:center;">
   <img id="mainImg" src="${mainImg}" style="width:100%;max-width:500px;border-radius:10px;border:1px solid #ccc;margin-bottom:10px;">
@@ -158,27 +164,32 @@ export function generateProduct() {
 
   <h2 style="margin:5px 0;">${name}</h2>
   <p style="font-size:18px;">
-    ${offer ? `<span style="text-decoration:line-through;color:#aaa;margin-right:6px;">৳${price.toLocaleString()}</span><span style="color:red;font-weight:bold;">৳${offer.toLocaleString()}</span><small style="color:limegreen;">(-${discount}%)</small>` : `<span style="color:red;font-weight:bold;">৳${price.toLocaleString()}</span>`}
+    ${offer ? `<span style="text-decoration:line-through;color:#aaa;margin-right:6px;">${currencySymbol}${price.toLocaleString()}</span><span style="color:red;font-weight:bold;">${currencySymbol}${offer.toLocaleString()}</span><small style="color:limegreen;">(-${discount}%)</small>` : `<span style="color:red;font-weight:bold;">${currencySymbol}${price.toLocaleString()}</span>`}
   </p>
 
   <div style="margin:20px 0;">
-    <a href="https://wa.me/${wa}?text=${encodeURIComponent(`📦 আমি একটি পণ্য অর্ডার করতে চাই\n🔖 প্রোডাক্ট: ${name}\n💰 মূল্য: ${offer || price}৳\n🧾 কোড: ${code}\n📁 ক্যাটাগরি: ${category}\n🚚 ডেলিভারি: ${delivery}`)}" 
+    <a href="https://wa.me/${wa}?text=${encodeURIComponent(whatsappMsg)}" 
        target="_blank"
        style="display:inline-block;background: linear-gradient(135deg, #25D366, #128C7E);color:#fff;padding:14px 32px;border-radius:50px;font-weight:bold;font-size:17px;text-decoration:none;box-shadow: 0 4px 10px rgba(0,0,0,0.15);transition: all 0.3s ease;">
       Order Now
     </a>
   </div>
   <ul style="list-style:none;padding:0;margin:15px auto;text-align:left;max-width:500px;">
-    ${code ? `<li><i class="fas fa-hashtag"></i> কোড: ${code}</li>` : ''}
-    ${status ? `<li><i class="fas fa-box"></i> স্ট্যাটাস: ${status}</li>` : ''}
-    ${category ? `<li><i class="fas fa-folder"></i> ক্যাটাগরি: ${category}</li>` : ''}
-    ${delivery ? `<li><i class="fas fa-truck"></i> ডেলিভারি টাইম: ${delivery}</li>` : ''}
+    ${code ? `<li><strong>কোড:</strong> ${code}</li>` : ''}
+    ${unit ? `<li><strong>ইউনিট:</strong> ${unit}</li>` : ''}
+    ${qty ? `<li><strong>পরিমাণ:</strong> ${qty}</li>` : ''}
+    ${brand ? `<li><strong>ব্র্যান্ড:</strong> ${brand}</li>` : ''}
+    ${size ? `<li><strong>সাইজ:</strong> ${size}</li>` : ''}
+    ${color ? `<li><strong>রঙ:</strong> ${color}</li>` : ''}
+    ${status ? `<li><strong>স্ট্যাটাস:</strong> ${status}</li>` : ''}
+    ${category ? `<li><strong>ক্যাটাগরি:</strong> ${category}</li>` : ''}
+    ${delivery ? `<li><strong>ডেলিভারি টাইম:</strong> ${delivery}</li>` : ''}
     ${customHTML}
   </ul>
-  ${desc ? `<div style="border:1px solid #eee;padding:15px;border-radius:10px;max-width:500px;margin:auto;margin-bottom:20px;"><p style="margin:0;"><strong>Description:</strong><br>${desc}</p></div>` : ''}
+  ${desc ? `<div style="border:1px solid #eee;padding:15px;border-radius:10px;max-width:500px;margin:auto;margin-bottom:20px;"><p style="margin:0;"><strong>বর্ণনা:</strong><br>${desc}</p></div>` : ''}
   ${videoEmbed ? videoEmbed.replace(/border-radius:10px/g, 'border-radius:10px;max-width:500px;margin:auto;').replace(/background:#f8f9fa/g, 'background:#f5f5f5') : ''}
   
-  <p style="display:none;"><a href="#">{getProduct} $price={৳${price}} $sale={৳${offer}} $style={1}</a></p>
+  <p style="display:none;"><a href="#">{getProduct} $price={${currencySymbol}${price}} $sale={${currencySymbol}${offer}} $style={1}</a></p>
 </div>
 
 <script>
@@ -222,7 +233,7 @@ export function addImageInput() {
   const currentInputs = container.querySelectorAll(".img-url");
   
   if (currentInputs.length >= 5) {
-    showToast('<i class="fas fa-exclamation-triangle"></i> সর্বোচ্চ ৫টি ছবি যোগ করা যাবে।');
+    showToast("সর্বোচ্চ ৫টি ছবি যোগ করা যাবে।");
     return;
   }
   
@@ -242,7 +253,7 @@ export function addImageInput() {
     
     const removeBtn = document.createElement("button");
     removeBtn.type = "button";
-    removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+    removeBtn.innerHTML = "×"; // Removed icon, using simple X
     removeBtn.style.background = "#dc3545";
     removeBtn.style.color = "white";
     removeBtn.style.border = "none";
@@ -259,7 +270,7 @@ export function addImageInput() {
     container.appendChild(input);
   }
   
-  showToast('<i class="fas fa-check-circle"></i> নতুন ছবির ফিল্ড যোগ করা হয়েছে।');
+  showToast("নতুন ছবির ফিল্ড যোগ করা হয়েছে।");
 }
 
 export function addCustomField() {
@@ -267,7 +278,7 @@ export function addCustomField() {
   const currentFields = container.querySelectorAll(".custom-field-group");
   
   if (currentFields.length >= 10) {
-    showToast('<i class="fas fa-exclamation-triangle"></i> সর্বোচ্চ ১০টি কাস্টম ফিল্ড যোগ করা যাবে।');
+    showToast("সর্বোচ্চ ১০টি কাস্টম ফিল্ড যোগ করা যাবে।");
     return;
   }
   
@@ -283,12 +294,12 @@ export function addCustomField() {
     <input type="text" class="custom-value" placeholder="মান (যেমন: ৬ মাস)" style="flex: 1;">
     <button type="button" onclick="this.parentElement.remove(); showToast('কাস্টম ফিল্ড মুছে ফেলা হয়েছে।')" 
             style="background:#dc3545;color:white;border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;">
-      <i class="fas fa-times"></i>
+      ×
     </button>
   `;
   
   container.appendChild(group);
-  showToast('<i class="fas fa-check-circle"></i> নতুন কাস্টম ফিল্ড যোগ করা হয়েছে।');
+  showToast("নতুন কাস্টম ফিল্ড যোগ করা হয়েছে।");
 }
 
 export function saveDraft() {
@@ -391,7 +402,7 @@ export function loadDraftToForm(id) {
     addCustomField();
   }
   
-  showToast('<i class="fas fa-check-circle"></i> ড্রাফট লোড করা হয়েছে।');
+  showToast("ড্রাফট লোড করা হয়েছে।");
 }
 
 export function applyFieldVisibility() {
@@ -449,5 +460,4 @@ style.textContent = `
 }
 `;
 document.head.appendChild(style);
-
 

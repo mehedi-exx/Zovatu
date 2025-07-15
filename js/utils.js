@@ -21,29 +21,54 @@ export function showToast(message, type = "success") {
 
   toast.innerHTML = `<i class="${icon}"></i> <span>${message}</span>`;
   
+  // Enhanced toast styles
+  toast.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : type === 'warning' ? '#ff9800' : '#2196F3'};
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 10000;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transform: translateX(100%);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    cursor: pointer;
+    max-width: 350px;
+    word-wrap: break-word;
+  `;
+  
   document.body.appendChild(toast);
 
   // Trigger animation
-  setTimeout(() => toast.classList.add("show"), 100);
+  setTimeout(() => {
+    toast.style.transform = 'translateX(0)';
+  }, 100);
 
   // Auto remove after 4 seconds
   setTimeout(() => {
-    toast.classList.remove("show");
+    toast.style.transform = 'translateX(100%)';
     setTimeout(() => {
       if (toast.parentNode) {
         toast.remove();
       }
-    }, 400);
+    }, 300);
   }, 4000);
 
   // Click to dismiss
   toast.addEventListener('click', () => {
-    toast.classList.remove("show");
+    toast.style.transform = 'translateX(100%)';
     setTimeout(() => {
       if (toast.parentNode) {
         toast.remove();
       }
-    }, 400);
+    }, 300);
   });
 }
 

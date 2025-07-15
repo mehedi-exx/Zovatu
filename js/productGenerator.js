@@ -1,5 +1,15 @@
 import { getVal, showToast } from './utils.js';
 
+// Helper function to validate URLs
+function isValidURL(string) {
+  try {
+    new URL(string);
+    return true;
+  } catch (_) {
+    return false;
+  }
+}
+
 export function generateProduct() {
   const name = getVal("name"), code = getVal("code"), price = parseFloat(getVal("price"));
   const offer = parseFloat(getVal("offer")), unit = getVal("unit"), qty = getVal("qty");
@@ -8,17 +18,46 @@ export function generateProduct() {
   const desc = getVal("desc"), video = getVal("video"), wa = getVal("wa");
   const imgs = document.querySelectorAll(".img-url");
 
-  // Enhanced validation
-  if (!name || !code || isNaN(price) || !imgs[0]?.value || !wa) {
-    showToast("❌ প্রোডাক্ট নাম, কোড, প্রাইস, প্রথম ছবি ও WhatsApp নম্বর বাধ্যতামূলক।");
+  // Enhanced validation with specific error messages
+  const errors = [];
+  
+  if (!name) errors.push("প্রোডাক্ট নাম");
+  if (!code) errors.push("প্রোডাক্ট কোড");
+  if (isNaN(price) || price <= 0) errors.push("সঠিক প্রাইস");
+  if (!imgs[0]?.value.trim()) errors.push("প্রথম ছবির লিংক");
+  if (!wa) errors.push("WhatsApp নম্বর");
+
+  if (errors.length > 0) {
+    showToast(`<i class="fas fa-exclamation-triangle"></i> অনুগ্রহ করে ${errors.join(", ")} দিন।`, "error");
     highlightMissingFields();
     return;
   }
 
-  // WhatsApp number validation
+  // Enhanced WhatsApp number validation
   if (!wa.match(/^8801[0-9]{9}$/)) {
-    showToast("❌ WhatsApp নম্বর সঠিক ফরম্যাটে দিন (8801XXXXXXXXX)");
+    showToast('<i class="fas fa-exclamation-triangle"></i> WhatsApp নম্বর সঠিক ফরম্যাটে দিন (8801XXXXXXXXX)', "error");
     document.getElementById("wa").focus();
+    return;
+  }
+
+  // Validate image URLs
+  const invalidImages = [];
+  imgs.forEach((input, index) => {
+    const url = input.value.trim();
+    if (url && !isValidURL(url)) {
+      invalidImages.push(`ছবি ${index + 1}`);
+    }
+  });
+
+  if (invalidImages.length > 0) {
+    showToast(`<i class="fas fa-exclamation-triangle"></i> ${invalidImages.join(", ")} এর লিংক সঠিক নয়।`, "error");
+    return;
+  }
+
+  // Validate offer price
+  if (offer && (isNaN(offer) || offer >= price)) {
+    showToast('<i class="fas fa-exclamation-triangle"></i> অফার প্রাইস মূল প্রাইসের চেয়ে কম হতে হবে।', "error");
+    document.getElementById("offer").focus();
     return;
   }
 
@@ -79,16 +118,36 @@ export function generateProduct() {
   document.getElementById("output").textContent = html;
   document.getElementById("preview").innerHTML = html;
   saveDraft();
-  showToast("✅ প্রোডাক্ট সফলভাবে তৈরি হয়েছে!");
+  showToast('<i class="fas fa-check-circle"></i> প্রোডাক্ট সফলভাবে তৈরি হয়েছে!', "success");
   
-  // Add success animation
+  // Enhanced success animation with multiple visual feedback
   const generateBtn = document.getElementById("generateBtn");
-  generateBtn.style.background = "#28a745";
+  const originalContent = generateBtn.innerHTML;
+  const originalBackground = generateBtn.style.background;
+  
+  // Success state with animation
+  generateBtn.style.background = "linear-gradient(135deg, #28a745, #20c997)";
   generateBtn.innerHTML = '<i class="fas fa-check"></i> সম্পন্ন!';
+  generateBtn.style.transform = "scale(1.05)";
+  generateBtn.style.boxShadow = "0 6px 20px rgba(40, 167, 69, 0.4)";
+  
+  // Add pulse animation
+  generateBtn.style.animation = "pulse 0.6s ease-in-out";
+  
+  // Reset after animation
   setTimeout(() => {
-    generateBtn.style.background = "";
-    generateBtn.innerHTML = '<i class="fas fa-magic"></i> জেনারেট';
-  }, 2000);
+    generateBtn.style.background = originalBackground;
+    generateBtn.innerHTML = originalContent;
+    generateBtn.style.transform = "";
+    generateBtn.style.boxShadow = "";
+    generateBtn.style.animation = "";
+  }, 2500);
+
+  // Scroll to preview section smoothly
+  const previewSection = document.getElementById("preview");
+  if (previewSection) {
+    previewSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 
   // Theme generation functions
   function generateOldVersionTheme() {
@@ -110,10 +169,10 @@ export function generateProduct() {
     </a>
   </div>
   <ul style="list-style:none;padding:0;margin:15px auto;text-align:left;max-width:500px;">
-    ${code ? `<li>🔢 কোড: ${code}</li>` : ''}
-    ${status ? `<li>📦 স্ট্যাটাস: ${status}</li>` : ''}
-    ${category ? `<li>📁 ক্যাটাগরি: ${category}</li>` : ''}
-    ${delivery ? `<li>🚚 ডেলিভারি টাইম: ${delivery}</li>` : ''}
+    ${code ? `<li><i class="fas fa-hashtag"></i> কোড: ${code}</li>` : ''}
+    ${status ? `<li><i class="fas fa-box"></i> স্ট্যাটাস: ${status}</li>` : ''}
+    ${category ? `<li><i class="fas fa-folder"></i> ক্যাটাগরি: ${category}</li>` : ''}
+    ${delivery ? `<li><i class="fas fa-truck"></i> ডেলিভারি টাইম: ${delivery}</li>` : ''}
     ${customHTML}
   </ul>
   ${desc ? `<div style="border:1px solid #eee;padding:15px;border-radius:10px;max-width:500px;margin:auto;margin-bottom:20px;"><p style="margin:0;"><strong>Description:</strong><br>${desc}</p></div>` : ''}
@@ -163,7 +222,7 @@ export function addImageInput() {
   const currentInputs = container.querySelectorAll(".img-url");
   
   if (currentInputs.length >= 5) {
-    showToast("⚠️ সর্বোচ্চ ৫টি ছবি যোগ করা যাবে।");
+    showToast('<i class="fas fa-exclamation-triangle"></i> সর্বোচ্চ ৫টি ছবি যোগ করা যাবে।');
     return;
   }
   
@@ -200,7 +259,7 @@ export function addImageInput() {
     container.appendChild(input);
   }
   
-  showToast("✅ নতুন ছবির ফিল্ড যোগ করা হয়েছে।");
+  showToast('<i class="fas fa-check-circle"></i> নতুন ছবির ফিল্ড যোগ করা হয়েছে।');
 }
 
 export function addCustomField() {
@@ -208,7 +267,7 @@ export function addCustomField() {
   const currentFields = container.querySelectorAll(".custom-field-group");
   
   if (currentFields.length >= 10) {
-    showToast("⚠️ সর্বোচ্চ ১০টি কাস্টম ফিল্ড যোগ করা যাবে।");
+    showToast('<i class="fas fa-exclamation-triangle"></i> সর্বোচ্চ ১০টি কাস্টম ফিল্ড যোগ করা যাবে।');
     return;
   }
   
@@ -229,7 +288,7 @@ export function addCustomField() {
   `;
   
   container.appendChild(group);
-  showToast("✅ নতুন কাস্টম ফিল্ড যোগ করা হয়েছে।");
+  showToast('<i class="fas fa-check-circle"></i> নতুন কাস্টম ফিল্ড যোগ করা হয়েছে।');
 }
 
 export function saveDraft() {
@@ -332,7 +391,7 @@ export function loadDraftToForm(id) {
     addCustomField();
   }
   
-  showToast("✅ ড্রাফট লোড করা হয়েছে।");
+  showToast('<i class="fas fa-check-circle"></i> ড্রাফট লোড করা হয়েছে।');
 }
 
 export function applyFieldVisibility() {

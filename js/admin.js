@@ -3,13 +3,13 @@ import { showToast, loadLanguage } from './utils.js';
 let currentSearchTerm = '';
 let currentFilter = 'all';
 
-export function renderDrafts() {
-  const drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
+export function renderDrafts(customDrafts = null) {
+  const drafts = customDrafts || JSON.parse(localStorage.getItem("drafts") || "[]");
   const searchTerm = document.getElementById("searchInput")?.value.toLowerCase() || '';
   
-  // Filter drafts based on search term
-  const filteredDrafts = drafts.filter(draft => {
-    const searchableText = `${draft.name} ${draft.code} ${draft.brand} ${draft.category}`.toLowerCase();
+  // Filter drafts based on search term if no custom drafts provided
+  const filteredDrafts = customDrafts || drafts.filter(draft => {
+    const searchableText = `${draft.name} ${draft.code} ${draft.brand} ${draft.category} ${draft.desc || ''}`.toLowerCase();
     return searchableText.includes(searchTerm);
   });
 
@@ -171,7 +171,7 @@ export function deleteDraft(id) {
   localStorage.setItem("drafts", JSON.stringify(drafts));
   
   renderDrafts();
-  showToast("✅ প্রোডাক্ট ডিলিট করা হয়েছে।");
+  showToast('<i class="fas fa-check-circle"></i> প্রোডাক্ট ডিলিট করা হয়েছে।');
 }
 
 export function togglePreview(id) {
@@ -198,7 +198,7 @@ export function toggleVerification(id) {
     localStorage.setItem("drafts", JSON.stringify(drafts));
     
     const isVerified = drafts[draftIndex].verified;
-    showToast(isVerified ? "✅ প্রোডাক্ট ভেরিফাই করা হয়েছে।" : "⚠️ প্রোডাক্ট আনভেরিফাই করা হয়েছে।");
+    showToast(isVerified ? '<i class="fas fa-check-circle"></i> প্রোডাক্ট ভেরিফাই করা হয়েছে।' : '<i class="fas fa-exclamation-triangle"></i> প্রোডাক্ট আনভেরিফাই করা হয়েছে।');
     
     renderDrafts();
   }
@@ -208,7 +208,7 @@ export function exportDrafts() {
   const drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
   
   if (drafts.length === 0) {
-    showToast("⚠️ এক্সপোর্ট করার জন্য কোনো ডেটা নেই।");
+    showToast('<i class="fas fa-exclamation-triangle"></i> এক্সপোর্ট করার জন্য কোনো ডেটা নেই।');
     return;
   }
   
@@ -220,7 +220,7 @@ export function exportDrafts() {
   link.download = `G9Tool_Products_${new Date().toISOString().split('T')[0]}.json`;
   link.click();
   
-  showToast("✅ ডেটা সফলভাবে এক্সপোর্ট করা হয়েছে।");
+  showToast('<i class="fas fa-check-circle"></i> ডেটা সফলভাবে এক্সপোর্ট করা হয়েছে।');
 }
 
 export function importDrafts() {
@@ -228,12 +228,12 @@ export function importDrafts() {
   const file = fileInput.files[0];
   
   if (!file) {
-    showToast("⚠️ অনুগ্রহ করে একটি JSON ফাইল নির্বাচন করুন।");
+    showToast('<i class="fas fa-exclamation-triangle"></i> অনুগ্রহ করে একটি JSON ফাইল নির্বাচন করুন।');
     return;
   }
   
   if (file.type !== "application/json") {
-    showToast("❌ শুধুমাত্র JSON ফাইল সাপোর্ট করা হয়।");
+    showToast('<i class="fas fa-times-circle"></i> শুধুমাত্র JSON ফাইল সাপোর্ট করা হয়।');
     return;
   }
   
@@ -279,10 +279,10 @@ export function importDrafts() {
       localStorage.setItem("drafts", JSON.stringify(mergedDrafts));
       renderDrafts();
       
-      showToast(`✅ ইমপোর্ট সম্পন্ন! নতুন: ${importedCount}টি, আপডেট: ${updatedCount}টি`);
+      showToast(`<i class="fas fa-check-circle"></i> ইমপোর্ট সম্পন্ন! নতুন: ${importedCount}টি, আপডেট: ${updatedCount}টি`);
       
     } catch (error) {
-      showToast("❌ ফাইল ইমপোর্ট করতে সমস্যা হয়েছে। সঠিক JSON ফাইল নিশ্চিত করুন।");
+      showToast('<i class="fas fa-times-circle"></i> ফাইল ইমপোর্ট করতে সমস্যা হয়েছে। সঠিক JSON ফাইল নিশ্চিত করুন।');
       console.error("Import error:", error);
     }
   };
@@ -301,7 +301,7 @@ export function bulkAction(action) {
   const selectedIds = Array.from(checkboxes).map(cb => cb.value);
   
   if (selectedIds.length === 0) {
-    showToast("⚠️ অনুগ্রহ করে কমপক্ষে একটি প্রোডাক্ট নির্বাচন করুন।");
+    showToast('<i class="fas fa-exclamation-triangle"></i> অনুগ্রহ করে কমপক্ষে একটি প্রোডাক্ট নির্বাচন করুন।');
     return;
   }
   
@@ -312,7 +312,7 @@ export function bulkAction(action) {
     drafts = drafts.filter(draft => !selectedIds.includes(draft.id.toString()));
     localStorage.setItem("drafts", JSON.stringify(drafts));
     
-    showToast(`✅ ${selectedIds.length}টি প্রোডাক্ট ডিলিট করা হয়েছে।`);
+    showToast(`<i class="fas fa-check-circle"></i> ${selectedIds.length}টি প্রোডাক্ট ডিলিট করা হয়েছে।`);
   } else if (action === 'verify') {
     let drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
     drafts.forEach(draft => {
@@ -322,7 +322,7 @@ export function bulkAction(action) {
     });
     localStorage.setItem("drafts", JSON.stringify(drafts));
     
-    showToast(`✅ ${selectedIds.length}টি প্রোডাক্ট ভেরিফাই করা হয়েছে।`);
+    showToast(`<i class="fas fa-check-circle"></i> ${selectedIds.length}টি প্রোডাক্ট ভেরিফাই করা হয়েছে।`);
   }
   
   renderDrafts();
@@ -375,4 +375,71 @@ window.addEventListener("DOMContentLoaded", async () => {
 });
 
 
+
+
+// Enhanced search function
+export function searchDrafts() {
+  const query = document.getElementById("searchInput").value.toLowerCase().trim();
+  const drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
+  
+  if (!query) {
+    renderDrafts();
+    return;
+  }
+  
+  // Enhanced search with multiple fields and fuzzy matching
+  const filteredDrafts = drafts.filter(draft => {
+    const searchFields = [
+      draft.name,
+      draft.code,
+      draft.brand,
+      draft.category,
+      draft.desc
+    ].filter(Boolean).join(' ').toLowerCase();
+    
+    // Support for multiple search terms
+    const searchTerms = query.split(' ').filter(term => term.length > 0);
+    
+    return searchTerms.every(term => 
+      searchFields.includes(term) || 
+      searchFields.includes(term.replace(/[aeiou]/g, '')) // Simple fuzzy matching
+    );
+  });
+  
+  renderDrafts(filteredDrafts);
+  
+  // Show search results count
+  showSearchResults(filteredDrafts.length, query);
+}
+
+function showSearchResults(count, query) {
+  let searchInfo = document.getElementById("searchInfo");
+  
+  if (!searchInfo) {
+    searchInfo = document.createElement('div');
+    searchInfo.id = 'searchInfo';
+    searchInfo.style.cssText = `
+      background: #2a2a2a;
+      color: #ccc;
+      padding: 8px 16px;
+      border-radius: 6px;
+      margin: 10px 0;
+      font-size: 14px;
+      border-left: 3px solid #4CAF50;
+      display: none;
+    `;
+    
+    const searchContainer = document.querySelector('#searchInput').parentNode;
+    searchContainer.appendChild(searchInfo);
+  }
+  
+  if (count > 0) {
+    searchInfo.innerHTML = `<i class="fas fa-search"></i> ${count}টি ফলাফল পাওয়া গেছে "${query}" এর জন্য`;
+    searchInfo.style.display = 'block';
+  } else {
+    searchInfo.innerHTML = `<i class="fas fa-exclamation-triangle"></i> "${query}" এর জন্য কোনো ফলাফল পাওয়া যায়নি`;
+    searchInfo.style.display = 'block';
+    searchInfo.style.borderLeftColor = '#ff9800';
+  }
+}
 

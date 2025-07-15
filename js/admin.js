@@ -1,4 +1,4 @@
-import { showToast, loadLanguage, getStorageItem, setStorageItem } from './utils.js';
+import { showToast, loadLanguage } from './utils.js';
 
 let currentSearchTerm = '';
 let currentFilter = 'all';
@@ -6,8 +6,7 @@ let currentFilter = 'all';
 export function renderDrafts() {
   const drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
   const searchTerm = document.getElementById("searchInput")?.value.toLowerCase() || '';
-  const selectedCurrency = getStorageItem("selectedCurrency", "৳"); // Get selected currency
-
+  
   // Filter drafts based on search term
   const filteredDrafts = drafts.filter(draft => {
     const searchableText = `${draft.name} ${draft.code} ${draft.brand} ${draft.category}`.toLowerCase();
@@ -59,7 +58,7 @@ export function renderDrafts() {
           <div class="meta-item">
             <div class="meta-label">মূল্য</div>
             <div class="meta-value">
-              ${draft.offer ? `<span style="text-decoration:line-through;color:#888;">${selectedCurrency}${draft.price}</span> <span style="color:#28a745;">${selectedCurrency}${draft.offer}</span>` : `${selectedCurrency}${draft.price || '0'}`}
+              ${draft.offer ? `<span style="text-decoration:line-through;color:#888;">৳${draft.price}</span> <span style="color:#28a745;">৳${draft.offer}</span>` : `৳${draft.price || '0'}`}
             </div>
           </div>
           <div class="meta-item">
@@ -134,7 +133,7 @@ export function renderDrafts() {
           
           <div style="margin-top:15px;padding-top:15px;border-top:1px solid #444;">
             <strong style="color:#ccc;">WhatsApp অর্ডার লিংক:</strong><br>
-            <a href="https://wa.me/${draft.wa}?text=${encodeURIComponent(`🛒 নতুন অর্ডার\n📦 প্রোডাক্ট: ${draft.name}\n🏷️ কোড: ${draft.code}\n💰 মূল্য: ${selectedCurrency}${draft.offer || draft.price}`)}" 
+            <a href="https://wa.me/${draft.wa}?text=${encodeURIComponent(`🛒 নতুন অর্ডার\n📦 প্রোডাক্ট: ${draft.name}\n🏷️ কোড: ${draft.code}\n💰 মূল্য: ৳${draft.offer || draft.price}`)}" 
                target="_blank" style="color:#25D366;font-size:14px;">
               <i class="fab fa-whatsapp"></i> WhatsApp এ অর্ডার করুন
             </a>
@@ -354,39 +353,6 @@ window.addEventListener("DOMContentLoaded", async () => {
   const savedLang = localStorage.getItem("language") || "en";
   await loadLanguage(savedLang);
   
-  // Load and set currency selection
-  const currencySelect = document.getElementById("currencySelect");
-  if (currencySelect) {
-    const savedCurrency = getStorageItem("selectedCurrency", "৳");
-    currencySelect.value = savedCurrency;
-    currencySelect.addEventListener("change", (event) => {
-      setStorageItem("selectedCurrency", event.target.value);
-      showToast(`কারেন্সি পরিবর্তন করা হয়েছে: ${event.target.value}`);
-      renderDrafts(); // Re-render drafts to update currency display
-    });
-  }
-
-  // Load and set WhatsApp message language selection
-  const whatsappLangSelect = document.getElementById("whatsappLangSelect");
-  if (whatsappLangSelect) {
-    const savedWhatsappLang = getStorageItem("whatsappMessageLanguage", "bn");
-    whatsappLangSelect.value = savedWhatsappLang;
-    whatsappLangSelect.addEventListener("change", (event) => {
-      setStorageItem("whatsappMessageLanguage", event.target.value);
-      showToast(`হোয়াটসঅ্যাপ মেসেজ ভাষা পরিবর্তন করা হয়েছে: ${event.target.value === 'bn' ? 'বাংলা' : 'English'}`);
-    });
-  }
-
-  // Load and set Output language selection
-  const outputLangSelect = document.getElementById("outputLangSelect");
-  if (outputLangSelect) {
-    const savedOutputLang = getStorageItem("outputLanguage", "bn"); // Default to Bengali
-    outputLangSelect.value = savedOutputLang;
-    outputLangSelect.addEventListener("change", (event) => {
-      setStorageItem("outputLanguage", event.target.value);
-      showToast(`আউটপুট ভাষা পরিবর্তন করা হয়েছে: ${event.target.value === 'bn' ? 'বাংলা' : 'English'}`);
-    });
-  }
   
   renderDrafts();
   
@@ -407,5 +373,6 @@ window.addEventListener("DOMContentLoaded", async () => {
     renderDrafts();
   }, 30000);
 });
+
 
 

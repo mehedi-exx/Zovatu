@@ -10,19 +10,7 @@
 </head>
 <body>
 
-<script>
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("service-worker.js")
-        .then(registration => {
-          console.log("Service Worker registered: ", registration);
-        })
-        .catch(error => {
-          console.error("Service Worker registration failed: ", error);
-        });
-    });
-  }
-</script>
+
 
 <header class="header">
   <div class="left-icons">
@@ -96,8 +84,10 @@
         </div>
       </div>
 
-      <button onclick="addCustomField()" type="button" data-i18n="add_custom_info"><i class="fas fa-plus"></i> কাস্টম তথ্য যোগ করুন</button>
-      <button onclick="addImageField()" type="button" data-i18n="add_more_images"><i class="fas fa-image"></i> আরও ছবি যোগ করুন</button>
+      <div class="button-row">
+        <button onclick="addCustomField()" type="button" data-i18n="add_custom_info"><i class="fas fa-plus"></i> কাস্টম তথ্য যোগ করুন</button>
+        <button onclick="addImageField()" type="button" data-i18n="add_more_images"><i class="fas fa-image"></i> আরও ছবি যোগ করুন</button>
+      </div>
     </div>
 
     <br />

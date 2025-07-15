@@ -87,18 +87,6 @@
       text-decoration: none;
       margin: 0 4px;
     }
-    /* Dark Mode Toggle */
-    .theme-toggle {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 24px;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-    .theme-toggle:hover {
-      transform: scale(1.1);
-    }
   </style>
 </head>
 <body>
@@ -107,12 +95,7 @@
 <div class="header">
   <div class="header-flex">
     <div class="header-title"><i class="fas fa-lock"></i> <span data-i18n="g9tool">G9 Tool</span></div>
-    <div>
-      <button class="theme-toggle" onclick="toggleTheme()">
-        <i class="fas fa-moon"></i>
-      </button>
-      <a href="https://t.me/mehedi_exx" target="_blank" class="telegram"><i class="fab fa-telegram-plane"></i></a>
-    </div>
+    <a href="https://t.me/mehedi_exx" target="_blank" class="telegram"><i class="fab fa-telegram-plane"></i></a>
   </div>
 </div>
 
@@ -132,33 +115,10 @@
 </div>
 
 <script type="module" src="auth.js"></script>
-<script>
-  function toggleTheme() {
-    document.body.classList.toggle("light-mode");
-    const currentTheme = document.body.classList.contains("light-mode") ? "light" : "dark";
-    localStorage.setItem("theme", currentTheme);
-    updateThemeToggleIcon(currentTheme);
-  }
-
-  function updateThemeToggleIcon(theme) {
-    const toggleButton = document.querySelector(".theme-toggle");
-    if (theme === "light") {
-      toggleButton.innerHTML = 	erase<i class="fas fa-sun"></i>";
-    } else {
-      toggleButton.innerHTML = 	erase<i class="fas fa-moon"></i>";
-    }
-  }
-
-  // Apply saved theme on load
-  document.addEventListener("DOMContentLoaded", () => {
-    const savedTheme = localStorage.getItem("theme") || "dark";
-    if (savedTheme === "light") {
-      document.body.classList.add("light-mode");
-    }
-    updateThemeToggleIcon(savedTheme);
-  });
-</script>
 </body>
 </html>
+
+
+
 
 

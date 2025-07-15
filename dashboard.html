@@ -29,12 +29,7 @@
     <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
   </div>
   <div class="logo"><i class="fas fa-toolbox"></i> G9Tool</div>
-  <div>
-    <button class="theme-toggle" onclick="toggleTheme()">
-      <i class="fas fa-moon"></i>
-    </button>
-    <a class="telegram-icon" href="https://t.me/yourchannel" target="_blank"><i class="fab fa-telegram"></i></a>
-  </div>
+  <a class="telegram-icon" href="https://t.me/yourchannel" target="_blank"><i class="fab fa-telegram"></i></a>
 </header>
 
 <div class="sidebar" id="sidebar">
@@ -50,29 +45,14 @@
       <span data-i18n="language_selection">ভাষা নির্বাচন</span>
     </div>
     <div class="language-options">
-      <button class="lang-btn" data-lang="bn" onclick="switchLanguage(\'bn\')">
+      <button class="lang-btn" data-lang="bn" onclick="switchLanguage('bn')">
         <span class="flag">🇧🇩</span>
         <span>বাংলা</span>
       </button>
-      <button class="lang-btn active" data-lang="en" onclick="switchLanguage(\'en\')">
+      <button class="lang-btn active" data-lang="en" onclick="switchLanguage('en')">
         <span class="flag">🇺🇸</span>
         <span>English</span>
       </button>
-    </div>
-  </div>
-
-  <!-- Theme Selection -->
-  <div class="theme-selector">
-    <div class="theme-header">
-      <i class="fas fa-paint-brush"></i>
-      <span data-i18n="theme_selection">Theme Selection</span>
-    </div>
-    <div class="theme-options">
-      <select id="themeSelect">
-        <option value="old_version" data-i18n="theme_old_version">Old Version</option>
-        <option value="professional_v1" data-i18n="theme_professional_v1">Professional V1</option>
-        <option value="professional_v2" data-i18n="theme_professional_v2">Professional V2</option>
-      </select>
     </div>
   </div>
 
@@ -134,5 +114,17 @@
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
 
 

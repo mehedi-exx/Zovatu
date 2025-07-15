@@ -1,4 +1,4 @@
-import { showToast, getVal, loadLanguage, translateElement, getStorageItem, setStorageItem } from './js/utils.js';
+import { showToast, getVal, loadLanguage, translateElement } from './js/utils.js';
 import { generateProduct, addImageInput, addCustomField, saveDraft, loadDraftToForm, applyFieldVisibility } from './js/productGenerator.js';
 
 // ✅ Enhanced Sidebar Toggle with Animation
@@ -36,9 +36,9 @@ function toggleSidebar() {
 // ✅ Enhanced Logout with Confirmation
 function logout() {
   if (confirm("আপনি কি নিশ্চিত যে লগ আউট করতে চান?")) {
-    const logoutBtn = document.querySelector("a[onclick=\"logout()\"]");
+    const logoutBtn = document.querySelector('a[onclick="logout()"]');
     if (logoutBtn) {
-      logoutBtn.innerHTML = 	erase<i class="fas fa-spinner fa-spin"></i> লগ আউট হচ্ছে...";
+      logoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> লগ আউট হচ্ছে...';
     }
     
     setTimeout(() => {
@@ -52,18 +52,23 @@ function logout() {
 
 // ✅ Enhanced Theme Management
 function applyTheme(theme) {
-  document.body.classList.remove("old_version-mode", "professional_v1-mode", "professional_v2-mode");
+  document.body.classList.remove("dark-mode", "light-mode");
   document.body.classList.add(theme + "-mode");
-  setStorageItem("selectedTheme", theme);
+  localStorage.setItem("theme", theme);
+  
+  const themeToggle = document.querySelector(".theme-toggle");
+  if (themeToggle) {
+    themeToggle.innerHTML = theme === "dark" ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+  }
 }
 
 // ✅ Professional Language Switching
 function switchLanguage(lang) {
   // Update active button state
-  document.querySelectorAll(".lang-btn").forEach(btn => {
-    btn.classList.remove("active");
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.remove('active');
     if (btn.dataset.lang === lang) {
-      btn.classList.add("active");
+      btn.classList.add('active');
     }
   });
   
@@ -75,32 +80,32 @@ function switchLanguage(lang) {
 async function applyLanguage(lang, showToastOnUpdate = false) {
   try {
     // Show loading state
-    document.querySelectorAll(".lang-btn").forEach(btn => {
-      btn.style.pointerEvents = "none";
-      btn.style.opacity = "0.7";
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.style.pointerEvents = 'none';
+      btn.style.opacity = '0.7';
     });
     
     await loadLanguage(lang);
     localStorage.setItem("language", lang);
     
     // Update active state
-    document.querySelectorAll(".lang-btn").forEach(btn => {
-      btn.classList.remove("active");
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.remove('active');
       if (btn.dataset.lang === lang) {
-        btn.classList.add("active");
+        btn.classList.add('active');
       }
     });
     
     if (showToastOnUpdate) {
-      showToast(translateElement("language_changed") + `: ${lang === "bn" ? "বাংলা" : "English"}`);
+      showToast(translateElement("language_changed") + `: ${lang === 'bn' ? 'বাংলা' : 'English'}`);
     }
   } catch (error) {
     showToast("ভাষা পরিবর্তনে সমস্যা হয়েছে।", "error");
   } finally {
     // Restore button states
-    document.querySelectorAll(".lang-btn").forEach(btn => {
-      btn.style.pointerEvents = "auto";
-      btn.style.opacity = "1";
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.style.pointerEvents = 'auto';
+      btn.style.opacity = '1';
     });
   }
 }
@@ -117,12 +122,12 @@ async function copyToClipboard() {
   
   try {
     const originalText = copyBtn.innerHTML;
-    copyBtn.innerHTML = 	erase<i class="fas fa-spinner fa-spin"></i> কপি হচ্ছে...";
+    copyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> কপি হচ্ছে...';
     copyBtn.disabled = true;
     
     await navigator.clipboard.writeText(output);
     
-    copyBtn.innerHTML = 	erase<i class="fas fa-check"></i> কপি হয়েছে!";
+    copyBtn.innerHTML = '<i class="fas fa-check"></i> কপি হয়েছে!';
     copyBtn.style.background = "#28a745";
     showToast("কোড সফলভাবে কপি হয়েছে!", "success");
     
@@ -133,12 +138,12 @@ async function copyToClipboard() {
     }, 2000);
     
   } catch (error) {
-    copyBtn.innerHTML = 	erase<i class="fas fa-times"></i> ব্যর্থ!";
+    copyBtn.innerHTML = '<i class="fas fa-times"></i> ব্যর্থ!';
     copyBtn.style.background = "#dc3545";
     showToast("কপি করতে সমস্যা হয়েছে।", "error");
     
     setTimeout(() => {
-      copyBtn.innerHTML = 	erase<i class="fas fa-copy"></i> কপি করুন";
+      copyBtn.innerHTML = '<i class="fas fa-copy"></i> কপি করুন';
       copyBtn.style.background = "";
       copyBtn.disabled = false;
     }, 2000);
@@ -148,21 +153,21 @@ async function copyToClipboard() {
 // ✅ Enhanced Form Validation
 function validateForm() {
   const requiredFields = [
-    { id: "name", label: "প্রোডাক্ট নাম" },
-    { id: "code", label: "প্রোডাক্ট কোড" },
-    { id: "price", label: "মূল্য" },
-    { id: "wa", label: "WhatsApp নম্বর" }
+    { id: 'name', label: 'প্রোডাক্ট নাম' },
+    { id: 'code', label: 'প্রোডাক্ট কোড' },
+    { id: 'price', label: 'মূল্য' },
+    { id: 'wa', label: 'WhatsApp নম্বর' }
   ];
   
-  const firstImgInput = document.querySelector(".img-url");
+  const firstImgInput = document.querySelector('.img-url');
   let isValid = true;
   const errors = [];
   
   // Clear previous errors
-  document.querySelectorAll(".form-error").forEach(el => {
-    el.classList.remove("form-error");
+  document.querySelectorAll('.form-error').forEach(el => {
+    el.classList.remove('form-error');
   });
-  document.querySelectorAll(".error-message").forEach(el => el.remove());
+  document.querySelectorAll('.error-message').forEach(el => el.remove());
   
   // Validate required fields
   requiredFields.forEach(field => {
@@ -170,38 +175,38 @@ function validateForm() {
     const value = element.value.trim();
     
     if (!value) {
-      element.classList.add("form-error");
+      element.classList.add('form-error');
       addErrorMessage(element, `${field.label} বাধ্যতামূলক`);
       errors.push(field.label);
       isValid = false;
     } else {
-      element.classList.add("form-success");
-      element.classList.remove("form-error");
+      element.classList.add('form-success');
+      element.classList.remove('form-error');
     }
   });
   
   // Validate first image
   if (!firstImgInput?.value.trim()) {
-    firstImgInput.classList.add("form-error");
-    addErrorMessage(firstImgInput, "কমপক্ষে একটি ছবি প্রয়োজন");
-    errors.push("প্রোডাক্ট ছবি");
+    firstImgInput.classList.add('form-error');
+    addErrorMessage(firstImgInput, 'কমপক্ষে একটি ছবি প্রয়োজন');
+    errors.push('প্রোডাক্ট ছবি');
     isValid = false;
   }
   
   // Validate WhatsApp number format
-  const waInput = document.getElementById("wa");
+  const waInput = document.getElementById('wa');
   if (waInput.value.trim() && !waInput.value.match(/^8801[0-9]{9}$/)) {
-    waInput.classList.add("form-error");
-    addErrorMessage(waInput, "সঠিক ফরম্যাট: 8801XXXXXXXXX");
+    waInput.classList.add('form-error');
+    addErrorMessage(waInput, 'সঠিক ফরম্যাট: 8801XXXXXXXXX');
     isValid = false;
   }
   
   // Validate price
-  const priceInput = document.getElementById("price");
+  const priceInput = document.getElementById('price');
   const price = parseFloat(priceInput.value);
   if (priceInput.value.trim() && (isNaN(price) || price <= 0)) {
-    priceInput.classList.add("form-error");
-    addErrorMessage(priceInput, "সঠিক মূল্য দিন");
+    priceInput.classList.add('form-error');
+    addErrorMessage(priceInput, 'সঠিক মূল্য দিন');
     isValid = false;
   }
   
@@ -209,8 +214,8 @@ function validateForm() {
 }
 
 function addErrorMessage(element, message) {
-  const errorDiv = document.createElement("div");
-  errorDiv.className = "error-message";
+  const errorDiv = document.createElement('div');
+  errorDiv.className = 'error-message';
   errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
   element.parentNode.insertBefore(errorDiv, element.nextSibling);
 }
@@ -248,7 +253,7 @@ function downloadTheme() {
   let timeLeft = 5;
 
   downloadBtn.disabled = true;
-  downloadBtn.classList.add("loading");
+  downloadBtn.classList.add('loading');
   downloadTimer.style.display = "block";
   
   const updateTimer = () => {
@@ -272,7 +277,7 @@ function downloadTheme() {
     } else {
       clearInterval(timerInterval);
       downloadTimer.style.display = "none";
-      downloadBtn.classList.remove("loading");
+      downloadBtn.classList.remove('loading');
       
       const confirmDownload = confirm(`🎨 G9Tool থিম ডাউনলোড করুন\n\nএই থিমটি আপনার ব্লগার সাইটের জন্য বিশেষভাবে ডিজাইন করা হয়েছে।\n\n✅ G9Tool এর সাথে সামঞ্জস্যপূর্ণ\n✅ রেসপনসিভ ডিজাইন\n✅ দ্রুত লোডিং\n✅ SEO অপ্টিমাইজড\n\nআপনি কি ডাউনলোড করতে চান?`);
       
@@ -285,12 +290,12 @@ function downloadTheme() {
         a.click();
         document.body.removeChild(a);
         
-        downloadBtn.innerHTML = 	erase<i class="fas fa-check"></i> ডাউনলোড সম্পন্ন!";
+        downloadBtn.innerHTML = '<i class="fas fa-check"></i> ডাউনলোড সম্পন্ন!';
         downloadBtn.style.background = "#28a745";
         showToast("🎉 থিম সফলভাবে ডাউনলোড হয়েছে!", "success");
         
         setTimeout(() => {
-          downloadBtn.innerHTML = 	erase<i class="fab fa-blogger-b"></i> ডাউনলোড থিম";
+          downloadBtn.innerHTML = '<i class="fab fa-blogger-b"></i> ডাউনলোড থিম';
           downloadBtn.style.background = "";
         }, 3000);
       } else {
@@ -304,22 +309,22 @@ function downloadTheme() {
 
 // ✅ Enhanced Keyboard Shortcuts
 function setupKeyboardShortcuts() {
-  document.addEventListener("keydown", (e) => {
+  document.addEventListener('keydown', (e) => {
     // Ctrl/Cmd + Enter to generate
-    if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
       e.preventDefault();
       generateProduct();
     }
     
     // Ctrl/Cmd + S to save draft
-    if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
       e.preventDefault();
       saveDraft();
       showToast("ড্রাফট সংরক্ষিত হয়েছে!", "success");
     }
     
     // Escape to close sidebar
-    if (e.key === "Escape") {
+    if (e.key === 'Escape') {
       const sidebar = document.getElementById("sidebar");
       if (sidebar.classList.contains("open")) {
         toggleSidebar();
@@ -335,29 +340,19 @@ window.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
+  const savedTheme = localStorage.getItem("theme") || "dark";
+  applyTheme(savedTheme);
+
   const savedLang = localStorage.getItem("language") || "en"; // Default to English
   await applyLanguage(savedLang, false);
   
   // Initialize language buttons
-  document.querySelectorAll(".lang-btn").forEach(btn => {
-    btn.classList.remove("active");
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.remove('active');
     if (btn.dataset.lang === savedLang) {
-      btn.classList.add("active");
+      btn.classList.add('active');
     }
   });
-
-  // Theme selection logic
-  const themeSelect = document.getElementById("themeSelect");
-  if (themeSelect) {
-    const savedTheme = getStorageItem("selectedTheme", "old_version");
-    themeSelect.value = savedTheme;
-    applyTheme(savedTheme);
-
-    themeSelect.addEventListener("change", (event) => {
-      applyTheme(event.target.value);
-      showToast(`Theme changed to: ${event.target.value}`);
-    });
-  }
 
   applyFieldVisibility();
 
@@ -370,7 +365,7 @@ window.addEventListener("DOMContentLoaded", async () => {
       if (validation.isValid) {
         generateProduct();
       } else {
-        showToast(`অনুগ্রহ করে নিম্নলিখিত ক্ষেত্রগুলি পূরণ করুন: ${validation.errors.join(", ")}`, "error");
+        showToast(`অনুগ্রহ করে নিম্নলিখিত ক্ষেত্রগুলি পূরণ করুন: ${validation.errors.join(', ')}`, "error");
       }
     });
   }
@@ -388,11 +383,11 @@ window.addEventListener("DOMContentLoaded", async () => {
     showToast("ড্রাফট লোড করা হয়েছে। এডিট করুন এবং আপডেট করুন।", "info");
   }
   
-  const formInputs = document.querySelectorAll("input, textarea, select");
+  const formInputs = document.querySelectorAll('input, textarea, select');
   formInputs.forEach(input => {
-    input.addEventListener("input", () => {
-      input.classList.remove("form-error", "form-success");
-      const errorMsg = input.parentNode.querySelector(".error-message");
+    input.addEventListener('input', () => {
+      input.classList.remove('form-error', 'form-success');
+      const errorMsg = input.parentNode.querySelector('.error-message');
       if (errorMsg) errorMsg.remove();
     });
   });
@@ -411,6 +406,4 @@ window.downloadTheme = downloadTheme;
 window.copyToClipboard = copyToClipboard;
 window.validateForm = validateForm;
 window.switchLanguage = switchLanguage;
-window.applyTheme = applyTheme;
-
 

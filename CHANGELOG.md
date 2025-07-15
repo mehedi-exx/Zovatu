@@ -1,230 +1,204 @@
-# Changelog - G9Tool Enhanced
+# Changelog
 
-## [4.0.0] - 2025-07-12
+All notable changes to G9Tool will be documented in this file.
 
-### 🎉 Major Release - Complete UI/UX Overhaul
+## [2.0.0] - 2025-07-15
 
-এই রিলিজে G9Tool এর সম্পূর্ণ UI/UX পুনর্নির্মাণ করা হয়েছে এবং অনেক নতুন বৈশিষ্ট্য যোগ করা হয়েছে।
+### 🎉 Major Features Added
 
-### ✨ Added (নতুন বৈশিষ্ট্য)
+#### Admin Panel Enhancements
+- **Currency Selection**: Added support for 50+ international currencies (৳ BDT, $ USD, ₹ INR, € EUR, £ GBP, etc.)
+- **Output Language Control**: Admin can now set product description language (Bengali/English)
+- **WhatsApp Message Language**: Separate control for WhatsApp message language
+- **Product Statistics**: Consolidated view of total, verified, and pending products
+- **Enhanced Product Management**: Improved edit, preview, verify, and delete functionality
 
-#### 🎨 UI/UX Enhancements
-- **Modern Design System**: গ্রেডিয়েন্ট ব্যাকগ্রাউন্ড এবং আধুনিক কালার প্যালেট
-- **Smooth Animations**: সব ইন্টারঅ্যাকশনে স্মুথ ট্রানজিশন এবং হোভার ইফেক্ট
-- **Enhanced Typography**: উন্নত ফন্ট হায়ারার্কি এবং পাঠযোগ্যতা
-- **Responsive Design**: সব ডিভাইসে পারফেক্ট প্রদর্শন
-- **Loading States**: বোতান এবং ফর্মের জন্য লোডিং ইন্ডিকেটর
-- **Visual Feedback**: সফল/ব্যর্থ অপারেশনের জন্য টোস্ট নোটিফিকেশন
+#### Theme System
+- **Multi-Theme Support**: Three professional themes available
+  - Old Version (Default): Classic dark theme with orange accents
+  - Professional V1: Modern blue gradient design
+  - Professional V2: Premium navy theme with red accents
+- **Theme Persistence**: Selected theme saves across sessions
+- **Admin Theme Control**: Centralized theme management
 
-#### 📄 New Pages
-- **Drafts Management** (`drafts.html`):
-  - সংরক্ষিত ড্রাফট দেখুন এবং পরিচালনা করুন
-  - রিয়েল-টাইম সার্চ ফাংশনালিটি
-  - টাইম-বেসড ফিল্টার (আজকের, এই সপ্তাহের, এই মাসের)
-  - ড্রাফট এডিট, কপি এবং ডিলিট অপশন
-  - Empty state with call-to-action
+#### Language System Improvements
+- **Complete Bilingual Support**: Full Bengali and English interface
+- **Language Persistence**: Selected language maintains across page refreshes
+- **Dynamic Content Translation**: Real-time language switching
+- **Improved Translation Coverage**: All UI elements properly translated
 
-- **User Profile** (`profile.html`):
-  - ব্যবহারকারীর তথ্য এবং পরিসংখ্যান
-  - পাসওয়ার্ড পরিবর্তন সুবিধা
-  - সাম্প্রতিক কার্যকলাপ ট্র্যাকিং
-  - অ্যাকাউন্ট ম্যানেজমেন্ট অপশন
-  - ডেটা ক্লিয়ার এবং রিসেট ফাংশন
+#### Mobile & Responsive Enhancements
+- **100% Mobile Responsive**: Optimized for all screen sizes
+- **Touch-Friendly Interface**: Improved button sizes and touch targets
+- **Progressive Web App (PWA)**: Installable on mobile devices
+- **Service Worker**: Offline functionality support
+- **Mobile-First Design**: Prioritized mobile user experience
 
-#### 🛠️ Enhanced Functionality
-- **Auto-save**: ফর্ম পূরণের সময় স্বয়ংক্রিয় ড্রাফট সংরক্ষণ
-- **Template System**: 
-  - ইলেকট্রনিক্স টেমপ্লেট (ডিফল্ট ভ্যালু সহ)
-  - ফ্যাশন টেমপ্লেট (সাইজ এবং কালার অপশন সহ)
-  - খাবার টেমপ্লেট (ওজন এবং ডেলিভারি সেটিং সহ)
-- **Enhanced Form Validation**: 
-  - রিয়েল-টাইম ভ্যালিডেশন
-  - WhatsApp নম্বর ফরম্যাট চেক
-  - ইমেজ URL ভ্যালিডেশন
-- **Keyboard Shortcuts**:
-  - `Ctrl+Enter`: প্রোডাক্ট জেনারেট
-  - `Ctrl+S`: ড্রাফট সেভ
-  - `Escape`: সাইডবার বন্ধ
-- **Statistics Dashboard**: ব্যবহারকারীর কার্যকলাপের পরিসংখ্যান
+### 🔧 Technical Improvements
 
-#### 🎯 Dashboard Improvements
-- **Statistics Cards**: মোট প্রোডাক্ট, ড্রাফট, আজকের কার্যকলাপ
-- **Quick Actions**: টেমপ্লেট লোড এবং ফর্ম ক্লিয়ার বোতাম
-- **Organized Sections**: 
-  - মূল তথ্য (Basic Information)
-  - মূল্য তথ্য (Pricing Information)
-  - প্রোডাক্ট বিবরণ (Product Details)
-  - মিডিয়া (Media)
-  - যোগাযোগ (Contact)
-  - কাস্টম তথ্য (Custom Fields)
-- **Enhanced Form Fields**: 
-  - ড্রপডাউন সিলেকশন
-  - প্রপার লেবেলিং
-  - ইনপুট গ্রুপিং
-- **Image Preview**: ইমেজ URL এর জন্য প্রিভিউ ফাংশনালিটি
+#### Code Architecture
+- **Modular File Structure**: Organized code into logical modules
+- **ES6 Module System**: Modern JavaScript module imports/exports
+- **Improved Error Handling**: Better error messages and validation
+- **Performance Optimization**: Faster loading and smoother interactions
 
-### 🔧 Improved (উন্নত বৈশিষ্ট্য)
+#### UI/UX Enhancements
+- **Professional Button System**: Consistent, accessible button design
+- **Gradient Design System**: Modern visual aesthetics
+- **Loading States**: Visual feedback for user actions
+- **Toast Notifications**: Improved user feedback system
+- **Accessibility Improvements**: Better keyboard navigation and screen reader support
 
-#### 📱 Enhanced JavaScript (`script.js`)
-- **Better Error Handling**: কমপ্রিহেনসিভ এরর ম্যানেজমেন্ট
-- **Performance Optimization**: দ্রুততর DOM ম্যানিপুলেশন
-- **Memory Management**: মেমোরি লিক প্রতিরোধ
-- **Code Organization**: মডুলার এবং রক্ষণাবেক্ষণযোগ্য কোড
-- **Enhanced Draft System**: 
-  - ২০টি পর্যন্ত ড্রাফট সংরক্ষণ
-  - টাইমস্ট্যাম্প ট্র্যাকিং
-  - ডুপ্লিকেট প্রতিরোধ
+#### Data Management
+- **Enhanced Local Storage**: Improved data persistence
+- **JSON Import/Export**: Better data portability
+- **Product Search**: Advanced search functionality
+- **Data Validation**: Improved form validation and error handling
 
-#### 🎨 Enhanced CSS (`style.css`)
-- **CSS Grid & Flexbox**: আধুনিক লেআউট সিস্টেম
-- **CSS Custom Properties**: সহজ কাস্টমাইজেশনের জন্য ভেরিয়েবল
-- **Advanced Animations**: 
-  - Keyframe animations
-  - Transform effects
-  - Smooth transitions
-- **Better Responsive Design**: 
-  - Mobile-first approach
-  - Improved breakpoints
-  - Touch-friendly interfaces
-- **Dark Theme Optimization**: উন্নত ডার্ক মোড সাপোর্ট
+### 🐛 Bug Fixes
 
-#### 🔐 Enhanced Authentication
-- **Better Session Management**: উন্নত localStorage হ্যান্ডলিং
-- **Auto-redirect**: অননুমোদিত অ্যাক্সেস প্রতিরোধ
-- **Login State Persistence**: সেশন মেইনটেইন
+#### Authentication System
+- Fixed login persistence issues
+- Improved session management
+- Better error handling for invalid credentials
 
-### 🔄 Changed (পরিবর্তিত)
+#### Product Generation
+- Fixed image URL validation
+- Improved WhatsApp link generation
+- Better handling of empty fields
+- Fixed currency symbol display
 
-#### 🎨 Design System
-- **Color Palette**: নতুন গ্রেডিয়েন্ট-বেসড কালার স্কিম
-- **Button Styles**: 3D ইফেক্ট এবং হোভার অ্যানিমেশন
-- **Form Elements**: উন্নত ইনপুট ফিল্ড ডিজাইন
-- **Card Components**: শ্যাডো এবং বর্ডার ইফেক্ট
+#### Language System
+- Fixed language switching bugs
+- Improved translation loading
+- Better fallback for missing translations
 
-#### 📐 Layout Structure
-- **Header**: আরো কমপ্যাক্ট এবং ফাংশনাল
-- **Sidebar**: উন্নত নেভিগেশন এবং অ্যানিমেশন
-- **Main Content**: গ্রিড-বেসড লেআউট
-- **Footer**: (যদি প্রয়োজন হয় তাহলে যোগ করা যেতে পারে)
+#### Mobile Issues
+- Fixed sidebar overlay on mobile
+- Improved touch interactions
+- Better responsive form layouts
+- Fixed viewport scaling issues
 
-#### 🔧 Code Architecture
-- **File Organization**: আরো স্ট্রাকচার্ড ফাইল সিস্টেম
-- **Function Naming**: আরো বর্ণনামূলক ফাংশন নাম
-- **Comment System**: বাংলা এবং ইংরেজি কমেন্ট
-- **Error Messages**: ব্যবহারকারী-বান্ধব এরর মেসেজ
+### 🎨 Design Improvements
 
-### 🐛 Fixed (সমাধানকৃত সমস্যা)
+#### Visual Consistency
+- **Unified Color Scheme**: Consistent colors across all pages
+- **Professional Icons**: Replaced emojis with professional icons
+- **Improved Typography**: Better font hierarchy and readability
+- **Enhanced Spacing**: Improved layout and visual breathing room
 
-#### 🔧 Bug Fixes
-- **Form Validation**: ইনপুট ভ্যালিডেশনের সমস্যা সমাধান
-- **Mobile Responsiveness**: মোবাইল ডিভাইসে লেআউট সমস্যা
-- **Memory Leaks**: JavaScript মেমোরি লিক সমাধান
-- **Cross-browser Compatibility**: বিভিন্ন ব্রাউজারে সামঞ্জস্য
-- **Image Loading**: ইমেজ লোডিং এরর হ্যান্ডলিং
+#### Theme-Specific Enhancements
+- **Old Version Theme**: Maintained classic aesthetic while improving functionality
+- **Professional V1**: Modern blue gradient with enhanced visual elements
+- **Professional V2**: Premium dark theme with sophisticated design
 
-#### 🎯 Performance Fixes
-- **Loading Speed**: দ্রুততর পেজ লোডিং
-- **Animation Performance**: স্মুথ অ্যানিমেশন পারফরম্যান্স
-- **DOM Manipulation**: অপ্টিমাইজড DOM আপডেট
-- **Event Handling**: ইভেন্ট লিসেনার অপ্টিমাইজেশন
+### 📱 Mobile-Specific Features
 
-### 🗑️ Removed (অপসারিত)
+#### Progressive Web App
+- **App Manifest**: Proper PWA configuration
+- **Service Worker**: Offline functionality
+- **Install Prompt**: Native app installation
+- **App Icons**: Professional icon set for all devices
 
-#### 🧹 Code Cleanup
-- **Unused CSS**: অব্যবহৃত স্টাইল রুল অপসারণ
-- **Dead Code**: অব্যবহৃত JavaScript ফাংশন
-- **Redundant HTML**: অপ্রয়োজনীয় HTML এলিমেন্ট
-- **Old Comments**: পুরাতন এবং অপ্রাসঙ্গিক কমেন্ট
+#### Touch Optimization
+- **Gesture Support**: Swipe and touch gestures
+- **Improved Button Sizes**: Minimum 48px touch targets
+- **Mobile Navigation**: Optimized sidebar and menu system
+- **Keyboard Support**: Better mobile keyboard handling
 
-### 🔒 Security (নিরাপত্তা)
+### 🌐 Internationalization
 
-#### 🛡️ Security Enhancements
-- **Input Sanitization**: XSS প্রতিরোধের জন্য ইনপুট স্যানিটাইজেশন
-- **URL Validation**: নিরাপদ URL ভ্যালিডেশন
-- **Session Security**: উন্নত সেশন ম্যানেজমেন্ট
-- **Data Protection**: ব্যবহারকারীর ডেটা সুরক্ষা
+#### Language Support
+- **Complete Bengali Support**: All interface elements translated
+- **English Interface**: Full English language support
+- **Dynamic Language Switching**: Real-time language changes
+- **Persistent Language Settings**: Language choice remembered
 
-### 📊 Performance (পারফরম্যান্স)
+#### Currency Localization
+- **50+ Currencies**: Comprehensive international currency support
+- **Proper Currency Symbols**: Correct display of currency symbols
+- **Admin Currency Control**: Centralized currency management
 
-#### ⚡ Performance Improvements
-- **CSS Optimization**: কমপ্রেসড এবং অপ্টিমাইজড CSS
-- **JavaScript Minification**: অপ্টিমাইজড JavaScript কোড
-- **Image Optimization**: ইমেজ লোডিং অপ্টিমাইজেশন
-- **Caching Strategy**: ব্রাউজার ক্যাশিং উন্নতি
+### 🔒 Security & Performance
 
-### 🌐 Browser Support (ব্রাউজার সাপোর্ট)
+#### Security Enhancements
+- **Input Validation**: Improved form validation
+- **XSS Protection**: Better handling of user input
+- **Secure Local Storage**: Improved data storage security
 
-#### ✅ Supported Browsers
-- Chrome 80+ ✅
-- Firefox 75+ ✅
-- Safari 13+ ✅
-- Edge 80+ ✅
+#### Performance Improvements
+- **Faster Loading**: Optimized asset loading
+- **Reduced Bundle Size**: Minimized JavaScript and CSS
+- **Better Caching**: Improved browser caching strategy
+- **Smooth Animations**: Hardware-accelerated transitions
 
-#### ❌ Deprecated Support
-- Internet Explorer (সব ভার্সন) ❌
+### 📊 Admin Panel Features
 
-### 📱 Mobile Support (মোবাইল সাপোর্ট)
+#### Product Management
+- **Advanced Statistics**: Detailed product analytics
+- **Bulk Operations**: Multiple product management
+- **Search & Filter**: Advanced product filtering
+- **Export/Import**: JSON data management
 
-#### 📲 Mobile Enhancements
-- **Touch Gestures**: টাচ-ফ্রেন্ডলি ইন্টারঅ্যাকশন
-- **Viewport Optimization**: মোবাইল ভিউপোর্ট অপ্টিমাইজেশন
-- **Performance**: মোবাইল পারফরম্যান্স উন্নতি
-- **Accessibility**: মোবাইল অ্যাক্সেসিবিলিটি
+#### Settings Control
+- **Currency Management**: Global currency settings
+- **Language Control**: Output language configuration
+- **Theme Management**: Centralized theme control
+- **Field Customization**: Customizable form fields
 
-### 🔮 Future Plans (ভবিষ্যৎ পরিকল্পনা)
+### 🛠️ Developer Experience
 
-#### 🚀 Upcoming Features
-- **Dark/Light Theme Toggle**: থিম সুইচিং অপশন
-- **Export Options**: PDF/Word এক্সপোর্ট
-- **Advanced Templates**: আরো টেমপ্লেট অপশন
-- **Bulk Operations**: একসাথে একাধিক প্রোডাক্ট প্রসেসিং
-- **API Integration**: বাহ্যিক API ইন্টিগ্রেশন
-- **Multi-language Support**: একাধিক ভাষার সাপোর্ট
+#### Code Quality
+- **Modern JavaScript**: ES6+ features and syntax
+- **Modular Architecture**: Well-organized code structure
+- **Documentation**: Comprehensive code documentation
+- **Error Handling**: Improved debugging and error reporting
 
-### 📝 Migration Guide (মাইগ্রেশন গাইড)
+#### Maintainability
+- **Consistent Coding Style**: Unified code formatting
+- **Reusable Components**: Modular component system
+- **Clear File Organization**: Logical file structure
+- **Version Control**: Better Git workflow
 
-#### 🔄 Upgrading from v3.x
-1. **Backup**: পুরাতন ভার্সনের ব্যাকআপ নিন
-2. **Replace Files**: নতুন ফাইলগুলি দিয়ে প্রতিস্থাপন করুন
-3. **Clear Cache**: ব্রাউজার ক্যাশ ক্লিয়ার করুন
-4. **Test**: সব ফাংশনালিটি টেস্ট করুন
+### 🔄 Migration Notes
 
-#### 💾 Data Compatibility
-- **User Data**: সব ইউজার ডেটা সামঞ্জস্যপূর্ণ
-- **Drafts**: পুরাতন ড্রাফট সংরক্ষিত থাকবে
-- **Settings**: কাস্টম সেটিংস মাইগ্রেট হবে
+#### From v1.0.0 to v2.0.0
+- All existing data is preserved
+- New features are automatically available
+- Theme defaults to "Old Version" for consistency
+- Language defaults to English
+- All previous functionality remains intact
+
+#### Breaking Changes
+- None - Full backward compatibility maintained
+
+### 🎯 Future Roadmap
+
+#### Planned Features
+- **Cloud Storage Integration**: Online data synchronization
+- **Advanced Analytics**: Detailed usage statistics
+- **Custom Theme Builder**: User-created themes
+- **API Integration**: External service connections
+- **Multi-User Support**: Team collaboration features
+
+#### Performance Goals
+- **Sub-second Loading**: Faster initial load times
+- **Offline-First**: Enhanced offline functionality
+- **Real-time Updates**: Live data synchronization
 
 ---
 
-## [3.0.0] - Previous Version
-### Original G9Tool Features
+## [1.0.0] - Original Release
+
+### Initial Features
 - Basic product generation
-- Simple form interface
-- User authentication
-- Draft saving functionality
+- Simple admin panel
+- Bengali language support
+- Basic responsive design
+- Local data storage
+- WhatsApp integration
 
 ---
 
-**Note**: এই changelog শুধুমাত্র v4.0.0 এর জন্য। পূর্ববর্তী ভার্সনের বিস্তারিত তথ্যের জন্য আলাদা ডকুমেন্টেশন দেখুন।
-
-
-
-
-## v5.0 - 2025-07-12
-
-### ✨ নতুন বৈশিষ্ট্য
-- **একীভূত অ্যাডমিন প্যানেল**: ড্রাফট ম্যানেজমেন্ট এবং ফিল্ড কাস্টমাইজেশন এখন একটি একক অ্যাডমিন প্যানেলে।
-- **আউটপুট টেমপ্লেট সিস্টেম**: একাধিক আউটপুট টেমপ্লেট তৈরি, সংরক্ষণ এবং প্রয়োগ করার সুবিধা।
-
-### 🔄 পরিবর্তন
-- `drafts.html` এবং `fieldManager.html` ফাইলগুলো অপসারণ করা হয়েছে।
-- ড্যাশবোর্ডে ক্যাটাগরি ইনপুট `<select>` থেকে `<input type="text">` এ পরিবর্তন করা হয়েছে।
-- ড্যাশবোর্ডের সকল ফিল্ড এখন অ্যাডমিন প্যানেল থেকে নিয়ন্ত্রণযোগ্য।
-
-### 🐛 বাগ ফিক্স
-- কাস্টম ফিল্ড সঠিকভাবে কাজ না করার সমস্যা সমাধান করা হয়েছে।
-
-### 🎨 UI/UX উন্নতি
-- অ্যাডমিন প্যানেলের UI পুনর্গঠন করা হয়েছে।
-- টেমপ্লেট ম্যানেজমেন্টের জন্য নতুন UI যোগ করা হয়েছে।
+**Note**: This changelog follows [Keep a Changelog](https://keepachangelog.com/) format and [Semantic Versioning](https://semver.org/) principles.
 

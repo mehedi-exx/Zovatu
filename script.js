@@ -1,4 +1,4 @@
-import { showToast, getVal, loadLanguage, translateElement } from './js/utils.js';
+import { showToast, getVal, loadLanguage, translateElement, getStorageItem, setStorageItem } from './js/utils.js';
 import { generateProduct, addImageInput, addCustomField, saveDraft, loadDraftToForm, applyFieldVisibility } from './js/productGenerator.js';
 
 // ✅ Enhanced Sidebar Toggle with Animation
@@ -35,27 +35,16 @@ function toggleSidebar() {
 
 // ✅ Enhanced Logout with Confirmation
 function logout() {
-  const currentLang = window.languageManager ? window.languageManager.getCurrentUILanguage() : 'en';
-  const confirmMessage = currentLang === 'bn' ? 
-    "আপনি কি নিশ্চিত যে লগ আউট করতে চান?" : 
-    "Are you sure you want to logout?";
-    
-  if (confirm(confirmMessage)) {
-    const logoutBtn = document.querySelector('a[onclick="logout()"]');
+  if (confirm("আপনি কি নিশ্চিত যে লগ আউট করতে চান?")) {
+    const logoutBtn = document.querySelector("a[onclick=\"logout()\"]");
     if (logoutBtn) {
-      const loadingText = currentLang === 'bn' ? 
-        '<i class="fas fa-spinner fa-spin"></i> লগ আউট হচ্ছে...' :
-        '<i class="fas fa-spinner fa-spin"></i> Logging out...';
-      logoutBtn.innerHTML = loadingText;
+      logoutBtn.innerHTML = 	erase<i class="fas fa-spinner fa-spin"></i> লগ আউট হচ্ছে...";
     }
     
     setTimeout(() => {
       localStorage.removeItem("loggedInUser");
       localStorage.removeItem("editDraftId");
-      const successMessage = currentLang === 'bn' ? 
-        "সফলভাবে লগ আউট হয়েছে।" : 
-        "Successfully logged out.";
-      showToast(successMessage);
+      showToast("সফলভাবে লগ আউট হয়েছে।");
       window.location.replace("index.html");
     }, 1000);
   }
@@ -63,13 +52,56 @@ function logout() {
 
 // ✅ Enhanced Theme Management
 function applyTheme(theme) {
-  document.body.classList.remove("dark-mode", "light-mode");
+  document.body.classList.remove("old_version-mode", "professional_v1-mode", "professional_v2-mode");
   document.body.classList.add(theme + "-mode");
-  localStorage.setItem("theme", theme);
+  setStorageItem("selectedTheme", theme);
+}
+
+// ✅ Professional Language Switching
+function switchLanguage(lang) {
+  // Update active button state
+  document.querySelectorAll(".lang-btn").forEach(btn => {
+    btn.classList.remove("active");
+    if (btn.dataset.lang === lang) {
+      btn.classList.add("active");
+    }
+  });
   
-  const themeToggle = document.querySelector(".theme-toggle");
-  if (themeToggle) {
-    themeToggle.innerHTML = theme === "dark" ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+  // Apply language with smooth transition
+  applyLanguage(lang, true);
+}
+
+// ✅ Enhanced Language Management
+async function applyLanguage(lang, showToastOnUpdate = false) {
+  try {
+    // Show loading state
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.style.pointerEvents = "none";
+      btn.style.opacity = "0.7";
+    });
+    
+    await loadLanguage(lang);
+    localStorage.setItem("language", lang);
+    
+    // Update active state
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.classList.remove("active");
+      if (btn.dataset.lang === lang) {
+        btn.classList.add("active");
+      }
+    });
+    
+    if (showToastOnUpdate) {
+      showToast(translateElement("language_changed") + `: ${lang === "bn" ? "বাংলা" : "English"}`);
+    }
+  } catch (error) {
+    showToast("ভাষা পরিবর্তনে সমস্যা হয়েছে।", "error");
+  } finally {
+    // Restore button states
+    document.querySelectorAll(".lang-btn").forEach(btn => {
+      btn.style.pointerEvents = "auto";
+      btn.style.opacity = "1";
+    });
   }
 }
 
@@ -79,36 +111,20 @@ async function copyToClipboard() {
   const copyBtn = document.getElementById("copyBtn");
   
   if (!output.trim()) {
-    const currentLang = window.languageManager ? window.languageManager.getCurrentUILanguage() : 'en';
-    const warningMessage = currentLang === 'bn' ? 
-      "কপি করার জন্য কোনো কোড নেই। প্রথমে প্রোডাক্ট জেনারেট করুন।" :
-      "No code to copy. Please generate a product first.";
-    showToast(warningMessage, "warning");
+    showToast("কপি করার জন্য কোনো কোড নেই। প্রথমে প্রোডাক্ট জেনারেট করুন।", "warning");
     return;
   }
   
   try {
     const originalText = copyBtn.innerHTML;
-    const currentLang = window.languageManager ? window.languageManager.getCurrentUILanguage() : 'en';
-    
-    const loadingText = currentLang === 'bn' ? 
-      '<i class="fas fa-spinner fa-spin"></i> কপি হচ্ছে...' :
-      '<i class="fas fa-spinner fa-spin"></i> Copying...';
-    copyBtn.innerHTML = loadingText;
+    copyBtn.innerHTML = 	erase<i class="fas fa-spinner fa-spin"></i> কপি হচ্ছে...";
     copyBtn.disabled = true;
     
     await navigator.clipboard.writeText(output);
     
-    const successText = currentLang === 'bn' ? 
-      '<i class="fas fa-check"></i> কপি হয়েছে!' :
-      '<i class="fas fa-check"></i> Copied!';
-    copyBtn.innerHTML = successText;
+    copyBtn.innerHTML = 	erase<i class="fas fa-check"></i> কপি হয়েছে!";
     copyBtn.style.background = "#28a745";
-    
-    const successMessage = currentLang === 'bn' ? 
-      "কোড সফলভাবে কপি হয়েছে!" :
-      "Code copied successfully!";
-    showToast(successMessage, "success");
+    showToast("কোড সফলভাবে কপি হয়েছে!", "success");
     
     setTimeout(() => {
       copyBtn.innerHTML = originalText;
@@ -117,23 +133,12 @@ async function copyToClipboard() {
     }, 2000);
     
   } catch (error) {
-    const currentLang = window.languageManager ? window.languageManager.getCurrentUILanguage() : 'en';
-    const errorText = currentLang === 'bn' ? 
-      '<i class="fas fa-times"></i> ব্যর্থ!' :
-      '<i class="fas fa-times"></i> Failed!';
-    copyBtn.innerHTML = errorText;
+    copyBtn.innerHTML = 	erase<i class="fas fa-times"></i> ব্যর্থ!";
     copyBtn.style.background = "#dc3545";
-    
-    const errorMessage = currentLang === 'bn' ? 
-      "কপি করতে সমস্যা হয়েছে।" :
-      "Failed to copy.";
-    showToast(errorMessage, "error");
+    showToast("কপি করতে সমস্যা হয়েছে।", "error");
     
     setTimeout(() => {
-      const originalText = currentLang === 'bn' ? 
-        '<i class="fas fa-copy"></i> কপি করুন' :
-        '<i class="fas fa-copy"></i> Copy';
-      copyBtn.innerHTML = originalText;
+      copyBtn.innerHTML = 	erase<i class="fas fa-copy"></i> কপি করুন";
       copyBtn.style.background = "";
       copyBtn.disabled = false;
     }, 2000);
@@ -143,21 +148,21 @@ async function copyToClipboard() {
 // ✅ Enhanced Form Validation
 function validateForm() {
   const requiredFields = [
-    { id: 'name', label: 'প্রোডাক্ট নাম' },
-    { id: 'code', label: 'প্রোডাক্ট কোড' },
-    { id: 'price', label: 'মূল্য' },
-    { id: 'wa', label: 'WhatsApp নম্বর' }
+    { id: "name", label: "প্রোডাক্ট নাম" },
+    { id: "code", label: "প্রোডাক্ট কোড" },
+    { id: "price", label: "মূল্য" },
+    { id: "wa", label: "WhatsApp নম্বর" }
   ];
   
-  const firstImgInput = document.querySelector('.img-url');
+  const firstImgInput = document.querySelector(".img-url");
   let isValid = true;
   const errors = [];
   
   // Clear previous errors
-  document.querySelectorAll('.form-error').forEach(el => {
-    el.classList.remove('form-error');
+  document.querySelectorAll(".form-error").forEach(el => {
+    el.classList.remove("form-error");
   });
-  document.querySelectorAll('.error-message').forEach(el => el.remove());
+  document.querySelectorAll(".error-message").forEach(el => el.remove());
   
   // Validate required fields
   requiredFields.forEach(field => {
@@ -165,38 +170,38 @@ function validateForm() {
     const value = element.value.trim();
     
     if (!value) {
-      element.classList.add('form-error');
+      element.classList.add("form-error");
       addErrorMessage(element, `${field.label} বাধ্যতামূলক`);
       errors.push(field.label);
       isValid = false;
     } else {
-      element.classList.add('form-success');
-      element.classList.remove('form-error');
+      element.classList.add("form-success");
+      element.classList.remove("form-error");
     }
   });
   
   // Validate first image
   if (!firstImgInput?.value.trim()) {
-    firstImgInput.classList.add('form-error');
-    addErrorMessage(firstImgInput, 'কমপক্ষে একটি ছবি প্রয়োজন');
-    errors.push('প্রোডাক্ট ছবি');
+    firstImgInput.classList.add("form-error");
+    addErrorMessage(firstImgInput, "কমপক্ষে একটি ছবি প্রয়োজন");
+    errors.push("প্রোডাক্ট ছবি");
     isValid = false;
   }
   
   // Validate WhatsApp number format
-  const waInput = document.getElementById('wa');
+  const waInput = document.getElementById("wa");
   if (waInput.value.trim() && !waInput.value.match(/^8801[0-9]{9}$/)) {
-    waInput.classList.add('form-error');
-    addErrorMessage(waInput, 'সঠিক ফরম্যাট: 8801XXXXXXXXX');
+    waInput.classList.add("form-error");
+    addErrorMessage(waInput, "সঠিক ফরম্যাট: 8801XXXXXXXXX");
     isValid = false;
   }
   
   // Validate price
-  const priceInput = document.getElementById('price');
+  const priceInput = document.getElementById("price");
   const price = parseFloat(priceInput.value);
   if (priceInput.value.trim() && (isNaN(price) || price <= 0)) {
-    priceInput.classList.add('form-error');
-    addErrorMessage(priceInput, 'সঠিক মূল্য দিন');
+    priceInput.classList.add("form-error");
+    addErrorMessage(priceInput, "সঠিক মূল্য দিন");
     isValid = false;
   }
   
@@ -204,8 +209,8 @@ function validateForm() {
 }
 
 function addErrorMessage(element, message) {
-  const errorDiv = document.createElement('div');
-  errorDiv.className = 'error-message';
+  const errorDiv = document.createElement("div");
+  errorDiv.className = "error-message";
   errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
   element.parentNode.insertBefore(errorDiv, element.nextSibling);
 }
@@ -224,11 +229,7 @@ function startAutoSave() {
     
     if (name && code) {
       saveDraft();
-      const currentLang = window.languageManager ? window.languageManager.getCurrentUILanguage() : 'en';
-      const message = currentLang === 'bn' ? 
-        "স্বয়ংক্রিয় সংরক্ষণ সম্পন্ন" :
-        "Auto-save completed";
-      showToast(message, "info");
+      showToast("স্বয়ংক্রিয় সংরক্ষণ সম্পন্ন", "info");
     }
   }, 30000);
 }
@@ -247,19 +248,14 @@ function downloadTheme() {
   let timeLeft = 5;
 
   downloadBtn.disabled = true;
-  downloadBtn.classList.add('loading');
+  downloadBtn.classList.add("loading");
   downloadTimer.style.display = "block";
   
   const updateTimer = () => {
-    const currentLang = window.languageManager ? window.languageManager.getCurrentUILanguage() : 'en';
-    const timerText = currentLang === 'bn' ? 
-      `ডাউনলোড শুরু হচ্ছে ${timeLeft} সেকেন্ড পর...` :
-      `Download starting in ${timeLeft} seconds...`;
-      
     downloadTimer.innerHTML = `
       <div style="display:flex;align-items:center;gap:10px;color:#ffc107;">
         <i class="fas fa-clock"></i>
-        <span>${timerText}</span>
+        <span>ডাউনলোড শুরু হচ্ছে ${timeLeft} সেকেন্ড পর...</span>
       </div>
       <div class="progress-bar" style="margin-top:8px;">
         <div class="progress-fill" style="width:${((5-timeLeft)/5)*100}%;"></div>
@@ -276,14 +272,9 @@ function downloadTheme() {
     } else {
       clearInterval(timerInterval);
       downloadTimer.style.display = "none";
-      downloadBtn.classList.remove('loading');
+      downloadBtn.classList.remove("loading");
       
-      const currentLang = window.languageManager ? window.languageManager.getCurrentUILanguage() : 'en';
-      const confirmMessage = currentLang === 'bn' ? 
-        `🎨 G9Tool থিম ডাউনলোড করুন\n\nএই থিমটি আপনার ব্লগার সাইটের জন্য বিশেষভাবে ডিজাইন করা হয়েছে।\n\n✅ G9Tool এর সাথে সামঞ্জস্যপূর্ণ\n✅ রেসপনসিভ ডিজাইন\n✅ দ্রুত লোডিং\n✅ SEO অপ্টিমাইজড\n\nআপনি কি ডাউনলোড করতে চান?` :
-        `🎨 Download G9Tool Theme\n\nThis theme is specially designed for your Blogger site.\n\n✅ Compatible with G9Tool\n✅ Responsive Design\n✅ Fast Loading\n✅ SEO Optimized\n\nDo you want to download?`;
-      
-      const confirmDownload = confirm(confirmMessage);
+      const confirmDownload = confirm(`🎨 G9Tool থিম ডাউনলোড করুন\n\nএই থিমটি আপনার ব্লগার সাইটের জন্য বিশেষভাবে ডিজাইন করা হয়েছে।\n\n✅ G9Tool এর সাথে সামঞ্জস্যপূর্ণ\n✅ রেসপনসিভ ডিজাইন\n✅ দ্রুত লোডিং\n✅ SEO অপ্টিমাইজড\n\nআপনি কি ডাউনলোড করতে চান?`);
       
       if (confirmDownload) {
         const a = document.createElement("a");
@@ -294,29 +285,16 @@ function downloadTheme() {
         a.click();
         document.body.removeChild(a);
         
-        const successText = currentLang === 'bn' ? 
-          '<i class="fas fa-check"></i> ডাউনলোড সম্পন্ন!' :
-          '<i class="fas fa-check"></i> Download Complete!';
-        downloadBtn.innerHTML = successText;
+        downloadBtn.innerHTML = 	erase<i class="fas fa-check"></i> ডাউনলোড সম্পন্ন!";
         downloadBtn.style.background = "#28a745";
-        
-        const successMessage = currentLang === 'bn' ? 
-          "🎉 থিম সফলভাবে ডাউনলোড হয়েছে!" :
-          "🎉 Theme downloaded successfully!";
-        showToast(successMessage, "success");
+        showToast("🎉 থিম সফলভাবে ডাউনলোড হয়েছে!", "success");
         
         setTimeout(() => {
-          const originalText = currentLang === 'bn' ? 
-            '<i class="fab fa-blogger-b"></i> ডাউনলোড থিম' :
-            '<i class="fab fa-blogger-b"></i> Download Theme';
-          downloadBtn.innerHTML = originalText;
+          downloadBtn.innerHTML = 	erase<i class="fab fa-blogger-b"></i> ডাউনলোড থিম";
           downloadBtn.style.background = "";
         }, 3000);
       } else {
-        const cancelMessage = currentLang === 'bn' ? 
-          "ডাউনলোড বাতিল করা হয়েছে।" :
-          "Download cancelled.";
-        showToast(cancelMessage, "info");
+        showToast("ডাউনলোড বাতিল করা হয়েছে।", "info");
       }
       
       downloadBtn.disabled = false;
@@ -326,26 +304,22 @@ function downloadTheme() {
 
 // ✅ Enhanced Keyboard Shortcuts
 function setupKeyboardShortcuts() {
-  document.addEventListener('keydown', (e) => {
+  document.addEventListener("keydown", (e) => {
     // Ctrl/Cmd + Enter to generate
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+    if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
       e.preventDefault();
       generateProduct();
     }
     
     // Ctrl/Cmd + S to save draft
-    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    if ((e.ctrlKey || e.metaKey) && e.key === "s") {
       e.preventDefault();
       saveDraft();
-      const currentLang = window.languageManager ? window.languageManager.getCurrentUILanguage() : 'en';
-      const message = currentLang === 'bn' ? 
-        "ড্রাফট সংরক্ষিত হয়েছে!" :
-        "Draft saved!";
-      showToast(message, "success");
+      showToast("ড্রাফট সংরক্ষিত হয়েছে!", "success");
     }
     
     // Escape to close sidebar
-    if (e.key === 'Escape') {
+    if (e.key === "Escape") {
       const sidebar = document.getElementById("sidebar");
       if (sidebar.classList.contains("open")) {
         toggleSidebar();
@@ -361,16 +335,28 @@ window.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  const savedTheme = localStorage.getItem("theme") || "dark";
-  applyTheme(savedTheme);
+  const savedLang = localStorage.getItem("language") || "en"; // Default to English
+  await applyLanguage(savedLang, false);
+  
+  // Initialize language buttons
+  document.querySelectorAll(".lang-btn").forEach(btn => {
+    btn.classList.remove("active");
+    if (btn.dataset.lang === savedLang) {
+      btn.classList.add("active");
+    }
+  });
 
-  // Wait for language manager to initialize
-  if (window.languageManager) {
-    await window.languageManager.init();
-  } else {
-    // Fallback to old language system
-    const savedLang = localStorage.getItem("language") || "en";
-    await loadLanguage(savedLang);
+  // Theme selection logic
+  const themeSelect = document.getElementById("themeSelect");
+  if (themeSelect) {
+    const savedTheme = getStorageItem("selectedTheme", "old_version");
+    themeSelect.value = savedTheme;
+    applyTheme(savedTheme);
+
+    themeSelect.addEventListener("change", (event) => {
+      applyTheme(event.target.value);
+      showToast(`Theme changed to: ${event.target.value}`);
+    });
   }
 
   applyFieldVisibility();
@@ -384,11 +370,7 @@ window.addEventListener("DOMContentLoaded", async () => {
       if (validation.isValid) {
         generateProduct();
       } else {
-        const currentLang = window.languageManager ? window.languageManager.getCurrentUILanguage() : 'en';
-        const errorMessage = currentLang === 'bn' ? 
-          `অনুগ্রহ করে নিম্নলিখিত ক্ষেত্রগুলি পূরণ করুন: ${validation.errors.join(', ')}` :
-          `Please fill in the following fields: ${validation.errors.join(', ')}`;
-        showToast(errorMessage, "error");
+        showToast(`অনুগ্রহ করে নিম্নলিখিত ক্ষেত্রগুলি পূরণ করুন: ${validation.errors.join(", ")}`, "error");
       }
     });
   }
@@ -403,18 +385,14 @@ window.addEventListener("DOMContentLoaded", async () => {
   const draftId = localStorage.getItem("editDraftId");
   if (draftId) {
     loadDraftToForm(draftId);
-    const currentLang = window.languageManager ? window.languageManager.getCurrentUILanguage() : 'en';
-    const message = currentLang === 'bn' ? 
-      "ড্রাফট লোড করা হয়েছে। এডিট করুন এবং আপডেট করুন।" :
-      "Draft loaded. Edit and update.";
-    showToast(message, "info");
+    showToast("ড্রাফট লোড করা হয়েছে। এডিট করুন এবং আপডেট করুন।", "info");
   }
   
-  const formInputs = document.querySelectorAll('input, textarea, select');
+  const formInputs = document.querySelectorAll("input, textarea, select");
   formInputs.forEach(input => {
-    input.addEventListener('input', () => {
-      input.classList.remove('form-error', 'form-success');
-      const errorMsg = input.parentNode.querySelector('.error-message');
+    input.addEventListener("input", () => {
+      input.classList.remove("form-error", "form-success");
+      const errorMsg = input.parentNode.querySelector(".error-message");
       if (errorMsg) errorMsg.remove();
     });
   });
@@ -432,86 +410,7 @@ window.addCustomField = addCustomField;
 window.downloadTheme = downloadTheme;
 window.copyToClipboard = copyToClipboard;
 window.validateForm = validateForm;
+window.switchLanguage = switchLanguage;
+window.applyTheme = applyTheme;
 
-
-// ✅ Enhanced Theme Toggle Function
-function toggleTheme() {
-  const currentTheme = localStorage.getItem("theme") || "dark";
-  const newTheme = currentTheme === "dark" ? "light" : "dark";
-  
-  applyTheme(newTheme);
-  
-  const currentLang = window.languageManager ? window.languageManager.getCurrentUILanguage() : 'en';
-  const message = currentLang === 'bn' ? 
-    `থিম পরিবর্তন করা হয়েছে: ${newTheme === 'dark' ? 'ডার্ক মোড' : 'লাইট মোড'}` :
-    `Theme changed to: ${newTheme === 'dark' ? 'Dark Mode' : 'Light Mode'}`;
-  showToast(message, "info");
-}
-
-// ✅ Expose theme toggle to global scope
-window.toggleTheme = toggleTheme;
-
-
-// ✅ Clear Form Function
-function clearForm() {
-  const currentLang = window.languageManager ? window.languageManager.getCurrentUILanguage() : 'en';
-  const confirmMessage = currentLang === 'bn' ? 
-    "আপনি কি নিশ্চিত যে ফর্মটি পরিষ্কার করতে চান? সমস্ত তথ্য মুছে যাবে।" :
-    "Are you sure you want to clear the form? All information will be lost.";
-    
-  if (confirm(confirmMessage)) {
-    // Clear all input fields
-    document.querySelectorAll('#formFields input, #formFields textarea, #formFields select').forEach(field => {
-      field.value = '';
-      field.classList.remove('form-error', 'form-success');
-    });
-    
-    // Clear error messages
-    document.querySelectorAll('.error-message').forEach(el => el.remove());
-    
-    // Reset image inputs to just one
-    const imageInputs = document.getElementById('imageInputs');
-    imageInputs.innerHTML = `
-      <div class="form-group">
-        <label data-i18n="first_image_label">প্রধান ছবি *</label>
-        <div class="input-with-icon">
-          <span class="input-icon">
-            <i class="fas fa-image"></i>
-          </span>
-          <input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)" data-i18n="image_url" required>
-        </div>
-        <div class="field-hint" data-i18n="image_hint">প্রোডাক্টের প্রধান ছবির URL</div>
-      </div>
-    `;
-    
-    // Reset custom fields to just one
-    const customFields = document.getElementById('customFields');
-    customFields.innerHTML = `
-      <div class="custom-field-group">
-        <div class="form-group">
-          <input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি" data-i18n="custom_field_title">
-        </div>
-        <div class="form-group">
-          <input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস" data-i18n="custom_field_value">
-        </div>
-      </div>
-    `;
-    
-    // Clear output
-    document.getElementById('output').innerHTML = '';
-    document.getElementById('preview').innerHTML = '';
-    
-    // Show success message
-    const successMessage = currentLang === 'bn' ? 
-      "ফর্ম সফলভাবে পরিষ্কার করা হয়েছে।" :
-      "Form cleared successfully.";
-    showToast(successMessage, "success");
-    
-    // Focus on first input
-    document.getElementById('name').focus();
-  }
-}
-
-// ✅ Expose clear form to global scope
-window.clearForm = clearForm;
 

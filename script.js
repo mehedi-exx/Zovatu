@@ -110,6 +110,20 @@ async function applyLanguage(lang, showToastOnUpdate = false) {
   }
 }
 
+// ✅ Update Currency Symbol in Price Fields
+function updateCurrencySymbol() {
+  const currency = localStorage.getItem("selectedCurrency") || "৳";
+  const priceField = document.getElementById("price");
+  const offerField = document.getElementById("offer");
+  
+  if (priceField) {
+    priceField.placeholder = `মূল্য (${currency})`;
+  }
+  if (offerField) {
+    offerField.placeholder = `অফার মূল্য (${currency}) (ঐচ্ছিক)`;
+  }
+}
+
 // ✅ Enhanced Copy Functionality
 async function copyToClipboard() {
   const output = document.getElementById("output").textContent;
@@ -355,6 +369,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   });
 
   applyFieldVisibility();
+  updateCurrencySymbol(); // Update currency symbols on page load
 
   const generateBtn = document.getElementById("generateBtn");
   const copyBtn = document.getElementById("copyBtn");
@@ -391,6 +406,13 @@ window.addEventListener("DOMContentLoaded", async () => {
       if (errorMsg) errorMsg.remove();
     });
   });
+
+  // Listen for storage changes to update currency symbols
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'selectedCurrency') {
+      updateCurrencySymbol();
+    }
+  });
 });
 
 window.addEventListener("beforeunload", () => {
@@ -406,4 +428,5 @@ window.downloadTheme = downloadTheme;
 window.copyToClipboard = copyToClipboard;
 window.validateForm = validateForm;
 window.switchLanguage = switchLanguage;
+window.updateCurrencySymbol = updateCurrencySymbol;
 

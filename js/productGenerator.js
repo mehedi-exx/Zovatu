@@ -125,8 +125,44 @@ export function generateProduct() {
   // Generate HTML based on selected theme
   let html = generateOldVersionTheme(currency, whatsappMessage);
 
-  document.getElementById("output").textContent = html;
-  document.getElementById("preview").innerHTML = html;
+  // Display code in a read-only textarea with professional styling
+  const outputTextarea = document.getElementById("output");
+  outputTextarea.value = html;
+  outputTextarea.style.cssText = `
+    width: 100%;
+    height: 300px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 15px;
+    resize: vertical;
+    white-space: pre;
+    overflow: auto;
+    line-height: 1.4;
+    tab-size: 2;
+    -webkit-tab-size: 2;
+    -moz-tab-size: 2;
+    user-select: text;
+    cursor: text;
+  `;
+  
+  // Display professional preview
+  const previewContainer = document.getElementById("preview");
+  previewContainer.innerHTML = html;
+  previewContainer.style.cssText = `
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-top: 20px;
+    max-height: 600px;
+    overflow-y: auto;
+  `;
+  
   saveDraft();
   showToast("প্রোডাক্ট সফলভাবে তৈরি হয়েছে!", "success");
   
@@ -157,8 +193,7 @@ export function generateProduct() {
 
   // Theme generation functions
   function generateOldVersionTheme(currencySymbol, whatsappMsg) {
-    return `
-<div style="text-align:center;">
+    return `<div style="text-align:center;">
   <img id="mainImg" src="${mainImg}" style="width:100%;max-width:500px;border-radius:10px;border:1px solid #ccc;margin-bottom:10px;">
   <div id="thumbs" style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">${thumbHTML}</div>
 
@@ -303,161 +338,165 @@ export function addCustomField() {
 }
 
 export function saveDraft() {
-  const draft = {
-    id: localStorage.getItem("editDraftId") || Date.now(),
-    timestamp: new Date().toISOString(),
-    name: getVal("name"), 
-    code: getVal("code"), 
-    price: getVal("price"), 
+  const formData = {
+    name: getVal("name"),
+    code: getVal("code"),
+    price: getVal("price"),
     offer: getVal("offer"),
     unit: getVal("unit"),
     qty: getVal("qty"),
-    brand: getVal("brand"), 
-    size: getVal("size"), 
+    brand: getVal("brand"),
+    size: getVal("size"),
     color: getVal("color"),
-    delivery: getVal("delivery"), 
-    status: getVal("status"), 
+    delivery: getVal("delivery"),
+    status: getVal("status"),
     category: getVal("category"),
-    desc: getVal("desc"), 
-    video: getVal("video"), 
+    desc: getVal("desc"),
+    video: getVal("video"),
     wa: getVal("wa"),
-    images: [...document.querySelectorAll(".img-url")].map(i => i.value.trim()).filter(Boolean),
-    customFields: [...document.querySelectorAll(".custom-field-group")].map(group => ({
+    images: Array.from(document.querySelectorAll(".img-url")).map(input => input.value.trim()).filter(url => url),
+    customFields: Array.from(document.querySelectorAll(".custom-field-group")).map(group => ({
       key: group.querySelector(".custom-key").value.trim(),
       value: group.querySelector(".custom-value").value.trim()
     })).filter(field => field.key && field.value),
-    verified: false
+    timestamp: new Date().toISOString()
   };
 
-  let drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
-  const index = drafts.findIndex(d => d.id == draft.id);
+  const drafts = JSON.parse(localStorage.getItem("productDrafts") || "[]");
+  const editId = localStorage.getItem("editDraftId");
   
-  if (index !== -1) {
-    drafts[index] = { ...drafts[index], ...draft };
+  if (editId) {
+    const index = drafts.findIndex(draft => draft.id === editId);
+    if (index !== -1) {
+      drafts[index] = { ...formData, id: editId };
+    }
+    localStorage.removeItem("editDraftId");
   } else {
-    drafts.push(draft);
+    const newDraft = { ...formData, id: Date.now().toString() };
+    drafts.unshift(newDraft);
   }
   
-  localStorage.setItem("drafts", JSON.stringify(drafts));
-  localStorage.removeItem("editDraftId");
+  // Keep only last 50 drafts
+  if (drafts.length > 50) {
+    drafts.splice(50);
+  }
+  
+  localStorage.setItem("productDrafts", JSON.stringify(drafts));
 }
 
-export function loadDraftToForm(id) {
-  const draft = JSON.parse(localStorage.getItem("drafts") || "[]").find(d => d.id == id);
-  if (!draft) return;
+export function loadDraftToForm(draftId) {
+  const drafts = JSON.parse(localStorage.getItem("productDrafts") || "[]");
+  const draft = drafts.find(d => d.id === draftId);
   
-  localStorage.setItem("editDraftId", id);
-  
-  // Clear existing form
-  document.getElementById("imageInputs").innerHTML = '<input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">';
-  document.getElementById("customFields").innerHTML = '<div class="custom-field-group"><input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি"><input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস"></div>';
+  if (!draft) {
+    showToast("ড্রাফট পাওয়া যায়নি।", "error");
+    return;
+  }
   
   // Load basic fields
-  const fieldIds = ['name', 'code', 'price', 'offer', 'unit', 'qty', 'brand', 'size', 'color', 'delivery', 'status', 'category', 'desc', 'video', 'wa'];
-  fieldIds.forEach(fieldId => {
-    const element = document.getElementById(fieldId);
-    if (element && draft[fieldId]) {
-      element.value = draft[fieldId];
+  Object.keys(draft).forEach(key => {
+    const element = document.getElementById(key);
+    if (element && draft[key]) {
+      element.value = draft[key];
     }
   });
-
+  
   // Load images
-  const imgContainer = document.getElementById("imageInputs");
-  imgContainer.innerHTML = "";
-  if (draft.images && draft.images.length > 0) {
-    draft.images.forEach((url, index) => {
-      if (index === 0) {
-        const input = document.createElement("input");
-        input.type = "url";
-        input.className = "img-url";
-        input.placeholder = "ছবির লিংক (Image URL)";
-        input.value = url;
-        imgContainer.appendChild(input);
-      } else {
-        addImageInput();
-        const inputs = imgContainer.querySelectorAll(".img-url");
-        inputs[inputs.length - 1].value = url;
-      }
-    });
-  } else {
-    const input = document.createElement("input");
-    input.type = "url";
-    input.className = "img-url";
-    input.placeholder = "ছবির লিংক (Image URL)";
-    imgContainer.appendChild(input);
-  }
-
+  const imageContainer = document.getElementById("imageInputs");
+  imageContainer.innerHTML = "";
+  
+  draft.images?.forEach((url, index) => {
+    if (index === 0) {
+      const firstInput = document.createElement("input");
+      firstInput.type = "url";
+      firstInput.className = "img-url";
+      firstInput.placeholder = "ছবির লিংক ১ (Image URL)";
+      firstInput.value = url;
+      imageContainer.appendChild(firstInput);
+    } else {
+      addImageInput();
+      const inputs = imageContainer.querySelectorAll(".img-url");
+      inputs[inputs.length - 1].value = url;
+    }
+  });
+  
   // Load custom fields
   const customContainer = document.getElementById("customFields");
   customContainer.innerHTML = "";
-  if (draft.customFields && draft.customFields.length > 0) {
-    draft.customFields.forEach(field => {
-      addCustomField();
-      const groups = customContainer.querySelectorAll(".custom-field-group");
-      const lastGroup = groups[groups.length - 1];
-      lastGroup.querySelector(".custom-key").value = field.key;
-      lastGroup.querySelector(".custom-value").value = field.value;
-    });
-  } else {
-    addCustomField();
-  }
   
+  draft.customFields?.forEach(field => {
+    addCustomField();
+    const groups = customContainer.querySelectorAll(".custom-field-group");
+    const lastGroup = groups[groups.length - 1];
+    lastGroup.querySelector(".custom-key").value = field.key;
+    lastGroup.querySelector(".custom-value").value = field.value;
+  });
+  
+  localStorage.setItem("editDraftId", draftId);
   showToast("ড্রাফট লোড করা হয়েছে।");
+  
+  // Scroll to top of form
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 export function applyFieldVisibility() {
-  const fieldVisibility = JSON.parse(localStorage.getItem("fieldVisibility") || "{}");
+  const savedVisibility = JSON.parse(localStorage.getItem("fieldVisibility") || "{}");
   
-  const fieldMapping = {
-    offer: "offer",
-    unit: "unit", 
-    qty: "qty",
-    brand: "brand",
-    size: "size",
-    color: "color",
-    delivery: "delivery",
-    status: "status",
-    category: "category",
-    desc: "desc",
-    video: "video",
-    customFields: "customFields"
+  // Define field mappings
+  const fieldMappings = {
+    "offer_price": "offer",
+    "unit": "unit",
+    "quantity": "qty",
+    "brand_company": "brand",
+    "size_option": "size",
+    "color_option": "color",
+    "delivery_time": "delivery",
+    "status": "status",
+    "category": "category",
+    "product_description": "desc",
+    "youtube_video_link": "video",
+    "add_custom_info": "customFields"
   };
-
-  Object.keys(fieldMapping).forEach(fieldKey => {
-    const element = document.getElementById(fieldMapping[fieldKey]);
-    if (element) {
-      if (fieldVisibility[fieldKey] === false) {
-        element.style.display = "none";
-        // Also hide the label if it exists
-        const label = document.querySelector(`label[for="${fieldMapping[fieldKey]}"]`);
-        if (label) label.style.display = "none";
+  
+  Object.keys(fieldMappings).forEach(key => {
+    const fieldId = fieldMappings[key];
+    const fieldElement = document.getElementById(fieldId);
+    const fieldContainer = fieldElement?.closest('.form-group') || fieldElement?.parentElement;
+    
+    if (fieldContainer) {
+      if (savedVisibility[key] === false) {
+        fieldContainer.style.display = 'none';
       } else {
-        element.style.display = "";
-        const label = document.querySelector(`label[for="${fieldMapping[fieldKey]}"]`);
-        if (label) label.style.display = "";
+        fieldContainer.style.display = '';
       }
     }
   });
-
-  // Handle custom fields buttons
-  const addCustomBtn = document.querySelector('button[onclick*="addCustomField"]');
-  const addImageBtn = document.querySelector('button[onclick*="addImageField"]');
   
-  if (fieldVisibility.customFields === false && addCustomBtn) {
-    addCustomBtn.style.display = "none";
-  } else if (addCustomBtn) {
-    addCustomBtn.style.display = "";
+  // Handle special cases
+  const addMoreImagesBtn = document.querySelector('button[onclick="addImageInput()"]');
+  if (addMoreImagesBtn) {
+    if (savedVisibility["add_more_images"] === false) {
+      addMoreImagesBtn.style.display = 'none';
+    } else {
+      addMoreImagesBtn.style.display = '';
+    }
   }
 }
 
-// Add CSS for shake animation
-const style = document.createElement('style');
-style.textContent = `
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
-}
-`;
-document.head.appendChild(style);
+// Copy function for the output code
+window.copyCode = function() {
+  const outputTextarea = document.getElementById("output");
+  if (outputTextarea && outputTextarea.value) {
+    navigator.clipboard.writeText(outputTextarea.value).then(() => {
+      showToast("কোড কপি করা হয়েছে!", "success");
+    }).catch(() => {
+      // Fallback for older browsers
+      outputTextarea.select();
+      document.execCommand('copy');
+      showToast("কোড কপি করা হয়েছে!", "success");
+    });
+  } else {
+    showToast("কপি করার জন্য কোন কোড নেই।", "error");
+  }
+};
 

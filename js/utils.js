@@ -4,9 +4,9 @@ export const getVal = id => document.getElementById(id)?.value.trim();
 
 export function showToast(message, type = "success") {
   // Remove existing toasts to prevent stacking
-  const existingToasts = document.querySelectorAll('.toast');
+  const existingToasts = document.querySelectorAll(".toast");
   existingToasts.forEach(toast => {
-    toast.classList.add('hide');
+    toast.classList.add("hide");
     setTimeout(() => toast.remove(), 300);
   });
 
@@ -79,6 +79,7 @@ export async function loadLanguage(lang) {
       throw new Error(`Failed to load language file: ${lang}.json`);
     }
     translations = await response.json();
+    localStorage.setItem("languageData", JSON.stringify(translations)); // Store translations in localStorage
     applyTranslations();
     
     // Update document language
@@ -92,8 +93,13 @@ export async function loadLanguage(lang) {
   }
 }
 
-export function translateElement(key) {
-  return translations[key] || key;
+export function translateElement(element) {
+  element.querySelectorAll("[data-lang]").forEach(el => {
+    const key = el.getAttribute("data-lang");
+    if (translations[key]) {
+      el.textContent = translations[key];
+    }
+  });
 }
 
 function applyTranslations() {
@@ -107,11 +113,17 @@ function applyTranslations() {
       }
     }
   });
+  document.querySelectorAll("[data-lang]").forEach(element => {
+    const key = element.getAttribute("data-lang");
+    if (translations[key]) {
+      element.textContent = translations[key];
+    }
+  });
 }
 
 // Enhanced form validation utilities
 export function validateEmail(email) {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[^
   return emailRegex.test(email);
 }
 
@@ -171,4 +183,5 @@ export function measurePerformance(name, fn) {
   console.log(`${name} took ${end - start} milliseconds`);
   return result;
 }
+
 

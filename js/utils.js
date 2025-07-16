@@ -1,12 +1,12 @@
-let translations = {};
+// ZOVATU Utilities - Optimized for English-only
 
 export const getVal = id => document.getElementById(id)?.value.trim();
 
 export function showToast(message, type = "success") {
   // Remove existing toasts to prevent stacking
-  const existingToasts = document.querySelectorAll(".toast");
+  const existingToasts = document.querySelectorAll('.toast');
   existingToasts.forEach(toast => {
-    toast.classList.add("hide");
+    toast.classList.add('hide');
     setTimeout(() => toast.remove(), 300);
   });
 
@@ -54,134 +54,161 @@ export function showToast(message, type = "success") {
   // Auto remove after 4 seconds
   setTimeout(() => {
     toast.style.transform = 'translateX(100%)';
-    setTimeout(() => {
-      if (toast.parentNode) {
-        toast.remove();
-      }
-    }, 300);
+    setTimeout(() => toast.remove(), 300);
   }, 4000);
 
   // Click to dismiss
-  toast.addEventListener('click', () => {
+  toast.onclick = () => {
     toast.style.transform = 'translateX(100%)';
-    setTimeout(() => {
-      if (toast.parentNode) {
-        toast.remove();
-      }
-    }, 300);
-  });
+    setTimeout(() => toast.remove(), 300);
+  };
 }
 
-export async function loadLanguage(lang) {
-  try {
-    const response = await fetch(`./languages/${lang}.json`);
-    if (!response.ok) {
-      throw new Error(`Failed to load language file: ${lang}.json`);
+// Enhanced form validation
+export function validateForm(requiredFields) {
+  const errors = [];
+  
+  requiredFields.forEach(fieldId => {
+    const value = getVal(fieldId);
+    if (!value) {
+      const field = document.getElementById(fieldId);
+      const label = field?.placeholder || fieldId;
+      errors.push(`${label} is required`);
+      
+      // Add visual feedback
+      if (field) {
+        field.style.borderColor = '#f44336';
+        field.addEventListener('input', () => {
+          field.style.borderColor = '';
+        }, { once: true });
+      }
     }
-    translations = await response.json();
-    localStorage.setItem("languageData", JSON.stringify(translations)); // Store translations in localStorage
-    applyTranslations();
-    
-    // Update document language
-    document.documentElement.lang = lang;
-    
+  });
+  
+  return errors;
+}
+
+// Enhanced copy to clipboard
+export function copyToClipboard(text, successMessage = "Copied to clipboard!") {
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast(successMessage, "success");
+    }).catch(() => {
+      fallbackCopyTextToClipboard(text, successMessage);
+    });
+  } else {
+    fallbackCopyTextToClipboard(text, successMessage);
+  }
+}
+
+function fallbackCopyTextToClipboard(text, successMessage) {
+  const textArea = document.createElement("textarea");
+  textArea.value = text;
+  textArea.style.position = "fixed";
+  textArea.style.left = "-999999px";
+  textArea.style.top = "-999999px";
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  
+  try {
+    document.execCommand('copy');
+    showToast(successMessage, "success");
+  } catch (err) {
+    showToast("Failed to copy. Please copy manually.", "error");
+  }
+  
+  document.body.removeChild(textArea);
+}
+
+// Enhanced local storage with error handling
+export function saveToStorage(key, data) {
+  try {
+    localStorage.setItem(key, JSON.stringify(data));
     return true;
   } catch (error) {
-    console.error("Error loading language file:", error);
-    showToast(`Language loading failed: ${error.message}`, "error");
+    console.error('Storage save failed:', error);
+    showToast("Failed to save data. Storage might be full.", "error");
     return false;
   }
 }
 
-export function translateElement(element) {
-  element.querySelectorAll("[data-lang]").forEach(el => {
-    const key = el.getAttribute("data-lang");
-    if (translations[key]) {
-      el.textContent = translations[key];
-    }
-  });
+export function loadFromStorage(key, defaultValue = null) {
+  try {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : defaultValue;
+  } catch (error) {
+    console.error('Storage load failed:', error);
+    return defaultValue;
+  }
 }
 
-function applyTranslations() {
-  document.querySelectorAll("[data-i18n]").forEach(element => {
-    const key = element.getAttribute("data-i18n");
-    if (translations[key]) {
-      if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
-        element.placeholder = translations[key];
-      } else {
-        element.textContent = translations[key];
-      }
-    }
-  });
-  document.querySelectorAll("[data-lang]").forEach(element => {
-    const key = element.getAttribute("data-lang");
-    if (translations[key]) {
-      element.textContent = translations[key];
-    }
-  });
+// Enhanced URL validation
+export function isValidUrl(string) {
+  try {
+    const url = new URL(string);
+    return url.protocol === "http:" || url.protocol === "https:";
+  } catch (_) {
+    return false;
+  }
 }
 
-// Enhanced form validation utilities
-export function validateEmail(email) {
-  const emailRegex = /^[^
+// Enhanced phone number validation
+export function isValidPhone(phone) {
+  const phoneRegex = /^(\+?880|0)?1[3-9]\d{8}$/;
+  return phoneRegex.test(phone.replace(/\s+/g, ''));
+}
+
+// Enhanced email validation
+export function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
 
-export function validatePhone(phone) {
-  const phoneRegex = /^8801[0-9]{9}$/;
-  return phoneRegex.test(phone);
+// Format currency
+export function formatCurrency(amount, currency = '$') {
+  return `${currency}${parseFloat(amount).toFixed(2)}`;
 }
 
-export function validateURL(url) {
-  try {
-    new URL(url);
-    return true;
-  } catch {
-    return false;
-  }
+// Format date
+export function formatDate(date) {
+  return new Date(date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
 }
 
-export function sanitizeInput(input) {
-  const div = document.createElement('div');
-  div.textContent = input;
-  return div.innerHTML;
-}
-
-// Enhanced localStorage utilities
-export function setStorageItem(key, value) {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-    return true;
-  } catch (error) {
-    console.error('Storage error:', error);
-    showToast('Storage operation failed', 'error');
-    return false;
-  }
-}
-
-export function getStorageItem(key, defaultValue = null) {
-  try {
-    const item = localStorage.getItem(key);
-    return item ? JSON.parse(item) : defaultValue;
-  } catch (error) {
-    console.error('Storage retrieval error:', error);
-    return defaultValue;
-  }
+// Debounce function for search
+export function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
 }
 
 // Enhanced error handling
 export function handleError(error, context = '') {
   console.error(`Error in ${context}:`, error);
-  showToast(`An error occurred${context ? ` in ${context}` : ''}: ${error.message}`, 'error');
+  showToast(`An error occurred${context ? ` in ${context}` : ''}. Please try again.`, "error");
 }
 
-// Performance monitoring
-export function measurePerformance(name, fn) {
-  const start = performance.now();
-  const result = fn();
-  const end = performance.now();
-  console.log(`${name} took ${end - start} milliseconds`);
-  return result;
+// Check if user is authenticated
+export function isAuthenticated() {
+  return !!localStorage.getItem('loggedInUser');
 }
 
+// Redirect to login if not authenticated
+export function requireAuth() {
+  if (!isAuthenticated()) {
+    window.location.href = 'index.html';
+    return false;
+  }
+  return true;
+}
 

@@ -1,39 +1,56 @@
-import { showToast, getVal, loadLanguage, translateElement } from './js/utils.js';
-import { generateProduct, addImageInput, addCustomField, saveDraft, loadDraftToForm, applyFieldVisibility } from './js/productGenerator.js';
+// ZOVATU Main JavaScript - Professional eCommerce Website Builder
 
-// ✅ Enhanced Sidebar Toggle with Animation
+import { showToast, getVal, copyToClipboard, saveToStorage, loadFromStorage } from './js/utils.js';
+import { generateProduct, addImageInput, addCustomField, saveDraft, loadDraftToForm } from './js/productGenerator.js';
+
+// ===== GLOBAL VARIABLES =====
+let currentUser = null;
+
+// ===== SIDEBAR FUNCTIONALITY =====
 function toggleSidebar() {
   const sidebar = document.getElementById("sidebar");
-  const isOpen = sidebar.classList.contains("open");
+  const isOpen = sidebar?.classList.contains("open");
+  
+  if (!sidebar) return;
   
   if (isOpen) {
-    sidebar.classList.remove("open");
+    closeSidebar();
   } else {
-    sidebar.classList.add("open");
-  }
-  
-  // Add backdrop for mobile
-  if (!isOpen) {
-    const backdrop = document.createElement("div");
-    backdrop.className = "sidebar-backdrop";
-    backdrop.style.cssText = `
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 999;
-    `;
-    backdrop.onclick = toggleSidebar;
-    document.body.appendChild(backdrop);
-  } else {
-    const backdrop = document.querySelector(".sidebar-backdrop");
-    if (backdrop) backdrop.remove();
+    openSidebar();
   }
 }
 
-// ✅ Enhanced Logout with Confirmation
+function openSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  if (!sidebar) return;
+  
+  sidebar.classList.add("open");
+  
+  // Add backdrop for mobile
+  const backdrop = document.createElement("div");
+  backdrop.className = "sidebar-backdrop";
+  backdrop.onclick = closeSidebar;
+  document.body.appendChild(backdrop);
+  
+  // Trigger backdrop animation
+  setTimeout(() => backdrop.classList.add("show"), 10);
+}
+
+function closeSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  const backdrop = document.querySelector(".sidebar-backdrop");
+  
+  if (sidebar) {
+    sidebar.classList.remove("open");
+  }
+  
+  if (backdrop) {
+    backdrop.classList.remove("show");
+    setTimeout(() => backdrop.remove(), 300);
+  }
+}
+
+// ===== AUTHENTICATION =====
 function logout() {
   if (confirm("Are you sure you want to logout?")) {
     const logoutBtn = document.querySelector('a[onclick="logout()"]');
@@ -44,389 +61,348 @@ function logout() {
     setTimeout(() => {
       localStorage.removeItem("loggedInUser");
       localStorage.removeItem("editDraftId");
-      showToast("Successfully logged out.", "success");
+      showToast("Successfully logged out!", "success");
       window.location.replace("index.html");
     }, 1000);
   }
 }
 
-// ✅ Enhanced Theme Management
-function applyTheme(theme) {
-  document.body.classList.remove("dark-mode", "light-mode");
-  document.body.classList.add(theme + "-mode");
-  localStorage.setItem("theme", theme);
+// ===== FORM HANDLING =====
+function handleProductForm() {
+  const form = document.getElementById('productForm');
+  if (!form) return;
   
-  const themeToggle = document.querySelector(".theme-toggle");
-  if (themeToggle) {
-    themeToggle.innerHTML = theme === "dark" ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-  }
-}
-
-// ✅ Professional Language Switching
-function switchLanguage(lang) {
-  // Update active button state
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.classList.remove('active');
-    if (btn.dataset.lang === lang) {
-      btn.classList.add('active');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn.innerHTML;
+    
+    try {
+      // Show loading state
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+      submitBtn.disabled = true;
+      
+      // Generate product
+      await generateProduct();
+      
+      showToast("Product generated successfully!", "success");
+    } catch (error) {
+      console.error('Error generating product:', error);
+      showToast("Failed to generate product. Please try again.", "error");
+    } finally {
+      // Reset button
+      submitBtn.innerHTML = originalText;
+      submitBtn.disabled = false;
     }
   });
-  
-  // Apply language with smooth transition
-  applyLanguage(lang, true);
 }
 
-// ✅ Enhanced Language Management
-async function applyLanguage(lang, showToastOnUpdate = false) {
-  try {
-    // Show loading state
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.style.pointerEvents = 'none';
-      btn.style.opacity = '0.7';
-    });
-    
-    await loadLanguage(lang);
-    localStorage.setItem("language", lang);
-    
-    // Update active state
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.classList.remove('active');
-      if (btn.dataset.lang === lang) {
-        btn.classList.add('active');
-      }
-    });
-    
-    if (showToastOnUpdate) {
-      showToast(translateElement("language_changed") + `: ${lang === 'bn' ? 'বাংলা' : 'English'}`);
-    }
-  } catch (error) {
-    showToast("ভাষা পরিবর্তনে সমস্যা হয়েছে।", "error");
-  } finally {
-    // Restore button states
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.style.pointerEvents = 'auto';
-      btn.style.opacity = '1';
-    });
-  }
-}
-
-// ✅ Update Currency Symbol in Price Fields
-function updateCurrencySymbol() {
-  const currency = localStorage.getItem("selectedCurrency") || "৳";
-  const priceField = document.getElementById("price");
-  const offerField = document.getElementById("offer");
-  
-  if (priceField) {
-    priceField.placeholder = `মূল্য (${currency})`;
-  }
-  if (offerField) {
-    offerField.placeholder = `অফার মূল্য (${currency}) (ঐচ্ছিক)`;
-  }
-}
-
-// ✅ Enhanced Copy Functionality
-async function copyToClipboard() {
-  const output = document.getElementById("output").textContent;
-  const copyBtn = document.getElementById("copyBtn");
-  
-  if (!output.trim()) {
-    showToast("কপি করার জন্য কোনো কোড নেই। প্রথমে প্রোডাক্ট জেনারেট করুন।", "warning");
-    return;
-  }
-  
-  try {
-    const originalText = copyBtn.innerHTML;
-    copyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> কপি হচ্ছে...';
-    copyBtn.disabled = true;
-    
-    await navigator.clipboard.writeText(output);
-    
-    copyBtn.innerHTML = '<i class="fas fa-check"></i> কপি হয়েছে!';
-    copyBtn.style.background = "#28a745";
-    showToast("কোড সফলভাবে কপি হয়েছে!", "success");
-    
-    setTimeout(() => {
-      copyBtn.innerHTML = originalText;
-      copyBtn.style.background = "";
-      copyBtn.disabled = false;
-    }, 2000);
-    
-  } catch (error) {
-    copyBtn.innerHTML = '<i class="fas fa-times"></i> ব্যর্থ!';
-    copyBtn.style.background = "#dc3545";
-    showToast("কপি করতে সমস্যা হয়েছে।", "error");
-    
-    setTimeout(() => {
-      copyBtn.innerHTML = '<i class="fas fa-copy"></i> কপি করুন';
-      copyBtn.style.background = "";
-      copyBtn.disabled = false;
-    }, 2000);
-  }
-}
-
-// ✅ Enhanced Form Validation
-function validateForm() {
-  const requiredFields = [
-    { id: 'name', label: 'প্রোডাক্ট নাম' },
-    { id: 'code', label: 'প্রোডাক্ট কোড' },
-    { id: 'price', label: 'মূল্য' },
-    { id: 'wa', label: 'WhatsApp নম্বর' }
-  ];
-  
-  const firstImgInput = document.querySelector('.img-url');
-  let isValid = true;
-  const errors = [];
-  
-  // Clear previous errors
-  document.querySelectorAll('.form-error').forEach(el => {
-    el.classList.remove('form-error');
-  });
-  document.querySelectorAll('.error-message').forEach(el => el.remove());
-  
-  // Validate required fields
-  requiredFields.forEach(field => {
-    const element = document.getElementById(field.id);
-    const value = element.value.trim();
-    
-    if (!value) {
-      element.classList.add('form-error');
-      addErrorMessage(element, `${field.label} বাধ্যতামূলক`);
-      errors.push(field.label);
-      isValid = false;
-    } else {
-      element.classList.add('form-success');
-      element.classList.remove('form-error');
-    }
-  });
-  
-  // Validate first image
-  if (!firstImgInput?.value.trim()) {
-    firstImgInput.classList.add('form-error');
-    addErrorMessage(firstImgInput, 'কমপক্ষে একটি ছবি প্রয়োজন');
-    errors.push('প্রোডাক্ট ছবি');
-    isValid = false;
-  }
-  
-  // Validate WhatsApp number format
-  const waInput = document.getElementById('wa');
-  if (waInput.value.trim() && !waInput.value.match(/^8801[0-9]{9}$/)) {
-    waInput.classList.add('form-error');
-    addErrorMessage(waInput, 'সঠিক ফরম্যাট: 8801XXXXXXXXX');
-    isValid = false;
-  }
-  
-  // Validate price
-  const priceInput = document.getElementById('price');
-  const price = parseFloat(priceInput.value);
-  if (priceInput.value.trim() && (isNaN(price) || price <= 0)) {
-    priceInput.classList.add('form-error');
-    addErrorMessage(priceInput, 'সঠিক মূল্য দিন');
-    isValid = false;
-  }
-  
-  return { isValid, errors };
-}
-
-function addErrorMessage(element, message) {
-  const errorDiv = document.createElement('div');
-  errorDiv.className = 'error-message';
-  errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
-  element.parentNode.insertBefore(errorDiv, element.nextSibling);
-}
-
-// ✅ Enhanced Auto-save Functionality
-let autoSaveInterval;
-
-function startAutoSave() {
-  if (autoSaveInterval) {
-    clearInterval(autoSaveInterval);
-  }
-  
-  autoSaveInterval = setInterval(() => {
-    const name = getVal("name");
-    const code = getVal("code");
-    
-    if (name && code) {
-      saveDraft();
-      showToast("স্বয়ংক্রিয় সংরক্ষণ সম্পন্ন", "info");
-    }
-  }, 30000);
-}
-
-function stopAutoSave() {
-  if (autoSaveInterval) {
-    clearInterval(autoSaveInterval);
-    autoSaveInterval = null;
-  }
-}
-
-// ✅ Enhanced Theme Download with Progress
+// ===== THEME DOWNLOAD =====
 function downloadTheme() {
-  const downloadBtn = document.getElementById("downloadThemeBtn");
-  const downloadTimer = document.getElementById("downloadTimer");
-  let timeLeft = 5;
-
-  downloadBtn.disabled = true;
-  downloadBtn.classList.add('loading');
-  downloadTimer.style.display = "block";
+  const btn = document.querySelector('.download-theme-btn');
+  if (!btn) return;
   
-  const updateTimer = () => {
-    downloadTimer.innerHTML = `
-      <div style="display:flex;align-items:center;gap:10px;color:#ffc107;">
-        <i class="fas fa-clock"></i>
-        <span>ডাউনলোড শুরু হচ্ছে ${timeLeft} সেকেন্ড পর...</span>
-      </div>
-      <div class="progress-bar" style="margin-top:8px;">
-        <div class="progress-fill" style="width:${((5-timeLeft)/5)*100}%;"></div>
-      </div>
-    `;
-  };
+  const originalText = btn.innerHTML;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing...';
+  btn.disabled = true;
   
-  updateTimer();
-
-  const timerInterval = setInterval(() => {
-    timeLeft--;
-    if (timeLeft > 0) {
-      updateTimer();
-    } else {
-      clearInterval(timerInterval);
-      downloadTimer.style.display = "none";
-      downloadBtn.classList.remove('loading');
-      
-      const confirmDownload = confirm(`🎨 G9Tool থিম ডাউনলোড করুন\n\nএই থিমটি আপনার ব্লগার সাইটের জন্য বিশেষভাবে ডিজাইন করা হয়েছে।\n\n✅ G9Tool এর সাথে সামঞ্জস্যপূর্ণ\n✅ রেসপনসিভ ডিজাইন\n✅ দ্রুত লোডিং\n✅ SEO অপ্টিমাইজড\n\nআপনি কি ডাউনলোড করতে চান?`);
-      
-      if (confirmDownload) {
-        const a = document.createElement("a");
-        a.href = "https://github.com/mehedi-exx/G9-Tool/releases/download/G9Tool/G9Tool.xml";
-        a.download = "G9Tool_Theme.xml";
-        a.style.display = "none";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        
-        downloadBtn.innerHTML = '<i class="fas fa-check"></i> ডাউনলোড সম্পন্ন!';
-        downloadBtn.style.background = "#28a745";
-        showToast("🎉 থিম সফলভাবে ডাউনলোড হয়েছে!", "success");
-        
-        setTimeout(() => {
-          downloadBtn.innerHTML = '<i class="fab fa-blogger-b"></i> ডাউনলোড থিম';
-          downloadBtn.style.background = "";
-        }, 3000);
-      } else {
-        showToast("ডাউনলোড বাতিল করা হয়েছে।", "info");
-      }
-      
-      downloadBtn.disabled = false;
-    }
-  }, 1000);
+  setTimeout(() => {
+    // Create download link
+    const link = document.createElement('a');
+    link.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent('ZOVATU Theme Package');
+    link.download = 'zovatu-theme.zip';
+    link.click();
+    
+    showToast("Theme download started!", "success");
+    
+    // Reset button
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+  }, 2000);
 }
 
-// ✅ Enhanced Keyboard Shortcuts
+// ===== KEYBOARD SHORTCUTS =====
 function setupKeyboardShortcuts() {
   document.addEventListener('keydown', (e) => {
-    // Ctrl/Cmd + Enter to generate
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-      e.preventDefault();
-      generateProduct();
-    }
-    
     // Ctrl/Cmd + S to save draft
     if ((e.ctrlKey || e.metaKey) && e.key === 's') {
       e.preventDefault();
       saveDraft();
-      showToast("ড্রাফট সংরক্ষিত হয়েছে!", "success");
     }
     
     // Escape to close sidebar
     if (e.key === 'Escape') {
-      const sidebar = document.getElementById("sidebar");
-      if (sidebar.classList.contains("open")) {
-        toggleSidebar();
+      closeSidebar();
+    }
+    
+    // Ctrl/Cmd + Enter to generate product
+    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+      e.preventDefault();
+      const form = document.getElementById('productForm');
+      if (form) {
+        form.dispatchEvent(new Event('submit'));
       }
     }
   });
 }
 
-// ✅ Enhanced Event Listeners
-window.addEventListener("DOMContentLoaded", async () => {
-  if (!localStorage.getItem("loggedInUser")) {
-    window.location.replace("index.html");
-    return;
-  }
-
-  const savedTheme = localStorage.getItem("theme") || "dark";
-  applyTheme(savedTheme);
-
-  const savedLang = localStorage.getItem("language") || "en"; // Default to English
-  await applyLanguage(savedLang, false);
+// ===== FORM VALIDATION =====
+function setupFormValidation() {
+  const inputs = document.querySelectorAll('input[required], textarea[required]');
   
-  // Initialize language buttons
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.classList.remove('active');
-    if (btn.dataset.lang === savedLang) {
-      btn.classList.add('active');
-    }
+  inputs.forEach(input => {
+    input.addEventListener('blur', validateField);
+    input.addEventListener('input', clearFieldError);
   });
+}
 
-  applyFieldVisibility();
-  updateCurrencySymbol(); // Update currency symbols on page load
-
-  const generateBtn = document.getElementById("generateBtn");
-  const copyBtn = document.getElementById("copyBtn");
+function validateField(e) {
+  const field = e.target;
+  const value = field.value.trim();
   
-  if (generateBtn) {
-    generateBtn.addEventListener("click", () => {
-      const validation = validateForm();
-      if (validation.isValid) {
-        generateProduct();
-      } else {
-        showToast(`অনুগ্রহ করে নিম্নলিখিত ক্ষেত্রগুলি পূরণ করুন: ${validation.errors.join(', ')}`, "error");
-      }
-    });
+  if (!value && field.required) {
+    showFieldError(field, 'This field is required');
+    return false;
   }
   
-  if (copyBtn) {
-    copyBtn.addEventListener("click", copyToClipboard);
+  // Email validation
+  if (field.type === 'email' && value) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(value)) {
+      showFieldError(field, 'Please enter a valid email address');
+      return false;
+    }
   }
+  
+  // URL validation
+  if (field.type === 'url' && value) {
+    try {
+      new URL(value);
+    } catch {
+      showFieldError(field, 'Please enter a valid URL');
+      return false;
+    }
+  }
+  
+  // Number validation
+  if (field.type === 'number' && value) {
+    const num = parseFloat(value);
+    if (isNaN(num) || num < 0) {
+      showFieldError(field, 'Please enter a valid positive number');
+      return false;
+    }
+  }
+  
+  clearFieldError(field);
+  return true;
+}
 
-  setupKeyboardShortcuts();
-  startAutoSave();
+function showFieldError(field, message) {
+  field.style.borderColor = 'var(--error)';
   
-  const draftId = localStorage.getItem("editDraftId");
-  if (draftId) {
-    loadDraftToForm(draftId);
-    showToast("ড্রাফট লোড করা হয়েছে। এডিট করুন এবং আপডেট করুন।", "info");
+  // Remove existing error message
+  const existingError = field.parentNode.querySelector('.field-error');
+  if (existingError) {
+    existingError.remove();
   }
   
-  const formInputs = document.querySelectorAll('input, textarea, select');
-  formInputs.forEach(input => {
+  // Add error message
+  const errorDiv = document.createElement('div');
+  errorDiv.className = 'field-error';
+  errorDiv.style.cssText = `
+    color: var(--error);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  `;
+  errorDiv.textContent = message;
+  field.parentNode.appendChild(errorDiv);
+}
+
+function clearFieldError(field) {
+  field.style.borderColor = '';
+  const errorDiv = field.parentNode.querySelector('.field-error');
+  if (errorDiv) {
+    errorDiv.remove();
+  }
+}
+
+// ===== AUTO-SAVE FUNCTIONALITY =====
+function setupAutoSave() {
+  const form = document.getElementById('productForm');
+  if (!form) return;
+  
+  const inputs = form.querySelectorAll('input, textarea, select');
+  let autoSaveTimeout;
+  
+  inputs.forEach(input => {
     input.addEventListener('input', () => {
-      input.classList.remove('form-error', 'form-success');
-      const errorMsg = input.parentNode.querySelector('.error-message');
-      if (errorMsg) errorMsg.remove();
+      clearTimeout(autoSaveTimeout);
+      autoSaveTimeout = setTimeout(() => {
+        saveFormData();
+      }, 2000); // Auto-save after 2 seconds of inactivity
     });
   });
+}
 
-  // Listen for storage changes to update currency symbols
-  window.addEventListener('storage', (e) => {
-    if (e.key === 'selectedCurrency') {
-      updateCurrencySymbol();
+function saveFormData() {
+  const form = document.getElementById('productForm');
+  if (!form) return;
+  
+  const formData = new FormData(form);
+  const data = {};
+  
+  for (let [key, value] of formData.entries()) {
+    data[key] = value;
+  }
+  
+  saveToStorage('autoSaveData', data);
+}
+
+function loadFormData() {
+  const data = loadFromStorage('autoSaveData');
+  if (!data) return;
+  
+  Object.keys(data).forEach(key => {
+    const field = document.getElementById(key);
+    if (field && data[key]) {
+      field.value = data[key];
     }
   });
+}
+
+// ===== RESPONSIVE MENU HANDLING =====
+function setupResponsiveMenu() {
+  const mediaQuery = window.matchMedia('(max-width: 768px)');
+  
+  function handleMediaChange(e) {
+    if (!e.matches) {
+      // Desktop view - close sidebar
+      closeSidebar();
+    }
+  }
+  
+  mediaQuery.addListener(handleMediaChange);
+  handleMediaChange(mediaQuery);
+}
+
+// ===== PERFORMANCE OPTIMIZATION =====
+function optimizeImages() {
+  const images = document.querySelectorAll('img');
+  
+  images.forEach(img => {
+    // Add loading="lazy" for better performance
+    if (!img.hasAttribute('loading')) {
+      img.setAttribute('loading', 'lazy');
+    }
+    
+    // Add error handling
+    img.addEventListener('error', () => {
+      img.style.display = 'none';
+      console.warn('Failed to load image:', img.src);
+    });
+  });
+}
+
+// ===== ACCESSIBILITY IMPROVEMENTS =====
+function setupAccessibility() {
+  // Add ARIA labels to buttons without text
+  const iconButtons = document.querySelectorAll('button:not([aria-label])');
+  iconButtons.forEach(btn => {
+    const icon = btn.querySelector('i');
+    if (icon && !btn.textContent.trim()) {
+      const classes = icon.className;
+      if (classes.includes('fa-bars') || classes.includes('menu')) {
+        btn.setAttribute('aria-label', 'Toggle menu');
+      } else if (classes.includes('fa-plus')) {
+        btn.setAttribute('aria-label', 'Add item');
+      } else if (classes.includes('fa-download')) {
+        btn.setAttribute('aria-label', 'Download');
+      }
+    }
+  });
+  
+  // Improve focus management
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+      document.body.classList.add('keyboard-navigation');
+    }
+  });
+  
+  document.addEventListener('mousedown', () => {
+    document.body.classList.remove('keyboard-navigation');
+  });
+}
+
+// ===== INITIALIZATION =====
+document.addEventListener('DOMContentLoaded', () => {
+  // Check authentication
+  currentUser = loadFromStorage('loggedInUser');
+  
+  // Initialize components
+  setupKeyboardShortcuts();
+  setupFormValidation();
+  setupAutoSave();
+  setupResponsiveMenu();
+  setupAccessibility();
+  optimizeImages();
+  
+  // Load saved form data
+  loadFormData();
+  
+  // Handle product form
+  handleProductForm();
+  
+  // Setup download theme button
+  const downloadBtn = document.querySelector('.download-theme-btn');
+  if (downloadBtn) {
+    downloadBtn.addEventListener('click', downloadTheme);
+  }
+  
+  // Close sidebar when clicking outside
+  document.addEventListener('click', (e) => {
+    const sidebar = document.getElementById('sidebar');
+    const menuBtn = document.querySelector('.menu-btn');
+    
+    if (sidebar && sidebar.classList.contains('open') && 
+        !sidebar.contains(e.target) && 
+        !menuBtn?.contains(e.target)) {
+      closeSidebar();
+    }
+  });
+  
+  console.log('ZOVATU initialized successfully!');
 });
 
-window.addEventListener("beforeunload", () => {
-  stopAutoSave();
-});
-
-// ✅ Expose functions to global scope
+// ===== GLOBAL FUNCTIONS =====
 window.toggleSidebar = toggleSidebar;
 window.logout = logout;
-window.addImageField = addImageInput;
+window.addImageInput = addImageInput;
 window.addCustomField = addCustomField;
-window.downloadTheme = downloadTheme;
+window.saveDraft = saveDraft;
 window.copyToClipboard = copyToClipboard;
-window.validateForm = validateForm;
-window.switchLanguage = switchLanguage;
-window.updateCurrencySymbol = updateCurrencySymbol;
+
+// ===== ERROR HANDLING =====
+window.addEventListener('error', (e) => {
+  console.error('Global error:', e.error);
+  showToast('An unexpected error occurred. Please refresh the page.', 'error');
+});
+
+window.addEventListener('unhandledrejection', (e) => {
+  console.error('Unhandled promise rejection:', e.reason);
+  showToast('An error occurred while processing your request.', 'error');
+});
+
+// ===== SERVICE WORKER REGISTRATION =====
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then(registration => {
+        console.log('SW registered: ', registration);
+      })
+      .catch(registrationError => {
+        console.log('SW registration failed: ', registrationError);
+      });
+  });
+}
 

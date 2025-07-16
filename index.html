@@ -1,51 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ZOVATU Premium - eCommerce Website Builder</title>
-  <meta name="description" content="Create your professional eCommerce website for free with ZOVATU. Build online stores, manage products, and grow your business.">
-  <meta name="keywords" content="ecommerce, website builder, online store, free, business, ZOVATU">
-  <link rel="icon" href="./assets/zovatu-icon.png" type="image/png">
-  <link rel="manifest" href="./manifest.json">
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZOVATU - eCommerce Website Builder</title>
+  <meta name="description" content="Create professional eCommerce websites for free with ZOVATU. Build your online store in minutes with our easy-to-use tools.">
+  <meta name="keywords" content="ecommerce, website builder, online store, free, ZOVATU">
+  <meta name="author" content="ZOVATU">
+  
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="ZOVATU - eCommerce Website Builder">
+  <meta property="og:description" content="Create professional eCommerce websites for free with ZOVATU">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zovatu.com">
+  
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ZOVATU - eCommerce Website Builder">
+  <meta name="twitter:description" content="Create professional eCommerce websites for free with ZOVATU">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/icons/icon-192x192.png">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192x192.png">
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  
+  <!-- Google Fonts - Inter (Popular Professional Font) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
-
-<!-- Header -->
-<div class="header">
-  <div class="header-flex">
-    <div class="header-title">
-      <img src="./assets/zovatu-icon.png" alt="ZOVATU" class="header-logo">
-      <span>ZOVATU</span>
+<body class="login-page">
+  <!-- Header -->
+  <header class="login-header">
+    <div class="logo-container">
+      <img src="assets/zovatu-icon.png" alt="ZOVATU" class="logo-icon">
+      <span class="logo-text">ZOVATU</span>
     </div>
-    <a href="https://t.me/mehedi_exx" target="_blank" class="telegram"><i class="fab fa-telegram-plane"></i></a>
-  </div>
-</div>
+  </header>
 
-<!-- Login Card -->
-<div class="login-box">
-  <div class="login-logo">
-    <img src="./assets/zovatu-icon.png" alt="ZOVATU">
-  </div>
-  <h2><i class="fas fa-user-shield"></i> Login</h2>
-  <p class="login-subtitle">Create Your eCommerce Website</p>
-  <input type="text" id="username" placeholder="Username" />
-  <input type="password" id="password" placeholder="Password" />
-  <button class="login-btn" onclick="loginUser()" id="loginBtn">
-    <i class="fas fa-sign-in-alt"></i> Login
-  </button>
+  <!-- Main Content -->
+  <main class="login-main">
+    <div class="login-container">
+      <div class="login-box">
+        <!-- Logo Section -->
+        <div class="login-logo">
+          <img src="assets/zovatu-icon.png" alt="ZOVATU" class="login-logo-icon">
+        </div>
+        
+        <!-- Title Section -->
+        <div class="login-title">
+          <h1><i class="fas fa-user-circle"></i> Login</h1>
+          <p>Create Your eCommerce Website</p>
+        </div>
+        
+        <!-- Login Form -->
+        <form id="loginForm" class="login-form">
+          <div class="input-group">
+            <input type="text" id="username" placeholder="Username" required>
+            <i class="fas fa-user input-icon"></i>
+          </div>
+          
+          <div class="input-group">
+            <input type="password" id="password" placeholder="Password" required>
+            <i class="fas fa-lock input-icon"></i>
+          </div>
+          
+          <button type="submit" class="login-btn">
+            <i class="fas fa-sign-in-alt"></i> Login
+          </button>
+        </form>
+        
+        <!-- Contact Section -->
+        <div class="contact-section">
+          <p>Get premium access by contacting:</p>
+          <div class="contact-links">
+            <a href="https://wa.me/your-number" target="_blank" class="contact-btn whatsapp">
+              <i class="fab fa-whatsapp"></i> WhatsApp
+            </a>
+            <a href="https://t.me/yourchannel" target="_blank" class="contact-btn telegram">
+              <i class="fab fa-telegram"></i> Telegram
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
 
-  <div class="contact-links">
-    Get premium access by contacting:
-    <br />
-    <a href="https://wa.me/8801627647776" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a> |
-    <a href="https://t.me/mehedi_exx" target="_blank"><i class="fab fa-telegram-plane"></i> Telegram</a>
-  </div>
-</div>
+  <!-- Footer -->
+  <footer class="login-footer">
+    <p>&copy; 2024 ZOVATU. All rights reserved.</p>
+  </footer>
 
-<script type="module" src="auth.js"></script>
+  <!-- Scripts -->
+  <script type="module" src="auth.js"></script>
 </body>
 </html>
 

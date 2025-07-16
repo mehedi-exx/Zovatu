@@ -3,26 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Admin Panel - ZOVATU</title>
-  <meta name="description" content="ZOVATU Admin Panel - Manage your eCommerce products and settings">
-  <link rel="icon" href="./assets/zovatu-icon.png" type="image/png">
+  <title data-i18n="admin_panel">Admin Panel - G9Tool</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
 </head>
 <body>
 
 <header class="header">
-  <div class="logo">
-    <img src="./assets/zovatu-icon.png" alt="ZOVATU" class="header-logo">
-    <span>Admin Panel</span>
-  </div>
-  <a href="dashboard.html" class="back-link"><i class="fas fa-arrow-left"></i> Back</a>
+  <div class="logo"><i class="fas fa-cog"></i> <span data-i18n="admin_panel">Admin Panel</span></div>
+  <a href="dashboard.html" class="back-link" data-i18n="back"><i class="fas fa-arrow-left"></i> Back</a>
 </header>
 
 <div class="main-content">
   <!-- Statistics Section -->
   <div class="admin-controls">
-    <h2><i class="fas fa-chart-bar"></i> Product Statistics</h2>
+    <h2 data-i18n="product_statistics"><i class="fas fa-chart-bar"></i> Product Statistics</h2>
     <div class="stats-summary">
       <div class="stat-item">
         <div class="stat-number" id="totalProducts">0</div>
@@ -41,26 +37,26 @@
 
   <!-- Global Settings Section -->
   <div class="admin-controls">
-    <h2><i class="fas fa-globe"></i> Global Settings</h2>
+    <h2 data-i18n="global_settings"><i class="fas fa-globe"></i> Global Settings</h2>
     <div class="settings-grid">
       <div class="setting-item">
-        <label for="currencySelect">Select Currency:</label>
+        <label for="currencySelect" data-i18n="select_currency">Select Currency:</label>
         <select id="currencySelect" onchange="saveSettings()">
-          <option value="$">$ (USD)</option>
-          <option value="€">€ (EUR)</option>
-          <option value="£">£ (GBP)</option>
-          <option value="₹">₹ (INR)</option>
-          <option value="¥">¥ (JPY)</option>
-          <option value="₽">₽ (RUB)</option>
-          <option value="₩">₩ (KRW)</option>
-          <option value="৳">৳ (BDT)</option>
+          <option value="৳" data-i18n="currency_bdt">৳ (BDT)</option>
+          <option value="$" data-i18n="currency_usd">$ (USD)</option>
+          <option value="€" data-i18n="currency_eur">€ (EUR)</option>
+          <option value="£" data-i18n="currency_gbp">£ (GBP)</option>
+          <option value="₹" data-i18n="currency_inr">₹ (INR)</option>
+          <option value="¥" data-i18n="currency_jpy">¥ (JPY)</option>
+          <option value="₽" data-i18n="currency_rub">₽ (RUB)</option>
+          <option value="₩" data-i18n="currency_krw">₩ (KRW)</option>
         </select>
       </div>
       <div class="setting-item">
-        <label for="whatsappLangSelect">WhatsApp Message Language:</label>
+        <label for="whatsappLangSelect" data-i18n="whatsapp_message_language">WhatsApp Message Language:</label>
         <select id="whatsappLangSelect" onchange="saveSettings()">
-          <option value="en">English</option>
-          <option value="bn">Bengali</option>
+          <option value="bn" data-i18n="lang_bengali">বাংলা</option>
+          <option value="en" data-i18n="lang_english">English</option>
         </select>
       </div>
     </div>
@@ -68,11 +64,11 @@
 
   <!-- Admin Controls -->
   <div class="admin-controls">
-    <h2><i class="fas fa-box"></i> Saved Product Management</h2>
+    <h2 data-i18n="saved_product_list"><i class="fas fa-box"></i> Saved Product Management</h2>
     
     <div class="search-section">
-      <input type="text" id="searchInput" placeholder="Search products (name or code)" oninput="renderDrafts()" />
-      <button onclick="exportDrafts()"><i class="fas fa-download"></i> Export JSON</button>
+      <input type="text" id="searchInput" placeholder="Search products (name or code)" oninput="renderDrafts()" data-i18n="search_product" />
+      <button onclick="exportDrafts()" data-i18n="export_json"><i class="fas fa-download"></i> Export JSON</button>
       <label for="importFile" class="import-button">
         <i class="fas fa-upload"></i> Import JSON
         <input type="file" id="importFile" accept=".json" onchange="importDrafts()" style="display: none;" />
@@ -86,4 +82,5 @@
 <script type="module" src="js/admin.js"></script>
 </body>
 </html>
+
 

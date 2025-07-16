@@ -3,30 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title data-i18n="g9tool_premium">G9Tool Premium</title>
+  <title>ZOVATU Premium - eCommerce Website Builder</title>
+  <meta name="description" content="Create your professional eCommerce website for free with ZOVATU. Build online stores, manage products, and grow your business.">
+  <meta name="keywords" content="ecommerce, website builder, online store, free, business, ZOVATU">
+  <link rel="icon" href="./assets/zovatu-icon.png" type="image/png">
+  <link rel="manifest" href="./manifest.json">
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
 </head>
 <body>
 
 <!-- Header -->
 <div class="header">
   <div class="header-flex">
-    <div class="header-title"><i class="fas fa-lock"></i> <span data-i18n="g9tool">G9 Tool</span></div>
+    <div class="header-title">
+      <img src="./assets/zovatu-icon.png" alt="ZOVATU" class="header-logo">
+      <span>ZOVATU</span>
+    </div>
     <a href="https://t.me/mehedi_exx" target="_blank" class="telegram"><i class="fab fa-telegram-plane"></i></a>
   </div>
 </div>
 
 <!-- Login Card -->
 <div class="login-box">
-  <h2><i class="fas fa-user-shield"></i> <span data-i18n="login">লগইন করুন</span></h2>
-  <input type="text" id="username" placeholder="User" data-i18n="username" />
-  <input type="password" id="password" placeholder="Password" data-i18n="password" />
-  <button class="login-btn" onclick="loginUser()" id="loginBtn"><i class="fas fa-sign-in-alt"></i> <span data-i18n="login_button">লগইন</span></button>
+  <div class="login-logo">
+    <img src="./assets/zovatu-icon.png" alt="ZOVATU">
+  </div>
+  <h2><i class="fas fa-user-shield"></i> Login</h2>
+  <p class="login-subtitle">Create Your eCommerce Website</p>
+  <input type="text" id="username" placeholder="Username" />
+  <input type="password" id="password" placeholder="Password" />
+  <button class="login-btn" onclick="loginUser()" id="loginBtn">
+    <i class="fas fa-sign-in-alt"></i> Login
+  </button>
 
   <div class="contact-links">
-    প্রিমিয়াম এক্সেস নিতে যোগাযোগ করুন:
+    Get premium access by contacting:
     <br />
     <a href="https://wa.me/8801627647776" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a> |
     <a href="https://t.me/mehedi_exx" target="_blank"><i class="fab fa-telegram-plane"></i> Telegram</a>
@@ -36,5 +48,4 @@
 <script type="module" src="auth.js"></script>
 </body>
 </html>
-
 

@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title data-i18n="g9tool_dashboard">G9Tool Dashboard</title>
+  <title>ZOVATU Dashboard - eCommerce Website Builder</title>
+  <meta name="description" content="ZOVATU Dashboard - Create and manage your eCommerce products easily">
+  <link rel="icon" href="./assets/zovatu-icon.png" type="image/png">
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="manifest" href="manifest.json">
@@ -14,127 +16,78 @@
   <div class="left-icons">
     <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
   </div>
-  <div class="logo"><i class="fas fa-toolbox"></i> G9Tool</div>
+  <div class="logo">
+    <img src="./assets/zovatu-icon.png" alt="ZOVATU" class="header-logo">
+    <span>ZOVATU</span>
+  </div>
   <a class="telegram-icon" href="https://t.me/yourchannel" target="_blank"><i class="fab fa-telegram"></i></a>
 </header>
 
 <div class="sidebar" id="sidebar">
   <button class="close-sidebar" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
-  <a href="tutorial.html" data-i18n="tutorial"><i class="fas fa-book"></i> Tutorial</a>
-  <a href="admin.html" data-i18n="admin_panel"><i class="fas fa-user-shield"></i> Admin Panel</a>
-  <a href="fieldManager.html" data-i18n="field_customize"><i class="fas fa-cogs"></i> Field Customize</a>
-
-  <a href="#" onclick="logout()" data-i18n="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
-  <div class="language-selector">
-    <div class="language-header">
-      <i class="fas fa-globe"></i>
-      <span data-i18n="language_selection">Language Selection</span>
-    </div>
-    <div class="language-options">
-      <button class="lang-btn" data-lang="bn" onclick="switchLanguage('bn')">
-        <span class="flag">🇧🇩</span>
-        <span>বাংলা</span>
-      </button>
-      <button class="lang-btn active" data-lang="en" onclick="switchLanguage('en')">
-        <span class="flag">🇺🇸</span>
-        <span>English</span>
-      </button>
-    </div>
-  </div>
+  <a href="tutorial.html"><i class="fas fa-book"></i> Tutorial</a>
+  <a href="admin.html"><i class="fas fa-user-shield"></i> Admin Panel</a>
+  <a href="fieldManager.html"><i class="fas fa-cogs"></i> Field Customize</a>
+  <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
 
   <div class="theme-download-box">
     <div class="theme-header">
-      <i class="fab fa-blogger-b"></i>
-      <div class="logo-text">G9Theme</div>
+      <img src="./assets/zovatu-icon.png" alt="ZOVATU" class="theme-logo">
+      <div class="logo-text">ZOVATU</div>
     </div>
-    <p data-i18n="theme_download_description">Download theme for your blog.</p>
-    <button id="downloadThemeBtn" data-i18n="download_theme_button" onclick="downloadTheme()">Download Theme</button>
+    <p>Download themes for your blog.</p>
+    <button id="downloadThemeBtn" onclick="downloadTheme()">Download Theme</button>
     <div id="downloadTimer" style="display:none;"></div>
   </div>
 </div>
+
 <main>
   <div class="form-wrapper">
     <div id="formFields">
-      <div class="form-group">
-        <input type="text" id="name" placeholder="Product Name" data-i18n="product_name">
-      </div>
-      <div class="form-group">
-        <input type="text" id="code" placeholder="Product Code" data-i18n="product_code">
-      </div>
-      <div class="form-group">
-        <input type="number" id="price" placeholder="Price (৳)" data-i18n="price">
-      </div>
-      <div class="form-group">
-        <input type="number" id="offer" placeholder="Offer Price (Optional)" data-i18n="offer_price">
-      </div>
-      <div class="form-group">
-        <input type="text" id="unit" placeholder="Unit (e.g., Pcs, Kg)" data-i18n="unit">
-      </div>
-      <div class="form-group">
-        <input type="number" id="qty" placeholder="Quantity (Qty)" data-i18n="quantity">
-      </div>
-      <div class="form-group">
-        <input type="text" id="brand" placeholder="Brand / Company" data-i18n="brand_company">
-      </div>
-      <div class="form-group">
-        <input type="text" id="size" placeholder="Size Option" data-i18n="size_option">
-      </div>
-      <div class="form-group">
-        <input type="text" id="color" placeholder="Color Option" data-i18n="color_option">
-      </div>
-      <div class="form-group">
-        <input type="text" id="delivery" placeholder="Delivery Time" data-i18n="delivery_time">
-      </div>
-      <div class="form-group">
-        <input type="text" id="status" placeholder="Status" data-i18n="status">
-      </div>
-      <div class="form-group">
-        <input type="text" id="category" placeholder="Category" data-i18n="category">
-      </div>
-      <div class="form-group">
-        <textarea id="desc" rows="3" placeholder="Product Description" data-i18n="product_description"></textarea>
-      </div>
-      <div class="form-group">
-        <input type="url" id="video" placeholder="Video Link (YouTube)" data-i18n="youtube_video_link">
-      </div>
-      <div class="form-group">
-        <input type="tel" id="wa" placeholder="WhatsApp Number (8801XXXXXXXXXX)" data-i18n="whatsapp_number">
-      </div>
+      <input type="text" id="name" placeholder="Product Name">
+      <input type="text" id="code" placeholder="Product Code">
+      <input type="number" id="price" placeholder="Price ($)">
+      <input type="number" id="offer" placeholder="Offer Price (Optional)">
+      <input type="text" id="unit" placeholder="Unit (e.g., piece, kg)">
+      <input type="number" id="qty" placeholder="Quantity">
+      <input type="text" id="brand" placeholder="Brand / Company">
+      <input type="text" id="size" placeholder="Size Options">
+      <input type="text" id="color" placeholder="Color Options">
+      <input type="text" id="delivery" placeholder="Delivery Time">
+      <input type="text" id="status" placeholder="Status">
+      <input type="text" id="category" placeholder="Category">
+      <textarea id="desc" rows="3" placeholder="Product Description"></textarea>
+      <input type="url" id="video" placeholder="Video Link (YouTube)">
+      <input type="tel" id="wa" placeholder="WhatsApp Number (8801XXXXXXXXXX)">
 
       <div id="imageInputs">
-        <input type="url" class="img-url" placeholder="Image URL" data-i18n="image_url">
+        <input type="url" class="img-url" placeholder="Image URL">
       </div>
 
       <div id="customFields">
-        <!-- Custom fields will be added dynamically -->
+        <div class="custom-field-group">
+          <input type="text" class="custom-key" placeholder="Custom Field Title (e.g., Warranty)">
+          <input type="text" class="custom-value" placeholder="Custom Field Value (e.g., 3 months)">
+        </div>
       </div>
 
       <div class="button-row">
-        <button onclick="addCustomField()" type="button" data-i18n="add_custom_info"><i class="fas fa-plus"></i> Add Custom Info</button>
-        <button onclick="addImageInput()" type="button" data-i18n="add_more_images"><i class="fas fa-image"></i> Add More Images</button>
+        <button onclick="addCustomField()" type="button">
+          <i class="fas fa-plus"></i> Add Custom Info
+        </button>
+        <button onclick="addImageField()" type="button">
+          <i class="fas fa-image"></i> Add More Images
+        </button>
       </div>
     </div>
 
     <br />
-    <button id="generateBtn" onclick="generateProduct()" data-i18n="generate"><i class="fas fa-magic"></i> Generate</button>
-    
-    <!-- Code Output Section -->
-    <div class="code-output-section" style="margin-top: 20px;">
-      <div class="code-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-        <h3 style="margin: 0; color: #333;">Generated Code</h3>
-        <button id="copyBtn" onclick="copyCode()" style="background: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer;">
-          <i class="fas fa-copy"></i> Copy Code
-        </button>
-      </div>
-      <textarea id="output" readonly style="width: 100%; height: 300px; font-family: monospace; background: #1e1e1e; color: #d4d4d4; border: 1px solid #444; border-radius: 8px; padding: 15px; resize: vertical;"></textarea>
-    </div>
-    
-    <!-- Preview Section -->
-    <div class="preview-section" style="margin-top: 20px;">
-      <h3 style="margin-bottom: 10px; color: #333;">Live Preview</h3>
-      <div id="preview" style="border: 1px solid #ddd; border-radius: 10px; padding: 20px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1);"></div>
-    </div>
+    <button id="generateBtn"><i class="fas fa-magic"></i> Generate</button>
+    <button id="copyBtn"><i class="fas fa-copy"></i> Copy</button>
   </div>
+
+  <div class="output" id="output"></div>
+  <div class="live-preview" id="preview"></div>
 </main>
 
 <script type="module" src="script.js"></script>

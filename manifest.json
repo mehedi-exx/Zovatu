@@ -1,19 +1,19 @@
 {
-  "name": "G9Tool",
-  "short_name": "G9Tool",
-  "description": "A powerful tool for product generation and management.",
-  "start_url": "./index.html",
+  "name": "ZOVATU - eCommerce Website Builder",
+  "short_name": "ZOVATU",
+  "description": "Create your professional eCommerce website for free with ZOVATU",
+  "start_url": "./",
   "display": "standalone",
-  "background_color": "#121212",
-  "theme_color": "#1f1f1f",
+  "background_color": "#ffffff",
+  "theme_color": "#ff5722",
   "icons": [
     {
-      "src": "./assets/icons/icon-192x192.png",
+      "src": "./assets/zovatu-icon.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "./assets/icons/icon-512x512.png",
+      "src": "./assets/zovatu-icon.png",
       "sizes": "512x512",
       "type": "image/png"
     }

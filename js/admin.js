@@ -217,7 +217,7 @@ export function exportDrafts() {
   
   const link = document.createElement('a');
   link.href = URL.createObjectURL(dataBlob);
-  link.download = `G9Tool_Products_${new Date().toISOString().split('T')[0]}.json`;
+  link.download = `Zovatu_Products_${new Date().toISOString().split('T')[0]}.json`;
   link.click();
   
   showToast('ডেটা সফলভাবে এক্সপোর্ট করা হয়েছে।');

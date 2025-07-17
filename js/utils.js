@@ -1,403 +1,174 @@
-// ZOVATU Utilities - Professional eCommerce Website Builder
+let translations = {};
 
-// ===== TOAST NOTIFICATIONS =====
-export function showToast(message, type = 'success', duration = 3000) {
-  // Remove existing toasts
+export const getVal = id => document.getElementById(id)?.value.trim();
+
+export function showToast(message, type = "success") {
+  // Remove existing toasts to prevent stacking
   const existingToasts = document.querySelectorAll('.toast');
-  existingToasts.forEach(toast => toast.remove());
-  
-  // Create toast element
-  const toast = document.createElement('div');
+  existingToasts.forEach(toast => {
+    toast.classList.add('hide');
+    setTimeout(() => toast.remove(), 300);
+  });
+
+  const toast = document.createElement("div");
   toast.className = `toast ${type}`;
   
-  // Add icon based on type
-  const icons = {
-    success: 'fas fa-check-circle',
-    error: 'fas fa-exclamation-circle',
-    warning: 'fas fa-exclamation-triangle',
-    info: 'fas fa-info-circle'
-  };
+  let icon = "fas fa-info-circle";
+  if (type === "success") icon = "fas fa-check-circle";
+  else if (type === "error") icon = "fas fa-times-circle";
+  else if (type === "warning") icon = "fas fa-exclamation-triangle";
+  else if (type === "info") icon = "fas fa-info-circle";
+
+  toast.innerHTML = `<i class="${icon}"></i> <span>${message}</span>`;
   
-  toast.innerHTML = `
-    <i class="${icons[type] || icons.info}"></i>
-    <span>${message}</span>
+  // Enhanced toast styles
+  toast.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : type === 'warning' ? '#ff9800' : '#2196F3'};
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 10000;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transform: translateX(100%);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    cursor: pointer;
+    max-width: 350px;
+    word-wrap: break-word;
   `;
   
-  // Add to DOM
   document.body.appendChild(toast);
-  
+
   // Trigger animation
-  setTimeout(() => toast.classList.add('show'), 100);
-  
-  // Auto remove
   setTimeout(() => {
-    toast.classList.remove('show');
-    setTimeout(() => toast.remove(), 300);
-  }, duration);
-  
+    toast.style.transform = 'translateX(0)';
+  }, 100);
+
+  // Auto remove after 4 seconds
+  setTimeout(() => {
+    toast.style.transform = 'translateX(100%)';
+    setTimeout(() => {
+      if (toast.parentNode) {
+        toast.remove();
+      }
+    }, 300);
+  }, 4000);
+
   // Click to dismiss
   toast.addEventListener('click', () => {
-    toast.classList.remove('show');
-    setTimeout(() => toast.remove(), 300);
-  });
-}
-
-// ===== UTILITY FUNCTIONS =====
-export function getVal(id) {
-  const element = document.getElementById(id);
-  return element ? element.value.trim() : '';
-}
-
-export function setVal(id, value) {
-  const element = document.getElementById(id);
-  if (element) {
-    element.value = value;
-  }
-}
-
-export function copyToClipboard(text) {
-  if (!text) {
-    const output = document.getElementById('generatedHTML');
-    text = output ? output.textContent : '';
-  }
-  
-  if (!text) {
-    showToast('No content to copy!', 'warning');
-    return;
-  }
-  
-  navigator.clipboard.writeText(text).then(() => {
-    showToast('Copied to clipboard!', 'success');
-  }).catch(err => {
-    console.error('Failed to copy: ', err);
-    showToast('Failed to copy to clipboard', 'error');
-  });
-}
-
-// ===== LOCAL STORAGE HELPERS =====
-export function saveToStorage(key, data) {
-  try {
-    localStorage.setItem(key, JSON.stringify(data));
-    return true;
-  } catch (error) {
-    console.error('Failed to save to storage:', error);
-    showToast('Failed to save data', 'error');
-    return false;
-  }
-}
-
-export function loadFromStorage(key) {
-  try {
-    const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : null;
-  } catch (error) {
-    console.error('Failed to load from storage:', error);
-    return null;
-  }
-}
-
-export function removeFromStorage(key) {
-  try {
-    localStorage.removeItem(key);
-    return true;
-  } catch (error) {
-    console.error('Failed to remove from storage:', error);
-    return false;
-  }
-}
-
-// ===== FORM HELPERS =====
-export function clearForm(formId) {
-  const form = document.getElementById(formId);
-  if (form) {
-    form.reset();
-    
-    // Clear any custom fields
-    const customFields = form.querySelectorAll('.custom-field-group');
-    customFields.forEach(field => field.remove());
-    
-    // Reset image inputs
-    const imageInputs = form.querySelector('#imageInputs');
-    if (imageInputs) {
-      imageInputs.innerHTML = `
-        <div class="image-input-group">
-          <input type="url" placeholder="Image URL 1" class="image-url">
-          <button type="button" onclick="addImageInput()" class="add-image-btn">
-            <i class="fas fa-plus"></i>
-          </button>
-        </div>
-      `;
-    }
-    
-    showToast('Form cleared successfully!', 'info');
-  }
-}
-
-export function validateForm(formId) {
-  const form = document.getElementById(formId);
-  if (!form) return false;
-  
-  const requiredFields = form.querySelectorAll('[required]');
-  let isValid = true;
-  
-  requiredFields.forEach(field => {
-    if (!field.value.trim()) {
-      field.style.borderColor = 'var(--error)';
-      isValid = false;
-    } else {
-      field.style.borderColor = '';
-    }
-  });
-  
-  if (!isValid) {
-    showToast('Please fill in all required fields', 'warning');
-  }
-  
-  return isValid;
-}
-
-// ===== STRING HELPERS =====
-export function slugify(text) {
-  return text
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/[\s_-]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
-
-export function capitalize(text) {
-  return text.charAt(0).toUpperCase() + text.slice(1);
-}
-
-export function formatPrice(price) {
-  const num = parseFloat(price);
-  return isNaN(num) ? '0.00' : num.toFixed(2);
-}
-
-export function formatCurrency(amount, currency = 'USD') {
-  const num = parseFloat(amount);
-  if (isNaN(num)) return '$0.00';
-  
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: currency
-  }).format(num);
-}
-
-// ===== DATE HELPERS =====
-export function formatDate(date, format = 'short') {
-  const d = new Date(date);
-  if (isNaN(d.getTime())) return 'Invalid Date';
-  
-  const options = {
-    short: { year: 'numeric', month: 'short', day: 'numeric' },
-    long: { year: 'numeric', month: 'long', day: 'numeric' },
-    time: { hour: '2-digit', minute: '2-digit' }
-  };
-  
-  return d.toLocaleDateString('en-US', options[format] || options.short);
-}
-
-export function getTimestamp() {
-  return new Date().toISOString();
-}
-
-// ===== URL HELPERS =====
-export function isValidUrl(string) {
-  try {
-    new URL(string);
-    return true;
-  } catch (_) {
-    return false;
-  }
-}
-
-export function getUrlParams() {
-  const params = new URLSearchParams(window.location.search);
-  const result = {};
-  for (let [key, value] of params) {
-    result[key] = value;
-  }
-  return result;
-}
-
-// ===== DOWNLOAD HELPERS =====
-export function downloadFile(content, filename, type = 'text/plain') {
-  const blob = new Blob([content], { type });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  link.click();
-  URL.revokeObjectURL(url);
-}
-
-export function downloadHTML() {
-  const output = document.getElementById('generatedHTML');
-  if (!output || !output.textContent.trim()) {
-    showToast('No HTML content to download!', 'warning');
-    return;
-  }
-  
-  const content = output.textContent;
-  const filename = `zovatu-product-${Date.now()}.html`;
-  downloadFile(content, filename, 'text/html');
-  showToast('HTML file downloaded!', 'success');
-}
-
-// ===== ANIMATION HELPERS =====
-export function fadeIn(element, duration = 300) {
-  element.style.opacity = '0';
-  element.style.display = 'block';
-  
-  let start = null;
-  function animate(timestamp) {
-    if (!start) start = timestamp;
-    const progress = timestamp - start;
-    const opacity = Math.min(progress / duration, 1);
-    
-    element.style.opacity = opacity;
-    
-    if (progress < duration) {
-      requestAnimationFrame(animate);
-    }
-  }
-  
-  requestAnimationFrame(animate);
-}
-
-export function fadeOut(element, duration = 300) {
-  let start = null;
-  const initialOpacity = parseFloat(getComputedStyle(element).opacity);
-  
-  function animate(timestamp) {
-    if (!start) start = timestamp;
-    const progress = timestamp - start;
-    const opacity = initialOpacity * (1 - Math.min(progress / duration, 1));
-    
-    element.style.opacity = opacity;
-    
-    if (progress < duration) {
-      requestAnimationFrame(animate);
-    } else {
-      element.style.display = 'none';
-    }
-  }
-  
-  requestAnimationFrame(animate);
-}
-
-// ===== DEBOUNCE HELPER =====
-export function debounce(func, wait, immediate) {
-  let timeout;
-  return function executedFunction(...args) {
-    const later = () => {
-      timeout = null;
-      if (!immediate) func(...args);
-    };
-    const callNow = immediate && !timeout;
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-    if (callNow) func(...args);
-  };
-}
-
-// ===== THROTTLE HELPER =====
-export function throttle(func, limit) {
-  let inThrottle;
-  return function(...args) {
-    if (!inThrottle) {
-      func.apply(this, args);
-      inThrottle = true;
-      setTimeout(() => inThrottle = false, limit);
-    }
-  };
-}
-
-// ===== DEVICE DETECTION =====
-export function isMobile() {
-  return window.innerWidth <= 768;
-}
-
-export function isTablet() {
-  return window.innerWidth > 768 && window.innerWidth <= 1024;
-}
-
-export function isDesktop() {
-  return window.innerWidth > 1024;
-}
-
-// ===== PERFORMANCE HELPERS =====
-export function preloadImage(src) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = reject;
-    img.src = src;
-  });
-}
-
-export function lazyLoad(selector) {
-  const elements = document.querySelectorAll(selector);
-  
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const element = entry.target;
-        const src = element.dataset.src;
-        if (src) {
-          element.src = src;
-          element.removeAttribute('data-src');
-        }
-        observer.unobserve(element);
+    toast.style.transform = 'translateX(100%)';
+    setTimeout(() => {
+      if (toast.parentNode) {
+        toast.remove();
       }
-    });
+    }, 300);
   });
-  
-  elements.forEach(element => observer.observe(element));
 }
 
-// ===== SECURITY HELPERS =====
-export function sanitizeHTML(str) {
-  const temp = document.createElement('div');
-  temp.textContent = str;
-  return temp.innerHTML;
+export async function loadLanguage(lang) {
+  try {
+    const response = await fetch(`./languages/${lang}.json`);
+    if (!response.ok) {
+      throw new Error(`Failed to load language file: ${lang}.json`);
+    }
+    translations = await response.json();
+    applyTranslations();
+    
+    // Update document language
+    document.documentElement.lang = lang;
+    
+    return true;
+  } catch (error) {
+    console.error("Error loading language file:", error);
+    showToast(`Language loading failed: ${error.message}`, "error");
+    return false;
+  }
 }
 
-export function escapeHTML(str) {
+export function translateElement(key) {
+  return translations[key] || key;
+}
+
+function applyTranslations() {
+  document.querySelectorAll("[data-i18n]").forEach(element => {
+    const key = element.getAttribute("data-i18n");
+    if (translations[key]) {
+      if (element.tagName === "INPUT" || element.tagName === "TEXTAREA") {
+        element.placeholder = translations[key];
+      } else {
+        element.textContent = translations[key];
+      }
+    }
+  });
+}
+
+// Enhanced form validation utilities
+export function validateEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+export function validatePhone(phone) {
+  const phoneRegex = /^8801[0-9]{9}$/;
+  return phoneRegex.test(phone);
+}
+
+export function validateURL(url) {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function sanitizeInput(input) {
   const div = document.createElement('div');
-  div.textContent = str;
+  div.textContent = input;
   return div.innerHTML;
 }
 
-// ===== ANALYTICS HELPERS =====
-export function trackEvent(eventName, properties = {}) {
-  // Basic event tracking - can be extended with analytics services
-  console.log('Event tracked:', eventName, properties);
-  
-  // Example: Send to analytics service
-  // analytics.track(eventName, properties);
+// Enhanced localStorage utilities
+export function setStorageItem(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch (error) {
+    console.error('Storage error:', error);
+    showToast('Storage operation failed', 'error');
+    return false;
+  }
 }
 
-export function trackPageView(pageName) {
-  trackEvent('page_view', { page: pageName });
+export function getStorageItem(key, defaultValue = null) {
+  try {
+    const item = localStorage.getItem(key);
+    return item ? JSON.parse(item) : defaultValue;
+  } catch (error) {
+    console.error('Storage retrieval error:', error);
+    return defaultValue;
+  }
 }
 
-// ===== INITIALIZATION =====
-export function initializeUtils() {
-  // Track page view
-  trackPageView(document.title);
-  
-  // Initialize lazy loading for images
-  lazyLoad('img[data-src]');
-  
-  console.log('ZOVATU Utils initialized');
+// Enhanced error handling
+export function handleError(error, context = '') {
+  console.error(`Error in ${context}:`, error);
+  showToast(`An error occurred${context ? ` in ${context}` : ''}: ${error.message}`, 'error');
 }
 
-// Auto-initialize when DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initializeUtils);
-} else {
-  initializeUtils();
+// Performance monitoring
+export function measurePerformance(name, fn) {
+  const start = performance.now();
+  const result = fn();
+  const end = performance.now();
+  console.log(`${name} took ${end - start} milliseconds`);
+  return result;
 }
 

@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 window.addEventListener("DOMContentLoaded", async () => {
   const savedLang = localStorage.getItem("language") || "en"; // Set default language to English
-  await 
+  await loadLanguage(savedLang);
 });
 
 window.loginUser = loginUser;

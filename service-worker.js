@@ -1,4 +1,4 @@
-const CACHE_NAME = "Zovatu-cache-v1";
+const CACHE_NAME = "g9tool-cache-v1";
 const urlsToCache = [
   "./",
   "./index.html",

@@ -63,52 +63,7 @@ function applyTheme(theme) {
 }
 
 // ✅ Professional Language Switching
-function switchLanguage(lang) {
-  // Update active button state
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.classList.remove('active');
-    if (btn.dataset.lang === lang) {
-      btn.classList.add('active');
-    }
-  });
-  
-  // Apply language with smooth transition
-  applyLanguage(lang, true);
-}
 
-// ✅ Enhanced Language Management
-async function applyLanguage(lang, showToastOnUpdate = false) {
-  try {
-    // Show loading state
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.style.pointerEvents = 'none';
-      btn.style.opacity = '0.7';
-    });
-    
-    await 
-    localStorage.setItem("language", lang);
-    
-    // Update active state
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.classList.remove('active');
-      if (btn.dataset.lang === lang) {
-        btn.classList.add('active');
-      }
-    });
-    
-    if (showToastOnUpdate) {
-      showToast(translateElement("language_changed") + `: ${lang === 'bn' ? '' : 'English'}`);
-    }
-  } catch (error) {
-    showToast("ভাষা পরিবর্তনে সমস্যা হয়েছে।", "error");
-  } finally {
-    // Restore button states
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.style.pointerEvents = 'auto';
-      btn.style.opacity = '1';
-    });
-  }
-}
 
 // ✅ Update Currency Symbol in Price Fields
 function updateCurrencySymbol() {
@@ -358,15 +313,8 @@ window.addEventListener("DOMContentLoaded", async () => {
   applyTheme(savedTheme);
 
   const savedLang = localStorage.getItem("language") || "en"; // Default to English
-  await applyLanguage(savedLang, false);
   
-  // Initialize language buttons
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.classList.remove('active');
-    if (btn.dataset.lang === savedLang) {
-      btn.classList.add('active');
-    }
-  });
+
 
   applyFieldVisibility();
   updateCurrencySymbol(); // Update currency symbols on page load

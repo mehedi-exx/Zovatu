@@ -1,4 +1,4 @@
-import { showToast, loadLanguage } from './utils.js';
+import { showToast } from './utils.js';
 
 const mandatoryFields = [
   { key: "name", label: "Product Name", icon: "fas fa-tag" },
@@ -111,7 +111,7 @@ export function updateFieldPreview() {
 
   const savedVisibility = JSON.parse(localStorage.getItem("fieldVisibility") || "{}");
   let activeFields = [...mandatoryFields];
-  
+
   optionalFields.forEach(field => {
     const checkbox = document.getElementById(field.key);
     if (checkbox && checkbox.checked) {
@@ -135,21 +135,21 @@ export function updateFieldPreview() {
 export function saveSettings() {
   const newVisibility = {};
   let changedCount = 0;
-  
+
   optionalFields.forEach(field => {
     const checkbox = document.getElementById(field.key);
     const oldValue = JSON.parse(localStorage.getItem("fieldVisibility") || "{}")[field.key];
     const newValue = checkbox.checked;
-    
+
     newVisibility[field.key] = newValue;
-    
+
     if (oldValue !== newValue) {
       changedCount++;
     }
   });
 
   localStorage.setItem("fieldVisibility", JSON.stringify(newVisibility));
-  
+
   if (changedCount > 0) {
     showToast(`${changedCount} field(s) updated! Check dashboard for changes.`);
   } else {
@@ -160,7 +160,7 @@ export function saveSettings() {
   const originalText = saveBtn.textContent;
   saveBtn.textContent = '✓ Saved!';
   saveBtn.style.background = '#28a745';
-  
+
   setTimeout(() => {
     saveBtn.textContent = originalText;
     saveBtn.style.background = '#28a745';
@@ -185,11 +185,7 @@ export function checkLogin() {
   }
 }
 
-window.addEventListener("DOMContentLoaded", async () => {
+window.addEventListener("DOMContentLoaded", () => {
   checkLogin();
-  
-  const savedLang = localStorage.getItem("language") || "en";
-  await loadLanguage(savedLang);
-  
   renderFields();
 });

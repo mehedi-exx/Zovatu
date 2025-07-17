@@ -1,6 +1,6 @@
 {
-  "name": "G9Tool",
-  "short_name": "G9Tool",
+  "name": "Zovatu",
+  "short_name": "Zovatu",
   "description": "A powerful tool for product generation and management.",
   "start_url": "./index.html",
   "display": "standalone",

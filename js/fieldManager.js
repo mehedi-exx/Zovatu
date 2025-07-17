@@ -1,26 +1,26 @@
 import { showToast, loadLanguage } from './utils.js';
 
 const mandatoryFields = [
-  { key: "name", label: "প্রোডাক্ট নাম", icon: "fas fa-tag" },
-  { key: "code", label: "প্রোডাক্ট কোড", icon: "fas fa-barcode" },
-  { key: "price", label: "মূল্য প্রাইস (৳)", icon: "fas fa-money-bill" },
-  { key: "wa", label: "WhatsApp নম্বর", icon: "fab fa-whatsapp" },
-  { key: "images", label: "ছবির লিংক", icon: "fas fa-image" }
+  { key: "name", label: "Product Name", icon: "fas fa-tag" },
+  { key: "code", label: "Product Code", icon: "fas fa-barcode" },
+  { key: "price", label: "Price (৳)", icon: "fas fa-money-bill" },
+  { key: "wa", label: "WhatsApp Number", icon: "fab fa-whatsapp" },
+  { key: "images", label: "Image Link", icon: "fas fa-image" }
 ];
 
 const optionalFields = [
-  { key: "offer", label: "অফার প্রাইস (ঐচ্ছিক)", icon: "fas fa-percent" },
-  { key: "unit", label: "ইউনিট (যেমন: পিস, কেজি)", icon: "fas fa-weight" },
-  { key: "qty", label: "পরিমাণ (Qty)", icon: "fas fa-sort-numeric-up" },
-  { key: "brand", label: "ব্র্যান্ড / কোম্পানি", icon: "fas fa-building" },
-  { key: "size", label: "সাইজ অপশন", icon: "fas fa-expand-arrows-alt" },
-  { key: "color", label: "রঙ অপশন", icon: "fas fa-palette" },
-  { key: "delivery", label: "ডেলিভারি টাইম", icon: "fas fa-truck" },
-  { key: "status", label: "স্ট্যাটাস", icon: "fas fa-info-circle" },
-  { key: "category", label: "ক্যাটাগরি", icon: "fas fa-list" },
-  { key: "desc", label: "প্রোডাক্ট বর্ণনা", icon: "fas fa-align-left" },
-  { key: "video", label: "ভিডিও লিংক (YouTube)", icon: "fab fa-youtube" },
-  { key: "customFields", label: "কাস্টম তথ্য", icon: "fas fa-plus-circle" }
+  { key: "offer", label: "Offer Price (Optional)", icon: "fas fa-percent" },
+  { key: "unit", label: "Unit (e.g., pcs, kg)", icon: "fas fa-weight" },
+  { key: "qty", label: "Quantity (Qty)", icon: "fas fa-sort-numeric-up" },
+  { key: "brand", label: "Brand / Company", icon: "fas fa-building" },
+  { key: "size", label: "Size Option", icon: "fas fa-expand-arrows-alt" },
+  { key: "color", label: "Color Option", icon: "fas fa-palette" },
+  { key: "delivery", label: "Delivery Time", icon: "fas fa-truck" },
+  { key: "status", label: "Status", icon: "fas fa-info-circle" },
+  { key: "category", label: "Category", icon: "fas fa-list" },
+  { key: "desc", label: "Product Description", icon: "fas fa-align-left" },
+  { key: "video", label: "Video Link (YouTube)", icon: "fab fa-youtube" },
+  { key: "customFields", label: "Custom Info", icon: "fas fa-plus-circle" }
 ];
 
 const form = document.getElementById("fieldManagerForm");
@@ -29,25 +29,23 @@ export function renderFields() {
   const savedVisibility = JSON.parse(localStorage.getItem("fieldVisibility") || "{}");
   form.innerHTML = "";
 
-  // Add header section
   const headerDiv = document.createElement("div");
   headerDiv.innerHTML = `
     <div style="text-align: center; margin-bottom: 30px; padding: 20px; background: #2a2a2a; border-radius: 10px;">
       <h2 style="color: #00bfff; margin: 0 0 10px 0; font-size: 24px;">
-        <i class="fas fa-cog"></i> ফিল্ড কাস্টমাইজেশন
+        <i class="fas fa-cog"></i> Field Customization
       </h2>
       <p style="color: #ccc; margin: 0; font-size: 16px;">
-        আপনার প্রয়োজন অনুযায়ী ফর্ম ফিল্ডগুলো চালু বা বন্ধ করুন
+        Enable or disable form fields as per your needs
       </p>
     </div>
   `;
   form.appendChild(headerDiv);
 
-  // Mandatory fields section
   const mandatorySection = document.createElement("div");
   mandatorySection.innerHTML = `
     <h3 style="color: #28a745; margin: 20px 0 15px 0; font-size: 18px; display: flex; align-items: center; gap: 10px;">
-      <i class="fas fa-lock"></i> বাধ্যতামূলক ফিল্ড
+      <i class="fas fa-lock"></i> Mandatory Fields
     </h3>
   `;
   form.appendChild(mandatorySection);
@@ -60,21 +58,20 @@ export function renderFields() {
       <label class="field-label">
         <i class="${field.icon}" style="color: #28a745; margin-right: 8px;"></i>
         ${field.label} 
-        <small style="color: #28a745; font-weight: bold;">(বাধ্যতামূলক)</small>
+        <small style="color: #28a745; font-weight: bold;">(Required)</small>
       </label>
       <input type="checkbox" checked disabled style="cursor: not-allowed;" />
     `;
     form.appendChild(div);
   });
 
-  // Optional fields section
   const optionalSection = document.createElement("div");
   optionalSection.innerHTML = `
     <h3 style="color: #ffc107; margin: 30px 0 15px 0; font-size: 18px; display: flex; align-items: center; gap: 10px;">
-      <i class="fas fa-toggle-on"></i> ঐচ্ছিক ফিল্ড
+      <i class="fas fa-toggle-on"></i> Optional Fields
     </h3>
     <p style="color: #888; margin-bottom: 20px; font-size: 14px;">
-      নিচের ফিল্ডগুলো আপনার প্রয়োজন অনুযায়ী চালু বা বন্ধ করতে পারেন
+      You can enable or disable the following fields based on your preference
     </p>
   `;
   form.appendChild(optionalSection);
@@ -94,12 +91,11 @@ export function renderFields() {
     form.appendChild(div);
   });
 
-  // Add preview section
   const previewSection = document.createElement("div");
   previewSection.innerHTML = `
     <div style="margin-top: 30px; padding: 20px; background: #2a2a2a; border-radius: 10px;">
       <h3 style="color: #00bfff; margin: 0 0 15px 0; font-size: 18px;">
-        <i class="fas fa-eye"></i> প্রিভিউ
+        <i class="fas fa-eye"></i> Preview
       </h3>
       <div id="fieldPreview" style="color: #ccc; font-size: 14px;"></div>
     </div>
@@ -124,7 +120,7 @@ export function updateFieldPreview() {
   });
 
   previewDiv.innerHTML = `
-    <p><strong>সক্রিয় ফিল্ড সংখ্যা:</strong> ${activeFields.length}</p>
+    <p><strong>Active Fields:</strong> ${activeFields.length}</p>
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 15px;">
       ${activeFields.map(field => `
         <div style="background: #333; padding: 8px 12px; border-radius: 6px; font-size: 13px;">
@@ -155,15 +151,14 @@ export function saveSettings() {
   localStorage.setItem("fieldVisibility", JSON.stringify(newVisibility));
   
   if (changedCount > 0) {
-    showToast(`${changedCount}টি ফিল্ড আপডেট হয়েছে! ড্যাশবোর্ডে পরিবর্তন দেখুন।`);
+    showToast(`${changedCount} field(s) updated! Check dashboard for changes.`);
   } else {
-    showToast("কোনো পরিবর্তন হয়নি।");
+    showToast("No changes made.");
   }
-  
-  // Add visual feedback
+
   const saveBtn = document.querySelector('.save-btn');
   const originalText = saveBtn.textContent;
-  saveBtn.textContent = '✓ সংরক্ষিত!';
+  saveBtn.textContent = '✓ Saved!';
   saveBtn.style.background = '#28a745';
   
   setTimeout(() => {
@@ -173,14 +168,13 @@ export function saveSettings() {
 }
 
 export function resetToDefault() {
-  if (confirm("সব ফিল্ড ডিফল্ট অবস্থায় ফিরিয়ে আনতে চান?")) {
+  if (confirm("Do you want to reset all fields to default?")) {
     localStorage.removeItem("fieldVisibility");
     renderFields();
-    showToast("সব ফিল্ড ডিফল্ট অবস্থায় ফিরিয়ে আনা হয়েছে!");
+    showToast("All fields have been reset to default!");
   }
 }
 
-// Expose functions to global scope for onclick handlers
 window.saveSettings = saveSettings;
 window.updateFieldPreview = updateFieldPreview;
 window.resetToDefault = resetToDefault;
@@ -194,10 +188,8 @@ export function checkLogin() {
 window.addEventListener("DOMContentLoaded", async () => {
   checkLogin();
   
-  // Load language
-  const savedLang = localStorage.getItem("language") || "bn";
+  const savedLang = localStorage.getItem("language") || "en";
   await loadLanguage(savedLang);
   
   renderFields();
 });
-

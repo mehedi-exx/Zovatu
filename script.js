@@ -1,4 +1,4 @@
-import { showToast, getVal, translateElement } from './js/utils.js';
+import { showToast, getVal, loadLanguage, translateElement } from './js/utils.js';
 import { generateProduct, addImageInput, addCustomField, saveDraft, loadDraftToForm, applyFieldVisibility } from './js/productGenerator.js';
 
 // ✅ Enhanced Sidebar Toggle with Animation
@@ -35,16 +35,16 @@ function toggleSidebar() {
 
 // ✅ Enhanced Logout with Confirmation
 function logout() {
-  if (confirm("Are you sure you want to logout?")) {
+  if (confirm("আপনি কি নিশ্চিত যে লগ আউট করতে চান?")) {
     const logoutBtn = document.querySelector('a[onclick="logout()"]');
     if (logoutBtn) {
-      logoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging out...';
+      logoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> লগ আউট হচ্ছে...';
     }
     
     setTimeout(() => {
       localStorage.removeItem("loggedInUser");
       localStorage.removeItem("editDraftId");
-      showToast("Successfully logged out.");
+      showToast("সফলভাবে লগ আউট হয়েছে।");
       window.location.replace("index.html");
     }, 1000);
   }
@@ -62,17 +62,20 @@ function applyTheme(theme) {
   }
 }
 
+// ✅ Professional Language Switching
+
+
 // ✅ Update Currency Symbol in Price Fields
 function updateCurrencySymbol() {
-  const currency = localStorage.getItem("selectedCurrency") || "$";
+  const currency = localStorage.getItem("selectedCurrency") || "৳";
   const priceField = document.getElementById("price");
   const offerField = document.getElementById("offer");
   
   if (priceField) {
-    priceField.placeholder = `Price (${currency})`;
+    priceField.placeholder = `মূল্য (${currency})`;
   }
   if (offerField) {
-    offerField.placeholder = `Offer Price (${currency}) (Optional)`;
+    offerField.placeholder = `অফার মূল্য (${currency}) (ঐচ্ছিক)`;
   }
 }
 
@@ -82,20 +85,20 @@ async function copyToClipboard() {
   const copyBtn = document.getElementById("copyBtn");
   
   if (!output.trim()) {
-    showToast("No code to copy. Generate a product first.", "warning");
+    showToast("কপি করার জন্য কোনো কোড নেই। প্রথমে প্রোডাক্ট জেনারেট করুন।", "warning");
     return;
   }
   
   try {
     const originalText = copyBtn.innerHTML;
-    copyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Copying...';
+    copyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> কপি হচ্ছে...';
     copyBtn.disabled = true;
     
     await navigator.clipboard.writeText(output);
     
-    copyBtn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+    copyBtn.innerHTML = '<i class="fas fa-check"></i> কপি হয়েছে!';
     copyBtn.style.background = "#28a745";
-    showToast("Copied successfully!", "success");
+    showToast("কোড সফলভাবে কপি হয়েছে!", "success");
     
     setTimeout(() => {
       copyBtn.innerHTML = originalText;
@@ -104,12 +107,12 @@ async function copyToClipboard() {
     }, 2000);
     
   } catch (error) {
-    copyBtn.innerHTML = '<i class="fas fa-times"></i> Failed!';
+    copyBtn.innerHTML = '<i class="fas fa-times"></i> ব্যর্থ!';
     copyBtn.style.background = "#dc3545";
-    showToast("Failed to copy.", "error");
+    showToast("কপি করতে সমস্যা হয়েছে।", "error");
     
     setTimeout(() => {
-      copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copy';
+      copyBtn.innerHTML = '<i class="fas fa-copy"></i> কপি করুন';
       copyBtn.style.background = "";
       copyBtn.disabled = false;
     }, 2000);
@@ -119,28 +122,30 @@ async function copyToClipboard() {
 // ✅ Enhanced Form Validation
 function validateForm() {
   const requiredFields = [
-    { id: 'name', label: 'Product Name' },
-    { id: 'code', label: 'Product Code' },
-    { id: 'price', label: 'Price' },
-    { id: 'wa', label: 'WhatsApp Number' }
+    { id: 'name', label: 'প্রোডাক্ট নাম' },
+    { id: 'code', label: 'প্রোডাক্ট কোড' },
+    { id: 'price', label: 'মূল্য' },
+    { id: 'wa', label: 'WhatsApp নম্বর' }
   ];
   
   const firstImgInput = document.querySelector('.img-url');
   let isValid = true;
   const errors = [];
-
+  
+  // Clear previous errors
   document.querySelectorAll('.form-error').forEach(el => {
     el.classList.remove('form-error');
   });
   document.querySelectorAll('.error-message').forEach(el => el.remove());
-
+  
+  // Validate required fields
   requiredFields.forEach(field => {
     const element = document.getElementById(field.id);
     const value = element.value.trim();
     
     if (!value) {
       element.classList.add('form-error');
-      addErrorMessage(element, `${field.label} is required`);
+      addErrorMessage(element, `${field.label} বাধ্যতামূলক`);
       errors.push(field.label);
       isValid = false;
     } else {
@@ -148,29 +153,32 @@ function validateForm() {
       element.classList.remove('form-error');
     }
   });
-
+  
+  // Validate first image
   if (!firstImgInput?.value.trim()) {
     firstImgInput.classList.add('form-error');
-    addErrorMessage(firstImgInput, 'At least one image is required');
-    errors.push('Product Image');
+    addErrorMessage(firstImgInput, 'কমপক্ষে একটি ছবি প্রয়োজন');
+    errors.push('প্রোডাক্ট ছবি');
     isValid = false;
   }
-
+  
+  // Validate WhatsApp number format
   const waInput = document.getElementById('wa');
   if (waInput.value.trim() && !waInput.value.match(/^8801[0-9]{9}$/)) {
     waInput.classList.add('form-error');
-    addErrorMessage(waInput, 'Correct format: 8801XXXXXXXXX');
+    addErrorMessage(waInput, 'সঠিক ফরম্যাট: 8801XXXXXXXXX');
     isValid = false;
   }
-
+  
+  // Validate price
   const priceInput = document.getElementById('price');
   const price = parseFloat(priceInput.value);
   if (priceInput.value.trim() && (isNaN(price) || price <= 0)) {
     priceInput.classList.add('form-error');
-    addErrorMessage(priceInput, 'Enter a valid price');
+    addErrorMessage(priceInput, 'সঠিক মূল্য দিন');
     isValid = false;
   }
-
+  
   return { isValid, errors };
 }
 
@@ -195,7 +203,7 @@ function startAutoSave() {
     
     if (name && code) {
       saveDraft();
-      showToast("Auto-saved", "info");
+      showToast("স্বয়ংক্রিয় সংরক্ষণ সম্পন্ন", "info");
     }
   }, 30000);
 }
@@ -207,19 +215,84 @@ function stopAutoSave() {
   }
 }
 
+// ✅ Enhanced Theme Download with Progress
+function downloadTheme() {
+  const downloadBtn = document.getElementById("downloadThemeBtn");
+  const downloadTimer = document.getElementById("downloadTimer");
+  let timeLeft = 5;
+
+  downloadBtn.disabled = true;
+  downloadBtn.classList.add('loading');
+  downloadTimer.style.display = "block";
+  
+  const updateTimer = () => {
+    downloadTimer.innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px;color:#ffc107;">
+        <i class="fas fa-clock"></i>
+        <span>ডাউনলোড শুরু হচ্ছে ${timeLeft} সেকেন্ড পর...</span>
+      </div>
+      <div class="progress-bar" style="margin-top:8px;">
+        <div class="progress-fill" style="width:${((5-timeLeft)/5)*100}%;"></div>
+      </div>
+    `;
+  };
+  
+  updateTimer();
+
+  const timerInterval = setInterval(() => {
+    timeLeft--;
+    if (timeLeft > 0) {
+      updateTimer();
+    } else {
+      clearInterval(timerInterval);
+      downloadTimer.style.display = "none";
+      downloadBtn.classList.remove('loading');
+      
+      const confirmDownload = confirm(`🎨 Zovatu থিম ডাউনলোড করুন\n\nএই থিমটি আপনার ব্লগার সাইটের জন্য বিশেষভাবে ডিজাইন করা হয়েছে।\n\n✅ Zovatu এর সাথে সামঞ্জস্যপূর্ণ\n✅ রেসপনসিভ ডিজাইন\n✅ দ্রুত লোডিং\n✅ SEO অপ্টিমাইজড\n\nআপনি কি ডাউনলোড করতে চান?`);
+      
+      if (confirmDownload) {
+        const a = document.createElement("a");
+        a.href = "https://github.com/mehedi-exx/G9-Tool/releases/download/Zovatu/Zovatu.xml";
+        a.download = "Zovatu_Theme.xml";
+        a.style.display = "none";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        
+        downloadBtn.innerHTML = '<i class="fas fa-check"></i> ডাউনলোড সম্পন্ন!';
+        downloadBtn.style.background = "#28a745";
+        showToast("🎉 থিম সফলভাবে ডাউনলোড হয়েছে!", "success");
+        
+        setTimeout(() => {
+          downloadBtn.innerHTML = '<i class="fab fa-blogger-b"></i> ডাউনলোড থিম';
+          downloadBtn.style.background = "";
+        }, 3000);
+      } else {
+        showToast("ডাউনলোড বাতিল করা হয়েছে।", "info");
+      }
+      
+      downloadBtn.disabled = false;
+    }
+  }, 1000);
+}
+
+// ✅ Enhanced Keyboard Shortcuts
 function setupKeyboardShortcuts() {
   document.addEventListener('keydown', (e) => {
+    // Ctrl/Cmd + Enter to generate
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
       e.preventDefault();
       generateProduct();
     }
-
+    
+    // Ctrl/Cmd + S to save draft
     if ((e.ctrlKey || e.metaKey) && e.key === 's') {
       e.preventDefault();
       saveDraft();
-      showToast("Draft saved!", "success");
+      showToast("ড্রাফট সংরক্ষিত হয়েছে!", "success");
     }
-
+    
+    // Escape to close sidebar
     if (e.key === 'Escape') {
       const sidebar = document.getElementById("sidebar");
       if (sidebar.classList.contains("open")) {
@@ -229,6 +302,7 @@ function setupKeyboardShortcuts() {
   });
 }
 
+// ✅ Enhanced Event Listeners
 window.addEventListener("DOMContentLoaded", async () => {
   if (!localStorage.getItem("loggedInUser")) {
     window.location.replace("index.html");
@@ -238,36 +312,40 @@ window.addEventListener("DOMContentLoaded", async () => {
   const savedTheme = localStorage.getItem("theme") || "dark";
   applyTheme(savedTheme);
 
+  const savedLang = localStorage.getItem("language") || "en"; // Default to English
+  
+
+
   applyFieldVisibility();
-  updateCurrencySymbol();
+  updateCurrencySymbol(); // Update currency symbols on page load
 
   const generateBtn = document.getElementById("generateBtn");
   const copyBtn = document.getElementById("copyBtn");
-
+  
   if (generateBtn) {
     generateBtn.addEventListener("click", () => {
       const validation = validateForm();
       if (validation.isValid) {
         generateProduct();
       } else {
-        showToast(`Please complete the following fields: ${validation.errors.join(', ')}`, "error");
+        showToast(`অনুগ্রহ করে নিম্নলিখিত ক্ষেত্রগুলি পূরণ করুন: ${validation.errors.join(', ')}`, "error");
       }
     });
   }
-
+  
   if (copyBtn) {
     copyBtn.addEventListener("click", copyToClipboard);
   }
 
   setupKeyboardShortcuts();
   startAutoSave();
-
+  
   const draftId = localStorage.getItem("editDraftId");
   if (draftId) {
     loadDraftToForm(draftId);
-    showToast("Draft loaded. You can now edit and update.", "info");
+    showToast("ড্রাফট লোড করা হয়েছে। এডিট করুন এবং আপডেট করুন।", "info");
   }
-
+  
   const formInputs = document.querySelectorAll('input, textarea, select');
   formInputs.forEach(input => {
     input.addEventListener('input', () => {
@@ -277,6 +355,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     });
   });
 
+  // Listen for storage changes to update currency symbols
   window.addEventListener('storage', (e) => {
     if (e.key === 'selectedCurrency') {
       updateCurrencySymbol();
@@ -288,10 +367,14 @@ window.addEventListener("beforeunload", () => {
   stopAutoSave();
 });
 
+// ✅ Expose functions to global scope
 window.toggleSidebar = toggleSidebar;
 window.logout = logout;
 window.addImageField = addImageInput;
 window.addCustomField = addCustomField;
+window.downloadTheme = downloadTheme;
 window.copyToClipboard = copyToClipboard;
 window.validateForm = validateForm;
+window.switchLanguage = switchLanguage;
 window.updateCurrencySymbol = updateCurrencySymbol;
+

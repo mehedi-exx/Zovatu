@@ -379,7 +379,20 @@ button[onclick*="parentElement.remove"]:hover {
 }
 
 /* ✅ Output Styles */
-.output, .live-preview {
+.output {
+  background: #1a1a1a;
+  padding: 15px;
+  border-radius: 12px;
+  margin: 20px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  max-height: 200px; /* Limit height for code output */
+  overflow-y: auto; /* Add scroll for overflow */
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  color: #0f0; /* Green color for code */
+}
+
+.live-preview {
   background: #1a1a1a;
   padding: 25px;
   border-radius: 12px;
@@ -1622,5 +1635,7 @@ button:disabled:hover {
     padding: 8px 12px;
   }
 }
+
+
 
 

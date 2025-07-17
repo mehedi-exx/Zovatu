@@ -196,7 +196,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   
   // Load language
   const savedLang = localStorage.getItem("language") || "bn";
-  await 
+  await loadLanguage(savedLang);
   
   renderFields();
 });

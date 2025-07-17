@@ -23,21 +23,21 @@ export function generateProduct() {
   // Enhanced validation with specific error messages
   const errors = [];
   
-  if (!name) errors.push("প্রোডাক্ট নাম");
-  if (!code) errors.push("প্রোডাক্ট কোড");
-  if (isNaN(price) || price <= 0) errors.push("সঠিক প্রাইস");
-  if (!imgs[0]?.value.trim()) errors.push("প্রথম ছবির লিংক");
-  if (!wa) errors.push("WhatsApp নম্বর");
+  if (!name) errors.push("Product Name");
+  if (!code) errors.push("Product Code");
+  if (isNaN(price) || price <= 0) errors.push("Valid Price");
+  if (!imgs[0]?.value.trim()) errors.push("First Image Link");
+  if (!wa) errors.push("WhatsApp Number");
 
   if (errors.length > 0) {
-    showToast(`অনুগ্রহ করে ${errors.join(", ")} দিন।`, "error");
+    showToast(`Please provide ${errors.join(", ")}.`, "error");
     highlightMissingFields();
     return;
   }
 
   // Enhanced WhatsApp number validation
   if (!wa.match(/^8801[0-9]{9}$/)) {
-    showToast("WhatsApp নম্বর সঠিক ফরম্যাটে দিন (8801XXXXXXXXX)", "error");
+    showToast("Please provide WhatsApp number in correct format (8801XXXXXXXXX)", "error");
     document.getElementById("wa").focus();
     return;
   }
@@ -47,18 +47,18 @@ export function generateProduct() {
   imgs.forEach((input, index) => {
     const url = input.value.trim();
     if (url && !isValidURL(url)) {
-      invalidImages.push(`ছবি ${index + 1}`);
+      invalidImages.push(`Image ${index + 1}`);
     }
   });
 
   if (invalidImages.length > 0) {
-    showToast(`${invalidImages.join(", ")} এর লিংক সঠিক নয়।`, "error");
+    showToast(`${invalidImages.join(", ")} link(s) are not valid.`, "error");
     return;
   }
 
   // Validate offer price
   if (offer && (isNaN(offer) || offer >= price)) {
-    showToast("অফার প্রাইস মূল প্রাইসের চেয়ে কম হতে হবে।", "error");
+    showToast("Offer price must be less than the main price.", "error");
     document.getElementById("offer").focus();
     return;
   }

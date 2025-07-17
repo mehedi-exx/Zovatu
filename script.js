@@ -85,7 +85,7 @@ async function applyLanguage(lang, showToastOnUpdate = false) {
       btn.style.opacity = '0.7';
     });
     
-    await loadLanguage(lang);
+    await 
     localStorage.setItem("language", lang);
     
     // Update active state

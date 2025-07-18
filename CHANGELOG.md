@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to G9Tool will be documented in this file.
+All notable changes to Zovatu will be documented in this file.
 
 ## [2.0.0] - 2025-07-15
 

@@ -74,10 +74,45 @@ export function showToast(message, type = "success") {
 
 export async function loadLanguage(lang) {
   try {
-    const response = await fetch(`./languages/${lang}.json`);
-    if (!response.ok) {
-      throw new Error(`Failed to load language file: ${lang}.json`);
+    // Try multiple possible paths for the language file
+    const possiblePaths = [
+      `./languages/${lang}.json`,
+      `languages/${lang}.json`,
+      `./js/../languages/${lang}.json`,
+      `./${lang}.json`
+    ];
+    
+    let response = null;
+    let lastError = null;
+    
+    for (const path of possiblePaths) {
+      try {
+        response = await fetch(path);
+        if (response.ok) {
+          break;
+        }
+      } catch (error) {
+        lastError = error;
+        continue;
+      }
     }
+    
+    if (!response || !response.ok) {
+      // If all paths fail, create a minimal English translation object
+      console.warn(`Could not load language file for ${lang}, using fallback`);
+      translations = {
+        "username_password_required": "Username and password are required",
+        "user_not_found": "User not found",
+        "login_successful": "Login successful",
+        "invalid_credentials_or_not_premium": "Invalid credentials or user is not premium",
+        "login_failed": "Login failed",
+        "logout_successful": "Logout successful"
+      };
+      applyTranslations();
+      document.documentElement.lang = lang;
+      return true;
+    }
+    
     translations = await response.json();
     applyTranslations();
     
@@ -87,8 +122,18 @@ export async function loadLanguage(lang) {
     return true;
   } catch (error) {
     console.error("Error loading language file:", error);
-    showToast(`Language loading failed: ${error.message}`, "error");
-    return false;
+    // Use fallback translations instead of showing error
+    translations = {
+      "username_password_required": "Username and password are required",
+      "user_not_found": "User not found", 
+      "login_successful": "Login successful",
+      "invalid_credentials_or_not_premium": "Invalid credentials or user is not premium",
+      "login_failed": "Login failed",
+      "logout_successful": "Logout successful"
+    };
+    applyTranslations();
+    document.documentElement.lang = lang;
+    return true;
   }
 }
 

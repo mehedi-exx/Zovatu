@@ -1,8 +1,50 @@
-import { showToast } from './utils.js';
+import { showToast, loadLanguage, translateElement } from './utils.js';
 
 let currentSearchTerm = '';
 let currentFilter = 'all';
 
+// Check if user is logged in
+function checkLogin() {
+  const loggedInUser = localStorage.getItem("loggedInUser");
+  if (!loggedInUser) {
+    window.location.href = "index.html";
+    return;
+  }
+}
+
+// Update statistics
+function updateStatistics(drafts) {
+  const totalProducts = drafts.length;
+  const verifiedProducts = drafts.filter(draft => draft.verified).length;
+  const pendingProducts = totalProducts - verifiedProducts;
+
+  document.getElementById("totalProducts").textContent = totalProducts;
+  document.getElementById("verifiedProducts").textContent = verifiedProducts;
+  document.getElementById("pendingProducts").textContent = pendingProducts;
+}
+
+// Load settings from localStorage
+function loadSettings() {
+  const savedCurrency = localStorage.getItem("selectedCurrency") || "৳";
+  const savedWhatsappLang = localStorage.getItem("whatsappLanguage") || "bn";
+  
+  document.getElementById("currencySelect").value = savedCurrency;
+  document.getElementById("whatsappLangSelect").value = savedWhatsappLang;
+}
+
+// Save settings to localStorage
+function saveSettings() {
+  const currency = document.getElementById("currencySelect").value;
+  const whatsappLang = document.getElementById("whatsappLangSelect").value;
+  
+  localStorage.setItem("selectedCurrency", currency);
+  localStorage.setItem("whatsappLanguage", whatsappLang);
+  
+  showToast("Settings saved successfully", "success");
+  renderDrafts(); // Re-render to update currency display
+}
+
+// Render drafts/products
 export function renderDrafts(customDrafts = null) {
   const drafts = customDrafts || JSON.parse(localStorage.getItem("drafts") || "[]");
   const searchTerm = document.getElementById("searchInput")?.value.toLowerCase() || '';
@@ -109,13 +151,146 @@ export function renderDrafts(customDrafts = null) {
   }).join('');
 }
 
-// ... (বাকি সব ফাংশন অপরিবর্তিত আছে, শুধুমাত্র বাংলা মুছে ফেলা হয়েছে)
+// Edit draft function
+function editDraft(id) {
+  const drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
+  const draft = drafts.find(d => d.id === id);
+  
+  if (!draft) {
+    showToast("Product not found", "error");
+    return;
+  }
+  
+  // Store the draft to edit in localStorage
+  localStorage.setItem("editingDraft", JSON.stringify(draft));
+  
+  // Redirect to dashboard with edit mode
+  window.location.href = "dashboard.html?edit=" + id;
+}
 
-window.addEventListener("DOMContentLoaded", () => {
+// Toggle preview function
+function togglePreview(id) {
+  const preview = document.getElementById(`preview-${id}`);
+  if (preview) {
+    preview.style.display = preview.style.display === 'none' ? 'block' : 'none';
+  }
+}
+
+// Toggle verification function
+function toggleVerification(id) {
+  const drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
+  const draftIndex = drafts.findIndex(d => d.id === id);
+  
+  if (draftIndex === -1) {
+    showToast("Product not found", "error");
+    return;
+  }
+  
+  drafts[draftIndex].verified = !drafts[draftIndex].verified;
+  localStorage.setItem("drafts", JSON.stringify(drafts));
+  
+  showToast(`Product ${drafts[draftIndex].verified ? 'verified' : 'unverified'} successfully`, "success");
+  renderDrafts();
+}
+
+// Delete draft function
+function deleteDraft(id) {
+  if (!confirm("Are you sure you want to delete this product?")) {
+    return;
+  }
+  
+  const drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
+  const filteredDrafts = drafts.filter(d => d.id !== id);
+  
+  localStorage.setItem("drafts", JSON.stringify(filteredDrafts));
+  showToast("Product deleted successfully", "success");
+  renderDrafts();
+}
+
+// Export drafts function
+function exportDrafts() {
+  const drafts = JSON.parse(localStorage.getItem("drafts") || "[]");
+  
+  if (drafts.length === 0) {
+    showToast("No products to export", "warning");
+    return;
+  }
+  
+  const dataStr = JSON.stringify(drafts, null, 2);
+  const dataBlob = new Blob([dataStr], { type: 'application/json' });
+  
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(dataBlob);
+  link.download = `zovatu-products-${new Date().toISOString().split('T')[0]}.json`;
+  link.click();
+  
+  showToast("Products exported successfully", "success");
+}
+
+// Import drafts function
+function importDrafts() {
+  const fileInput = document.getElementById("importFile");
+  const file = fileInput.files[0];
+  
+  if (!file) {
+    showToast("Please select a file", "warning");
+    return;
+  }
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const importedData = JSON.parse(e.target.result);
+      
+      if (!Array.isArray(importedData)) {
+        throw new Error("Invalid file format");
+      }
+      
+      const existingDrafts = JSON.parse(localStorage.getItem("drafts") || "[]");
+      const mergedDrafts = [...existingDrafts];
+      
+      let importedCount = 0;
+      importedData.forEach(item => {
+        // Check if product with same ID already exists
+        if (!mergedDrafts.find(d => d.id === item.id)) {
+          mergedDrafts.push({
+            ...item,
+            timestamp: item.timestamp || new Date().toISOString()
+          });
+          importedCount++;
+        }
+      });
+      
+      localStorage.setItem("drafts", JSON.stringify(mergedDrafts));
+      showToast(`${importedCount} products imported successfully`, "success");
+      renderDrafts();
+      
+    } catch (error) {
+      showToast("Error importing file: " + error.message, "error");
+    }
+  };
+  
+  reader.readAsText(file);
+  fileInput.value = ''; // Reset file input
+}
+
+// Make functions globally available
+window.editDraft = editDraft;
+window.togglePreview = togglePreview;
+window.toggleVerification = toggleVerification;
+window.deleteDraft = deleteDraft;
+window.exportDrafts = exportDrafts;
+window.importDrafts = importDrafts;
+window.saveSettings = saveSettings;
+
+// Initialize when DOM is loaded
+window.addEventListener("DOMContentLoaded", async () => {
   checkLogin();
-
-  // Removed loadLanguage()
-
+  
+  // Load language
+  const savedLang = localStorage.getItem("language") || "en";
+  await loadLanguage(savedLang);
+  
   loadSettings();
   renderDrafts();
 
@@ -128,5 +303,7 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Auto-refresh every 30 seconds
   setInterval(renderDrafts, 30000);
 });
+

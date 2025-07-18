@@ -1,4 +1,9 @@
-import { getVal, showToast } from './utils.js';
+import { showToast } from './utils.js';
+
+// Helper function to get element value
+function getVal(id) {
+  return document.getElementById(id)?.value.trim() || '';
+}
 
 // Helper function to validate URLs
 function isValidURL(string) {
@@ -18,7 +23,7 @@ export function generateProduct() {
   const desc = getVal("desc"), video = getVal("video"), wa = getVal("wa");
   const imgs = document.querySelectorAll(".img-url");
   const currency = localStorage.getItem("selectedCurrency") || "৳"; // Get selected currency
-  const whatsappLang = localStorage.getItem("whatsappLanguage") || "bn"; // Get selected WhatsApp language
+  const whatsappLang = localStorage.getItem("whatsappLanguage") || "en"; // Get selected WhatsApp language
 
   // Enhanced validation with specific error messages
   const errors = [];
@@ -82,7 +87,7 @@ export function generateProduct() {
     }
   });
 
-  // Generate custom fields HTML (removed icons)
+  // Generate custom fields HTML
   let customHTML = "";
   document.querySelectorAll(".custom-field-group").forEach(group => {
     const key = group.querySelector(".custom-key").value.trim();
@@ -92,7 +97,7 @@ export function generateProduct() {
     }
   });
 
-  // Enhanced video embedding (removed icons)
+  // Enhanced video embedding
   let videoEmbed = "";
   if (video && (video.includes("youtube.com") || video.includes("youtu.be"))) {
     let videoId = "";
@@ -104,7 +109,7 @@ export function generateProduct() {
     if (videoId) {
       videoEmbed = `
         <div style="margin:20px 0;padding:15px;background:#f8f9fa;border-radius:10px;">
-          <h3 style="margin:0 0 10px 0;color:#333;">প্রোডাক্ট ভিডিও</h3>
+          <h3 style="margin:0 0 10px 0;color:#333;">Product Video</h3>
           <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;">
             <iframe src="https://www.youtube.com/embed/${videoId}" 
                     style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;border-radius:8px;" 
@@ -114,7 +119,7 @@ export function generateProduct() {
     }
   }
 
-  // WhatsApp message content based on selected language (removed emojis)
+  // WhatsApp message content based on selected language
   let whatsappMessage;
   if (whatsappLang === "en") {
     whatsappMessage = `I want to order a product\nProduct: ${name}\nPrice: ${currency}${offer || price}\nCode: ${code}${category ? `\nCategory: ${category}` : ''}${delivery ? `\nDelivery: ${delivery}` : ''}`;
@@ -128,18 +133,18 @@ export function generateProduct() {
   document.getElementById("output").textContent = html;
   document.getElementById("preview").innerHTML = html;
   saveDraft();
-  showToast("প্রোডাক্ট সফলভাবে তৈরি হয়েছে!", "success");
+  showToast("Product generated successfully!", "success");
   
   // Enhanced success animation with multiple visual feedback
   const generateBtn = document.getElementById("generateBtn");
   const originalContent = generateBtn.innerHTML;
   const originalBackground = generateBtn.style.background;
   
-  // Success state with animation (reduced animation)
+  // Success state with animation
   generateBtn.style.background = "linear-gradient(135deg, #28a745, #20c997)";
-  generateBtn.innerHTML = "সম্পন্ন!";
-  generateBtn.style.transform = "scale(1.02)"; // Slightly reduced scale
-  generateBtn.style.boxShadow = "0 4px 10px rgba(0,0,0,0.1)"; // Slightly reduced shadow
+  generateBtn.innerHTML = "Complete!";
+  generateBtn.style.transform = "scale(1.02)";
+  generateBtn.style.boxShadow = "0 4px 10px rgba(0,0,0,0.1)";
   
   // Reset after animation
   setTimeout(() => {
@@ -147,7 +152,7 @@ export function generateProduct() {
     generateBtn.innerHTML = originalContent;
     generateBtn.style.transform = "";
     generateBtn.style.boxShadow = "";
-  }, 1500); // Reduced timeout
+  }, 1500);
 
   // Scroll to preview section smoothly
   const previewSection = document.getElementById("preview");
@@ -175,18 +180,18 @@ export function generateProduct() {
     </a>
   </div>
   <ul style="list-style:none;padding:0;margin:15px auto;text-align:left;max-width:500px;">
-    ${code ? `<li><strong>কোড:</strong> ${code}</li>` : ''}
-    ${unit ? `<li><strong>ইউনিট:</strong> ${unit}</li>` : ''}
-    ${qty ? `<li><strong>পরিমাণ:</strong> ${qty}</li>` : ''}
-    ${brand ? `<li><strong>ব্র্যান্ড:</strong> ${brand}</li>` : ''}
-    ${size ? `<li><strong>সাইজ:</strong> ${size}</li>` : ''}
-    ${color ? `<li><strong>রঙ:</strong> ${color}</li>` : ''}
-    ${status ? `<li><strong>স্ট্যাটাস:</strong> ${status}</li>` : ''}
-    ${category ? `<li><strong>ক্যাটাগরি:</strong> ${category}</li>` : ''}
-    ${delivery ? `<li><strong>ডেলিভারি টাইম:</strong> ${delivery}</li>` : ''}
+    ${code ? `<li><strong>Code:</strong> ${code}</li>` : ''}
+    ${unit ? `<li><strong>Unit:</strong> ${unit}</li>` : ''}
+    ${qty ? `<li><strong>Quantity:</strong> ${qty}</li>` : ''}
+    ${brand ? `<li><strong>Brand:</strong> ${brand}</li>` : ''}
+    ${size ? `<li><strong>Size:</strong> ${size}</li>` : ''}
+    ${color ? `<li><strong>Color:</strong> ${color}</li>` : ''}
+    ${status ? `<li><strong>Status:</strong> ${status}</li>` : ''}
+    ${category ? `<li><strong>Category:</strong> ${category}</li>` : ''}
+    ${delivery ? `<li><strong>Delivery Time:</strong> ${delivery}</li>` : ''}
     ${customHTML}
   </ul>
-  ${desc ? `<div style="border:1px solid #eee;padding:15px;border-radius:10px;max-width:500px;margin:auto;margin-bottom:20px;"><p style="margin:0;"><strong>বর্ণনা:</strong><br>${desc}</p></div>` : ''}
+  ${desc ? `<div style="border:1px solid #eee;padding:15px;border-radius:10px;max-width:500px;margin:auto;margin-bottom:20px;"><p style="margin:0;"><strong>Description:</strong><br>${desc}</p></div>` : ''}
   ${videoEmbed ? videoEmbed.replace(/border-radius:10px/g, 'border-radius:10px;max-width:500px;margin:auto;').replace(/background:#f8f9fa/g, 'background:#f5f5f5') : ''}
   
   <p style="display:none;"><a href="#">{getProduct} $price={${currencySymbol}${price}} $sale={${currencySymbol}${offer}} $style={1}</a></p>
@@ -233,14 +238,14 @@ export function addImageInput() {
   const currentInputs = container.querySelectorAll(".img-url");
   
   if (currentInputs.length >= 5) {
-    showToast("সর্বোচ্চ ৫টি ছবি যোগ করা যাবে।");
+    showToast("Maximum 5 images can be added.", "warning");
     return;
   }
   
   const input = document.createElement("input");
   input.type = "url";
   input.className = "img-url";
-  input.placeholder = `ছবির লিংক ${currentInputs.length + 1} (Image URL)`;
+  input.placeholder = `Image URL ${currentInputs.length + 1}`;
   input.style.marginTop = "10px";
   
   // Add remove button for additional images
@@ -253,7 +258,7 @@ export function addImageInput() {
     
     const removeBtn = document.createElement("button");
     removeBtn.type = "button";
-    removeBtn.innerHTML = "×"; // Removed icon, using simple X
+    removeBtn.innerHTML = "×";
     removeBtn.style.background = "#dc3545";
     removeBtn.style.color = "white";
     removeBtn.style.border = "none";
@@ -270,7 +275,7 @@ export function addImageInput() {
     container.appendChild(input);
   }
   
-  showToast("নতুন ছবির ফিল্ড যোগ করা হয়েছে।");
+  showToast("New image field added.", "success");
 }
 
 export function addCustomField() {
@@ -278,7 +283,7 @@ export function addCustomField() {
   const currentFields = container.querySelectorAll(".custom-field-group");
   
   if (currentFields.length >= 10) {
-    showToast("সর্বোচ্চ ১০টি কাস্টম ফিল্ড যোগ করা যাবে।");
+    showToast("Maximum 10 custom fields can be added.", "warning");
     return;
   }
   
@@ -290,16 +295,16 @@ export function addCustomField() {
   group.style.marginTop = "10px";
   
   group.innerHTML = `
-    <input type="text" class="custom-key" placeholder="শিরোনাম (যেমন: ওয়ারেন্টি)" style="flex: 1;">
-    <input type="text" class="custom-value" placeholder="মান (যেমন: ৬ মাস)" style="flex: 1;">
-    <button type="button" onclick="this.parentElement.remove(); showToast('কাস্টম ফিল্ড মুছে ফেলা হয়েছে।')" 
+    <input type="text" class="custom-key" placeholder="Title (e.g., Warranty)" style="flex: 1;">
+    <input type="text" class="custom-value" placeholder="Value (e.g., 6 Months)" style="flex: 1;">
+    <button type="button" onclick="this.parentElement.remove(); showToast('Custom field removed.', 'success')" 
             style="background:#dc3545;color:white;border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;">
       ×
     </button>
   `;
   
   container.appendChild(group);
-  showToast("নতুন কাস্টম ফিল্ড যোগ করা হয়েছে।");
+  showToast("New custom field added.", "success");
 }
 
 export function saveDraft() {
@@ -349,8 +354,8 @@ export function loadDraftToForm(id) {
   localStorage.setItem("editDraftId", id);
   
   // Clear existing form
-  document.getElementById("imageInputs").innerHTML = '<input type="url" class="img-url" placeholder="ছবির লিংক (Image URL)">';
-  document.getElementById("customFields").innerHTML = '<div class="custom-field-group"><input type="text" class="custom-key" placeholder="শিরোনাম যেমন: ওয়ারেন্টি"><input type="text" class="custom-value" placeholder="মান যেমন: ৩ মাস"></div>';
+  document.getElementById("imageInputs").innerHTML = '<input type="url" class="img-url" placeholder="Image URL">';
+  document.getElementById("customFields").innerHTML = '<div class="custom-field-group"><input type="text" class="custom-key" placeholder="Title (e.g., Warranty)"><input type="text" class="custom-value" placeholder="Value (e.g., 3 Months)"></div>';
   
   // Load basic fields
   const fieldIds = ['name', 'code', 'price', 'offer', 'unit', 'qty', 'brand', 'size', 'color', 'delivery', 'status', 'category', 'desc', 'video', 'wa'];
@@ -370,7 +375,7 @@ export function loadDraftToForm(id) {
         const input = document.createElement("input");
         input.type = "url";
         input.className = "img-url";
-        input.placeholder = "ছবির লিংক (Image URL)";
+        input.placeholder = "Image URL";
         input.value = url;
         imgContainer.appendChild(input);
       } else {
@@ -383,7 +388,7 @@ export function loadDraftToForm(id) {
     const input = document.createElement("input");
     input.type = "url";
     input.className = "img-url";
-    input.placeholder = "ছবির লিংক (Image URL)";
+    input.placeholder = "Image URL";
     imgContainer.appendChild(input);
   }
 
@@ -402,7 +407,7 @@ export function loadDraftToForm(id) {
     addCustomField();
   }
   
-  showToast("ড্রাফট লোড করা হয়েছে।");
+  showToast("Draft loaded successfully.", "success");
 }
 
 export function applyFieldVisibility() {

@@ -1,9 +1,9 @@
-import { showToast } from './utils.js';
+import { showToast, loadLanguage, translateElement } from './utils.js';
 
 const mandatoryFields = [
   { key: "name", label: "Product Name", icon: "fas fa-tag" },
   { key: "code", label: "Product Code", icon: "fas fa-barcode" },
-  { key: "price", label: "Price (৳)", icon: "fas fa-money-bill" },
+  { key: "price", label: "Price", icon: "fas fa-money-bill" },
   { key: "wa", label: "WhatsApp Number", icon: "fab fa-whatsapp" },
   { key: "images", label: "Image Link", icon: "fas fa-image" }
 ];
@@ -151,9 +151,9 @@ export function saveSettings() {
   localStorage.setItem("fieldVisibility", JSON.stringify(newVisibility));
 
   if (changedCount > 0) {
-    showToast(`${changedCount} field(s) updated! Check dashboard for changes.`);
+    showToast(`${changedCount} field(s) updated! Check dashboard for changes.`, "success");
   } else {
-    showToast("No changes made.");
+    showToast("No changes made.", "info");
   }
 
   const saveBtn = document.querySelector('.save-btn');
@@ -171,7 +171,7 @@ export function resetToDefault() {
   if (confirm("Do you want to reset all fields to default?")) {
     localStorage.removeItem("fieldVisibility");
     renderFields();
-    showToast("All fields have been reset to default!");
+    showToast("All fields have been reset to default!", "success");
   }
 }
 
@@ -185,7 +185,13 @@ export function checkLogin() {
   }
 }
 
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", async () => {
   checkLogin();
+  
+  // Load language
+  const savedLang = localStorage.getItem("language") || "en";
+  await loadLanguage(savedLang);
+  
   renderFields();
 });
+

@@ -1,37 +1,108 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Zovatu Premium</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <title>Zovatu Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }body {
+  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-box {
+  background: #121212;
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+.login-box h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #F9A825;
+}
+
+.input-group {
+  margin-bottom: 1rem;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: #1e1e1e;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.login-btn {
+  background-color: #00C853;
+  color: white;
+  border: none;
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login-btn:hover {
+  background-color: #00a844;
+}
+
+.premium-access {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.premium-access a {
+  color: #00B0FF;
+  margin: 0 0.5rem;
+  text-decoration: none;
+}
+
+  </style>
 </head>
 <body>
-
-<!-- Header -->
-<div class="header">
-  <div class="header-flex">
-    <div class="header-title"><i class="fas fa-lock"></i> <span>Zovatu</span></div>
-    <a href="https://t.me/mehedi_exx" target="_blank" class="telegram"><i class="fab fa-telegram-plane"></i></a>
+  <div class="login-box">
+    <h2>🔐 Zovatu Login</h2>
+    <div class="input-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" placeholder="Enter your username">
+    </div>
+    <div class="input-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter your password">
+    </div>
+    <button class="login-btn">Login</button>
+    <div class="premium-access">
+      For premium access, contact:
+      <br>
+      <a href="#">WhatsApp</a> | <a href="#">Telegram</a>
+    </div>
   </div>
-</div>
-
-<!-- Login Card -->
-<div class="login-box">
-  <h2><i class="fas fa-user-shield"></i> <span>Login</span></h2>
-  <input type="text" id="username" placeholder="Username" />
-  <input type="password" id="password" placeholder="Password" />
-  <button class="login-btn" onclick="loginUser()" id="loginBtn"><i class="fas fa-sign-in-alt"></i> <span>Login</span></button>
-
-  <div class="contact-links">
-    For premium access, contact:
-    <br />
-    <a href="https://wa.me/8801627647776" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a> |
-    <a href="https://t.me/mehedi_exx" target="_blank"><i class="fab fa-telegram-plane"></i> Telegram</a>
-  </div>
-</div>
-
-<script type="module" src="auth.js"></script>
 </body>
 </html>

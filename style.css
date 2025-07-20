@@ -1,207 +1,200 @@
-/* ✅ Zovatu Modern UI CSS Upgrade (Fully Fixed) */
+/* -----------------------------------
+   ZOVATU - Final UI Polishing
+   Facebook-like sleek responsive interface
+------------------------------------ */
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
-  transition: all 0.3s ease;
 }
 
 body {
-  background-color: #121212;
-  color: #e5e5e5;
+  background: #111;
+  color: #eee;
+  font-size: 16px;
   line-height: 1.6;
-  scroll-behavior: smooth;
+  padding-bottom: 70px;
+  overflow-x: hidden;
 }
 
-/* ✅ Container/Card Style */
-.container, main, .form-wrapper, .section, .admin-controls, .draft-item {
-  background-color: #1e1e1e;
-  border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-}
-
-/* ✅ Buttons */
-button {
-  padding: 12px 24px;
-  border: none;
-  border-radius: 12px;
-  background-color: #FFA500;
-  color: #121212;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(255,165,0,0.3);
-  transition: transform 0.2s ease, background 0.2s;
-}
-
-button:hover {
-  background-color: #ff9900;
-  transform: scale(1.03);
-}
-
-/* ✅ Actions Button Row Fix */
-.actions {
+/* Header */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #000;
+  color: #fff;
+  padding: 12px 20px;
+  z-index: 999;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  margin-top: 10px;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.actions button {
-  flex: 1 1 45%;
-  min-width: 140px;
-  margin: 4px 0;
-  border-radius: 12px;
+header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
 }
 
-/* ✅ Inputs */
+main {
+  margin-top: 60px;
+  padding: 20px;
+}
+
+/* Inputs & Forms */
 input, select, textarea {
   width: 100%;
-  padding: 14px;
-  background: #2a2a2a;
-  border: 1px solid #444;
-  border-radius: 10px;
+  padding: 10px;
+  background: #1c1c1c;
+  border: 1px solid #333;
+  border-radius: 8px;
   color: #fff;
-  font-size: 16px;
-  margin-bottom: 12px;
+  margin-bottom: 15px;
+  outline: none;
+  transition: border 0.3s ease;
 }
 
 input:focus, select:focus, textarea:focus {
-  border-color: #FFA500;
-  box-shadow: 0 0 0 3px rgba(255,165,0,0.3);
-  outline: none;
+  border-color: #00BFFF;
+  box-shadow: 0 0 8px rgba(0,191,255,0.5);
 }
 
-/* ✅ Sidebar */
-.sidebar {
-  background: #1c1c1c;
-  width: 280px;
+/* Buttons */
+button {
+  background: #FFA500;
+  color: #000;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(255, 165, 0, 0.4);
+  transition: 0.3s ease;
+}
+
+button:hover {
+  background: #ffb733;
+  transform: translateY(-2px);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.actions button {
+  flex: 1 1 40%;
+  min-width: 130px;
+}
+
+/* Card / Item */
+.draft-item {
+  background: rgba(255,255,255,0.03);
   padding: 20px;
-  border-right: 2px solid #333;
-}
-
-.sidebar a {
-  display: block;
-  padding: 12px 16px;
-  margin: 10px 0;
-  background: #2b2b2b;
-  color: #fff;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: background 0.2s;
-}
-
-.sidebar a:hover, .sidebar a.active {
-  background: #3a3a3a;
-}
-
-/* ✅ Login Box */
-.login-box {
-  max-width: 400px;
-  background: #1e1e1e;
-  padding: 40px;
-  margin: auto;
-  margin-top: 10vh;
   border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-}
-
-.login-box h2 {
   margin-bottom: 20px;
-  color: #FFA500;
-  font-size: 24px;
-  text-align: center;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  transition: all 0.3s;
 }
 
-.login-btn {
-  background: #28a745;
-  color: white;
+.draft-item:hover {
+  transform: scale(1.01);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.6);
 }
 
-.login-btn:hover {
-  background: #20c997;
+.draft-item img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-top: 10px;
 }
 
-/* ✅ Toasts */
-.toast {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: #333;
-  color: #fff;
-  padding: 14px 20px;
-  border-radius: 10px;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-  opacity: 0;
-  transform: translateY(-20px);
-  transition: all 0.3s ease;
-  z-index: 10000;
-}
-
-.toast.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.toast.success { background: #4CAF50; }
-.toast.error { background: #f44336; }
-.toast.info { background: #2196f3; }
-.toast.warning { background: #ff9800; }
-
-/* ✅ Price Styling */
+/* Price styles */
 .old-price {
   text-decoration: line-through;
-  color: #888;
+  color: #999;
+  margin-right: 10px;
   font-weight: 500;
-  margin-right: 8px;
 }
 
 .new-price {
   color: #4CAF50;
-  font-weight: 700;
+  font-weight: bold;
   font-size: 18px;
 }
 
-/* ✅ Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+/* Bottom Navigation */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #111;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+  border-top: 1px solid #333;
 }
-::-webkit-scrollbar-thumb {
-  background-color: #FFA500;
+
+.bottom-nav i {
+  color: #fff;
+  font-size: 22px;
+}
+
+/* Toasts */
+.toast-success { background-color: #28a745; color: white; padding: 10px; border-radius: 5px; }
+.toast-error { background-color: #dc3545; color: white; padding: 10px; border-radius: 5px; }
+.toast-info { background-color: #17a2b8; color: white; padding: 10px; border-radius: 5px; }
+.toast-warning { background-color: #ffc107; color: black; padding: 10px; border-radius: 5px; }
+
+/* Sidebar/Menu Fix */
+.sidebar, .menu-btn, .close-sidebar {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 10px;
 }
 
-/* ✅ Checkbox */
-input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  accent-color: #28a745;
-  cursor: pointer;
+.sidebar {
+  background: #1c1c1c;
+  padding: 20px;
+  border-radius: 16px;
 }
 
-/* ✅ Field Icon Alignment */
+/* Optional Field Icons */
 .field-group i {
   font-size: 18px;
   color: #00bfff;
-  width: 24px;
+  margin-right: 6px;
 }
 
-/* ✅ Responsive */
-@media (max-width: 768px) {
-  .sidebar {
-    width: 100%;
-    position: relative;
-  }
-  .login-box {
-    width: 90%;
-  }
-  .actions button {
-    flex: 1 1 100%;
-  }
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

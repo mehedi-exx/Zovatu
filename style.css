@@ -1,4 +1,4 @@
-/* ✅ Zovatu Modern UI CSS Upgrade (Safe & 100% Feature-Compatible) */
+/* ✅ Zovatu Modern UI CSS Upgrade (Fully Fixed) */
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
@@ -17,8 +17,8 @@ body {
   scroll-behavior: smooth;
 }
 
-/* ✅ Layout */
-.container, main, .form-wrapper, .section, .admin-controls {
+/* ✅ Container/Card Style */
+.container, main, .form-wrapper, .section, .admin-controls, .draft-item {
   background-color: #1e1e1e;
   border-radius: 16px;
   padding: 20px;
@@ -30,18 +30,34 @@ body {
 button {
   padding: 12px 24px;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   background-color: #FFA500;
   color: #121212;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(255, 165, 0, 0.3);
+  box-shadow: 0 4px 8px rgba(255,165,0,0.3);
   transition: transform 0.2s ease, background 0.2s;
 }
 
 button:hover {
   background-color: #ff9900;
   transform: scale(1.03);
+}
+
+/* ✅ Actions Button Row Fix */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.actions button {
+  flex: 1 1 45%;
+  min-width: 140px;
+  margin: 4px 0;
+  border-radius: 12px;
 }
 
 /* ✅ Inputs */
@@ -125,6 +141,7 @@ input:focus, select:focus, textarea:focus {
   opacity: 0;
   transform: translateY(-20px);
   transition: all 0.3s ease;
+  z-index: 10000;
 }
 
 .toast.show {
@@ -137,10 +154,19 @@ input:focus, select:focus, textarea:focus {
 .toast.info { background: #2196f3; }
 .toast.warning { background: #ff9800; }
 
-/* ✅ Utility */
-.text-center { text-align: center; }
-.mt-20 { margin-top: 20px; }
-.mb-20 { margin-bottom: 20px; }
+/* ✅ Price Styling */
+.old-price {
+  text-decoration: line-through;
+  color: #888;
+  font-weight: 500;
+  margin-right: 8px;
+}
+
+.new-price {
+  color: #4CAF50;
+  font-weight: 700;
+  font-size: 18px;
+}
 
 /* ✅ Scrollbar */
 ::-webkit-scrollbar {
@@ -151,11 +177,19 @@ input:focus, select:focus, textarea:focus {
   border-radius: 10px;
 }
 
-/* ✅ Checkbox Custom */
+/* ✅ Checkbox */
 input[type="checkbox"] {
   width: 20px;
   height: 20px;
   accent-color: #28a745;
+  cursor: pointer;
+}
+
+/* ✅ Field Icon Alignment */
+.field-group i {
+  font-size: 18px;
+  color: #00bfff;
+  width: 24px;
 }
 
 /* ✅ Responsive */
@@ -167,13 +201,7 @@ input[type="checkbox"] {
   .login-box {
     width: 90%;
   }
+  .actions button {
+    flex: 1 1 100%;
+  }
 }
-
-/* ✅ Button Glow Variant */
-.button-glow {
-  background: linear-gradient(45deg, #FFA500, #FF8C00);
-  box-shadow: 0 0 15px rgba(255, 165, 0, 0.4);
-  color: #000;
-}
-
-/* 🎯 More sections (tutorial, stats, etc.) can be extended similarly */

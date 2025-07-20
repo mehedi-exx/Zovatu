@@ -6,17 +6,32 @@
   <title data-i18n="admin_panel">Admin Panel - Zovatu</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
 </head>
 <body>
 
-<header class="header">
-  <div class="logo"><i class="fas fa-cog"></i> <span data-i18n="admin_panel">Admin Panel</span></div>
-  <a href="dashboard.html" class="back-link" data-i18n="back"><i class="fas fa-arrow-left"></i> Back</a>
+<!-- ✅ Header -->
+<header>
+  <div class="icon-btn" id="menuToggle">
+    <i class="fas fa-bars"></i>
+  </div>
+  <div class="logo">
+    <i class="fas fa-cog"></i> <span data-i18n="admin_panel">Admin Panel</span>
+  </div>
+  <a href="dashboard.html" class="icon-btn">
+    <i class="fas fa-arrow-left"></i>
+  </a>
 </header>
 
-<div class="main-content">
-  <!-- Statistics Section -->
+<!-- ✅ Sidebar -->
+<div class="sidebar" id="sidebarMenu">
+  <a href="tutorial.html"><i class="fas fa-book"></i> Tutorial</a>
+  <a href="admin.html"><i class="fas fa-user-shield"></i> Admin Panel</a>
+  <a href="fieldManager.html"><i class="fas fa-cogs"></i> Field Customize</a>
+  <a href="dashboard.html"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+</div>
+
+<!-- ✅ Main Content -->
+<main>
   <div class="admin-controls">
     <h2 data-i18n="product_statistics"><i class="fas fa-chart-bar"></i> Product Statistics</h2>
     <div class="stats-summary">
@@ -35,7 +50,6 @@
     </div>
   </div>
 
-  <!-- Global Settings Section -->
   <div class="admin-controls">
     <h2 data-i18n="global_settings"><i class="fas fa-globe"></i> Global Settings</h2>
     <div class="settings-grid">
@@ -62,10 +76,8 @@
     </div>
   </div>
 
-  <!-- Admin Controls -->
   <div class="admin-controls">
     <h2 data-i18n="saved_product_list"><i class="fas fa-box"></i> Saved Product Management</h2>
-    
     <div class="search-section">
       <input type="text" id="searchInput" placeholder="Search products (name or code)" oninput="renderDrafts()" data-i18n="search_product" />
       <button onclick="exportDrafts()" data-i18n="export_json"><i class="fas fa-download"></i> Export JSON</button>
@@ -77,10 +89,17 @@
   </div>
 
   <div id="draftList"></div>
-</div>
+</main>
+
+<!-- ✅ Sidebar Toggle Script -->
+<script>
+  const menuBtn = document.getElementById('menuToggle');
+  const sidebar = document.getElementById('sidebarMenu');
+  menuBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('active');
+  });
+</script>
 
 <script type="module" src="js/admin.js"></script>
 </body>
 </html>
-
-

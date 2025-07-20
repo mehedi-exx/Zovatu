@@ -1,135 +1,116 @@
-/* -----------------------------------
-   ZOVATU - Final UI Polishing
-   Facebook-like sleek responsive interface
------------------------------------- */
-
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
-}
-
-body {
-  background: #111;
-  color: #eee;
-  font-size: 16px;
-  line-height: 1.6;
-  padding-bottom: 70px;
-  overflow-x: hidden;
-}
-
 /* Header */
 header {
-  position: fixed;
+  background-color: #000;
+  color: white;
+  padding: 0.5rem 1rem;
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
-  background: #000;
-  color: #fff;
-  padding: 12px 20px;
   z-index: 999;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
-header h1 {
-  font-size: 20px;
+/* Logo */
+.logo {
   font-weight: 600;
-  letter-spacing: 0.5px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-main {
-  margin-top: 60px;
+/* Rounded Icons */
+.icon-btn {
+  background-color: #ffae00;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(255, 174, 0, 0.4);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.icon-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Sidebar menu */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  height: 100%;
+  width: 240px;
+  background-color: #121212;
+  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.5);
   padding: 20px;
+  transition: left 0.3s ease;
+  z-index: 1000;
 }
-
-/* Inputs & Forms */
-input, select, textarea {
-  width: 100%;
-  padding: 10px;
-  background: #1c1c1c;
-  border: 1px solid #333;
-  border-radius: 8px;
+.sidebar.active {
+  left: 0;
+}
+.sidebar a {
+  display: block;
   color: #fff;
-  margin-bottom: 15px;
-  outline: none;
-  transition: border 0.3s ease;
+  margin: 12px 0;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+.sidebar a:hover {
+  background-color: #222;
 }
 
-input:focus, select:focus, textarea:focus {
-  border-color: #00BFFF;
-  box-shadow: 0 0 8px rgba(0,191,255,0.5);
+/* Inputs */
+input[type="text"],
+input[type="number"],
+input[type="password"],
+select {
+  width: 100%;
+  padding: 14px;
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 10px;
+  color: #ddd;
+  font-size: 16px;
+  outline: none;
+  margin-bottom: 12px;
 }
 
 /* Buttons */
-button {
-  background: #FFA500;
-  color: #000;
-  border: none;
+button,
+.btn {
   padding: 12px 20px;
+  border: none;
+  background-color: #ffae00;
+  color: #000;
+  font-weight: 600;
   border-radius: 12px;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(255, 165, 0, 0.4);
-  transition: 0.3s ease;
+  box-shadow: 0 6px 12px rgba(255, 174, 0, 0.3);
+  margin: 4px;
+  transition: 0.2s ease-in-out;
+}
+button:hover,
+.btn:hover {
+  transform: scale(1.03);
+  background-color: #ffc107;
 }
 
-button:hover {
-  background: #ffb733;
-  transform: translateY(-2px);
-}
-
-.actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  justify-content: center;
-  margin-top: 16px;
-}
-
-.actions button {
-  flex: 1 1 40%;
-  min-width: 130px;
-}
-
-/* Card / Item */
-.draft-item {
-  background: rgba(255,255,255,0.03);
-  padding: 20px;
-  border-radius: 16px;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
-  transition: all 0.3s;
-}
-
-.draft-item:hover {
-  transform: scale(1.01);
-  box-shadow: 0 4px 30px rgba(0,0,0,0.6);
-}
-
-.draft-item img {
-  max-width: 100%;
-  border-radius: 8px;
-  margin-top: 10px;
-}
-
-/* Price styles */
-.old-price {
+/* Price */
+.strike-price {
   text-decoration: line-through;
-  color: #999;
-  margin-right: 10px;
-  font-weight: 500;
+  color: #888;
+  margin-right: 8px;
 }
-
 .new-price {
-  color: #4CAF50;
+  color: #00c853;
   font-weight: bold;
-  font-size: 18px;
 }
 
 /* Bottom Navigation */
@@ -137,64 +118,47 @@ button:hover {
   position: fixed;
   bottom: 0;
   left: 0;
-  right: 0;
-  height: 60px;
-  background: #111;
+  width: 100%;
+  background-color: #0a0a0a;
+  border-top: 1px solid #222;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
-  border-top: 1px solid #333;
-}
-
-.bottom-nav i {
-  color: #fff;
-  font-size: 22px;
-}
-
-/* Toasts */
-.toast-success { background-color: #28a745; color: white; padding: 10px; border-radius: 5px; }
-.toast-error { background-color: #dc3545; color: white; padding: 10px; border-radius: 5px; }
-.toast-info { background-color: #17a2b8; color: white; padding: 10px; border-radius: 5px; }
-.toast-warning { background-color: #ffc107; color: black; padding: 10px; border-radius: 5px; }
-
-/* Sidebar/Menu Fix */
-.sidebar, .menu-btn, .close-sidebar {
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-}
-
-.sidebar {
-  background: #1c1c1c;
-  padding: 20px;
-  border-radius: 16px;
-}
-
-/* Optional Field Icons */
-.field-group i {
-  font-size: 18px;
-  color: #00bfff;
-  margin-right: 6px;
+  padding: 10px 0;
+  z-index: 999;
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
-
 ::-webkit-scrollbar-track {
-  background: #1a1a1a;
+  background: #1c1c1c;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: #444;
-  border-radius: 6px;
+  background: #555;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #777;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
+/* Cards */
+.card {
+  background-color: #121212;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+}
+.card:hover {
+  transform: scale(1.01);
+}
+
+/* Flex buttons */
+.button-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
 }

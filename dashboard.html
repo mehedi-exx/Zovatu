@@ -10,30 +10,26 @@
 </head>
 <body>
 
-<!-- ✅ Header -->
-<header>
-  <div class="icon-btn" id="menuToggle">
-    <i class="fas fa-bars"></i>
+<header class="header">
+  <div class="left-icons">
+    <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
   </div>
-  <div class="logo">
-    <i class="fas fa-toolbox"></i> Zovatu
-  </div>
-  <a href="https://t.me/yourchannel" target="_blank" class="icon-btn">
-    <i class="fab fa-telegram" style="color:#0088cc;"></i>
-  </a>
+  <div class="logo"><i class="fas fa-toolbox"></i> Zovatu</div>
+  <a class="telegram-icon" href="https://t.me/yourchannel" target="_blank"><i class="fab fa-telegram"></i></a>
 </header>
 
-<!-- ✅ Sidebar -->
-<div class="sidebar" id="sidebarMenu">
+<div class="sidebar" id="sidebar">
+  <button class="close-sidebar" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
   <a href="tutorial.html"><i class="fas fa-book"></i> Tutorial</a>
   <a href="admin.html"><i class="fas fa-user-shield"></i> Admin Panel</a>
   <a href="fieldManager.html"><i class="fas fa-cogs"></i> Field Customize</a>
   <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
 
+  <a href="billingTool.html"><i class="fas fa-file-invoice-dollar"></i> Billing Tool</a>
   <div class="theme-download-box">
     <div class="theme-header">
       <i class="fab fa-blogger-b"></i>
-      <div class="logo-text">G9Theme</div>
+      <div class="logo-text">ZovatuTheme</div>
     </div>
     <p>Download theme for your blog.</p>
     <button id="downloadThemeBtn" onclick="downloadTheme()">Download Theme</button>
@@ -41,7 +37,6 @@
   </div>
 </div>
 
-<!-- ✅ Main Content -->
 <main>
   <div class="form-wrapper">
     <div id="formFields">
@@ -72,31 +67,20 @@
         </div>
       </div>
 
-      <div class="button-group">
+      <div class="button-row">
         <button onclick="addCustomField()" type="button"><i class="fas fa-plus"></i> Add Custom Info</button>
         <button onclick="addImageField()" type="button"><i class="fas fa-image"></i> Add More Images</button>
       </div>
     </div>
 
     <br />
-    <div class="button-group">
-      <button id="generateBtn"><i class="fas fa-magic"></i> Generate</button>
-      <button id="copyBtn"><i class="fas fa-copy"></i> Copy</button>
-    </div>
+    <button id="generateBtn"><i class="fas fa-magic"></i> Generate</button>
+    <button id="copyBtn"><i class="fas fa-copy"></i> Copy</button>
   </div>
 
   <div class="output" id="output"></div>
   <div class="live-preview" id="preview"></div>
 </main>
-
-<!-- ✅ Menu Toggle Script -->
-<script>
-  const menuBtn = document.getElementById('menuToggle');
-  const sidebar = document.getElementById('sidebarMenu');
-  menuBtn.addEventListener('click', () => {
-    sidebar.classList.toggle('active');
-  });
-</script>
 
 <script type="module" src="script.js"></script>
 </body>

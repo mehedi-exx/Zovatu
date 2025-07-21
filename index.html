@@ -9,55 +9,28 @@
 </head>
 <body>
 
-<!-- ✅ Header -->
-<header>
-  <div class="icon-btn" id="menuToggle">
-    <i class="fas fa-bars"></i>
+<!-- Header -->
+<div class="header">
+  <div class="header-flex">
+    <div class="header-title"><i class="fas fa-lock"></i> <span>Zovatu</span></div>
+    <a href="https://t.me/mehedi_exx" target="_blank" class="telegram"><i class="fab fa-telegram-plane"></i></a>
   </div>
-  <div class="logo">
-    <i class="fas fa-lock"></i> Zovatu
-  </div>
-  <a href="https://t.me/mehedi_exx" target="_blank" class="icon-btn">
-    <i class="fab fa-telegram-plane" style="color: #0088cc;"></i>
-  </a>
-</header>
-
-<!-- ✅ Sidebar Menu -->
-<div class="sidebar" id="sidebarMenu">
-  <a href="#"><i class="fas fa-home"></i> Home</a>
-  <a href="#"><i class="fas fa-tools"></i> Dashboard</a>
-  <a href="#"><i class="fas fa-user-cog"></i> Admin Panel</a>
-  <a href="#"><i class="fas fa-cogs"></i> Field Manager</a>
-  <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
 </div>
 
-<!-- ✅ Login Card -->
-<main>
-  <div class="login-box">
-    <h2><i class="fas fa-user-shield"></i> <span>Login</span></h2>
-    <input type="text" id="username" placeholder="Username" />
-    <input type="password" id="password" placeholder="Password" />
-    <button class="login-btn" onclick="loginUser()" id="loginBtn">
-      <i class="fas fa-sign-in-alt"></i> <span>Login</span>
-    </button>
+<!-- Login Card -->
+<div class="login-box">
+  <h2><i class="fas fa-user-shield"></i> <span>Login</span></h2>
+  <input type="text" id="username" placeholder="Username" />
+  <input type="password" id="password" placeholder="Password" />
+  <button class="login-btn" onclick="loginUser()" id="loginBtn"><i class="fas fa-sign-in-alt"></i> <span>Login</span></button>
 
-    <div class="contact-links">
-      For premium access, contact:
-      <br />
-      <a href="https://wa.me/8801627647776" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a> |
-      <a href="https://t.me/mehedi_exx" target="_blank"><i class="fab fa-telegram-plane"></i> Telegram</a>
-    </div>
+  <div class="contact-links">
+    For premium access, contact:
+    <br />
+    <a href="https://wa.me/8801627647776" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a> |
+    <a href="https://t.me/mehedi_exx" target="_blank"><i class="fab fa-telegram-plane"></i> Telegram</a>
   </div>
-</main>
-
-<!-- ✅ JS: Menu Toggle -->
-<script>
-  const menuBtn = document.getElementById('menuToggle');
-  const sidebar = document.getElementById('sidebarMenu');
-  menuBtn.addEventListener('click', () => {
-    sidebar.classList.toggle('active');
-  });
-</script>
+</div>
 
 <script type="module" src="auth.js"></script>
 </body>

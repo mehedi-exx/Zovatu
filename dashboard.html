@@ -7,13 +7,90 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="manifest" href="manifest.json">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: #f7f9fc;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #1abc9c;
+      color: white;
+      padding: 15px 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .menu-btn, .close-sidebar {
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: white;
+      cursor: pointer;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0; left: -260px;
+      width: 260px;
+      height: 100%;
+      background: #2c3e50;
+      color: white;
+      padding: 20px;
+      transition: left 0.3s ease;
+      z-index: 1000;
+    }
+    .sidebar.open { left: 0; }
+    .sidebar a {
+      display: block;
+      color: white;
+      padding: 10px 0;
+      text-decoration: none;
+      border-bottom: 1px solid #34495e;
+    }
+    .sidebar a:hover {
+      background: #34495e;
+      border-radius: 4px;
+      padding-left: 10px;
+    }
+    .theme-download-box {
+      margin-top: 20px;
+      padding: 10px;
+      background: #34495e;
+      border-radius: 6px;
+    }
+    .form-wrapper {
+      max-width: 400px;
+      background: white;
+      padding: 20px;
+      margin: 50px auto;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+    }
+    input, button {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    button {
+      background: #1abc9c;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #16a085;
+    }
+  </style>
 </head>
 <body>
 
 <header class="header">
-  <div class="left-icons">
-    <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
-  </div>
+  <button class="menu-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
   <div class="logo"><i class="fas fa-toolbox"></i> Zovatu</div>
   <a class="telegram-icon" href="https://t.me/yourchannel" target="_blank"><i class="fab fa-telegram"></i></a>
 </header>
@@ -23,17 +100,11 @@
   <a href="tutorial.html"><i class="fas fa-book"></i> Tutorial</a>
   <a href="admin.html"><i class="fas fa-user-shield"></i> Admin Panel</a>
   <a href="fieldManager.html"><i class="fas fa-cogs"></i> Field Customize</a>
-
-  <!-- ✅ New Billing Tool menu link -->
   <a href="billing.html"><i class="fas fa-file-invoice-dollar"></i> Billing Tool</a>
-
   <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
 
   <div class="theme-download-box">
-    <div class="theme-header">
-      <i class="fab fa-blogger-b"></i>
-      <div class="logo-text">G9Theme</div>
-    </div>
+    <div><i class="fab fa-blogger-b"></i> <strong>G9Theme</strong></div>
     <p>Download theme for your blog.</p>
     <button id="downloadThemeBtn" onclick="downloadTheme()">Download Theme</button>
     <div id="downloadTimer" style="display:none;"></div>
@@ -42,49 +113,45 @@
 
 <main>
   <div class="form-wrapper">
-    <div id="formFields">
-      <input type="text" id="name" placeholder="Product Name">
-      <input type="text" id="code" placeholder="Product Code">
-      <input type="number" id="price" placeholder="Price (৳)">
-      <input type="number" id="offer" placeholder="Offer Price (Optional)">
-      <input type="text" id="unit" placeholder="Unit (e.g., Pcs, Kg)">
-      <input type="number" id="qty" placeholder="Quantity (Qty)">
-      <input type="text" id="brand" placeholder="Brand / Company">
-      <input type="text" id="size" placeholder="Size Option">
-      <input type="text" id="color" placeholder="Color Option">
-      <input type="text" id="delivery" placeholder="Delivery Time">
-      <input type="text" id="status" placeholder="Status">
-      <input type="text" id="category" placeholder="Category">
-      <textarea id="desc" rows="3" placeholder="Product Description"></textarea>
-      <input type="url" id="video" placeholder="Video Link (YouTube)">
-      <input type="tel" id="wa" placeholder="WhatsApp Number (8801XXXXXXXXXX)">
-
-      <div id="imageInputs">
-        <input type="url" class="img-url" placeholder="Image URL">
-      </div>
-
-      <div id="customFields">
-        <div class="custom-field-group">
-          <input type="text" class="custom-key" placeholder="Title e.g., Warranty">
-          <input type="text" class="custom-value" placeholder="Value e.g., 3 Months">
-        </div>
-      </div>
-
-      <div class="button-row">
-        <button onclick="addCustomField()" type="button"><i class="fas fa-plus"></i> Add Custom Info</button>
-        <button onclick="addImageField()" type="button"><i class="fas fa-image"></i> Add More Images</button>
-      </div>
-    </div>
-
-    <br />
-    <button id="generateBtn"><i class="fas fa-magic"></i> Generate</button>
-    <button id="copyBtn"><i class="fas fa-copy"></i> Copy</button>
+    <h3>Create Billing Shop</h3>
+    <input type="text" placeholder="Shop Name" id="shopName">
+    <input type="text" placeholder="Owner Name" id="ownerName">
+    <input type="tel" placeholder="Mobile Number" id="mobile">
+    <input type="text" placeholder="Address" id="address">
+    <input type="email" placeholder="Salesman Gmail (Optional)" id="salesmanGmail">
+    <button onclick="createShop()">Create Shop</button>
   </div>
-
-  <div class="output" id="output"></div>
-  <div class="live-preview" id="preview"></div>
 </main>
 
-<script type="module" src="script.js"></script>
+<script>
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
+
+  function createShop() {
+    const shopName = document.getElementById("shopName").value;
+    const ownerName = document.getElementById("ownerName").value;
+    const mobile = document.getElementById("mobile").value;
+    const address = document.getElementById("address").value;
+    const salesman = document.getElementById("salesmanGmail").value;
+
+    if (!shopName || !mobile || !address) {
+      alert("Please fill all required fields.");
+      return;
+    }
+
+    alert("Shop created successfully!\nName: " + shopName + "\nAddress: " + address);
+    // Future: Save to localStorage or backend here
+  }
+
+  function logout() {
+    alert("You are logged out.");
+  }
+
+  function downloadTheme() {
+    alert("Download started...");
+  }
+</script>
+
 </body>
 </html>

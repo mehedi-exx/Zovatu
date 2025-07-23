@@ -1,7 +1,27 @@
 import { showToast, loadLanguage, translateElement } from './js/utils.js';
 
 // Add loading animation CSS
+const loadingCSS = `
+.loading {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ffffff;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
 
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+`;
+
+// Inject CSS
+const style = document.createElement('style');
+style.textContent = loadingCSS;
+document.head.appendChild(style);
 
 function loginUser() {
   const uname = document.getElementById("username").value.trim();
@@ -51,7 +71,7 @@ function loginUser() {
       // Reset button after 2 seconds
       setTimeout(() => {
         loginBtn.innerHTML = originalContent;
-        loginBtn.style.removeProperty("background");
+        loginBtn.style.background = '';
         loginBtn.style.opacity = '1';
         loginBtn.disabled = false;
       }, 2000);

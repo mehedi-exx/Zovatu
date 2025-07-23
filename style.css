@@ -6,23 +6,22 @@
   margin: 0;
   padding: 0;
   /* Remove all animations and transitions */
-  transition: none;
-  animation: none;
+  transition: none !important;
+  animation: none !important;
 }
 
 body {
   font-family: 'Segoe UI', sans-serif;
-  background-color: #0A0A0A; /* Deeper Black Background */
-  color: #E0E0E0; /* Soft White Text */
-  font-size: 16px; /* Base font size */
-  line-height: 1.6;
+  background-color: #000000; /* Pure Black Background */
+  color: #ffffff; /* White Text */
+  line-height: 1.5;
   overflow-x: hidden;
 }
 
 /* ✅ Header Styles (Common for Dashboard, Tutorial, Field Manager) */
 header.header {
-  background-color: #151515; /* Slightly lighter dark for header */
-  padding: 15px 25px; /* More generous padding */
+  background-color: #1a1a1a; /* Dark Gray for Header */
+  padding: 10px 20px; /* Adjusted padding */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
@@ -37,9 +36,9 @@ header.header {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 22px; /* Slightly larger logo */
+  font-size: 20px; /* Adjusted font size */
   font-weight: 700;
-  color: #E0E0E0;
+  color: #ffffff;
 }
 
 .logo i {
@@ -88,8 +87,10 @@ header.header {
   left: -300px; /* Wider sidebar */
   width: 300px;
   height: 100vh;
-  background-color: #151515; /* Dark Gray for sidebar */
+  background-color: #1a1a1a; /* Dark Gray for sidebar */
   padding: 20px;
+  transition: left 0.3s ease;
+  z-index: 1000;
   overflow-y: auto;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
 }
@@ -191,8 +192,8 @@ header.header {
 
 /* ✅ Main Content (Common for Dashboard, Admin, Field Manager, Tutorial) */
 main {
-  padding: 30px; /* More padding for main content */
-  max-width: 1300px; /* Slightly wider content area */
+  padding: 20px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -207,21 +208,21 @@ main {
 /* ✅ Form Elements */
 input, textarea, select {
   width: 100%;
-  padding: 15px 18px; /* Increased padding */
-  margin: 12px 0; /* Adjusted margin */
-  background: #1F1F1F; /* Darker input background */
-  border: 1px solid #333333; /* Softer border */
-  border-radius: 10px; /* More rounded corners */
-  color: #E0E0E0;
-  font-size: 16px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2); /* Inner shadow for depth */
+  padding: 14px 16px;
+  margin: 10px 0;
+  background: #2a2a2a;
+  border: 1px solid #444444;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 16px; /* Ensures no zoom on iOS */
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 input:focus, textarea:focus, select:focus {
   outline: none;
   border-color: #FFA500;
-  box-shadow: 0 0 0 4px rgba(255, 165, 0, 0.3); /* More prominent focus ring */
+  box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.2);
 }
 
 input::placeholder, textarea::placeholder {
@@ -233,28 +234,22 @@ button {
   background: #FFA500;
   color: #000000;
   border: none;
-  padding: 14px 22px; /* Slightly larger padding */
-  border-radius: 10px; /* More rounded corners */
-  font-size: 17px; /* Slightly larger font */
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease; /* Added transform transition */
+  transition: background 0.2s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px; /* Increased gap */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* More prominent shadow */
-  margin: 8px; /* Adjusted margin */
+  gap: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin: 5px;
 }
 
 button:hover {
   background: #FF8C00;
-  transform: translateY(-2px); /* Subtle lift effect */
-}
-
-button:active {
-  transform: translateY(0); /* Reset on click */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Smaller shadow on click */
 }
 
 /* Primary Button (Generate) */
@@ -343,43 +338,43 @@ button[onclick*="parentElement.remove"]:hover {
 /* ✅ Toast Notifications */
 .toast {
   position: fixed;
-  top: 25px; /* Slightly lower */
-  right: 25px; /* Slightly more inward */
-  padding: 18px 28px; /* Increased padding */
-  border-radius: 12px; /* More rounded corners */
+  top: 20px;
+  right: 20px;
+  padding: 16px 24px;
+  border-radius: 10px;
   color: white;
   font-weight: 500;
   z-index: 10000;
-  transform: translateX(120%); /* Start further off-screen */
-  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); /* Smoother animation */
+  transform: translateX(100%);
+  transition: transform 0.3s ease; 
   display: flex;
   align-items: center;
-  gap: 15px; /* Increased gap */
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4); /* More prominent shadow */
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .toast.show {
-  transform: translateX(0); /* Slide in fully */
+  transform: translateX(0);
 }
 
 .toast.success {
-  background: #4CAF50; /* Green */
+  background: #4CAF50;
 }
 
 .toast.error {
-  background: #f44336; /* Red */
+  background: #f44336;
 }
 
 .toast.warning {
-  background: #ff9800; /* Orange */
+  background: #ff9800;
 }
 
 .toast.info {
-  background: #2196f3; /* Blue */
+  background: #2196f3;
 }
 
 .toast i {
-  font-size: 20px; /* Slightly larger icon */
+  font-size: 18px;
 }
 
 /* ✅ Loading Animation */
@@ -409,97 +404,7 @@ button[onclick*="parentElement.remove"]:hover {
 
 @media (max-width: 768px) {
   header.header {
-    padding: 12px 20px;
-    height: 55px;
-  }
-  .logo {
-    font-size: 20px;
-  }
-  .logo i, .menu-btn i, .telegram-icon i {
-    font-size: 22px;
-  }
-  .sidebar {
-    width: 280px;
-  }
-  .close-sidebar {
-    font-size: 20px;
-  }
-  main {
-    padding: 20px;
-  }
-  .form-wrapper, .admin-controls, .tutorial-nav, .section {
-    padding: 25px;
-    margin-bottom: 18px;
-  }
-  input, textarea, select {
-    padding: 14px 16px;
-    font-size: 15px;
-  }
-  button {
-    padding: 12px 20px;
-    font-size: 16px;
-  }
-  #generateBtn {
-    padding: 15px 30px;
-    font-size: 17px;
-  }
-  .button-row {
-    flex-direction: column;
-    gap: 10px;
-  }
-  .button-row button {
-    width: 100%;
-    min-width: unset;
-  }
-  .toast {
-    right: 20px;
-    left: 20px;
-    max-width: none;
-    padding: 16px 24px;
-  }
-  .theme-download-box {
-    padding: 18px;
-  }
-  .tutorial-nav .nav-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .section h2 {
-    font-size: 26px;
-  }
-  .feature-grid {
-    grid-template-columns: 1fr;
-  }
-  .stats-summary {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  .search-section {
-    flex-direction: column;
-    gap: 15px;
-  }
-  .search-section input, .search-section button, .import-button {
-    width: 100%;
-  }
-  .draft-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-  .draft-meta {
-    grid-template-columns: 1fr;
-  }
-  .actions {
-    flex-wrap: wrap;
-  }
-  .actions button {
-    flex: 1 1 auto;
-    min-width: 120px;
-  }
-}
-
-@media (max-width: 480px) {
-  header.header {
-    padding: 10px 12px;
+    padding: 10px 15px;
     height: 50px;
   }
   .logo {
@@ -509,19 +414,21 @@ button[onclick*="parentElement.remove"]:hover {
     font-size: 20px;
   }
   .sidebar {
-    width: 100vw;
-    left: -100vw;
+    width: 280px;
+  }
+  .close-sidebar {
+    font-size: 18px;
   }
   main {
-    padding: 15px;
+    padding: 10px;
   }
   .form-wrapper, .admin-controls, .tutorial-nav, .section {
     padding: 20px;
-    margin-bottom: 12px;
+    margin-bottom: 15px;
   }
   input, textarea, select {
     padding: 12px 14px;
-    font-size: 14px;
+    font-size: 15px;
   }
   button {
     padding: 10px 18px;
@@ -531,20 +438,108 @@ button[onclick*="parentElement.remove"]:hover {
     padding: 14px 28px;
     font-size: 16px;
   }
+  .button-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .button-row button {
+    width: 100%;
+    min-width: unset;
+  }
   .toast {
-    top: 15px;
-    right: 15px;
-    left: 15px;
-    padding: 14px 20px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+    padding: 12px 18px;
   }
   .theme-download-box {
     padding: 15px;
   }
   .tutorial-nav .nav-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .section h2 {
+    font-size: 24px;
+  }
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+  .stats-summary {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  .search-section {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .search-section input, .search-section button, .import-button {
+    width: 100%;
+  }
+  .draft-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .draft-meta {
+    grid-template-columns: 1fr;
+  }
+  .actions {
+    flex-wrap: wrap;
+  }
+  .actions button {
+    flex: 1 1 auto;
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  header.header {
+    padding: 8px 10px;
+    height: 45px;
+  }
+  .logo {
+    font-size: 16px;
+  }
+  .logo i, .menu-btn i, .telegram-icon i {
+    font-size: 18px;
+  }
+  .sidebar {
+    width: 100vw;
+    left: -100vw;
+  }
+  main {
+    padding: 5px;
+  }
+  .form-wrapper, .admin-controls, .tutorial-nav, .section {
+    padding: 15px;
+    margin-bottom: 10px;
+  }
+  input, textarea, select {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+  button {
+    padding: 8px 15px;
+    font-size: 14px;
+  }
+  #generateBtn {
+    padding: 12px 24px;
+    font-size: 15px;
+  }
+  .toast {
+    top: 10px;
+    right: 5px;
+    left: 5px;
+    padding: 10px 15px;
+  }
+  .theme-download-box {
+    padding: 10px;
+  }
+  .tutorial-nav .nav-grid {
     grid-template-columns: 1fr;
   }
   .section h2 {
-    font-size: 22px;
+    font-size: 20px;
   }
   .section h3 {
     font-size: 18px;
@@ -562,10 +557,10 @@ button[onclick*="parentElement.remove"]:hover {
     font-size: 12px;
   }
   .stat-number {
-    font-size: 28px;
+    font-size: 24px;
   }
   .stat-label {
-    font-size: 12px;
+    font-size: 11px;
   }
   .draft-name {
     font-size: 16px;
@@ -586,7 +581,7 @@ button[onclick*="parentElement.remove"]:hover {
   justify-content: space-between;
   max-width: 700px;
   margin: auto;
-  padding: 15px 25px; /* More generous padding */
+  padding: 10px 20px; /* Adjusted padding */
 }
 .header-title {
   display: flex;
@@ -1558,25 +1553,6 @@ button:disabled:hover {
     font-size: 13px;
     padding: 8px 12px;
   }
-}
-
-
-
-
-/* Loading Animation */
-.loading {
-  width: 16px;
-  height: 16px;
-  border: 2px solid #ffffff;
-  border-top: 2px solid transparent;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  display: inline-block;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
 }
 
 

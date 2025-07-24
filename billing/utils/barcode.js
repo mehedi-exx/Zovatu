@@ -1,22 +1,39 @@
-// Zovatu Billing Tool - Barcode Generation Utility
-// Handles barcode generation for products using various formats
+/* ===================================
+   Zovatu Smart Billing Tool - Barcode Utility
+   Barcode Generation and Management
+   =================================== */
 
-class BarcodeGenerator {
+// Barcode utility class
+class BarcodeUtils {
     constructor() {
-        this.canvas = null;
-        this.ctx = null;
-        this.initCanvas();
+        this.init();
     }
 
-    // Initialize canvas for barcode generation
-    initCanvas() {
-        this.canvas = document.createElement('canvas');
-        this.ctx = this.canvas.getContext('2d');
+    // Initialize barcode utility
+    init() {
+        // Load JsBarcode library if not already loaded
+        this.loadBarcodeLibrary();
     }
 
-    // Generate barcode image as data URL
-    generateBarcode(code, format = 'CODE128', options = {}) {
+    // Load JsBarcode library
+    loadBarcodeLibrary() {
+        if (typeof JsBarcode === 'undefined') {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js';
+            script.onload = () => {
+                console.log('JsBarcode library loaded successfully');
+            };
+            script.onerror = () => {
+                console.error('Failed to load JsBarcode library');
+            };
+            document.head.appendChild(script);
+        }
+    }
+
+    // Generate barcode
+    generateBarcode(text, options = {}) {
         const defaultOptions = {
+            format: 'CODE128',
             width: 2,
             height: 100,
             displayValue: true,
@@ -28,498 +45,415 @@ class BarcodeGenerator {
             font: 'monospace',
             background: '#ffffff',
             lineColor: '#000000',
-            margin: 10
+            margin: 10,
+            marginTop: undefined,
+            marginBottom: undefined,
+            marginLeft: undefined,
+            marginRight: undefined
         };
 
         const config = { ...defaultOptions, ...options };
 
+        // Create canvas element
+        const canvas = document.createElement('canvas');
+        
         try {
-            switch (format.toUpperCase()) {
-                case 'CODE128':
-                    return this.generateCode128(code, config);
-                case 'EAN13':
-                    return this.generateEAN13(code, config);
-                case 'EAN8':
-                    return this.generateEAN8(code, config);
-                case 'UPC':
-                    return this.generateUPC(code, config);
-                case 'CODE39':
-                    return this.generateCode39(code, config);
-                default:
-                    return this.generateCode128(code, config);
+            if (typeof JsBarcode !== 'undefined') {
+                JsBarcode(canvas, text, config);
+                return canvas;
+            } else {
+                console.error('JsBarcode library not loaded');
+                return this.generateFallbackBarcode(text);
             }
         } catch (error) {
-            console.error('Barcode generation error:', error);
-            return null;
+            console.error('Error generating barcode:', error);
+            return this.generateFallbackBarcode(text);
         }
     }
 
-    // Generate Code 128 barcode
-    generateCode128(code, config) {
-        const patterns = this.getCode128Patterns();
-        const encoded = this.encodeCode128(code);
+    // Generate fallback barcode (simple text representation)
+    generateFallbackBarcode(text) {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
         
-        if (!encoded) {
-            throw new Error('Invalid Code 128 data');
-        }
-
-        return this.drawBarcode(encoded, config, code);
+        canvas.width = 300;
+        canvas.height = 100;
+        
+        // Draw white background
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw text
+        ctx.fillStyle = '#000000';
+        ctx.font = '16px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+        
+        return canvas;
     }
 
-    // Generate EAN-13 barcode
-    generateEAN13(code, config) {
-        if (code.length !== 13) {
-            throw new Error('EAN-13 must be exactly 13 digits');
-        }
-
-        if (!/^\d+$/.test(code)) {
-            throw new Error('EAN-13 must contain only digits');
-        }
-
-        const patterns = this.getEAN13Patterns();
-        const encoded = this.encodeEAN13(code);
-        
-        return this.drawBarcode(encoded, config, code);
+    // Generate barcode as data URL
+    generateBarcodeDataURL(text, options = {}) {
+        const canvas = this.generateBarcode(text, options);
+        return canvas.toDataURL('image/png');
     }
 
-    // Generate EAN-8 barcode
-    generateEAN8(code, config) {
-        if (code.length !== 8) {
-            throw new Error('EAN-8 must be exactly 8 digits');
-        }
-
-        if (!/^\d+$/.test(code)) {
-            throw new Error('EAN-8 must contain only digits');
-        }
-
-        const patterns = this.getEAN8Patterns();
-        const encoded = this.encodeEAN8(code);
-        
-        return this.drawBarcode(encoded, config, code);
+    // Generate barcode as blob
+    generateBarcodeBlob(text, options = {}) {
+        return new Promise((resolve) => {
+            const canvas = this.generateBarcode(text, options);
+            canvas.toBlob(resolve, 'image/png');
+        });
     }
 
-    // Generate UPC barcode
-    generateUPC(code, config) {
-        if (code.length !== 12) {
-            throw new Error('UPC must be exactly 12 digits');
-        }
+    // Generate product barcode
+    generateProductBarcode(product, options = {}) {
+        const barcodeText = product.barcode || product.sku || product.id;
+        const defaultOptions = {
+            format: 'CODE128',
+            width: 1.5,
+            height: 60,
+            displayValue: true,
+            fontSize: 12
+        };
 
-        if (!/^\d+$/.test(code)) {
-            throw new Error('UPC must contain only digits');
-        }
-
-        const patterns = this.getUPCPatterns();
-        const encoded = this.encodeUPC(code);
-        
-        return this.drawBarcode(encoded, config, code);
+        return this.generateBarcode(barcodeText, { ...defaultOptions, ...options });
     }
 
-    // Generate Code 39 barcode
-    generateCode39(code, config) {
-        if (!/^[A-Z0-9\-\.\$\/\+\%\s]*$/.test(code)) {
-            throw new Error('Code 39 contains invalid characters');
-        }
+    // Generate invoice barcode
+    generateInvoiceBarcode(invoice, options = {}) {
+        const barcodeText = invoice.invoiceNumber || invoice.id;
+        const defaultOptions = {
+            format: 'CODE128',
+            width: 2,
+            height: 80,
+            displayValue: true,
+            fontSize: 14
+        };
 
-        const patterns = this.getCode39Patterns();
-        const encoded = this.encodeCode39(code);
-        
-        return this.drawBarcode(encoded, config, code);
+        return this.generateBarcode(barcodeText, { ...defaultOptions, ...options });
     }
 
-    // Draw barcode on canvas
-    drawBarcode(encoded, config, displayText) {
-        const totalWidth = encoded.length * config.width + (config.margin * 2);
-        const textHeight = config.displayValue ? config.fontSize + config.textMargin : 0;
-        const totalHeight = config.height + textHeight + (config.margin * 2);
-
-        this.canvas.width = totalWidth;
-        this.canvas.height = totalHeight;
-
-        // Clear canvas with background color
-        this.ctx.fillStyle = config.background;
-        this.ctx.fillRect(0, 0, totalWidth, totalHeight);
-
-        // Draw bars
-        this.ctx.fillStyle = config.lineColor;
-        let x = config.margin;
-
-        for (let i = 0; i < encoded.length; i++) {
-            if (encoded[i] === '1') {
-                this.ctx.fillRect(x, config.margin, config.width, config.height);
-            }
-            x += config.width;
-        }
-
-        // Draw text if enabled
-        if (config.displayValue && displayText) {
-            this.ctx.fillStyle = config.lineColor;
-            this.ctx.font = `${config.fontOptions} ${config.fontSize}px ${config.font}`;
-            this.ctx.textAlign = config.textAlign;
-
-            const textX = totalWidth / 2;
-            const textY = config.margin + config.height + config.fontSize + config.textMargin;
-
-            this.ctx.fillText(displayText, textX, textY);
-        }
-
-        return this.canvas.toDataURL('image/png');
-    }
-
-    // Encode Code 128
-    encodeCode128(data) {
-        const patterns = this.getCode128Patterns();
-        let encoded = patterns.start; // Start pattern
-        let checksum = 104; // Start B value
+    // Generate QR code (using a simple QR code implementation)
+    generateQRCode(text, size = 200) {
+        // For a full implementation, you would use a QR code library
+        // This is a placeholder that creates a simple pattern
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
         
-        for (let i = 0; i < data.length; i++) {
-            const charCode = data.charCodeAt(i);
-            const value = charCode - 32;
-            
-            if (value < 0 || value > 95) {
-                return null; // Invalid character
-            }
-            
-            encoded += patterns.data[value];
-            checksum += value * (i + 1);
-        }
+        canvas.width = size;
+        canvas.height = size;
         
-        // Add checksum
-        encoded += patterns.data[checksum % 103];
+        // Draw white background
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, size, size);
         
-        // Add stop pattern
-        encoded += patterns.stop;
+        // Draw simple pattern (placeholder for actual QR code)
+        ctx.fillStyle = '#000000';
+        const cellSize = size / 25;
         
-        return encoded;
-    }
-
-    // Encode EAN-13
-    encodeEAN13(data) {
-        const patterns = this.getEAN13Patterns();
-        let encoded = patterns.start;
-        
-        const firstDigit = parseInt(data[0]);
-        const leftPattern = patterns.first[firstDigit];
-        
-        // Left group
-        for (let i = 1; i <= 6; i++) {
-            const digit = parseInt(data[i]);
-            const patternType = leftPattern[i - 1];
-            encoded += patterns.left[patternType][digit];
-        }
-        
-        // Center guard
-        encoded += patterns.center;
-        
-        // Right group
-        for (let i = 7; i <= 12; i++) {
-            const digit = parseInt(data[i]);
-            encoded += patterns.right[digit];
-        }
-        
-        // End guard
-        encoded += patterns.end;
-        
-        return encoded;
-    }
-
-    // Encode EAN-8
-    encodeEAN8(data) {
-        const patterns = this.getEAN8Patterns();
-        let encoded = patterns.start;
-        
-        // Left group
-        for (let i = 0; i < 4; i++) {
-            const digit = parseInt(data[i]);
-            encoded += patterns.left[digit];
-        }
-        
-        // Center guard
-        encoded += patterns.center;
-        
-        // Right group
-        for (let i = 4; i < 8; i++) {
-            const digit = parseInt(data[i]);
-            encoded += patterns.right[digit];
-        }
-        
-        // End guard
-        encoded += patterns.end;
-        
-        return encoded;
-    }
-
-    // Encode UPC
-    encodeUPC(data) {
-        // UPC is similar to EAN-13 with a leading zero
-        return this.encodeEAN13('0' + data);
-    }
-
-    // Encode Code 39
-    encodeCode39(data) {
-        const patterns = this.getCode39Patterns();
-        let encoded = patterns.start;
-        
-        for (let i = 0; i < data.length; i++) {
-            const char = data[i];
-            if (patterns.data[char]) {
-                encoded += patterns.data[char] + '0'; // Inter-character gap
+        for (let i = 0; i < 25; i++) {
+            for (let j = 0; j < 25; j++) {
+                if ((i + j) % 3 === 0) {
+                    ctx.fillRect(i * cellSize, j * cellSize, cellSize, cellSize);
+                }
             }
         }
         
-        encoded += patterns.start; // Stop pattern (same as start)
+        // Add text in center
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '12px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('QR', size / 2, size / 2);
         
-        return encoded;
+        return canvas;
     }
 
-    // Get Code 128 patterns
-    getCode128Patterns() {
-        return {
-            start: '11010010000',
-            stop: '1100011101011',
-            data: [
-                '11011001100', '11001101100', '11001100110', '10010011000', '10010001100',
-                '10001001100', '10011001000', '10011000100', '10001100100', '11001001000',
-                '11001000100', '11000100100', '10110011100', '10011011100', '10011001110',
-                '10111001100', '10011101100', '10011100110', '11001110010', '11001011100',
-                '11001001110', '11011100100', '11001110100', '11101101110', '11101001100',
-                '11100101100', '11100100110', '11101100100', '11100110100', '11100110010',
-                '11011011000', '11011000110', '11000110110', '10100011000', '10001011000',
-                '10001000110', '10110001000', '10001101000', '10001100010', '11010001000',
-                '11000101000', '11000100010', '10110111000', '10110001110', '10001101110',
-                '10111011000', '10111000110', '10001110110', '11101110110', '11010001110',
-                '11000101110', '11011101000', '11011100010', '11011101110', '11101011000',
-                '11101000110', '11100010110', '11101101000', '11101100010', '11100011010',
-                '11101111010', '11001000010', '11110001010', '10100110000', '10100001100',
-                '10010110000', '10010000110', '10000101100', '10000100110', '10110010000',
-                '10110000100', '10011010000', '10011000010', '10000110100', '10000110010',
-                '11000010010', '11001010000', '11110111010', '11000010100', '10001111010',
-                '10100111100', '10010111100', '10010011110', '10111100100', '10011110100',
-                '10011110010', '11110100100', '11110010100', '11110010010', '11011011110',
-                '11011110110', '11110110110', '10101111000', '10100011110', '10001011110',
-                '10111101000', '10111100010', '11110101000', '11110100010', '10111011110',
-                '10111101110', '11101011110', '11110101110', '11010000100', '11010010000',
-                '11010011100', '1100011101011'
-            ]
+    // Generate invoice QR code with payment info
+    generateInvoiceQRCode(invoice, shop) {
+        const qrData = {
+            invoice: invoice.invoiceNumber,
+            shop: shop.name,
+            amount: invoice.total,
+            date: ZovatuUtils.formatDate(invoice.createdAt, 'DD/MM/YYYY')
         };
-    }
-
-    // Get EAN-13 patterns
-    getEAN13Patterns() {
-        return {
-            start: '101',
-            center: '01010',
-            end: '101',
-            first: [
-                'LLLLLL', 'LLGLGG', 'LLGGLG', 'LLGGGL', 'LGLLGG',
-                'LGGLLG', 'LGGGLL', 'LGLGLG', 'LGLGGL', 'LGGLGL'
-            ],
-            left: {
-                L: ['0001101', '0011001', '0010011', '0111101', '0100011',
-                    '0110001', '0101111', '0111011', '0110111', '0001011'],
-                G: ['0100111', '0110011', '0011011', '0100001', '0011101',
-                    '0111001', '0000101', '0010001', '0001001', '0010111']
-            },
-            right: ['1110010', '1100110', '1101100', '1000010', '1011100',
-                   '1001110', '1010000', '1000100', '1001000', '1110100']
-        };
-    }
-
-    // Get EAN-8 patterns
-    getEAN8Patterns() {
-        return {
-            start: '101',
-            center: '01010',
-            end: '101',
-            left: ['0001101', '0011001', '0010011', '0111101', '0100011',
-                  '0110001', '0101111', '0111011', '0110111', '0001011'],
-            right: ['1110010', '1100110', '1101100', '1000010', '1011100',
-                   '1001110', '1010000', '1000100', '1001000', '1110100']
-        };
-    }
-
-    // Get UPC patterns (same as EAN-13)
-    getUPCPatterns() {
-        return this.getEAN13Patterns();
-    }
-
-    // Get Code 39 patterns
-    getCode39Patterns() {
-        return {
-            start: '1000101110111010',
-            data: {
-                '0': '101001101101', '1': '110100101011', '2': '101100101011',
-                '3': '110110010101', '4': '101001101011', '5': '110100110101',
-                '6': '101100110101', '7': '101001011011', '8': '110100101101',
-                '9': '101100101101', 'A': '110101001011', 'B': '101101001011',
-                'C': '110110100101', 'D': '101011001011', 'E': '110101100101',
-                'F': '101101100101', 'G': '101010011011', 'H': '110101001101',
-                'I': '101101001101', 'J': '101011001101', 'K': '110101010011',
-                'L': '101101010011', 'M': '110110101001', 'N': '101011010011',
-                'O': '110101101001', 'P': '101101101001', 'Q': '101010110011',
-                'R': '110101011001', 'S': '101101011001', 'T': '101011011001',
-                'U': '110010101011', 'V': '100110101011', 'W': '110011010101',
-                'X': '100101101011', 'Y': '110010110101', 'Z': '100110110101',
-                '-': '100101011011', '.': '110010101101', ' ': '100110101101',
-                '$': '100100100101', '/': '100100101001', '+': '100101001001',
-                '%': '101001001001'
-            }
-        };
-    }
-
-    // Validate barcode format
-    validateFormat(code, format) {
-        switch (format.toUpperCase()) {
-            case 'CODE128':
-                return code.length > 0 && code.length <= 80;
-            case 'EAN13':
-                return /^\d{13}$/.test(code);
-            case 'EAN8':
-                return /^\d{8}$/.test(code);
-            case 'UPC':
-                return /^\d{12}$/.test(code);
-            case 'CODE39':
-                return /^[A-Z0-9\-\.\$\/\+\%\s]*$/.test(code) && code.length <= 43;
-            default:
-                return false;
-        }
-    }
-
-    // Generate random barcode for testing
-    generateRandomBarcode(format = 'CODE128') {
-        switch (format.toUpperCase()) {
-            case 'EAN13':
-                return this.generateRandomEAN13();
-            case 'EAN8':
-                return this.generateRandomEAN8();
-            case 'UPC':
-                return this.generateRandomUPC();
-            case 'CODE39':
-                return this.generateRandomCode39();
-            case 'CODE128':
-            default:
-                return this.generateRandomCode128();
-        }
-    }
-
-    // Generate random EAN-13
-    generateRandomEAN13() {
-        let code = '';
-        for (let i = 0; i < 12; i++) {
-            code += Math.floor(Math.random() * 10);
-        }
         
-        // Calculate check digit
+        const qrText = JSON.stringify(qrData);
+        return this.generateQRCode(qrText);
+    }
+
+    // Get supported barcode formats
+    getSupportedFormats() {
+        return [
+            { value: 'CODE128', label: 'Code 128', description: 'Most common format, supports all ASCII characters' },
+            { value: 'CODE39', label: 'Code 39', description: 'Alphanumeric format, widely supported' },
+            { value: 'EAN13', label: 'EAN-13', description: '13-digit European Article Number' },
+            { value: 'EAN8', label: 'EAN-8', description: '8-digit European Article Number' },
+            { value: 'UPC', label: 'UPC-A', description: '12-digit Universal Product Code' },
+            { value: 'ITF14', label: 'ITF-14', description: '14-digit Interleaved 2 of 5' },
+            { value: 'MSI', label: 'MSI', description: 'Modified Plessey code' },
+            { value: 'pharmacode', label: 'Pharmacode', description: 'Pharmaceutical binary code' }
+        ];
+    }
+
+    // Validate barcode text for format
+    validateBarcodeText(text, format) {
+        const validations = {
+            CODE128: () => text.length > 0 && text.length <= 80,
+            CODE39: () => /^[A-Z0-9\-. $/+%]*$/.test(text) && text.length <= 43,
+            EAN13: () => /^\d{12,13}$/.test(text),
+            EAN8: () => /^\d{7,8}$/.test(text),
+            UPC: () => /^\d{11,12}$/.test(text),
+            ITF14: () => /^\d{13,14}$/.test(text),
+            MSI: () => /^\d+$/.test(text),
+            pharmacode: () => /^\d+$/.test(text) && parseInt(text) >= 3 && parseInt(text) <= 131070
+        };
+
+        const validator = validations[format];
+        return validator ? validator() : false;
+    }
+
+    // Generate EAN-13 check digit
+    generateEAN13CheckDigit(code) {
+        if (code.length !== 12) return null;
+        
         let sum = 0;
         for (let i = 0; i < 12; i++) {
-            sum += parseInt(code[i]) * (i % 2 === 0 ? 1 : 3);
+            const digit = parseInt(code[i]);
+            sum += (i % 2 === 0) ? digit : digit * 3;
         }
-        const checkDigit = (10 - (sum % 10)) % 10;
         
+        return (10 - (sum % 10)) % 10;
+    }
+
+    // Generate valid EAN-13 code
+    generateEAN13Code(prefix = '200') {
+        // Start with prefix (country code or company prefix)
+        let code = prefix.padEnd(12, '0');
+        
+        // Generate random digits for the remaining positions
+        for (let i = prefix.length; i < 12; i++) {
+            code = code.substring(0, i) + Math.floor(Math.random() * 10) + code.substring(i + 1);
+        }
+        
+        // Add check digit
+        const checkDigit = this.generateEAN13CheckDigit(code);
         return code + checkDigit;
-    }
-
-    // Generate random EAN-8
-    generateRandomEAN8() {
-        let code = '';
-        for (let i = 0; i < 7; i++) {
-            code += Math.floor(Math.random() * 10);
-        }
-        
-        // Calculate check digit
-        let sum = 0;
-        for (let i = 0; i < 7; i++) {
-            sum += parseInt(code[i]) * (i % 2 === 0 ? 3 : 1);
-        }
-        const checkDigit = (10 - (sum % 10)) % 10;
-        
-        return code + checkDigit;
-    }
-
-    // Generate random UPC
-    generateRandomUPC() {
-        let code = '';
-        for (let i = 0; i < 11; i++) {
-            code += Math.floor(Math.random() * 10);
-        }
-        
-        // Calculate check digit
-        let sum = 0;
-        for (let i = 0; i < 11; i++) {
-            sum += parseInt(code[i]) * (i % 2 === 0 ? 3 : 1);
-        }
-        const checkDigit = (10 - (sum % 10)) % 10;
-        
-        return code + checkDigit;
-    }
-
-    // Generate random Code 39
-    generateRandomCode39() {
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        let code = '';
-        const length = Math.floor(Math.random() * 10) + 5; // 5-14 characters
-        
-        for (let i = 0; i < length; i++) {
-            code += chars[Math.floor(Math.random() * chars.length)];
-        }
-        
-        return code;
-    }
-
-    // Generate random Code 128
-    generateRandomCode128() {
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let code = '';
-        const length = Math.floor(Math.random() * 15) + 5; // 5-19 characters
-        
-        for (let i = 0; i < length; i++) {
-            code += chars[Math.floor(Math.random() * chars.length)];
-        }
-        
-        return code;
-    }
-
-    // Download barcode as image
-    downloadBarcode(dataURL, filename = 'barcode.png') {
-        const link = document.createElement('a');
-        link.download = filename;
-        link.href = dataURL;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
     }
 
     // Print barcode
-    printBarcode(dataURL) {
+    printBarcode(canvas, title = '') {
         const printWindow = window.open('', '_blank');
-        printWindow.document.write(`
+        const dataURL = canvas.toDataURL('image/png');
+        
+        const printContent = `
+            <!DOCTYPE html>
             <html>
-                <head>
-                    <title>Print Barcode</title>
-                    <style>
-                        body { margin: 0; padding: 20px; text-align: center; }
-                        img { max-width: 100%; height: auto; }
-                        @media print {
-                            body { margin: 0; padding: 0; }
-                        }
-                    </style>
-                </head>
-                <body>
-                    <img src="${dataURL}" alt="Barcode" />
-                    <script>
-                        window.onload = function() {
-                            window.print();
-                            window.onafterprint = function() {
-                                window.close();
-                            };
+            <head>
+                <title>Print Barcode</title>
+                <style>
+                    body {
+                        margin: 0;
+                        padding: 20px;
+                        font-family: Arial, sans-serif;
+                        text-align: center;
+                    }
+                    .barcode-container {
+                        margin: 20px auto;
+                        max-width: 400px;
+                    }
+                    .barcode-title {
+                        font-size: 18px;
+                        font-weight: bold;
+                        margin-bottom: 10px;
+                    }
+                    .barcode-image {
+                        max-width: 100%;
+                        height: auto;
+                        border: 1px solid #ddd;
+                        padding: 10px;
+                        background: white;
+                    }
+                    @media print {
+                        body { margin: 0; padding: 10px; }
+                        .no-print { display: none; }
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="barcode-container">
+                    ${title ? `<div class="barcode-title">${title}</div>` : ''}
+                    <img src="${dataURL}" alt="Barcode" class="barcode-image">
+                </div>
+                <script>
+                    window.onload = function() {
+                        window.print();
+                        window.onafterprint = function() {
+                            window.close();
                         };
-                    </script>
-                </body>
+                    };
+                </script>
+            </body>
             </html>
-        `);
+        `;
+        
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+    }
+
+    // Download barcode as image
+    downloadBarcode(canvas, filename = 'barcode.png') {
+        const link = document.createElement('a');
+        link.download = filename;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    }
+
+    // Create barcode label with product info
+    createProductLabel(product, options = {}) {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        const width = options.width || 300;
+        const height = options.height || 200;
+        
+        canvas.width = width;
+        canvas.height = height;
+        
+        // Draw white background
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, width, height);
+        
+        // Draw border
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(5, 5, width - 10, height - 10);
+        
+        // Generate barcode
+        const barcodeCanvas = this.generateProductBarcode(product, {
+            width: 1,
+            height: 40,
+            displayValue: false
+        });
+        
+        // Draw barcode
+        const barcodeY = height - 80;
+        ctx.drawImage(barcodeCanvas, 20, barcodeY, width - 40, 50);
+        
+        // Draw product name
+        ctx.fillStyle = '#000000';
+        ctx.font = 'bold 14px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(product.name, width / 2, 30);
+        
+        // Draw price
+        ctx.font = 'bold 18px Arial';
+        ctx.fillText(ZovatuUtils.formatCurrency(product.price), width / 2, 60);
+        
+        // Draw SKU
+        ctx.font = '12px Arial';
+        ctx.fillText(product.sku, width / 2, 90);
+        
+        // Draw barcode number
+        ctx.font = '10px monospace';
+        ctx.fillText(product.barcode || product.sku, width / 2, height - 15);
+        
+        return canvas;
+    }
+
+    // Batch generate product labels
+    batchGenerateLabels(products, options = {}) {
+        const labels = [];
+        
+        products.forEach(product => {
+            const label = this.createProductLabel(product, options);
+            labels.push({
+                product,
+                canvas: label,
+                dataURL: label.toDataURL('image/png')
+            });
+        });
+        
+        return labels;
+    }
+
+    // Print batch labels
+    printBatchLabels(labels, title = 'Product Labels') {
+        const printWindow = window.open('', '_blank');
+        
+        const labelHTML = labels.map(label => `
+            <div class="label-item">
+                <img src="${label.dataURL}" alt="${label.product.name}">
+            </div>
+        `).join('');
+        
+        const printContent = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Print Labels</title>
+                <style>
+                    body {
+                        margin: 0;
+                        padding: 20px;
+                        font-family: Arial, sans-serif;
+                    }
+                    .labels-container {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                        gap: 10px;
+                        max-width: 1200px;
+                        margin: 0 auto;
+                    }
+                    .label-item {
+                        text-align: center;
+                        page-break-inside: avoid;
+                    }
+                    .label-item img {
+                        max-width: 100%;
+                        height: auto;
+                        border: 1px solid #ddd;
+                    }
+                    h1 {
+                        text-align: center;
+                        margin-bottom: 30px;
+                    }
+                    @media print {
+                        body { margin: 0; padding: 10px; }
+                        .no-print { display: none; }
+                        .labels-container {
+                            grid-template-columns: repeat(2, 1fr);
+                        }
+                    }
+                </style>
+            </head>
+            <body>
+                <h1>${title}</h1>
+                <div class="labels-container">
+                    ${labelHTML}
+                </div>
+                <script>
+                    window.onload = function() {
+                        window.print();
+                        window.onafterprint = function() {
+                            window.close();
+                        };
+                    };
+                </script>
+            </body>
+            </html>
+        `;
+        
+        printWindow.document.write(printContent);
         printWindow.document.close();
     }
 }
 
-// Create global barcode generator instance
-window.barcodeGenerator = new BarcodeGenerator();
+// Create global barcode utility instance
+const ZovatuBarcode = new BarcodeUtils();
+
+// Export for use in other modules
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { BarcodeUtils, ZovatuBarcode };
+}
 

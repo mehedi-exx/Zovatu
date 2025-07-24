@@ -1,290 +1,475 @@
-// Zovatu Billing Tool - Storage Utility
-// Handles localStorage and IndexedDB operations for client-side data persistence
+/* ===================================
+   Zovatu Smart Billing Tool - Storage
+   Data Storage and Management Module
+   =================================== */
 
-class BillingStorage {
+// Storage management class
+class ZovatuStorage {
     constructor() {
-        this.prefix = 'zovatu_billing_';
-        this.currentUser = localStorage.getItem('loggedInUser') || 'guest';
-        this.userPrefix = `${this.prefix}${this.currentUser}_`;
-        this.initializeStorage();
+        this.storagePrefix = 'zovatu_';
+        this.version = '2.0';
+        this.init();
     }
 
-    // Initialize storage with default structure
-    initializeStorage() {
-        const defaultData = {
-            shops: [],
-            currentShop: null,
-            settings: {
-                autoBackup: true,
-                backupFrequency: 'daily',
+    // Initialize storage
+    init() {
+        this.checkVersion();
+        this.ensureDefaultData();
+    }
+
+    // Check storage version and migrate if needed
+    checkVersion() {
+        const currentVersion = this.get('version');
+        if (currentVersion !== this.version) {
+            this.migrateData(currentVersion, this.version);
+            this.set('version', this.version);
+        }
+    }
+
+    // Migrate data between versions
+    migrateData(fromVersion, toVersion) {
+        console.log(`Migrating data from ${fromVersion} to ${toVersion}`);
+        
+        // Migration logic can be added here for future versions
+        if (!fromVersion) {
+            // First time setup
+            this.ensureDefaultData();
+        }
+    }
+
+    // Ensure default data exists
+    ensureDefaultData() {
+        // Default settings
+        if (!this.get('settings')) {
+            this.set('settings', {
                 currency: 'BDT',
-                invoicePrefix: 'INV-',
-                printEnabled: true
-            }
-        };
-
-        // Check if user data exists, if not create it
-        if (!this.getData('shops')) {
-            this.setData('shops', defaultData.shops);
+                taxRate: 0,
+                discountRate: 0,
+                language: 'en',
+                theme: 'light',
+                autoBackup: true,
+                printSettings: {
+                    paperSize: 'A4',
+                    orientation: 'portrait',
+                    includeBarcode: true,
+                    includeQR: false
+                },
+                businessInfo: {
+                    name: '',
+                    address: '',
+                    phone: '',
+                    email: '',
+                    website: '',
+                    logo: ''
+                }
+            });
         }
-        if (!this.getData('settings')) {
-            this.setData('settings', defaultData.settings);
+
+        // Default shops array
+        if (!this.get('shops')) {
+            this.set('shops', []);
+        }
+
+        // Default products array
+        if (!this.get('products')) {
+            this.set('products', []);
+        }
+
+        // Default invoices array
+        if (!this.get('invoices')) {
+            this.set('invoices', []);
+        }
+
+        // Default users array
+        if (!this.get('users')) {
+            this.set('users', [
+                {
+                    id: 'admin_001',
+                    username: 'admin',
+                    password: 'admin123', // In production, this should be hashed
+                    role: 'admin',
+                    name: 'Administrator',
+                    email: 'admin@zovatu.com',
+                    phone: '',
+                    avatar: '',
+                    createdAt: new Date().toISOString(),
+                    lastLogin: null,
+                    isActive: true
+                }
+            ]);
+        }
+
+        // Default categories
+        if (!this.get('categories')) {
+            this.set('categories', [
+                { id: 'cat_001', name: 'Electronics', description: 'Electronic items and gadgets' },
+                { id: 'cat_002', name: 'Clothing', description: 'Apparel and fashion items' },
+                { id: 'cat_003', name: 'Food & Beverages', description: 'Food and drink items' },
+                { id: 'cat_004', name: 'Books', description: 'Books and educational materials' },
+                { id: 'cat_005', name: 'Home & Garden', description: 'Home improvement and garden items' }
+            ]);
+        }
+
+        // Current session
+        if (!this.get('currentSession')) {
+            this.set('currentSession', {
+                userId: null,
+                shopId: null,
+                loginTime: null,
+                isLoggedIn: false
+            });
         }
     }
 
-    // Generic data operations
-    setData(key, data) {
+    // Get data from localStorage
+    get(key) {
         try {
-            const fullKey = this.userPrefix + key;
-            localStorage.setItem(fullKey, JSON.stringify(data));
-            return true;
+            const item = localStorage.getItem(this.storagePrefix + key);
+            return item ? JSON.parse(item) : null;
         } catch (error) {
-            console.error('Error saving data:', error);
-            return false;
-        }
-    }
-
-    getData(key) {
-        try {
-            const fullKey = this.userPrefix + key;
-            const data = localStorage.getItem(fullKey);
-            return data ? JSON.parse(data) : null;
-        } catch (error) {
-            console.error('Error loading data:', error);
+            console.error('Error getting data from storage:', error);
             return null;
         }
     }
 
-    removeData(key) {
+    // Set data to localStorage
+    set(key, value) {
         try {
-            const fullKey = this.userPrefix + key;
-            localStorage.removeItem(fullKey);
+            localStorage.setItem(this.storagePrefix + key, JSON.stringify(value));
             return true;
         } catch (error) {
-            console.error('Error removing data:', error);
+            console.error('Error setting data to storage:', error);
             return false;
         }
     }
 
-    // Shop operations
-    saveShop(shop) {
-        const shops = this.getData('shops') || [];
-        const existingIndex = shops.findIndex(s => s.id === shop.id);
-        
-        if (existingIndex >= 0) {
-            shops[existingIndex] = shop;
-        } else {
-            shops.push(shop);
+    // Remove data from localStorage
+    remove(key) {
+        try {
+            localStorage.removeItem(this.storagePrefix + key);
+            return true;
+        } catch (error) {
+            console.error('Error removing data from storage:', error);
+            return false;
         }
-        
-        return this.setData('shops', shops);
     }
 
+    // Clear all data
+    clear() {
+        try {
+            const keys = Object.keys(localStorage);
+            keys.forEach(key => {
+                if (key.startsWith(this.storagePrefix)) {
+                    localStorage.removeItem(key);
+                }
+            });
+            return true;
+        } catch (error) {
+            console.error('Error clearing storage:', error);
+            return false;
+        }
+    }
+
+    // Get all shops
     getShops() {
-        return this.getData('shops') || [];
+        return this.get('shops') || [];
     }
 
+    // Add new shop
+    addShop(shop) {
+        const shops = this.getShops();
+        shop.id = shop.id || ZovatuUtils.generateId('shop_');
+        shop.createdAt = shop.createdAt || new Date().toISOString();
+        shop.isActive = shop.isActive !== undefined ? shop.isActive : true;
+        
+        shops.push(shop);
+        return this.set('shops', shops);
+    }
+
+    // Update shop
+    updateShop(shopId, updates) {
+        const shops = this.getShops();
+        const index = shops.findIndex(shop => shop.id === shopId);
+        
+        if (index !== -1) {
+            shops[index] = { ...shops[index], ...updates, updatedAt: new Date().toISOString() };
+            return this.set('shops', shops);
+        }
+        return false;
+    }
+
+    // Delete shop
+    deleteShop(shopId) {
+        const shops = this.getShops();
+        const filteredShops = shops.filter(shop => shop.id !== shopId);
+        return this.set('shops', filteredShops);
+    }
+
+    // Get shop by ID
     getShop(shopId) {
         const shops = this.getShops();
         return shops.find(shop => shop.id === shopId) || null;
     }
 
-    deleteShop(shopId) {
-        const shops = this.getShops();
-        const filteredShops = shops.filter(shop => shop.id !== shopId);
-        
-        // Also remove all related data
-        this.removeData(`products_${shopId}`);
-        this.removeData(`invoices_${shopId}`);
-        this.removeData(`salesmen_${shopId}`);
-        
-        return this.setData('shops', filteredShops);
-    }
-
-    // Current shop operations
-    setCurrentShop(shopId) {
-        return this.setData('currentShop', shopId);
-    }
-
-    getCurrentShop() {
-        const shopId = this.getData('currentShop');
-        return shopId ? this.getShop(shopId) : null;
-    }
-
-    // Product operations
-    saveProduct(shopId, product) {
-        const products = this.getProducts(shopId);
-        const existingIndex = products.findIndex(p => p.id === product.id);
-        
-        if (existingIndex >= 0) {
-            products[existingIndex] = product;
-        } else {
-            products.push(product);
+    // Get all products
+    getProducts(shopId = null) {
+        const products = this.get('products') || [];
+        if (shopId) {
+            return products.filter(product => product.shopId === shopId);
         }
+        return products;
+    }
+
+    // Add new product
+    addProduct(product) {
+        const products = this.getProducts();
+        product.id = product.id || ZovatuUtils.generateId('prod_');
+        product.createdAt = product.createdAt || new Date().toISOString();
+        product.isActive = product.isActive !== undefined ? product.isActive : true;
         
-        return this.setData(`products_${shopId}`, products);
+        products.push(product);
+        return this.set('products', products);
     }
 
-    getProducts(shopId) {
-        return this.getData(`products_${shopId}`) || [];
+    // Update product
+    updateProduct(productId, updates) {
+        const products = this.getProducts();
+        const index = products.findIndex(product => product.id === productId);
+        
+        if (index !== -1) {
+            products[index] = { ...products[index], ...updates, updatedAt: new Date().toISOString() };
+            return this.set('products', products);
+        }
+        return false;
     }
 
-    getProduct(shopId, productId) {
-        const products = this.getProducts(shopId);
+    // Delete product
+    deleteProduct(productId) {
+        const products = this.getProducts();
+        const filteredProducts = products.filter(product => product.id !== productId);
+        return this.set('products', filteredProducts);
+    }
+
+    // Get product by ID
+    getProduct(productId) {
+        const products = this.getProducts();
         return products.find(product => product.id === productId) || null;
     }
 
-    deleteProduct(shopId, productId) {
+    // Search products
+    searchProducts(query, shopId = null) {
         const products = this.getProducts(shopId);
-        const filteredProducts = products.filter(product => product.id !== productId);
-        return this.setData(`products_${shopId}`, filteredProducts);
+        const searchTerm = query.toLowerCase();
+        
+        return products.filter(product => 
+            product.name.toLowerCase().includes(searchTerm) ||
+            product.sku.toLowerCase().includes(searchTerm) ||
+            product.barcode.toLowerCase().includes(searchTerm) ||
+            (product.category && product.category.toLowerCase().includes(searchTerm))
+        );
     }
 
-    // Invoice operations
-    saveInvoice(shopId, invoice) {
-        const invoices = this.getInvoices(shopId);
-        const existingIndex = invoices.findIndex(i => i.id === invoice.id);
-        
-        if (existingIndex >= 0) {
-            invoices[existingIndex] = invoice;
-        } else {
-            invoices.push(invoice);
+    // Get all invoices
+    getInvoices(shopId = null) {
+        const invoices = this.get('invoices') || [];
+        if (shopId) {
+            return invoices.filter(invoice => invoice.shopId === shopId);
         }
-        
-        return this.setData(`invoices_${shopId}`, invoices);
+        return invoices;
     }
 
-    getInvoices(shopId, filters = {}) {
-        let invoices = this.getData(`invoices_${shopId}`) || [];
+    // Add new invoice
+    addInvoice(invoice) {
+        const invoices = this.getInvoices();
+        invoice.id = invoice.id || ZovatuUtils.generateId('inv_');
+        invoice.invoiceNumber = invoice.invoiceNumber || this.generateInvoiceNumber();
+        invoice.createdAt = invoice.createdAt || new Date().toISOString();
+        invoice.status = invoice.status || 'completed';
         
-        // Apply filters
-        if (filters.date) {
-            const filterDate = new Date(filters.date).toDateString();
-            invoices = invoices.filter(invoice => 
-                new Date(invoice.date).toDateString() === filterDate
-            );
-        }
-        
-        if (filters.status) {
-            invoices = invoices.filter(invoice => invoice.status === filters.status);
-        }
-        
-        if (filters.startDate && filters.endDate) {
-            const start = new Date(filters.startDate);
-            const end = new Date(filters.endDate);
-            invoices = invoices.filter(invoice => {
-                const invoiceDate = new Date(invoice.date);
-                return invoiceDate >= start && invoiceDate <= end;
-            });
-        }
-        
-        // Sort by date (newest first)
-        return invoices.sort((a, b) => new Date(b.date) - new Date(a.date));
+        invoices.push(invoice);
+        return this.set('invoices', invoices);
     }
 
-    getInvoice(shopId, invoiceId) {
-        const invoices = this.getInvoices(shopId);
-        return invoices.find(invoice => invoice.id === invoiceId) || null;
+    // Update invoice
+    updateInvoice(invoiceId, updates) {
+        const invoices = this.getInvoices();
+        const index = invoices.findIndex(invoice => invoice.id === invoiceId);
+        
+        if (index !== -1) {
+            invoices[index] = { ...invoices[index], ...updates, updatedAt: new Date().toISOString() };
+            return this.set('invoices', invoices);
+        }
+        return false;
     }
 
-    deleteInvoice(shopId, invoiceId) {
-        const invoices = this.getInvoices(shopId);
+    // Delete invoice
+    deleteInvoice(invoiceId) {
+        const invoices = this.getInvoices();
         const filteredInvoices = invoices.filter(invoice => invoice.id !== invoiceId);
-        return this.setData(`invoices_${shopId}`, filteredInvoices);
+        return this.set('invoices', filteredInvoices);
     }
 
-    // Salesman operations
-    saveSalesman(shopId, salesman) {
-        const salesmen = this.getSalesmen(shopId);
-        const existingIndex = salesmen.findIndex(s => s.id === salesman.id);
+    // Generate invoice number
+    generateInvoiceNumber() {
+        const invoices = this.getInvoices();
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
         
-        if (existingIndex >= 0) {
-            salesmen[existingIndex] = salesman;
-        } else {
-            salesmen.push(salesman);
+        const prefix = `INV-${year}${month}${day}`;
+        const todayInvoices = invoices.filter(inv => 
+            inv.invoiceNumber && inv.invoiceNumber.startsWith(prefix)
+        );
+        
+        const nextNumber = String(todayInvoices.length + 1).padStart(3, '0');
+        return `${prefix}-${nextNumber}`;
+    }
+
+    // Get all users
+    getUsers() {
+        return this.get('users') || [];
+    }
+
+    // Add new user
+    addUser(user) {
+        const users = this.getUsers();
+        user.id = user.id || ZovatuUtils.generateId('user_');
+        user.createdAt = user.createdAt || new Date().toISOString();
+        user.isActive = user.isActive !== undefined ? user.isActive : true;
+        
+        users.push(user);
+        return this.set('users', users);
+    }
+
+    // Update user
+    updateUser(userId, updates) {
+        const users = this.getUsers();
+        const index = users.findIndex(user => user.id === userId);
+        
+        if (index !== -1) {
+            users[index] = { ...users[index], ...updates, updatedAt: new Date().toISOString() };
+            return this.set('users', users);
+        }
+        return false;
+    }
+
+    // Delete user
+    deleteUser(userId) {
+        const users = this.getUsers();
+        const filteredUsers = users.filter(user => user.id !== userId);
+        return this.set('users', filteredUsers);
+    }
+
+    // Get user by ID
+    getUser(userId) {
+        const users = this.getUsers();
+        return users.find(user => user.id === userId) || null;
+    }
+
+    // Authenticate user
+    authenticateUser(username, password) {
+        const users = this.getUsers();
+        const user = users.find(u => 
+            u.username === username && 
+            u.password === password && 
+            u.isActive
+        );
+        
+        if (user) {
+            // Update last login
+            this.updateUser(user.id, { lastLogin: new Date().toISOString() });
+            
+            // Set current session
+            this.setCurrentSession({
+                userId: user.id,
+                shopId: null,
+                loginTime: new Date().toISOString(),
+                isLoggedIn: true
+            });
+            
+            return user;
         }
         
-        return this.setData(`salesmen_${shopId}`, salesmen);
+        return null;
     }
 
-    getSalesmen(shopId) {
-        return this.getData(`salesmen_${shopId}`) || [];
-    }
-
-    getSalesman(shopId, salesmanId) {
-        const salesmen = this.getSalesmen(shopId);
-        return salesmen.find(salesman => salesman.id === salesmanId) || null;
-    }
-
-    deleteSalesman(shopId, salesmanId) {
-        const salesmen = this.getSalesmen(shopId);
-        const filteredSalesmen = salesmen.filter(salesman => salesman.id !== salesmanId);
-        return this.setData(`salesmen_${shopId}`, filteredSalesmen);
-    }
-
-    // Settings operations
-    saveSettings(settings) {
-        const currentSettings = this.getData('settings') || {};
-        const updatedSettings = { ...currentSettings, ...settings };
-        return this.setData('settings', updatedSettings);
-    }
-
-    getSettings() {
-        return this.getData('settings') || {
-            autoBackup: true,
-            backupFrequency: 'daily',
-            currency: 'BDT',
-            invoicePrefix: 'INV-',
-            printEnabled: true
+    // Get current session
+    getCurrentSession() {
+        return this.get('currentSession') || {
+            userId: null,
+            shopId: null,
+            loginTime: null,
+            isLoggedIn: false
         };
     }
 
-    // Backup operations
+    // Set current session
+    setCurrentSession(session) {
+        return this.set('currentSession', session);
+    }
+
+    // Logout user
+    logout() {
+        return this.setCurrentSession({
+            userId: null,
+            shopId: null,
+            loginTime: null,
+            isLoggedIn: false
+        });
+    }
+
+    // Get settings
+    getSettings() {
+        return this.get('settings') || {};
+    }
+
+    // Update settings
+    updateSettings(updates) {
+        const settings = this.getSettings();
+        const newSettings = { ...settings, ...updates };
+        return this.set('settings', newSettings);
+    }
+
+    // Get categories
+    getCategories() {
+        return this.get('categories') || [];
+    }
+
+    // Add category
+    addCategory(category) {
+        const categories = this.getCategories();
+        category.id = category.id || ZovatuUtils.generateId('cat_');
+        categories.push(category);
+        return this.set('categories', categories);
+    }
+
+    // Export all data
     exportData() {
         const data = {
-            shops: this.getData('shops'),
-            settings: this.getData('settings'),
-            currentShop: this.getData('currentShop'),
-            timestamp: new Date().toISOString(),
-            version: '1.0'
+            version: this.version,
+            exportDate: new Date().toISOString(),
+            shops: this.getShops(),
+            products: this.getProducts(),
+            invoices: this.getInvoices(),
+            users: this.getUsers(),
+            categories: this.getCategories(),
+            settings: this.getSettings()
         };
-
-        // Add all shop-specific data
-        const shops = this.getShops();
-        shops.forEach(shop => {
-            data[`products_${shop.id}`] = this.getProducts(shop.id);
-            data[`invoices_${shop.id}`] = this.getInvoices(shop.id);
-            data[`salesmen_${shop.id}`] = this.getSalesmen(shop.id);
-        });
-
+        
         return data;
     }
 
+    // Import data
     importData(data) {
         try {
-            // Validate data structure
-            if (!data.shops || !Array.isArray(data.shops)) {
-                throw new Error('Invalid backup data format');
-            }
-
-            // Import main data
-            this.setData('shops', data.shops);
-            if (data.settings) this.setData('settings', data.settings);
-            if (data.currentShop) this.setData('currentShop', data.currentShop);
-
-            // Import shop-specific data
-            data.shops.forEach(shop => {
-                if (data[`products_${shop.id}`]) {
-                    this.setData(`products_${shop.id}`, data[`products_${shop.id}`]);
-                }
-                if (data[`invoices_${shop.id}`]) {
-                    this.setData(`invoices_${shop.id}`, data[`invoices_${shop.id}`]);
-                }
-                if (data[`salesmen_${shop.id}`]) {
-                    this.setData(`salesmen_${shop.id}`, data[`salesmen_${shop.id}`]);
-                }
-            });
-
+            if (data.shops) this.set('shops', data.shops);
+            if (data.products) this.set('products', data.products);
+            if (data.invoices) this.set('invoices', data.invoices);
+            if (data.users) this.set('users', data.users);
+            if (data.categories) this.set('categories', data.categories);
+            if (data.settings) this.set('settings', data.settings);
+            
             return true;
         } catch (error) {
             console.error('Error importing data:', error);
@@ -292,79 +477,55 @@ class BillingStorage {
         }
     }
 
-    // Utility functions
-    generateId() {
-        return Date.now().toString(36) + Math.random().toString(36).substr(2);
-    }
-
-    getStorageSize() {
-        let total = 0;
-        for (let key in localStorage) {
-            if (key.startsWith(this.userPrefix)) {
-                total += localStorage[key].length;
-            }
-        }
-        return total;
-    }
-
-    clearAllData() {
+    // Get storage usage
+    getStorageUsage() {
+        let totalSize = 0;
         const keys = Object.keys(localStorage);
+        
         keys.forEach(key => {
-            if (key.startsWith(this.userPrefix)) {
-                localStorage.removeItem(key);
+            if (key.startsWith(this.storagePrefix)) {
+                totalSize += localStorage.getItem(key).length;
             }
         });
-        this.initializeStorage();
-    }
-
-    // Statistics
-    getShopStats(shopId) {
-        const products = this.getProducts(shopId);
-        const invoices = this.getInvoices(shopId);
-        const salesmen = this.getSalesmen(shopId);
-
-        const totalSales = invoices.reduce((sum, invoice) => sum + (invoice.total_amount || 0), 0);
-        const todayInvoices = invoices.filter(invoice => 
-            new Date(invoice.date).toDateString() === new Date().toDateString()
-        );
-        const todaySales = todayInvoices.reduce((sum, invoice) => sum + (invoice.total_amount || 0), 0);
-
+        
         return {
-            totalProducts: products.length,
-            totalInvoices: invoices.length,
-            totalSalesmen: salesmen.length,
-            totalSales: totalSales,
-            todayInvoices: todayInvoices.length,
-            todaySales: todaySales,
-            lowStockProducts: products.filter(p => p.stock < 10).length
+            used: totalSize,
+            formatted: ZovatuUtils.formatFileSize(totalSize),
+            percentage: Math.round((totalSize / (5 * 1024 * 1024)) * 100) // Assuming 5MB limit
         };
     }
 
-    // Search functionality
-    searchProducts(shopId, query) {
-        const products = this.getProducts(shopId);
-        const searchTerm = query.toLowerCase();
+    // Backup data to file
+    backupToFile() {
+        const data = this.exportData();
+        const filename = `zovatu_backup_${ZovatuUtils.formatDate(new Date(), 'YYYY-MM-DD')}.json`;
+        const jsonString = ZovatuUtils.stringifyJSON(data);
         
-        return products.filter(product => 
-            product.name.toLowerCase().includes(searchTerm) ||
-            product.code.toLowerCase().includes(searchTerm) ||
-            product.barcode.includes(searchTerm) ||
-            (product.brand && product.brand.toLowerCase().includes(searchTerm))
-        );
+        ZovatuUtils.downloadFile(jsonString, filename, 'application/json');
+        return true;
     }
 
-    searchInvoices(shopId, query) {
-        const invoices = this.getInvoices(shopId);
-        const searchTerm = query.toLowerCase();
-        
-        return invoices.filter(invoice => 
-            invoice.invoice_number.toLowerCase().includes(searchTerm) ||
-            (invoice.customer_name && invoice.customer_name.toLowerCase().includes(searchTerm)) ||
-            (invoice.customer_phone && invoice.customer_phone.includes(searchTerm))
-        );
+    // Restore data from file
+    restoreFromFile(file, callback) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const data = JSON.parse(e.target.result);
+                const success = this.importData(data);
+                callback(success, success ? 'Data restored successfully!' : 'Failed to restore data');
+            } catch (error) {
+                callback(false, 'Invalid backup file format');
+            }
+        };
+        reader.readAsText(file);
     }
 }
 
 // Create global storage instance
-window.billingStorage = new BillingStorage();
+const ZovatuStore = new ZovatuStorage();
+
+// Export for use in other modules
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { ZovatuStorage, ZovatuStore };
+}
 

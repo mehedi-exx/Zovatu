@@ -1,0 +1,114 @@
+/* Base Styling */
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f4f6f8;
+  color: #212529;
+  margin: 0;
+  padding: 20px;
+}
+
+h2, h3 {
+  color: #343a40;
+  margin-bottom: 15px;
+}
+
+/* Container */
+.container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 10px;
+}
+
+/* Section Styling */
+section {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  margin-bottom: 25px;
+}
+
+/* Inputs & Buttons */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="file"],
+button {
+  padding: 10px;
+  margin-top: 8px;
+  margin-bottom: 12px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 15px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Product List */
+#productList div {
+  padding: 10px;
+  margin: 5px 0;
+  background-color: #e9ecef;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#productList button {
+  margin-left: 5px;
+}
+
+/* Tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+table th, table td {
+  border: 1px solid #dee2e6;
+  padding: 10px;
+  text-align: left;
+}
+
+table th {
+  background-color: #f1f3f5;
+}
+
+/* Barcode Area */
+.barcode-area {
+  text-align: center;
+  margin-top: 15px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  section {
+    padding: 15px;
+  }
+
+  button {
+    font-size: 14px;
+  }
+
+  input {
+    font-size: 14px;
+  }
+}

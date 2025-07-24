@@ -1,19 +1,607 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Billing Dashboard</title>
-  <link rel="stylesheet" href="billing.css">
-  <script defer src="billing.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zovatu Smart Billing Tool</title>
+    <link rel="stylesheet" href="billing-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#ff6b35">
 </head>
 <body>
-  <h1>🧾 Create Shop</h1>
-  <form id="shopForm">
-    <input type="text" placeholder="Shop Name" required />
-    <input type="text" placeholder="Address" required />
-    <input type="tel" placeholder="Phone Number" required />
-    <input type="email" placeholder="Admin Gmail for Salesman" />
-    <button type="submit">Create Shop</button>
-  </form>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-overlay">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <i class="fas fa-toolbox"></i>
+                <h2>Zovatu</h2>
+            </div>
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Loading Smart Billing Tool...</p>
+        </div>
+    </div>
+
+    <!-- Profile Setup Modal -->
+    <div id="profileSetupModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-store"></i> Setup Your Shop Profile</h2>
+                <p>Please provide your shop details to get started</p>
+            </div>
+            <form id="profileSetupForm" class="profile-setup-form">
+                <div class="form-group">
+                    <label for="shopName">Shop Name *</label>
+                    <input type="text" id="shopName" name="shopName" required>
+                </div>
+                <div class="form-group">
+                    <label for="shopAddress">Shop Address *</label>
+                    <textarea id="shopAddress" name="shopAddress" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="shopMobile">Mobile Number *</label>
+                    <input type="tel" id="shopMobile" name="shopMobile" required>
+                </div>
+                <div class="form-group">
+                    <label for="shopEmail">Email Address</label>
+                    <input type="email" id="shopEmail" name="shopEmail">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check"></i> Create Shop Profile
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Interface -->
+    <div id="mainInterface" class="main-interface" style="display: none;">
+        <!-- Header -->
+        <header class="billing-header">
+            <div class="header-left">
+                <a href="../dashboard.html" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+                <div class="shop-info">
+                    <h1><i class="fas fa-file-invoice-dollar"></i> Smart Billing Tool</h1>
+                    <div class="shop-status">
+                        <span id="shopStatus" class="shop-status open">Open</span>
+                        <span class="daily-sales">Today: <span id="dailySales">$0.00</span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="mode-toggle">
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="modeToggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                    <span class="mode-label">Ultra Mode</span>
+                </div>
+                <button id="shopStatusToggle" class="shop-toggle-btn open">Close Shop</button>
+                <button id="settingsBtn" class="header-btn">
+                    <i class="fas fa-cog"></i>
+                </button>
+                <button id="adminBtn" class="header-btn">
+                    <i class="fas fa-chart-bar"></i>
+                </button>
+                <button id="productManagementBtn" class="header-btn">
+                    <i class="fas fa-boxes"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="billing-main">
+            <!-- Simple Mode Container -->
+            <div id="simpleModeContainer" class="mode-container">
+                <div class="billing-grid">
+                    <!-- Calculator Section -->
+                    <div class="calculator-section">
+                        <div class="calculator-header">
+                            <h3><i class="fas fa-calculator"></i> Simple Billing Calculator</h3>
+                            <div class="calculator-step" id="calculatorStep">Enter customer payment</div>
+                        </div>
+                        <div id="simpleCalculator" class="calculator">
+                            <div class="calculator-display">
+                                <div id="calculatorDisplay" class="display">0</div>
+                            </div>
+                            <div class="calculator-buttons">
+                                <button class="calc-btn calc-btn-clear" data-action="clear">C</button>
+                                <button class="calc-btn calc-btn-backspace" data-action="backspace">⌫</button>
+                                <button class="calc-btn calc-btn-next" data-action="next">Next</button>
+                                <button class="calc-btn calc-btn-generate" data-action="generate">Generate</button>
+                                
+                                <button class="calc-btn calc-btn-number" data-number="7">7</button>
+                                <button class="calc-btn calc-btn-number" data-number="8">8</button>
+                                <button class="calc-btn calc-btn-number" data-number="9">9</button>
+                                <button class="calc-btn calc-btn-decimal" data-action="decimal">.</button>
+                                
+                                <button class="calc-btn calc-btn-number" data-number="4">4</button>
+                                <button class="calc-btn calc-btn-number" data-number="5">5</button>
+                                <button class="calc-btn calc-btn-number" data-number="6">6</button>
+                                <button class="calc-btn calc-btn-number" data-number="0">0</button>
+                                
+                                <button class="calc-btn calc-btn-number" data-number="1">1</button>
+                                <button class="calc-btn calc-btn-number" data-number="2">2</button>
+                                <button class="calc-btn calc-btn-number" data-number="3">3</button>
+                                <button class="calc-btn calc-btn-number" data-number="00">00</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Bills Section -->
+                    <div class="recent-bills-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-history"></i> Recent Bills</h3>
+                        </div>
+                        <div id="recentBills" class="recent-bills">
+                            <!-- Recent bills will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ultra Mode Container -->
+            <div id="ultraModeContainer" class="mode-container" style="display: none;">
+                <div class="ultra-grid">
+                    <!-- Barcode Scanner Section -->
+                    <div class="scanner-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-barcode"></i> Barcode Scanner</h3>
+                        </div>
+                        <div class="scanner-input">
+                            <input type="text" id="barcodeInput" placeholder="Scan or enter barcode..." autofocus>
+                            <button id="manualSearchBtn" class="btn btn-secondary">
+                                <i class="fas fa-search"></i> Manual Search
+                            </button>
+                        </div>
+                        <div class="scanner-status">
+                            <div class="scanner-indicator">
+                                <i class="fas fa-wifi"></i> Scanner Ready
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product Search Section -->
+                    <div class="product-search-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-search"></i> Product Search</h3>
+                        </div>
+                        <div class="search-input">
+                            <input type="text" id="productSearch" placeholder="Search products by name...">
+                        </div>
+                        <div id="productSearchResults" class="search-results">
+                            <!-- Search results will be populated here -->
+                        </div>
+                        <div class="try-simple-mode" id="trySimpleModeContainer" style="display: none;">
+                            <p>Product not found in inventory</p>
+                            <button id="trySimpleModeBtn" class="btn btn-outline">
+                                <i class="fas fa-calculator"></i> Try Simple Mode
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Shopping Cart Section -->
+                    <div class="cart-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-shopping-cart"></i> Shopping Cart</h3>
+                            <div class="cart-summary">
+                                <span class="cart-count">Items: <span id="cartItemCount">0</span></span>
+                            </div>
+                        </div>
+                        <div id="cartItems" class="cart-items">
+                            <div class="empty-cart">Cart is empty</div>
+                        </div>
+                        <div class="cart-totals">
+                            <div class="total-row">
+                                <span>Subtotal:</span>
+                                <span id="cartSubtotal" class="currency-symbol">$0.00</span>
+                            </div>
+                            <div class="total-row total-final">
+                                <span>Total:</span>
+                                <span id="cartTotal" class="currency-symbol">$0.00</span>
+                            </div>
+                        </div>
+                        <div class="cart-actions">
+                            <button id="clearCartBtn" class="btn btn-secondary">
+                                <i class="fas fa-trash"></i> Clear Cart
+                            </button>
+                            <button id="checkoutBtn" class="btn btn-primary">
+                                <i class="fas fa-credit-card"></i> Checkout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2><i class="fas fa-cog"></i> Settings</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-tabs">
+                    <button class="tab-btn active" data-tab="general">General</button>
+                    <button class="tab-btn" data-tab="currency">Currency</button>
+                    <button class="tab-btn" data-tab="print">Print</button>
+                    <button class="tab-btn" data-tab="notifications">Notifications</button>
+                    <button class="tab-btn" data-tab="backup">Backup</button>
+                    <button class="tab-btn" data-tab="shop">Shop Profile</button>
+                </div>
+
+                <div class="tab-content">
+                    <!-- General Settings -->
+                    <div id="generalTab" class="tab-pane active">
+                        <h3>General Settings</h3>
+                        <div class="setting-group">
+                            <label>Billing Mode</label>
+                            <div class="mode-selector">
+                                <label class="radio-option">
+                                    <input type="radio" name="billingMode" value="simple" checked>
+                                    <span>Simple Mode</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="billingMode" value="ultra">
+                                    <span>Ultra Mode</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Currency Settings -->
+                    <div id="currencyTab" class="tab-pane">
+                        <h3>Currency Settings</h3>
+                        <div class="setting-group">
+                            <label for="currencySelect">Select Currency</label>
+                            <select id="currencySelect">
+                                <option value="USD">USD - US Dollar ($)</option>
+                                <option value="EUR">EUR - Euro (€)</option>
+                                <option value="GBP">GBP - British Pound (£)</option>
+                                <option value="BDT">BDT - Bangladeshi Taka (৳)</option>
+                                <option value="INR">INR - Indian Rupee (₹)</option>
+                                <option value="JPY">JPY - Japanese Yen (¥)</option>
+                                <option value="CNY">CNY - Chinese Yuan (¥)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Print Settings -->
+                    <div id="printTab" class="tab-pane">
+                        <h3>Print Settings</h3>
+                        <div class="setting-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" id="autoPrintToggle">
+                                <span>Auto-print bills after generation</span>
+                            </label>
+                        </div>
+                        <div class="setting-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" id="thermalModeToggle">
+                                <span>Thermal printer mode</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Notification Settings -->
+                    <div id="notificationsTab" class="tab-pane">
+                        <h3>Notification Settings</h3>
+                        <div class="setting-group">
+                            <label for="lowStockThreshold">Low Stock Alert Threshold</label>
+                            <input type="number" id="lowStockThreshold" min="1" max="100" value="10">
+                        </div>
+                    </div>
+
+                    <!-- Backup Settings -->
+                    <div id="backupTab" class="tab-pane">
+                        <h3>Backup Settings</h3>
+                        <div class="setting-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" id="autoBackupToggle" checked>
+                                <span>Enable automatic backup</span>
+                            </label>
+                        </div>
+                        <div class="setting-group">
+                            <label for="backupInterval">Backup Interval (hours)</label>
+                            <select id="backupInterval">
+                                <option value="24">Every 24 hours</option>
+                                <option value="12">Every 12 hours</option>
+                                <option value="6">Every 6 hours</option>
+                            </select>
+                        </div>
+                        <div class="setting-group">
+                            <button id="manualBackupBtn" class="btn btn-primary">
+                                <i class="fas fa-download"></i> Download Backup Now
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Shop Profile Settings -->
+                    <div id="shopTab" class="tab-pane">
+                        <h3>Edit Shop Profile</h3>
+                        <div class="setting-group">
+                            <label for="editShopName">Shop Name</label>
+                            <input type="text" id="editShopName">
+                        </div>
+                        <div class="setting-group">
+                            <label for="editShopAddress">Shop Address</label>
+                            <textarea id="editShopAddress"></textarea>
+                        </div>
+                        <div class="setting-group">
+                            <label for="editShopMobile">Mobile Number</label>
+                            <input type="tel" id="editShopMobile">
+                        </div>
+                        <div class="setting-group">
+                            <label for="editShopEmail">Email Address</label>
+                            <input type="email" id="editShopEmail">
+                        </div>
+                        <div class="setting-group">
+                            <button id="editShopBtn" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel Modal -->
+    <div id="adminPanelModal" class="modal">
+        <div class="modal-content modal-xlarge">
+            <div class="modal-header">
+                <h2><i class="fas fa-chart-bar"></i> Admin Panel</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="totalSalesValue">$0.00</div>
+                            <div class="stat-label">Total Sales</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="totalProfitValue">$0.00</div>
+                            <div class="stat-label">Total Profit</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-warehouse"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="stockValueValue">$0.00</div>
+                            <div class="stat-label">Stock Value</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-boxes"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="productCountValue">0</div>
+                            <div class="stat-label">Products</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-day"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="dailySalesValue">$0.00</div>
+                            <div class="stat-label">Today's Sales</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-value" id="lowStockCountValue">0</div>
+                            <div class="stat-label">Low Stock Items</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="charts-section">
+                    <div class="chart-filters">
+                        <div class="filter-group">
+                            <label for="dateFromFilter">From:</label>
+                            <input type="date" id="dateFromFilter">
+                        </div>
+                        <div class="filter-group">
+                            <label for="dateToFilter">To:</label>
+                            <input type="date" id="dateToFilter">
+                        </div>
+                        <button id="refreshStatsBtn" class="btn btn-secondary">
+                            <i class="fas fa-sync"></i> Refresh
+                        </button>
+                        <button id="exportReportBtn" class="btn btn-primary">
+                            <i class="fas fa-file-export"></i> Export Report
+                        </button>
+                    </div>
+
+                    <div class="charts-grid">
+                        <div class="chart-container">
+                            <h4>Daily Sales Trend</h4>
+                            <canvas id="salesChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h4>Monthly Profit</h4>
+                            <canvas id="profitChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h4>Stock Status</h4>
+                            <canvas id="stockChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <h4>Top Products</h4>
+                            <canvas id="topProductsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Management Modal -->
+    <div id="productManagementModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2><i class="fas fa-boxes"></i> Product Management</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Add Product Form -->
+                <div class="add-product-section">
+                    <h3>Add New Product</h3>
+                    <form id="addProductForm" class="product-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="productName">Product Name *</label>
+                                <input type="text" id="productName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="productBarcode">Barcode</label>
+                                <div class="barcode-input">
+                                    <input type="text" id="productBarcode">
+                                    <button type="button" id="generateBarcodeBtn" class="btn btn-secondary">
+                                        <i class="fas fa-barcode"></i> Generate
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="productCostPrice">Cost Price *</label>
+                                <input type="number" id="productCostPrice" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="productSellingPrice">Selling Price *</label>
+                                <input type="number" id="productSellingPrice" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="productStock">Initial Stock *</label>
+                                <input type="number" id="productStock" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="productUnit">Unit</label>
+                                <select id="productUnit">
+                                    <option value="pcs">Pieces</option>
+                                    <option value="kg">Kilogram</option>
+                                    <option value="ltr">Liter</option>
+                                    <option value="box">Box</option>
+                                    <option value="pack">Pack</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Add Product
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Product List -->
+                <div class="product-list-section">
+                    <div class="list-header">
+                        <h3>Product Inventory</h3>
+                        <div class="search-box">
+                            <input type="text" id="productManagementSearch" placeholder="Search products...">
+                            <i class="fas fa-search"></i>
+                        </div>
+                    </div>
+                    <div id="productList" class="product-list">
+                        <!-- Product list will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-credit-card"></i> Checkout</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="checkout-summary">
+                    <div class="total-amount">
+                        <span>Total Amount:</span>
+                        <span id="checkoutTotal" class="currency-symbol">$0.00</span>
+                    </div>
+                </div>
+                <div class="payment-section">
+                    <div class="form-group">
+                        <label for="customerPayment">Customer Payment</label>
+                        <input type="number" id="customerPayment" step="0.01" placeholder="Enter amount received">
+                    </div>
+                    <div class="change-display" id="changeDisplay" style="display: none;">
+                        <span>Change to Return:</span>
+                        <span id="changeAmount" class="currency-symbol">$0.00</span>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="modal-cancel">Cancel</button>
+                    <button id="completeCheckoutBtn" class="btn btn-primary">
+                        <i class="fas fa-check"></i> Complete Sale
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bill Preview Modal -->
+    <div id="billPreviewModal" class="modal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h2><i class="fas fa-receipt"></i> Bill Preview</h2>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="billPreviewContent" class="bill-preview">
+                    <!-- Bill content will be populated here -->
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-cancel">Close</button>
+                <button id="printBillBtn" class="btn btn-primary" onclick="billingUI.printCurrentBill()">
+                    <i class="fas fa-print"></i> Print Bill
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- JavaScript Files -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <script src="billing-storage.js"></script>
+    <script src="billing-core.js"></script>
+    <script src="billing-ui.js"></script>
+    <script src="billing-main.js"></script>
 </body>
 </html>
+

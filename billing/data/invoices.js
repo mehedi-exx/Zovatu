@@ -1,557 +1,617 @@
-// Zovatu Billing Tool - Invoices Data Management
-// Handles invoice operations, billing calculations, and reporting
+/* ===================================
+   Zovatu Smart Billing Tool - Invoices Data
+   Invoice and Billing Management Module
+   =================================== */
 
-class InvoicesManager {
+// Invoice management class
+class InvoiceManager {
     constructor() {
-        this.storage = window.billingStorage;
+        this.currentInvoice = null;
+        this.init();
     }
 
-    // Create a new invoice
-    createInvoice(shopId, invoiceData) {
-        // Validate required fields
-        if (!invoiceData.items || !Array.isArray(invoiceData.items) || invoiceData.items.length === 0) {
-            throw new Error('Invoice must have at least one item');
+    // Initialize invoice manager
+    init() {
+        this.resetCurrentInvoice();
+    }
+
+    // Reset current invoice
+    resetCurrentInvoice() {
+        this.currentInvoice = {
+            id: null,
+            invoiceNumber: null,
+            shopId: null,
+            customerId: null,
+            customerInfo: {
+                name: '',
+                phone: '',
+                email: '',
+                address: ''
+            },
+            items: [],
+            subtotal: 0,
+            taxAmount: 0,
+            discountAmount: 0,
+            total: 0,
+            paymentMethod: 'cash',
+            paymentStatus: 'pending',
+            notes: '',
+            createdAt: null,
+            updatedAt: null
+        };
+    }
+
+    // Get all invoices for current shop
+    getAllInvoices(shopId = null) {
+        const currentShopId = shopId || (ZovatuShops.getCurrentShop()?.id);
+        if (!currentShopId) return [];
+        
+        return ZovatuStore.getInvoices(currentShopId);
+    }
+
+    // Create new invoice
+    createInvoice(invoiceData = null) {
+        const currentShop = ZovatuShops.getCurrentShop();
+        if (!currentShop) {
+            ZovatuUtils.showToast('Please select a shop first', 'error');
+            return null;
         }
 
-        if (!invoiceData.total_amount || parseFloat(invoiceData.total_amount) <= 0) {
-            throw new Error('Invoice total amount must be greater than 0');
-        }
-
-        // Generate invoice number if not provided
-        const invoiceNumber = invoiceData.invoice_number || this.generateInvoiceNumber(shopId);
-
-        // Check for duplicate invoice numbers
-        const existingInvoices = this.storage.getInvoices(shopId);
-        if (existingInvoices.some(invoice => invoice.invoice_number === invoiceNumber)) {
-            throw new Error('An invoice with this number already exists');
-        }
-
-        // Calculate totals
-        const calculations = this.calculateInvoiceTotals(invoiceData.items, invoiceData.discount, invoiceData.tax_rate);
-
-        // Create invoice object
-        const invoice = {
-            id: this.storage.generateId(),
-            shop_id: shopId,
-            invoice_number: invoiceNumber,
-            date: invoiceData.date || new Date().toISOString(),
-            customer_name: invoiceData.customer_name?.trim() || 'Walk-in Customer',
-            customer_phone: invoiceData.customer_phone?.trim() || '',
-            customer_email: invoiceData.customer_email?.trim() || '',
-            customer_address: invoiceData.customer_address?.trim() || '',
-            items: invoiceData.items.map(item => ({
-                product_id: item.product_id,
-                name: item.name?.trim() || '',
-                quantity: parseInt(item.quantity) || 1,
-                unit_price: parseFloat(item.unit_price) || 0,
-                total: parseFloat(item.total) || (parseInt(item.quantity) * parseFloat(item.unit_price)),
-                discount: parseFloat(item.discount) || 0,
-                tax_rate: parseFloat(item.tax_rate) || 0
-            })),
-            subtotal: calculations.subtotal,
-            discount_amount: calculations.discount_amount,
-            tax_amount: calculations.tax_amount,
-            total_amount: calculations.total_amount,
-            amount_received: parseFloat(invoiceData.amount_received) || calculations.total_amount,
-            change_returned: parseFloat(invoiceData.change_returned) || 0,
-            payment_method: invoiceData.payment_method || 'cash',
-            status: invoiceData.status || 'paid',
-            notes: invoiceData.notes?.trim() || '',
-            salesman_id: invoiceData.salesman_id || 'admin',
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-            printed_at: null,
-            voided_at: null,
-            void_reason: null
+        const invoice = invoiceData || {
+            shopId: currentShop.id,
+            customerId: null,
+            customerInfo: {
+                name: '',
+                phone: '',
+                email: '',
+                address: ''
+            },
+            items: [],
+            subtotal: 0,
+            taxAmount: 0,
+            discountAmount: 0,
+            total: 0,
+            paymentMethod: 'cash',
+            paymentStatus: 'pending',
+            notes: '',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
         };
 
-        // Update product stock
-        this.updateProductStock(shopId, invoice.items);
-
-        // Save invoice
-        if (this.storage.saveInvoice(shopId, invoice)) {
+        const success = ZovatuStore.addInvoice(invoice);
+        if (success) {
+            this.currentInvoice = { ...invoice };
             return invoice;
         } else {
-            throw new Error('Failed to save invoice data');
+            ZovatuUtils.showToast('Failed to create invoice', 'error');
+            return null;
         }
     }
 
-    // Update existing invoice
-    updateInvoice(shopId, invoiceId, updateData) {
-        const invoice = this.storage.getInvoice(shopId, invoiceId);
-        if (!invoice) {
-            throw new Error('Invoice not found');
-        }
+    // Update invoice
+    updateInvoice(invoiceId, updates) {
+        const success = ZovatuStore.updateInvoice(invoiceId, {
+            ...updates,
+            updatedAt: new Date().toISOString()
+        });
 
-        // Prevent updating voided invoices
-        if (invoice.voided_at) {
-            throw new Error('Cannot update a voided invoice');
-        }
-
-        // Validate invoice number uniqueness if changed
-        if (updateData.invoice_number && updateData.invoice_number !== invoice.invoice_number) {
-            const existingInvoices = this.storage.getInvoices(shopId);
-            if (existingInvoices.some(inv => inv.id !== invoiceId && inv.invoice_number === updateData.invoice_number)) {
-                throw new Error('An invoice with this number already exists');
+        if (success) {
+            // Update current invoice if it's the one being updated
+            if (this.currentInvoice && this.currentInvoice.id === invoiceId) {
+                this.currentInvoice = { ...this.currentInvoice, ...updates };
             }
-        }
-
-        // Restore original stock if items are being changed
-        if (updateData.items) {
-            this.restoreProductStock(shopId, invoice.items);
-        }
-
-        // Recalculate totals if items changed
-        let calculations = {
-            subtotal: invoice.subtotal,
-            discount_amount: invoice.discount_amount,
-            tax_amount: invoice.tax_amount,
-            total_amount: invoice.total_amount
-        };
-
-        if (updateData.items) {
-            calculations = this.calculateInvoiceTotals(updateData.items, updateData.discount, updateData.tax_rate);
-        }
-
-        // Update invoice data
-        const updatedInvoice = {
-            ...invoice,
-            ...updateData,
-            id: invoice.id, // Ensure ID doesn't change
-            shop_id: invoice.shop_id, // Ensure shop_id doesn't change
-            created_at: invoice.created_at, // Preserve creation date
-            updated_at: new Date().toISOString(),
-            ...calculations
-        };
-
-        // Update product stock with new items
-        if (updateData.items) {
-            this.updateProductStock(shopId, updatedInvoice.items);
-        }
-
-        if (this.storage.saveInvoice(shopId, updatedInvoice)) {
-            return updatedInvoice;
-        } else {
-            throw new Error('Failed to update invoice data');
-        }
-    }
-
-    // Void an invoice
-    voidInvoice(shopId, invoiceId, reason) {
-        const invoice = this.storage.getInvoice(shopId, invoiceId);
-        if (!invoice) {
-            throw new Error('Invoice not found');
-        }
-
-        if (invoice.voided_at) {
-            throw new Error('Invoice is already voided');
-        }
-
-        // Restore product stock
-        this.restoreProductStock(shopId, invoice.items);
-
-        // Update invoice as voided
-        const voidedInvoice = {
-            ...invoice,
-            status: 'voided',
-            voided_at: new Date().toISOString(),
-            void_reason: reason?.trim() || 'No reason provided',
-            updated_at: new Date().toISOString()
-        };
-
-        if (this.storage.saveInvoice(shopId, voidedInvoice)) {
-            return voidedInvoice;
-        } else {
-            throw new Error('Failed to void invoice');
-        }
-    }
-
-    // Delete invoice (permanent)
-    deleteInvoice(shopId, invoiceId) {
-        const invoice = this.storage.getInvoice(shopId, invoiceId);
-        if (!invoice) {
-            throw new Error('Invoice not found');
-        }
-
-        // Restore product stock if not already voided
-        if (!invoice.voided_at) {
-            this.restoreProductStock(shopId, invoice.items);
-        }
-
-        if (this.storage.deleteInvoice(shopId, invoiceId)) {
             return true;
         } else {
-            throw new Error('Failed to delete invoice');
+            ZovatuUtils.showToast('Failed to update invoice', 'error');
+            return false;
         }
     }
 
-    // Generate invoice number
-    generateInvoiceNumber(shopId) {
-        const shop = this.storage.getShop(shopId);
-        const settings = shop?.settings || this.storage.getSettings();
-        const prefix = settings.invoice_prefix || 'INV-';
-        const year = new Date().getFullYear();
-        const invoices = this.storage.getInvoices(shopId);
-        const count = invoices.length + 1;
-        return `${prefix}${year}-${count.toString().padStart(4, '0')}`;
-    }
+    // Delete invoice
+    deleteInvoice(invoiceId) {
+        const invoice = ZovatuStore.getInvoices().find(inv => inv.id === invoiceId);
+        if (!invoice) return false;
 
-    // Calculate invoice totals
-    calculateInvoiceTotals(items, discountPercent = 0, taxRate = 0) {
-        const subtotal = items.reduce((sum, item) => {
-            const itemTotal = (parseInt(item.quantity) || 1) * (parseFloat(item.unit_price) || 0);
-            return sum + itemTotal;
-        }, 0);
-
-        const discount_amount = subtotal * (parseFloat(discountPercent) || 0) / 100;
-        const taxable_amount = subtotal - discount_amount;
-        const tax_amount = taxable_amount * (parseFloat(taxRate) || 0) / 100;
-        const total_amount = taxable_amount + tax_amount;
-
-        return {
-            subtotal: parseFloat(subtotal.toFixed(2)),
-            discount_amount: parseFloat(discount_amount.toFixed(2)),
-            tax_amount: parseFloat(tax_amount.toFixed(2)),
-            total_amount: parseFloat(total_amount.toFixed(2))
-        };
-    }
-
-    // Update product stock after sale
-    updateProductStock(shopId, items) {
-        items.forEach(item => {
-            if (item.product_id && item.product_id !== 'quick_sale') {
-                try {
-                    const product = this.storage.getProduct(shopId, item.product_id);
-                    if (product) {
-                        const newStock = Math.max(0, product.stock - (parseInt(item.quantity) || 1));
-                        this.storage.saveProduct(shopId, { ...product, stock: newStock });
-                    }
-                } catch (error) {
-                    console.warn(`Failed to update stock for product ${item.product_id}:`, error);
-                }
+        // Restore stock for all items in the invoice
+        invoice.items.forEach(item => {
+            if (item.productId) {
+                ZovatuProducts.updateStock(
+                    item.productId, 
+                    item.quantity, 
+                    'add', 
+                    `Invoice ${invoice.invoiceNumber} deleted`
+                );
             }
         });
+
+        const success = ZovatuStore.deleteInvoice(invoiceId);
+        if (success) {
+            ZovatuUtils.showToast('Invoice deleted successfully!', 'success');
+            return true;
+        } else {
+            ZovatuUtils.showToast('Failed to delete invoice', 'error');
+            return false;
+        }
     }
 
-    // Restore product stock (for voids/returns)
-    restoreProductStock(shopId, items) {
-        items.forEach(item => {
-            if (item.product_id && item.product_id !== 'quick_sale') {
-                try {
-                    const product = this.storage.getProduct(shopId, item.product_id);
-                    if (product) {
-                        const newStock = product.stock + (parseInt(item.quantity) || 1);
-                        this.storage.saveProduct(shopId, { ...product, stock: newStock });
-                    }
-                } catch (error) {
-                    console.warn(`Failed to restore stock for product ${item.product_id}:`, error);
-                }
+    // Get current invoice
+    getCurrentInvoice() {
+        return this.currentInvoice;
+    }
+
+    // Set current invoice
+    setCurrentInvoice(invoice) {
+        this.currentInvoice = invoice ? { ...invoice } : null;
+    }
+
+    // Add item to current invoice
+    addItem(item) {
+        if (!this.currentInvoice) {
+            this.resetCurrentInvoice();
+        }
+
+        // Check if item already exists
+        const existingItemIndex = this.currentInvoice.items.findIndex(
+            existingItem => existingItem.productId === item.productId || 
+            (existingItem.name === item.name && !item.productId)
+        );
+
+        if (existingItemIndex !== -1) {
+            // Update existing item quantity
+            this.currentInvoice.items[existingItemIndex].quantity += item.quantity || 1;
+            this.currentInvoice.items[existingItemIndex].total = 
+                this.currentInvoice.items[existingItemIndex].quantity * 
+                this.currentInvoice.items[existingItemIndex].price;
+        } else {
+            // Add new item
+            const newItem = {
+                id: ZovatuUtils.generateId('item_'),
+                productId: item.productId || null,
+                name: item.name,
+                sku: item.sku || '',
+                price: parseFloat(item.price) || 0,
+                quantity: parseInt(item.quantity) || 1,
+                unit: item.unit || 'pcs',
+                total: (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1)
+            };
+            this.currentInvoice.items.push(newItem);
+        }
+
+        this.calculateTotals();
+        return true;
+    }
+
+    // Remove item from current invoice
+    removeItem(itemId) {
+        if (!this.currentInvoice) return false;
+
+        const itemIndex = this.currentInvoice.items.findIndex(item => item.id === itemId);
+        if (itemIndex !== -1) {
+            this.currentInvoice.items.splice(itemIndex, 1);
+            this.calculateTotals();
+            return true;
+        }
+        return false;
+    }
+
+    // Update item quantity
+    updateItemQuantity(itemId, quantity) {
+        if (!this.currentInvoice) return false;
+
+        const item = this.currentInvoice.items.find(item => item.id === itemId);
+        if (item) {
+            item.quantity = Math.max(1, parseInt(quantity) || 1);
+            item.total = item.quantity * item.price;
+            this.calculateTotals();
+            return true;
+        }
+        return false;
+    }
+
+    // Calculate totals for current invoice
+    calculateTotals() {
+        if (!this.currentInvoice) return;
+
+        const currentShop = ZovatuShops.getCurrentShop();
+        const settings = currentShop?.settings || {};
+
+        // Calculate subtotal
+        this.currentInvoice.subtotal = this.currentInvoice.items.reduce(
+            (sum, item) => sum + item.total, 0
+        );
+
+        // Calculate tax
+        const taxRate = parseFloat(settings.taxRate) || 0;
+        this.currentInvoice.taxAmount = (this.currentInvoice.subtotal * taxRate) / 100;
+
+        // Calculate discount
+        const discountRate = parseFloat(settings.discountRate) || 0;
+        this.currentInvoice.discountAmount = (this.currentInvoice.subtotal * discountRate) / 100;
+
+        // Calculate total
+        this.currentInvoice.total = this.currentInvoice.subtotal + 
+                                   this.currentInvoice.taxAmount - 
+                                   this.currentInvoice.discountAmount;
+
+        // Ensure total is not negative
+        this.currentInvoice.total = Math.max(0, this.currentInvoice.total);
+    }
+
+    // Set customer info
+    setCustomerInfo(customerInfo) {
+        if (!this.currentInvoice) {
+            this.resetCurrentInvoice();
+        }
+        this.currentInvoice.customerInfo = { ...customerInfo };
+    }
+
+    // Set payment method
+    setPaymentMethod(method) {
+        if (!this.currentInvoice) {
+            this.resetCurrentInvoice();
+        }
+        this.currentInvoice.paymentMethod = method;
+    }
+
+    // Set notes
+    setNotes(notes) {
+        if (!this.currentInvoice) {
+            this.resetCurrentInvoice();
+        }
+        this.currentInvoice.notes = notes;
+    }
+
+    // Complete invoice (save and finalize)
+    completeInvoice() {
+        if (!this.currentInvoice || this.currentInvoice.items.length === 0) {
+            ZovatuUtils.showToast('Cannot complete empty invoice', 'error');
+            return false;
+        }
+
+        const currentShop = ZovatuShops.getCurrentShop();
+        if (!currentShop) {
+            ZovatuUtils.showToast('Please select a shop first', 'error');
+            return false;
+        }
+
+        // Update stock for all items
+        this.currentInvoice.items.forEach(item => {
+            if (item.productId) {
+                ZovatuProducts.updateStock(
+                    item.productId, 
+                    item.quantity, 
+                    'subtract', 
+                    `Sale - Invoice ${this.currentInvoice.invoiceNumber || 'New'}`
+                );
             }
         });
-    }
 
-    // Get invoices with filters
-    getInvoices(shopId, filters = {}) {
-        return this.storage.getInvoices(shopId, filters);
-    }
+        // Set invoice data
+        this.currentInvoice.shopId = currentShop.id;
+        this.currentInvoice.paymentStatus = 'completed';
+        this.currentInvoice.createdAt = new Date().toISOString();
+        this.currentInvoice.updatedAt = new Date().toISOString();
 
-    // Search invoices
-    searchInvoices(shopId, query) {
-        return this.storage.searchInvoices(shopId, query);
+        // Save invoice
+        const success = ZovatuStore.addInvoice(this.currentInvoice);
+        if (success) {
+            ZovatuUtils.showToast('Invoice completed successfully!', 'success');
+            
+            // Reset for next invoice
+            const completedInvoice = { ...this.currentInvoice };
+            this.resetCurrentInvoice();
+            
+            return completedInvoice;
+        } else {
+            ZovatuUtils.showToast('Failed to complete invoice', 'error');
+            return false;
+        }
     }
 
     // Get invoice statistics
-    getInvoiceStats(shopId, period = 'month') {
-        const invoices = this.storage.getInvoices(shopId);
-        const now = new Date();
-        let startDate;
+    getInvoiceStats(shopId = null, days = 30) {
+        const invoices = this.getAllInvoices(shopId);
+        const cutoffDate = new Date();
+        cutoffDate.setDate(cutoffDate.getDate() - days);
 
-        switch (period) {
-            case 'day':
-                startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                break;
-            case 'week':
-                startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-                break;
-            case 'month':
-                startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-                break;
-            case 'year':
-                startDate = new Date(now.getFullYear(), 0, 1);
-                break;
-            default:
-                startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-        }
-
-        const periodInvoices = invoices.filter(invoice => 
-            new Date(invoice.date) >= startDate && !invoice.voided_at
+        const recentInvoices = invoices.filter(invoice => 
+            new Date(invoice.createdAt) >= cutoffDate
         );
 
-        const totalSales = periodInvoices.reduce((sum, invoice) => sum + (invoice.total_amount || 0), 0);
-        const totalInvoices = periodInvoices.length;
-        const averageOrderValue = totalInvoices > 0 ? totalSales / totalInvoices : 0;
-        const totalTax = periodInvoices.reduce((sum, invoice) => sum + (invoice.tax_amount || 0), 0);
-        const totalDiscount = periodInvoices.reduce((sum, invoice) => sum + (invoice.discount_amount || 0), 0);
+        const totalSales = invoices.reduce((sum, invoice) => sum + (invoice.total || 0), 0);
+        const recentSales = recentInvoices.reduce((sum, invoice) => sum + (invoice.total || 0), 0);
+        
+        const totalOrders = invoices.length;
+        const recentOrders = recentInvoices.length;
 
-        // Payment method breakdown
-        const paymentMethods = {};
-        periodInvoices.forEach(invoice => {
-            const method = invoice.payment_method || 'cash';
-            paymentMethods[method] = (paymentMethods[method] || 0) + invoice.total_amount;
-        });
-
-        // Daily breakdown for charts
-        const dailyBreakdown = {};
-        periodInvoices.forEach(invoice => {
-            const date = new Date(invoice.date).toDateString();
-            if (!dailyBreakdown[date]) {
-                dailyBreakdown[date] = { sales: 0, count: 0 };
-            }
-            dailyBreakdown[date].sales += invoice.total_amount;
-            dailyBreakdown[date].count += 1;
-        });
+        const averageOrderValue = totalOrders > 0 ? totalSales / totalOrders : 0;
+        const recentAverageOrderValue = recentOrders > 0 ? recentSales / recentOrders : 0;
 
         return {
-            period,
             totalSales,
-            totalInvoices,
+            recentSales,
+            totalOrders,
+            recentOrders,
             averageOrderValue,
-            totalTax,
-            totalDiscount,
-            paymentMethods,
-            dailyBreakdown,
-            startDate: startDate.toISOString(),
-            endDate: now.toISOString()
+            recentAverageOrderValue,
+            period: days
         };
     }
 
-    // Get top customers
-    getTopCustomers(shopId, limit = 10) {
-        const invoices = this.storage.getInvoices(shopId);
-        const customers = {};
+    // Get sales by date range
+    getSalesByDateRange(startDate, endDate, shopId = null) {
+        const invoices = this.getAllInvoices(shopId);
+        const start = new Date(startDate);
+        const end = new Date(endDate);
 
-        invoices.forEach(invoice => {
-            if (invoice.customer_name && invoice.customer_name !== 'Walk-in Customer' && !invoice.voided_at) {
-                const key = invoice.customer_name.toLowerCase();
-                if (!customers[key]) {
-                    customers[key] = {
-                        name: invoice.customer_name,
-                        phone: invoice.customer_phone,
-                        email: invoice.customer_email,
-                        totalSpent: 0,
-                        totalInvoices: 0,
-                        lastPurchase: null
-                    };
-                }
-                customers[key].totalSpent += invoice.total_amount;
-                customers[key].totalInvoices += 1;
-                if (!customers[key].lastPurchase || new Date(invoice.date) > new Date(customers[key].lastPurchase)) {
-                    customers[key].lastPurchase = invoice.date;
-                }
-            }
+        const filteredInvoices = invoices.filter(invoice => {
+            const invoiceDate = new Date(invoice.createdAt);
+            return invoiceDate >= start && invoiceDate <= end;
         });
 
-        return Object.values(customers)
-            .sort((a, b) => b.totalSpent - a.totalSpent)
+        const totalSales = filteredInvoices.reduce((sum, invoice) => sum + (invoice.total || 0), 0);
+        const totalOrders = filteredInvoices.length;
+
+        // Group by date
+        const dailySales = {};
+        filteredInvoices.forEach(invoice => {
+            const date = ZovatuUtils.formatDate(invoice.createdAt, 'YYYY-MM-DD');
+            if (!dailySales[date]) {
+                dailySales[date] = { sales: 0, orders: 0 };
+            }
+            dailySales[date].sales += invoice.total || 0;
+            dailySales[date].orders += 1;
+        });
+
+        return {
+            totalSales,
+            totalOrders,
+            averageOrderValue: totalOrders > 0 ? totalSales / totalOrders : 0,
+            dailySales,
+            invoices: filteredInvoices
+        };
+    }
+
+    // Get top selling products
+    getTopSellingProducts(shopId = null, limit = 10) {
+        const invoices = this.getAllInvoices(shopId);
+        const productSales = {};
+
+        invoices.forEach(invoice => {
+            invoice.items.forEach(item => {
+                const key = item.productId || item.name;
+                if (!productSales[key]) {
+                    productSales[key] = {
+                        productId: item.productId,
+                        name: item.name,
+                        totalQuantity: 0,
+                        totalSales: 0,
+                        orderCount: 0
+                    };
+                }
+                productSales[key].totalQuantity += item.quantity;
+                productSales[key].totalSales += item.total;
+                productSales[key].orderCount += 1;
+            });
+        });
+
+        return Object.values(productSales)
+            .sort((a, b) => b.totalSales - a.totalSales)
             .slice(0, limit);
     }
 
-    // Get sales by salesman
-    getSalesBySalesman(shopId, period = 'month') {
-        const invoices = this.storage.getInvoices(shopId);
-        const salesmen = this.storage.getSalesmen(shopId);
-        const now = new Date();
-        let startDate;
+    // Search invoices
+    searchInvoices(query, shopId = null) {
+        const invoices = this.getAllInvoices(shopId);
+        const searchTerm = query.toLowerCase();
 
-        switch (period) {
-            case 'day':
-                startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                break;
-            case 'week':
-                startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-                break;
-            case 'month':
-                startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-                break;
-            case 'year':
-                startDate = new Date(now.getFullYear(), 0, 1);
-                break;
-            default:
-                startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-        }
-
-        const periodInvoices = invoices.filter(invoice => 
-            new Date(invoice.date) >= startDate && !invoice.voided_at
+        return invoices.filter(invoice => 
+            invoice.invoiceNumber.toLowerCase().includes(searchTerm) ||
+            invoice.customerInfo.name.toLowerCase().includes(searchTerm) ||
+            invoice.customerInfo.phone.includes(searchTerm) ||
+            invoice.items.some(item => item.name.toLowerCase().includes(searchTerm))
         );
-
-        const salesmanStats = {};
-        
-        // Initialize with all salesmen
-        salesmen.forEach(salesman => {
-            salesmanStats[salesman.id] = {
-                id: salesman.id,
-                name: salesman.name,
-                totalSales: 0,
-                totalInvoices: 0,
-                averageOrderValue: 0
-            };
-        });
-
-        // Add admin if not exists
-        if (!salesmanStats['admin']) {
-            salesmanStats['admin'] = {
-                id: 'admin',
-                name: 'Admin',
-                totalSales: 0,
-                totalInvoices: 0,
-                averageOrderValue: 0
-            };
-        }
-
-        // Calculate stats
-        periodInvoices.forEach(invoice => {
-            const salesmanId = invoice.salesman_id || 'admin';
-            if (!salesmanStats[salesmanId]) {
-                salesmanStats[salesmanId] = {
-                    id: salesmanId,
-                    name: 'Unknown',
-                    totalSales: 0,
-                    totalInvoices: 0,
-                    averageOrderValue: 0
-                };
-            }
-            salesmanStats[salesmanId].totalSales += invoice.total_amount;
-            salesmanStats[salesmanId].totalInvoices += 1;
-        });
-
-        // Calculate average order values
-        Object.values(salesmanStats).forEach(stats => {
-            stats.averageOrderValue = stats.totalInvoices > 0 ? stats.totalSales / stats.totalInvoices : 0;
-        });
-
-        return Object.values(salesmanStats).sort((a, b) => b.totalSales - a.totalSales);
     }
 
-    // Validate invoice data
-    validateInvoiceData(invoiceData) {
-        const errors = [];
-
-        if (!invoiceData.items || !Array.isArray(invoiceData.items) || invoiceData.items.length === 0) {
-            errors.push('Invoice must have at least one item');
-        }
-
-        if (invoiceData.items) {
-            invoiceData.items.forEach((item, index) => {
-                if (!item.name || item.name.trim().length === 0) {
-                    errors.push(`Item ${index + 1}: Name is required`);
-                }
-                if (!item.quantity || parseInt(item.quantity) <= 0) {
-                    errors.push(`Item ${index + 1}: Quantity must be greater than 0`);
-                }
-                if (!item.unit_price || parseFloat(item.unit_price) <= 0) {
-                    errors.push(`Item ${index + 1}: Unit price must be greater than 0`);
-                }
-            });
-        }
-
-        if (invoiceData.customer_email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(invoiceData.customer_email)) {
-            errors.push('Please enter a valid email address');
-        }
-
-        if (invoiceData.amount_received && parseFloat(invoiceData.amount_received) < 0) {
-            errors.push('Amount received cannot be negative');
-        }
-
-        return errors;
+    // Get payment methods
+    getPaymentMethods() {
+        return [
+            { value: 'cash', label: 'Cash', icon: 'fas fa-money-bill-wave' },
+            { value: 'card', label: 'Card', icon: 'fas fa-credit-card' },
+            { value: 'mobile', label: 'Mobile Payment', icon: 'fas fa-mobile-alt' },
+            { value: 'bank', label: 'Bank Transfer', icon: 'fas fa-university' },
+            { value: 'check', label: 'Check', icon: 'fas fa-money-check' },
+            { value: 'credit', label: 'Credit', icon: 'fas fa-handshake' }
+        ];
     }
 
     // Export invoices
-    exportInvoices(shopId, format = 'json', filters = {}) {
-        const invoices = this.storage.getInvoices(shopId, filters);
+    exportInvoices(shopId = null, format = 'json', dateRange = null) {
+        let invoices = this.getAllInvoices(shopId);
+        
+        // Filter by date range if provided
+        if (dateRange && dateRange.start && dateRange.end) {
+            const start = new Date(dateRange.start);
+            const end = new Date(dateRange.end);
+            invoices = invoices.filter(invoice => {
+                const invoiceDate = new Date(invoice.createdAt);
+                return invoiceDate >= start && invoiceDate <= end;
+            });
+        }
+
+        const shop = ZovatuShops.getCurrentShop();
         
         if (format === 'csv') {
-            return this.convertInvoicesToCSV(invoices);
+            return this.exportInvoicesCSV(invoices, shop);
+        } else {
+            return this.exportInvoicesJSON(invoices, shop);
         }
-        
-        return {
+    }
+
+    // Export invoices as JSON
+    exportInvoicesJSON(invoices, shop) {
+        const exportData = {
+            shop: shop ? { id: shop.id, name: shop.name } : null,
             invoices,
             exportDate: new Date().toISOString(),
-            shopId,
-            filters
+            totalInvoices: invoices.length,
+            totalSales: invoices.reduce((sum, inv) => sum + (inv.total || 0), 0)
         };
+
+        const filename = `invoices_${shop ? shop.name.replace(/[^a-zA-Z0-9]/g, '_') : 'all'}_${ZovatuUtils.formatDate(new Date(), 'YYYY-MM-DD')}.json`;
+        const jsonString = ZovatuUtils.stringifyJSON(exportData);
+        
+        ZovatuUtils.downloadFile(jsonString, filename, 'application/json');
+        return true;
     }
 
-    // Convert invoices to CSV
-    convertInvoicesToCSV(invoices) {
+    // Export invoices as CSV
+    exportInvoicesCSV(invoices, shop) {
         const headers = [
             'Invoice Number', 'Date', 'Customer Name', 'Customer Phone', 
-            'Subtotal', 'Discount', 'Tax', 'Total Amount', 'Amount Received', 
-            'Change Returned', 'Payment Method', 'Status', 'Salesman'
+            'Items', 'Subtotal', 'Tax', 'Discount', 'Total', 'Payment Method', 'Status'
         ];
+
+        const csvData = [
+            headers.join(','),
+            ...invoices.map(invoice => [
+                `"${invoice.invoiceNumber}"`,
+                `"${ZovatuUtils.formatDate(invoice.createdAt)}"`,
+                `"${invoice.customerInfo.name}"`,
+                `"${invoice.customerInfo.phone}"`,
+                `"${invoice.items.length} items"`,
+                invoice.subtotal,
+                invoice.taxAmount,
+                invoice.discountAmount,
+                invoice.total,
+                `"${invoice.paymentMethod}"`,
+                `"${invoice.paymentStatus}"`
+            ].join(','))
+        ].join('\n');
+
+        const filename = `invoices_${shop ? shop.name.replace(/[^a-zA-Z0-9]/g, '_') : 'all'}_${ZovatuUtils.formatDate(new Date(), 'YYYY-MM-DD')}.csv`;
         
-        const rows = invoices.map(invoice => [
-            invoice.invoice_number,
-            new Date(invoice.date).toLocaleDateString(),
-            invoice.customer_name,
-            invoice.customer_phone,
-            invoice.subtotal,
-            invoice.discount_amount,
-            invoice.tax_amount,
-            invoice.total_amount,
-            invoice.amount_received,
-            invoice.change_returned,
-            invoice.payment_method,
-            invoice.status,
-            invoice.salesman_id
-        ]);
-        
-        return [headers, ...rows].map(row => 
-            row.map(field => `"${field}"`).join(',')
-        ).join('\n');
+        ZovatuUtils.downloadFile(csvData, filename, 'text/csv');
+        return true;
     }
 
-    // Mark invoice as printed
-    markAsPrinted(shopId, invoiceId) {
-        const invoice = this.storage.getInvoice(shopId, invoiceId);
+    // Print invoice
+    printInvoice(invoiceId) {
+        const invoice = ZovatuStore.getInvoices().find(inv => inv.id === invoiceId);
         if (!invoice) {
-            throw new Error('Invoice not found');
+            ZovatuUtils.showToast('Invoice not found', 'error');
+            return false;
         }
 
-        const updatedInvoice = {
-            ...invoice,
-            printed_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
-        };
+        const shop = ZovatuStore.getShop(invoice.shopId);
+        const settings = ZovatuStore.getSettings();
 
-        return this.storage.saveInvoice(shopId, updatedInvoice);
+        // Generate print content
+        const printContent = this.generatePrintContent(invoice, shop, settings);
+        
+        // Open print window
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(printContent);
+        printWindow.document.close();
+        printWindow.print();
+        
+        return true;
     }
 
-    // Get invoice summary for dashboard
-    getInvoiceSummary(shopId) {
-        const invoices = this.storage.getInvoices(shopId);
-        const today = new Date().toDateString();
+    // Generate print content
+    generatePrintContent(invoice, shop, settings) {
+        const currency = settings.currency || 'BDT';
         
-        const todayInvoices = invoices.filter(invoice => 
-            new Date(invoice.date).toDateString() === today && !invoice.voided_at
-        );
-        
-        const totalInvoices = invoices.filter(invoice => !invoice.voided_at).length;
-        const totalSales = invoices.reduce((sum, invoice) => 
-            invoice.voided_at ? sum : sum + (invoice.total_amount || 0), 0
-        );
-        const todaySales = todayInvoices.reduce((sum, invoice) => sum + (invoice.total_amount || 0), 0);
-        
-        return {
-            totalInvoices,
-            totalSales,
-            todayInvoices: todayInvoices.length,
-            todaySales,
-            averageOrderValue: totalInvoices > 0 ? totalSales / totalInvoices : 0,
-            lastInvoice: invoices.length > 0 ? invoices[0] : null
-        };
+        return `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Invoice ${invoice.invoiceNumber}</title>
+            <style>
+                body { font-family: Arial, sans-serif; margin: 20px; }
+                .header { text-align: center; margin-bottom: 30px; }
+                .shop-name { font-size: 24px; font-weight: bold; }
+                .shop-info { margin: 10px 0; }
+                .invoice-info { margin: 20px 0; }
+                .customer-info { margin: 20px 0; }
+                table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                th { background-color: #f2f2f2; }
+                .totals { text-align: right; margin: 20px 0; }
+                .total-row { margin: 5px 0; }
+                .grand-total { font-weight: bold; font-size: 18px; }
+                @media print {
+                    body { margin: 0; }
+                    .no-print { display: none; }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <div class="shop-name">${shop?.name || 'Shop Name'}</div>
+                <div class="shop-info">${shop?.address || ''}</div>
+                <div class="shop-info">${shop?.phone || ''} | ${shop?.email || ''}</div>
+            </div>
+            
+            <div class="invoice-info">
+                <strong>Invoice #:</strong> ${invoice.invoiceNumber}<br>
+                <strong>Date:</strong> ${ZovatuUtils.formatDate(invoice.createdAt, 'DD/MM/YYYY HH:mm')}<br>
+                <strong>Payment Method:</strong> ${invoice.paymentMethod}
+            </div>
+            
+            ${invoice.customerInfo.name ? `
+            <div class="customer-info">
+                <strong>Customer:</strong> ${invoice.customerInfo.name}<br>
+                ${invoice.customerInfo.phone ? `<strong>Phone:</strong> ${invoice.customerInfo.phone}<br>` : ''}
+                ${invoice.customerInfo.address ? `<strong>Address:</strong> ${invoice.customerInfo.address}<br>` : ''}
+            </div>
+            ` : ''}
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${invoice.items.map(item => `
+                        <tr>
+                            <td>${item.name}</td>
+                            <td>${item.quantity} ${item.unit}</td>
+                            <td>${ZovatuUtils.formatCurrency(item.price, currency)}</td>
+                            <td>${ZovatuUtils.formatCurrency(item.total, currency)}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+            
+            <div class="totals">
+                <div class="total-row">Subtotal: ${ZovatuUtils.formatCurrency(invoice.subtotal, currency)}</div>
+                ${invoice.taxAmount > 0 ? `<div class="total-row">Tax: ${ZovatuUtils.formatCurrency(invoice.taxAmount, currency)}</div>` : ''}
+                ${invoice.discountAmount > 0 ? `<div class="total-row">Discount: -${ZovatuUtils.formatCurrency(invoice.discountAmount, currency)}</div>` : ''}
+                <div class="total-row grand-total">Total: ${ZovatuUtils.formatCurrency(invoice.total, currency)}</div>
+            </div>
+            
+            ${invoice.notes ? `<div style="margin-top: 30px;"><strong>Notes:</strong> ${invoice.notes}</div>` : ''}
+            
+            <div style="text-align: center; margin-top: 40px; font-size: 12px;">
+                Thank you for your business!<br>
+                Generated by Zovatu Smart Billing Tool
+            </div>
+        </body>
+        </html>
+        `;
     }
 }
 
-// Create global invoices manager instance
-window.invoicesManager = new InvoicesManager();
+// Create global invoice manager instance
+const ZovatuInvoices = new InvoiceManager();
+
+// Export for use in other modules
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { InvoiceManager, ZovatuInvoices };
+}
 

@@ -1,207 +1,254 @@
-// Zovatu Billing Tool - Products Data Management
-// Handles product operations, inventory management, and validation
+/* ===================================
+   Zovatu Smart Billing Tool - Products Data
+   Product Management Data Module
+   =================================== */
 
-class ProductsManager {
+// Product management class
+class ProductManager {
     constructor() {
-        this.storage = window.billingStorage;
+        this.init();
     }
 
-    // Create a new product
-    createProduct(shopId, productData) {
-        // Validate required fields
-        if (!productData.name || !productData.code || !productData.price) {
-            throw new Error('Product name, code, and price are required');
+    // Initialize product manager
+    init() {
+        // Any initialization logic
+    }
+
+    // Get all products for current shop
+    getAllProducts(shopId = null) {
+        const currentShopId = shopId || (ZovatuShops.getCurrentShop()?.id);
+        if (!currentShopId) return [];
+        
+        return ZovatuStore.getProducts(currentShopId);
+    }
+
+    // Get active products
+    getActiveProducts(shopId = null) {
+        return this.getAllProducts(shopId).filter(product => product.isActive);
+    }
+
+    // Create new product
+    createProduct(productData) {
+        const currentShop = ZovatuShops.getCurrentShop();
+        if (!currentShop) {
+            ZovatuUtils.showToast('Please select a shop first', 'error');
+            return null;
         }
 
-        // Check for duplicate product codes within the shop
-        const existingProducts = this.storage.getProducts(shopId);
-        if (existingProducts.some(product => product.code.toLowerCase() === productData.code.toLowerCase())) {
-            throw new Error('A product with this code already exists in this shop');
-        }
-
-        // Create product object with defaults
         const product = {
-            id: this.storage.generateId(),
-            shop_id: shopId,
-            name: productData.name.trim(),
-            code: productData.code.trim().toUpperCase(),
+            shopId: currentShop.id,
+            name: productData.name,
+            sku: productData.sku || this.generateSKU(productData.name),
+            barcode: productData.barcode || '',
+            category: productData.category || '',
+            description: productData.description || '',
             price: parseFloat(productData.price) || 0,
+            cost: parseFloat(productData.cost) || 0,
             stock: parseInt(productData.stock) || 0,
-            unit: productData.unit?.trim() || 'pcs',
-            brand: productData.brand?.trim() || '',
-            color: productData.color?.trim() || '',
-            size: productData.size?.trim() || '',
-            barcode: productData.barcode?.trim() || '',
-            description: productData.description?.trim() || '',
-            category: productData.category?.trim() || 'General',
-            cost_price: parseFloat(productData.cost_price) || 0,
-            min_stock: parseInt(productData.min_stock) || 5,
-            max_stock: parseInt(productData.max_stock) || 1000,
-            is_active: productData.is_active !== false,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-            stats: {
-                total_sold: 0,
-                total_revenue: 0,
-                last_sold: null
-            }
+            minStock: parseInt(productData.minStock) || 0,
+            maxStock: parseInt(productData.maxStock) || 0,
+            unit: productData.unit || 'pcs',
+            weight: parseFloat(productData.weight) || 0,
+            dimensions: productData.dimensions || '',
+            image: productData.image || '',
+            tags: productData.tags || [],
+            supplier: productData.supplier || '',
+            location: productData.location || '',
+            notes: productData.notes || '',
+            isActive: true,
+            isFeatured: productData.isFeatured || false,
+            isTrackStock: productData.isTrackStock !== false,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
         };
 
-        // Save product
-        if (this.storage.saveProduct(shopId, product)) {
+        const success = ZovatuStore.addProduct(product);
+        if (success) {
+            ZovatuUtils.showToast('Product created successfully!', 'success');
             return product;
         } else {
-            throw new Error('Failed to save product data');
+            ZovatuUtils.showToast('Failed to create product', 'error');
+            return null;
         }
     }
 
-    // Update existing product
-    updateProduct(shopId, productId, updateData) {
-        const product = this.storage.getProduct(shopId, productId);
-        if (!product) {
-            throw new Error('Product not found');
-        }
+    // Update product
+    updateProduct(productId, updates) {
+        const success = ZovatuStore.updateProduct(productId, {
+            ...updates,
+            updatedAt: new Date().toISOString()
+        });
 
-        // Validate code uniqueness if code is being changed
-        if (updateData.code && updateData.code !== product.code) {
-            const existingProducts = this.storage.getProducts(shopId);
-            if (existingProducts.some(p => p.id !== productId && p.code.toLowerCase() === updateData.code.toLowerCase())) {
-                throw new Error('A product with this code already exists');
-            }
-        }
-
-        // Update product data
-        const updatedProduct = {
-            ...product,
-            ...updateData,
-            id: product.id, // Ensure ID doesn't change
-            shop_id: product.shop_id, // Ensure shop_id doesn't change
-            created_at: product.created_at, // Preserve creation date
-            updated_at: new Date().toISOString(),
-            stats: {
-                ...product.stats,
-                ...updateData.stats
-            }
-        };
-
-        // Ensure numeric fields are properly typed
-        if (updateData.price !== undefined) updatedProduct.price = parseFloat(updateData.price) || 0;
-        if (updateData.stock !== undefined) updatedProduct.stock = parseInt(updateData.stock) || 0;
-        if (updateData.cost_price !== undefined) updatedProduct.cost_price = parseFloat(updateData.cost_price) || 0;
-        if (updateData.min_stock !== undefined) updatedProduct.min_stock = parseInt(updateData.min_stock) || 0;
-        if (updateData.max_stock !== undefined) updatedProduct.max_stock = parseInt(updateData.max_stock) || 0;
-
-        if (this.storage.saveProduct(shopId, updatedProduct)) {
-            return updatedProduct;
+        if (success) {
+            ZovatuUtils.showToast('Product updated successfully!', 'success');
+            return true;
         } else {
-            throw new Error('Failed to update product data');
+            ZovatuUtils.showToast('Failed to update product', 'error');
+            return false;
         }
     }
 
     // Delete product
-    deleteProduct(shopId, productId) {
-        const product = this.storage.getProduct(shopId, productId);
-        if (!product) {
-            throw new Error('Product not found');
+    deleteProduct(productId) {
+        // Check if product is used in any invoices
+        const invoices = ZovatuStore.getInvoices();
+        const productInUse = invoices.some(invoice => 
+            invoice.items && invoice.items.some(item => item.productId === productId)
+        );
+
+        if (productInUse) {
+            const confirmDelete = confirm(
+                'This product is used in existing invoices. Deleting it may affect invoice data. Are you sure?'
+            );
+            if (!confirmDelete) return false;
         }
 
-        if (this.storage.deleteProduct(shopId, productId)) {
+        const success = ZovatuStore.deleteProduct(productId);
+        if (success) {
+            ZovatuUtils.showToast('Product deleted successfully!', 'success');
             return true;
         } else {
-            throw new Error('Failed to delete product');
+            ZovatuUtils.showToast('Failed to delete product', 'error');
+            return false;
         }
     }
 
-    // Get product with calculated statistics
-    getProductWithStats(shopId, productId) {
-        const product = this.storage.getProduct(shopId, productId);
-        if (!product) {
-            return null;
-        }
-
-        // Calculate additional stats from invoices
-        const invoices = this.storage.getInvoices(shopId);
-        let totalSold = 0;
-        let totalRevenue = 0;
-        let lastSold = null;
-
-        invoices.forEach(invoice => {
-            invoice.items?.forEach(item => {
-                if (item.product_id === productId) {
-                    totalSold += item.quantity || 0;
-                    totalRevenue += item.total || 0;
-                    if (!lastSold || new Date(invoice.date) > new Date(lastSold)) {
-                        lastSold = invoice.date;
-                    }
-                }
-            });
-        });
-
-        return {
-            ...product,
-            stats: {
-                ...product.stats,
-                total_sold: totalSold,
-                total_revenue: totalRevenue,
-                last_sold: lastSold,
-                profit_margin: product.price > 0 ? ((product.price - product.cost_price) / product.price * 100) : 0,
-                stock_status: this.getStockStatus(product),
-                turnover_rate: this.calculateTurnoverRate(product, totalSold)
-            }
-        };
+    // Get product by ID
+    getProduct(productId) {
+        return ZovatuStore.getProduct(productId);
     }
 
-    // Get all products with statistics
-    getAllProductsWithStats(shopId) {
-        const products = this.storage.getProducts(shopId);
-        return products.map(product => this.getProductWithStats(shopId, product.id));
+    // Search products
+    searchProducts(query, shopId = null) {
+        const currentShopId = shopId || (ZovatuShops.getCurrentShop()?.id);
+        if (!currentShopId) return [];
+        
+        return ZovatuStore.searchProducts(query, currentShopId);
     }
 
-    // Update stock quantity
-    updateStock(shopId, productId, quantity, operation = 'set') {
-        const product = this.storage.getProduct(shopId, productId);
-        if (!product) {
-            throw new Error('Product not found');
-        }
+    // Get products by category
+    getProductsByCategory(category, shopId = null) {
+        const products = this.getAllProducts(shopId);
+        return products.filter(product => 
+            product.category && product.category.toLowerCase() === category.toLowerCase()
+        );
+    }
 
-        let newStock;
+    // Get low stock products
+    getLowStockProducts(shopId = null) {
+        const products = this.getAllProducts(shopId);
+        return products.filter(product => 
+            product.isTrackStock && 
+            product.stock <= product.minStock &&
+            product.isActive
+        );
+    }
+
+    // Get out of stock products
+    getOutOfStockProducts(shopId = null) {
+        const products = this.getAllProducts(shopId);
+        return products.filter(product => 
+            product.isTrackStock && 
+            product.stock <= 0 &&
+            product.isActive
+        );
+    }
+
+    // Update stock
+    updateStock(productId, quantity, operation = 'set', reason = '') {
+        const product = this.getProduct(productId);
+        if (!product) return false;
+
+        let newStock = product.stock;
+        
         switch (operation) {
             case 'add':
-                newStock = product.stock + quantity;
+                newStock += quantity;
                 break;
             case 'subtract':
-                newStock = product.stock - quantity;
+                newStock -= quantity;
                 break;
             case 'set':
-            default:
                 newStock = quantity;
                 break;
+            default:
+                return false;
         }
 
-        if (newStock < 0) {
-            throw new Error('Stock cannot be negative');
+        // Ensure stock doesn't go negative
+        newStock = Math.max(0, newStock);
+
+        const success = this.updateProduct(productId, { 
+            stock: newStock,
+            lastStockUpdate: new Date().toISOString(),
+            lastStockReason: reason
+        });
+
+        if (success) {
+            // Log stock movement
+            this.logStockMovement(productId, operation, quantity, newStock, reason);
         }
 
-        return this.updateProduct(shopId, productId, { stock: newStock });
+        return success;
     }
 
-    // Get stock status
-    getStockStatus(product) {
-        if (product.stock <= 0) {
-            return 'out_of_stock';
-        } else if (product.stock <= product.min_stock) {
-            return 'low_stock';
-        } else if (product.stock >= product.max_stock) {
-            return 'overstock';
-        } else {
-            return 'in_stock';
-        }
+    // Log stock movement
+    logStockMovement(productId, operation, quantity, newStock, reason) {
+        const movements = ZovatuStore.get('stockMovements') || [];
+        const movement = {
+            id: ZovatuUtils.generateId('mov_'),
+            productId,
+            operation,
+            quantity,
+            newStock,
+            reason,
+            timestamp: new Date().toISOString(),
+            userId: ZovatuAuth.getCurrentUser()?.id
+        };
+
+        movements.push(movement);
+        ZovatuStore.set('stockMovements', movements);
     }
 
-    // Calculate turnover rate
-    calculateTurnoverRate(product, totalSold) {
-        const daysSinceCreated = Math.max(1, Math.floor((Date.now() - new Date(product.created_at).getTime()) / (1000 * 60 * 60 * 24)));
-        return totalSold / daysSinceCreated;
+    // Get stock movements
+    getStockMovements(productId = null, limit = 50) {
+        const movements = ZovatuStore.get('stockMovements') || [];
+        let filteredMovements = movements;
+
+        if (productId) {
+            filteredMovements = movements.filter(movement => movement.productId === productId);
+        }
+
+        return filteredMovements
+            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+            .slice(0, limit);
+    }
+
+    // Generate SKU
+    generateSKU(productName) {
+        const prefix = productName.substring(0, 3).toUpperCase();
+        const timestamp = Date.now().toString().slice(-6);
+        const random = Math.random().toString(36).substr(2, 3).toUpperCase();
+        return `${prefix}-${timestamp}-${random}`;
+    }
+
+    // Generate barcode
+    generateBarcode() {
+        // Generate a simple 13-digit barcode (EAN-13 format)
+        let barcode = '';
+        for (let i = 0; i < 12; i++) {
+            barcode += Math.floor(Math.random() * 10);
+        }
+        
+        // Calculate check digit
+        let sum = 0;
+        for (let i = 0; i < 12; i++) {
+            const digit = parseInt(barcode[i]);
+            sum += (i % 2 === 0) ? digit : digit * 3;
+        }
+        const checkDigit = (10 - (sum % 10)) % 10;
+        
+        return barcode + checkDigit;
     }
 
     // Validate product data
@@ -212,245 +259,281 @@ class ProductsManager {
             errors.push('Product name must be at least 2 characters long');
         }
 
-        if (!productData.code || productData.code.trim().length < 1) {
-            errors.push('Product code is required');
+        if (productData.price && (isNaN(productData.price) || parseFloat(productData.price) < 0)) {
+            errors.push('Price must be a valid positive number');
         }
 
-        if (!productData.price || parseFloat(productData.price) <= 0) {
-            errors.push('Product price must be greater than 0');
+        if (productData.cost && (isNaN(productData.cost) || parseFloat(productData.cost) < 0)) {
+            errors.push('Cost must be a valid positive number');
         }
 
-        if (productData.stock && parseInt(productData.stock) < 0) {
-            errors.push('Stock quantity cannot be negative');
+        if (productData.stock && (isNaN(productData.stock) || parseInt(productData.stock) < 0)) {
+            errors.push('Stock must be a valid positive number');
         }
 
-        if (productData.cost_price && parseFloat(productData.cost_price) < 0) {
-            errors.push('Cost price cannot be negative');
-        }
+        // Check for duplicate SKU
+        if (productData.sku) {
+            const currentShop = ZovatuShops.getCurrentShop();
+            if (currentShop) {
+                const existingProducts = this.getAllProducts(currentShop.id);
+                const duplicateSKU = existingProducts.find(product => 
+                    product.sku === productData.sku &&
+                    product.id !== productData.id
+                );
 
-        if (productData.min_stock && parseInt(productData.min_stock) < 0) {
-            errors.push('Minimum stock cannot be negative');
-        }
-
-        if (productData.max_stock && parseInt(productData.max_stock) < 0) {
-            errors.push('Maximum stock cannot be negative');
-        }
-
-        if (productData.min_stock && productData.max_stock && parseInt(productData.min_stock) > parseInt(productData.max_stock)) {
-            errors.push('Minimum stock cannot be greater than maximum stock');
+                if (duplicateSKU) {
+                    errors.push('SKU already exists');
+                }
+            }
         }
 
         return errors;
     }
 
-    // Search products
-    searchProducts(shopId, query) {
-        return this.storage.searchProducts(shopId, query);
-    }
-
-    // Get products by category
-    getProductsByCategory(shopId, category) {
-        const products = this.storage.getProducts(shopId);
-        return products.filter(product => 
-            product.category.toLowerCase() === category.toLowerCase()
-        );
-    }
-
-    // Get low stock products
-    getLowStockProducts(shopId) {
-        const products = this.storage.getProducts(shopId);
-        return products.filter(product => product.stock <= product.min_stock);
-    }
-
-    // Get out of stock products
-    getOutOfStockProducts(shopId) {
-        const products = this.storage.getProducts(shopId);
-        return products.filter(product => product.stock <= 0);
-    }
-
-    // Get top selling products
-    getTopSellingProducts(shopId, limit = 10) {
-        const products = this.getAllProductsWithStats(shopId);
-        return products
-            .sort((a, b) => b.stats.total_sold - a.stats.total_sold)
-            .slice(0, limit);
-    }
-
-    // Get most profitable products
-    getMostProfitableProducts(shopId, limit = 10) {
-        const products = this.getAllProductsWithStats(shopId);
-        return products
-            .sort((a, b) => b.stats.total_revenue - a.stats.total_revenue)
-            .slice(0, limit);
-    }
-
-    // Get all categories
-    getCategories(shopId) {
-        const products = this.storage.getProducts(shopId);
-        const categories = [...new Set(products.map(product => product.category))];
+    // Get product categories
+    getProductCategories(shopId = null) {
+        const products = this.getAllProducts(shopId);
+        const categories = [...new Set(products.map(product => product.category).filter(Boolean))];
         return categories.sort();
     }
 
-    // Get all brands
-    getBrands(shopId) {
-        const products = this.storage.getProducts(shopId);
-        const brands = [...new Set(products.map(product => product.brand).filter(brand => brand))];
-        return brands.sort();
+    // Get product units
+    getProductUnits() {
+        return [
+            { value: 'pcs', label: 'Pieces' },
+            { value: 'kg', label: 'Kilograms' },
+            { value: 'g', label: 'Grams' },
+            { value: 'l', label: 'Liters' },
+            { value: 'ml', label: 'Milliliters' },
+            { value: 'm', label: 'Meters' },
+            { value: 'cm', label: 'Centimeters' },
+            { value: 'box', label: 'Box' },
+            { value: 'pack', label: 'Pack' },
+            { value: 'bottle', label: 'Bottle' },
+            { value: 'bag', label: 'Bag' },
+            { value: 'dozen', label: 'Dozen' }
+        ];
     }
 
-    // Generate barcode
-    generateBarcode(type = 'EAN13') {
-        switch (type) {
-            case 'EAN13':
-                return this.generateEAN13();
-            case 'CODE128':
-                return this.generateCode128();
-            case 'UPC':
-                return this.generateUPC();
-            default:
-                return this.generateEAN13();
-        }
+    // Calculate profit margin
+    calculateProfitMargin(cost, price) {
+        if (!cost || !price || cost <= 0) return 0;
+        return ((price - cost) / cost) * 100;
     }
 
-    // Generate EAN-13 barcode
-    generateEAN13() {
-        // Generate 12 random digits
-        let code = '';
-        for (let i = 0; i < 12; i++) {
-            code += Math.floor(Math.random() * 10);
-        }
-        
-        // Calculate check digit
-        let sum = 0;
-        for (let i = 0; i < 12; i++) {
-            sum += parseInt(code[i]) * (i % 2 === 0 ? 1 : 3);
-        }
-        const checkDigit = (10 - (sum % 10)) % 10;
-        
-        return code + checkDigit;
-    }
+    // Get product statistics
+    getProductStats(shopId = null) {
+        const products = this.getAllProducts(shopId);
+        const activeProducts = products.filter(product => product.isActive);
+        const lowStockProducts = this.getLowStockProducts(shopId);
+        const outOfStockProducts = this.getOutOfStockProducts(shopId);
 
-    // Generate Code 128 barcode
-    generateCode128() {
-        const timestamp = Date.now().toString();
-        return timestamp.slice(-10); // Last 10 digits of timestamp
-    }
+        const totalValue = products.reduce((sum, product) => 
+            sum + (product.stock * product.cost), 0
+        );
 
-    // Generate UPC barcode
-    generateUPC() {
-        // Generate 11 random digits
-        let code = '';
-        for (let i = 0; i < 11; i++) {
-            code += Math.floor(Math.random() * 10);
-        }
-        
-        // Calculate check digit
-        let sum = 0;
-        for (let i = 0; i < 11; i++) {
-            sum += parseInt(code[i]) * (i % 2 === 0 ? 3 : 1);
-        }
-        const checkDigit = (10 - (sum % 10)) % 10;
-        
-        return code + checkDigit;
-    }
+        const categories = this.getProductCategories(shopId);
 
-    // Export products data
-    exportProducts(shopId, format = 'json') {
-        const products = this.getAllProductsWithStats(shopId);
-        
-        if (format === 'csv') {
-            return this.convertToCSV(products);
-        }
-        
         return {
-            products,
-            exportDate: new Date().toISOString(),
-            shopId
+            totalProducts: products.length,
+            activeProducts: activeProducts.length,
+            inactiveProducts: products.length - activeProducts.length,
+            lowStockProducts: lowStockProducts.length,
+            outOfStockProducts: outOfStockProducts.length,
+            totalCategories: categories.length,
+            totalInventoryValue: totalValue
         };
     }
 
-    // Convert products to CSV format
-    convertToCSV(products) {
+    // Export products
+    exportProducts(shopId = null, format = 'json') {
+        const products = this.getAllProducts(shopId);
+        const shop = ZovatuShops.getCurrentShop();
+        
+        if (format === 'csv') {
+            return this.exportProductsCSV(products, shop);
+        } else {
+            return this.exportProductsJSON(products, shop);
+        }
+    }
+
+    // Export products as JSON
+    exportProductsJSON(products, shop) {
+        const exportData = {
+            shop: shop ? { id: shop.id, name: shop.name } : null,
+            products,
+            exportDate: new Date().toISOString(),
+            totalProducts: products.length
+        };
+
+        const filename = `products_${shop ? shop.name.replace(/[^a-zA-Z0-9]/g, '_') : 'all'}_${ZovatuUtils.formatDate(new Date(), 'YYYY-MM-DD')}.json`;
+        const jsonString = ZovatuUtils.stringifyJSON(exportData);
+        
+        ZovatuUtils.downloadFile(jsonString, filename, 'application/json');
+        return true;
+    }
+
+    // Export products as CSV
+    exportProductsCSV(products, shop) {
         const headers = [
-            'ID', 'Name', 'Code', 'Price', 'Stock', 'Unit', 'Brand', 
-            'Color', 'Size', 'Barcode', 'Category', 'Cost Price', 
-            'Min Stock', 'Max Stock', 'Total Sold', 'Total Revenue'
+            'Name', 'SKU', 'Barcode', 'Category', 'Price', 'Cost', 
+            'Stock', 'Unit', 'Description', 'Status'
         ];
+
+        const csvData = [
+            headers.join(','),
+            ...products.map(product => [
+                `"${product.name}"`,
+                `"${product.sku}"`,
+                `"${product.barcode}"`,
+                `"${product.category}"`,
+                product.price,
+                product.cost,
+                product.stock,
+                `"${product.unit}"`,
+                `"${product.description}"`,
+                product.isActive ? 'Active' : 'Inactive'
+            ].join(','))
+        ].join('\n');
+
+        const filename = `products_${shop ? shop.name.replace(/[^a-zA-Z0-9]/g, '_') : 'all'}_${ZovatuUtils.formatDate(new Date(), 'YYYY-MM-DD')}.csv`;
         
-        const rows = products.map(product => [
-            product.id,
-            product.name,
-            product.code,
-            product.price,
-            product.stock,
-            product.unit,
-            product.brand,
-            product.color,
-            product.size,
-            product.barcode,
-            product.category,
-            product.cost_price,
-            product.min_stock,
-            product.max_stock,
-            product.stats.total_sold,
-            product.stats.total_revenue
-        ]);
+        ZovatuUtils.downloadFile(csvData, filename, 'text/csv');
+        return true;
+    }
+
+    // Import products
+    importProducts(file, callback) {
+        const fileExtension = file.name.split('.').pop().toLowerCase();
         
-        return [headers, ...rows].map(row => 
-            row.map(field => `"${field}"`).join(',')
-        ).join('\n');
+        if (fileExtension === 'json') {
+            this.importProductsJSON(file, callback);
+        } else if (fileExtension === 'csv') {
+            this.importProductsCSV(file, callback);
+        } else {
+            callback(false, 'Unsupported file format. Please use JSON or CSV.');
+        }
+    }
+
+    // Import products from JSON
+    importProductsJSON(file, callback) {
+        ZovatuUtils.uploadFile(file, (data, file) => {
+            try {
+                const importData = JSON.parse(data);
+                const products = importData.products || importData;
+                
+                if (!Array.isArray(products)) {
+                    callback(false, 'Invalid file format');
+                    return;
+                }
+
+                const currentShop = ZovatuShops.getCurrentShop();
+                if (!currentShop) {
+                    callback(false, 'Please select a shop first');
+                    return;
+                }
+
+                let imported = 0;
+                let errors = 0;
+
+                products.forEach(productData => {
+                    productData.shopId = currentShop.id;
+                    const validationErrors = this.validateProductData(productData);
+                    
+                    if (validationErrors.length === 0) {
+                        const success = ZovatuStore.addProduct({
+                            ...productData,
+                            id: ZovatuUtils.generateId('prod_'),
+                            createdAt: new Date().toISOString(),
+                            updatedAt: new Date().toISOString()
+                        });
+                        
+                        if (success) {
+                            imported++;
+                        } else {
+                            errors++;
+                        }
+                    } else {
+                        errors++;
+                    }
+                });
+
+                callback(true, `Imported ${imported} products successfully. ${errors} errors.`);
+            } catch (error) {
+                callback(false, 'Invalid JSON file format');
+            }
+        });
     }
 
     // Import products from CSV
-    importFromCSV(shopId, csvData) {
-        const lines = csvData.split('\n');
-        const headers = lines[0].split(',').map(h => h.replace(/"/g, ''));
-        const products = [];
-        
-        for (let i = 1; i < lines.length; i++) {
-            if (lines[i].trim()) {
-                const values = lines[i].split(',').map(v => v.replace(/"/g, ''));
-                const productData = {};
+    importProductsCSV(file, callback) {
+        ZovatuUtils.uploadFile(file, (data, file) => {
+            try {
+                const lines = data.split('\n');
+                const headers = lines[0].split(',').map(h => h.replace(/"/g, '').trim());
                 
-                headers.forEach((header, index) => {
-                    productData[header.toLowerCase().replace(' ', '_')] = values[index];
-                });
-                
-                try {
-                    const product = this.createProduct(shopId, productData);
-                    products.push(product);
-                } catch (error) {
-                    console.warn(`Failed to import product ${productData.name}: ${error.message}`);
+                const currentShop = ZovatuShops.getCurrentShop();
+                if (!currentShop) {
+                    callback(false, 'Please select a shop first');
+                    return;
                 }
-            }
-        }
-        
-        return products;
-    }
 
-    // Get inventory summary
-    getInventorySummary(shopId) {
-        const products = this.getAllProductsWithStats(shopId);
-        
-        const totalProducts = products.length;
-        const totalValue = products.reduce((sum, product) => sum + (product.price * product.stock), 0);
-        const totalCostValue = products.reduce((sum, product) => sum + (product.cost_price * product.stock), 0);
-        const lowStockCount = products.filter(product => product.stock <= product.min_stock).length;
-        const outOfStockCount = products.filter(product => product.stock <= 0).length;
-        
-        return {
-            totalProducts,
-            totalValue,
-            totalCostValue,
-            potentialProfit: totalValue - totalCostValue,
-            lowStockCount,
-            outOfStockCount,
-            categories: this.getCategories(shopId).length,
-            brands: this.getBrands(shopId).length
-        };
+                let imported = 0;
+                let errors = 0;
+
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue;
+
+                    const values = line.split(',').map(v => v.replace(/"/g, '').trim());
+                    
+                    const productData = {
+                        shopId: currentShop.id,
+                        name: values[0] || '',
+                        sku: values[1] || this.generateSKU(values[0] || ''),
+                        barcode: values[2] || '',
+                        category: values[3] || '',
+                        price: parseFloat(values[4]) || 0,
+                        cost: parseFloat(values[5]) || 0,
+                        stock: parseInt(values[6]) || 0,
+                        unit: values[7] || 'pcs',
+                        description: values[8] || '',
+                        isActive: values[9] !== 'Inactive'
+                    };
+
+                    const validationErrors = this.validateProductData(productData);
+                    
+                    if (validationErrors.length === 0) {
+                        const success = ZovatuStore.addProduct({
+                            ...productData,
+                            id: ZovatuUtils.generateId('prod_'),
+                            createdAt: new Date().toISOString(),
+                            updatedAt: new Date().toISOString()
+                        });
+                        
+                        if (success) {
+                            imported++;
+                        } else {
+                            errors++;
+                        }
+                    } else {
+                        errors++;
+                    }
+                }
+
+                callback(true, `Imported ${imported} products successfully. ${errors} errors.`);
+            } catch (error) {
+                callback(false, 'Invalid CSV file format');
+            }
+        });
     }
 }
 
-// Create global products manager instance
-window.productsManager = new ProductsManager();
+// Create global product manager instance
+const ZovatuProducts = new ProductManager();
+
+// Export for use in other modules
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { ProductManager, ZovatuProducts };
+}
 

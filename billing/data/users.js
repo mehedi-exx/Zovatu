@@ -1,488 +1,602 @@
-// Zovatu Billing Tool - Users/Salesmen Data Management
-// Handles salesman operations, permissions, and user management
+/* ===================================
+   Zovatu Smart Billing Tool - Users Data
+   User Management Data Module
+   =================================== */
 
-class UsersManager {
+// User management class
+class UserManager {
     constructor() {
-        this.storage = window.billingStorage;
+        this.init();
     }
 
-    // Create a new salesman
-    createSalesman(shopId, salesmanData) {
-        // Validate required fields
-        if (!salesmanData.name || !salesmanData.email) {
-            throw new Error('Salesman name and email are required');
-        }
+    // Initialize user manager
+    init() {
+        // Any initialization logic
+    }
 
-        // Check for duplicate email within the shop
-        const existingSalesmen = this.storage.getSalesmen(shopId);
-        if (existingSalesmen.some(salesman => salesman.email.toLowerCase() === salesmanData.email.toLowerCase())) {
-            throw new Error('A salesman with this email already exists in this shop');
-        }
+    // Get all users
+    getAllUsers() {
+        return ZovatuStore.getUsers();
+    }
 
-        // Create salesman object with defaults
-        const salesman = {
-            id: this.storage.generateId(),
-            shop_id: shopId,
-            name: salesmanData.name.trim(),
-            email: salesmanData.email.trim().toLowerCase(),
-            phone: salesmanData.phone?.trim() || '',
-            address: salesmanData.address?.trim() || '',
-            hire_date: salesmanData.hire_date || new Date().toISOString(),
-            is_active: salesmanData.is_active !== false,
-            permissions: {
-                can_view_invoices: salesmanData.permissions?.can_view_invoices !== false,
-                can_edit_invoices: salesmanData.permissions?.can_edit_invoices || false,
-                can_print_invoices: salesmanData.permissions?.can_print_invoices !== false,
-                can_manage_products: salesmanData.permissions?.can_manage_products || false,
-                can_view_reports: salesmanData.permissions?.can_view_reports || false,
-                can_manage_customers: salesmanData.permissions?.can_manage_customers || false,
-                can_process_returns: salesmanData.permissions?.can_process_returns || false,
-                can_apply_discounts: salesmanData.permissions?.can_apply_discounts || false,
-                max_discount_percent: parseFloat(salesmanData.permissions?.max_discount_percent) || 0
-            },
-            settings: {
-                default_payment_method: salesmanData.settings?.default_payment_method || 'cash',
-                auto_print_invoices: salesmanData.settings?.auto_print_invoices || false,
-                require_customer_info: salesmanData.settings?.require_customer_info || false
-            },
-            stats: {
-                total_sales: 0,
-                total_invoices: 0,
-                total_customers: 0,
-                average_order_value: 0,
-                last_login: null,
-                last_sale: null
-            },
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
+    // Get active users
+    getActiveUsers() {
+        return ZovatuStore.getUsers().filter(user => user.isActive);
+    }
+
+    // Create new user
+    createUser(userData) {
+        const user = {
+            username: userData.username,
+            password: userData.password, // In production, this should be hashed
+            role: userData.role || 'salesman',
+            name: userData.name,
+            email: userData.email || '',
+            phone: userData.phone || '',
+            avatar: userData.avatar || '',
+            permissions: this.getDefaultPermissions(userData.role),
+            shopAccess: userData.shopAccess || [], // Array of shop IDs user can access
+            isActive: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            lastLogin: null,
+            loginCount: 0
         };
 
-        // Save salesman
-        if (this.storage.saveSalesman(shopId, salesman)) {
-            return salesman;
+        const success = ZovatuStore.addUser(user);
+        if (success) {
+            ZovatuUtils.showToast('User created successfully!', 'success');
+            return user;
         } else {
-            throw new Error('Failed to save salesman data');
-        }
-    }
-
-    // Update existing salesman
-    updateSalesman(shopId, salesmanId, updateData) {
-        const salesman = this.storage.getSalesman(shopId, salesmanId);
-        if (!salesman) {
-            throw new Error('Salesman not found');
-        }
-
-        // Validate email uniqueness if email is being changed
-        if (updateData.email && updateData.email !== salesman.email) {
-            const existingSalesmen = this.storage.getSalesmen(shopId);
-            if (existingSalesmen.some(s => s.id !== salesmanId && s.email.toLowerCase() === updateData.email.toLowerCase())) {
-                throw new Error('A salesman with this email already exists');
-            }
-        }
-
-        // Update salesman data
-        const updatedSalesman = {
-            ...salesman,
-            ...updateData,
-            id: salesman.id, // Ensure ID doesn't change
-            shop_id: salesman.shop_id, // Ensure shop_id doesn't change
-            created_at: salesman.created_at, // Preserve creation date
-            updated_at: new Date().toISOString(),
-            permissions: {
-                ...salesman.permissions,
-                ...updateData.permissions
-            },
-            settings: {
-                ...salesman.settings,
-                ...updateData.settings
-            },
-            stats: {
-                ...salesman.stats,
-                ...updateData.stats
-            }
-        };
-
-        if (this.storage.saveSalesman(shopId, updatedSalesman)) {
-            return updatedSalesman;
-        } else {
-            throw new Error('Failed to update salesman data');
-        }
-    }
-
-    // Delete salesman
-    deleteSalesman(shopId, salesmanId) {
-        const salesman = this.storage.getSalesman(shopId, salesmanId);
-        if (!salesman) {
-            throw new Error('Salesman not found');
-        }
-
-        // Check if salesman has any invoices
-        const invoices = this.storage.getInvoices(shopId);
-        const salesmanInvoices = invoices.filter(invoice => invoice.salesman_id === salesmanId);
-        
-        if (salesmanInvoices.length > 0) {
-            throw new Error('Cannot delete salesman with existing invoices. Deactivate instead.');
-        }
-
-        if (this.storage.deleteSalesman(shopId, salesmanId)) {
-            return true;
-        } else {
-            throw new Error('Failed to delete salesman');
-        }
-    }
-
-    // Deactivate salesman (soft delete)
-    deactivateSalesman(shopId, salesmanId) {
-        return this.updateSalesman(shopId, salesmanId, { 
-            is_active: false,
-            deactivated_at: new Date().toISOString()
-        });
-    }
-
-    // Activate salesman
-    activateSalesman(shopId, salesmanId) {
-        const updateData = { 
-            is_active: true,
-            deactivated_at: null
-        };
-        return this.updateSalesman(shopId, salesmanId, updateData);
-    }
-
-    // Get salesman with calculated statistics
-    getSalesmanWithStats(shopId, salesmanId) {
-        const salesman = this.storage.getSalesman(shopId, salesmanId);
-        if (!salesman) {
+            ZovatuUtils.showToast('Failed to create user', 'error');
             return null;
         }
+    }
 
-        // Calculate statistics from invoices
-        const invoices = this.storage.getInvoices(shopId);
-        const salesmanInvoices = invoices.filter(invoice => 
-            invoice.salesman_id === salesmanId && !invoice.voided_at
-        );
-
-        const totalSales = salesmanInvoices.reduce((sum, invoice) => sum + (invoice.total_amount || 0), 0);
-        const totalInvoices = salesmanInvoices.length;
-        const averageOrderValue = totalInvoices > 0 ? totalSales / totalInvoices : 0;
-
-        // Get unique customers
-        const uniqueCustomers = new Set();
-        salesmanInvoices.forEach(invoice => {
-            if (invoice.customer_name && invoice.customer_name !== 'Walk-in Customer') {
-                uniqueCustomers.add(invoice.customer_name.toLowerCase());
-            }
+    // Update user
+    updateUser(userId, updates) {
+        const success = ZovatuStore.updateUser(userId, {
+            ...updates,
+            updatedAt: new Date().toISOString()
         });
 
-        const lastSale = salesmanInvoices.length > 0 ? 
-            salesmanInvoices.sort((a, b) => new Date(b.date) - new Date(a.date))[0].date : null;
+        if (success) {
+            ZovatuUtils.showToast('User updated successfully!', 'success');
+            return true;
+        } else {
+            ZovatuUtils.showToast('Failed to update user', 'error');
+            return false;
+        }
+    }
+
+    // Delete user
+    deleteUser(userId) {
+        // Prevent deleting the last admin user
+        const users = this.getAllUsers();
+        const adminUsers = users.filter(user => user.role === 'admin' && user.isActive);
+        const userToDelete = users.find(user => user.id === userId);
+
+        if (userToDelete && userToDelete.role === 'admin' && adminUsers.length === 1) {
+            ZovatuUtils.showToast('Cannot delete the last admin user', 'error');
+            return false;
+        }
+
+        const success = ZovatuStore.deleteUser(userId);
+        if (success) {
+            ZovatuUtils.showToast('User deleted successfully!', 'success');
+            return true;
+        } else {
+            ZovatuUtils.showToast('Failed to delete user', 'error');
+            return false;
+        }
+    }
+
+    // Get user by ID
+    getUser(userId) {
+        return ZovatuStore.getUser(userId);
+    }
+
+    // Get user by username
+    getUserByUsername(username) {
+        const users = this.getAllUsers();
+        return users.find(user => user.username === username) || null;
+    }
+
+    // Authenticate user
+    authenticateUser(username, password) {
+        const user = ZovatuStore.authenticateUser(username, password);
+        if (user) {
+            // Update login statistics
+            this.updateUser(user.id, {
+                lastLogin: new Date().toISOString(),
+                loginCount: (user.loginCount || 0) + 1
+            });
+        }
+        return user;
+    }
+
+    // Change password
+    changePassword(userId, currentPassword, newPassword) {
+        const user = this.getUser(userId);
+        if (!user) {
+            ZovatuUtils.showToast('User not found', 'error');
+            return false;
+        }
+
+        if (user.password !== currentPassword) {
+            ZovatuUtils.showToast('Current password is incorrect', 'error');
+            return false;
+        }
+
+        const success = this.updateUser(userId, { password: newPassword });
+        if (success) {
+            ZovatuUtils.showToast('Password changed successfully!', 'success');
+        }
+        return success;
+    }
+
+    // Reset password (admin only)
+    resetPassword(userId, newPassword) {
+        const currentUser = ZovatuAuth.getCurrentUser();
+        if (!currentUser || currentUser.role !== 'admin') {
+            ZovatuUtils.showToast('Only administrators can reset passwords', 'error');
+            return false;
+        }
+
+        const success = this.updateUser(userId, { password: newPassword });
+        if (success) {
+            ZovatuUtils.showToast('Password reset successfully!', 'success');
+        }
+        return success;
+    }
+
+    // Get user roles
+    getUserRoles() {
+        return [
+            {
+                value: 'admin',
+                label: 'Administrator',
+                description: 'Full access to all features and settings',
+                icon: 'fas fa-user-shield'
+            },
+            {
+                value: 'manager',
+                label: 'Manager',
+                description: 'Access to shop management and reports',
+                icon: 'fas fa-user-tie'
+            },
+            {
+                value: 'salesman',
+                label: 'Salesman',
+                description: 'Access to billing and basic features',
+                icon: 'fas fa-user'
+            },
+            {
+                value: 'cashier',
+                label: 'Cashier',
+                description: 'Limited access to billing only',
+                icon: 'fas fa-cash-register'
+            }
+        ];
+    }
+
+    // Get default permissions for role
+    getDefaultPermissions(role) {
+        const permissions = {
+            admin: {
+                // Full access
+                canViewDashboard: true,
+                canManageShops: true,
+                canManageProducts: true,
+                canManageUsers: true,
+                canViewReports: true,
+                canManageSettings: true,
+                canExportData: true,
+                canImportData: true,
+                canDeleteData: true,
+                canViewAllShops: true,
+                canCreateInvoices: true,
+                canEditInvoices: true,
+                canDeleteInvoices: true,
+                canPrintInvoices: true,
+                canManageInventory: true,
+                canViewAnalytics: true
+            },
+            manager: {
+                // Shop management and reports
+                canViewDashboard: true,
+                canManageShops: true,
+                canManageProducts: true,
+                canManageUsers: false,
+                canViewReports: true,
+                canManageSettings: false,
+                canExportData: true,
+                canImportData: true,
+                canDeleteData: false,
+                canViewAllShops: true,
+                canCreateInvoices: true,
+                canEditInvoices: true,
+                canDeleteInvoices: false,
+                canPrintInvoices: true,
+                canManageInventory: true,
+                canViewAnalytics: true
+            },
+            salesman: {
+                // Basic billing features
+                canViewDashboard: true,
+                canManageShops: false,
+                canManageProducts: false,
+                canManageUsers: false,
+                canViewReports: false,
+                canManageSettings: false,
+                canExportData: false,
+                canImportData: false,
+                canDeleteData: false,
+                canViewAllShops: false,
+                canCreateInvoices: true,
+                canEditInvoices: false,
+                canDeleteInvoices: false,
+                canPrintInvoices: true,
+                canManageInventory: false,
+                canViewAnalytics: false
+            },
+            cashier: {
+                // Limited billing only
+                canViewDashboard: false,
+                canManageShops: false,
+                canManageProducts: false,
+                canManageUsers: false,
+                canViewReports: false,
+                canManageSettings: false,
+                canExportData: false,
+                canImportData: false,
+                canDeleteData: false,
+                canViewAllShops: false,
+                canCreateInvoices: true,
+                canEditInvoices: false,
+                canDeleteInvoices: false,
+                canPrintInvoices: true,
+                canManageInventory: false,
+                canViewAnalytics: false
+            }
+        };
+
+        return permissions[role] || permissions.salesman;
+    }
+
+    // Check user permission
+    hasPermission(userId, permission) {
+        const user = this.getUser(userId);
+        if (!user || !user.isActive) return false;
+
+        return user.permissions && user.permissions[permission] === true;
+    }
+
+    // Check if user can access shop
+    canAccessShop(userId, shopId) {
+        const user = this.getUser(userId);
+        if (!user || !user.isActive) return false;
+
+        // Admin can access all shops
+        if (user.role === 'admin') return true;
+
+        // Check if user has specific shop access
+        return user.shopAccess && user.shopAccess.includes(shopId);
+    }
+
+    // Grant shop access to user
+    grantShopAccess(userId, shopId) {
+        const user = this.getUser(userId);
+        if (!user) return false;
+
+        const shopAccess = user.shopAccess || [];
+        if (!shopAccess.includes(shopId)) {
+            shopAccess.push(shopId);
+            return this.updateUser(userId, { shopAccess });
+        }
+        return true;
+    }
+
+    // Revoke shop access from user
+    revokeShopAccess(userId, shopId) {
+        const user = this.getUser(userId);
+        if (!user) return false;
+
+        const shopAccess = user.shopAccess || [];
+        const updatedAccess = shopAccess.filter(id => id !== shopId);
+        return this.updateUser(userId, { shopAccess: updatedAccess });
+    }
+
+    // Get user statistics
+    getUserStats(userId) {
+        const user = this.getUser(userId);
+        if (!user) return null;
+
+        const invoices = ZovatuStore.getInvoices();
+        const userInvoices = invoices.filter(invoice => 
+            invoice.createdBy === userId || invoice.userId === userId
+        );
+
+        const totalSales = userInvoices.reduce((sum, invoice) => sum + (invoice.total || 0), 0);
+        const totalOrders = userInvoices.length;
+        const averageOrderValue = totalOrders > 0 ? totalSales / totalOrders : 0;
+
+        // Calculate performance for last 30 days
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+        const recentInvoices = userInvoices.filter(invoice => 
+            new Date(invoice.createdAt) >= thirtyDaysAgo
+        );
+
+        const recentSales = recentInvoices.reduce((sum, invoice) => sum + (invoice.total || 0), 0);
+        const recentOrders = recentInvoices.length;
 
         return {
-            ...salesman,
-            stats: {
-                ...salesman.stats,
-                total_sales: totalSales,
-                total_invoices: totalInvoices,
-                total_customers: uniqueCustomers.size,
-                average_order_value: averageOrderValue,
-                last_sale: lastSale
-            }
+            totalSales,
+            totalOrders,
+            averageOrderValue,
+            recentSales,
+            recentOrders,
+            loginCount: user.loginCount || 0,
+            lastLogin: user.lastLogin,
+            accountAge: Math.floor((new Date() - new Date(user.createdAt)) / (1000 * 60 * 60 * 24))
         };
     }
 
-    // Get all salesmen with statistics
-    getAllSalesmenWithStats(shopId) {
-        const salesmen = this.storage.getSalesmen(shopId);
-        return salesmen.map(salesman => this.getSalesmanWithStats(shopId, salesman.id));
+    // Get user performance ranking
+    getUserPerformanceRanking() {
+        const users = this.getActiveUsers().filter(user => 
+            user.role === 'salesman' || user.role === 'cashier'
+        );
+
+        const userPerformance = users.map(user => {
+            const stats = this.getUserStats(user.id);
+            return {
+                user,
+                stats,
+                score: stats.recentSales // Use recent sales as performance score
+            };
+        }).sort((a, b) => b.score - a.score);
+
+        return userPerformance;
     }
 
-    // Get active salesmen only
-    getActiveSalesmen(shopId) {
-        const salesmen = this.storage.getSalesmen(shopId);
-        return salesmen.filter(salesman => salesman.is_active);
-    }
-
-    // Check salesman permissions
-    hasPermission(shopId, salesmanId, permission) {
-        const salesman = this.storage.getSalesman(shopId, salesmanId);
-        if (!salesman || !salesman.is_active) {
-            return false;
-        }
-        return salesman.permissions[permission] || false;
-    }
-
-    // Update salesman permissions
-    updatePermissions(shopId, salesmanId, permissions) {
-        return this.updateSalesman(shopId, salesmanId, { permissions });
-    }
-
-    // Validate salesman data
-    validateSalesmanData(salesmanData) {
+    // Validate user data
+    validateUserData(userData) {
         const errors = [];
 
-        if (!salesmanData.name || salesmanData.name.trim().length < 2) {
-            errors.push('Salesman name must be at least 2 characters long');
+        if (!userData.username || userData.username.trim().length < 3) {
+            errors.push('Username must be at least 3 characters long');
         }
 
-        if (!salesmanData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(salesmanData.email)) {
-            errors.push('Please enter a valid email address');
+        if (!userData.password || userData.password.length < 6) {
+            errors.push('Password must be at least 6 characters long');
         }
 
-        if (salesmanData.phone && !/^[\+]?[0-9\-\(\)\s]+$/.test(salesmanData.phone)) {
-            errors.push('Please enter a valid phone number');
+        if (!userData.name || userData.name.trim().length < 2) {
+            errors.push('Name must be at least 2 characters long');
         }
 
-        if (salesmanData.permissions?.max_discount_percent) {
-            const maxDiscount = parseFloat(salesmanData.permissions.max_discount_percent);
-            if (maxDiscount < 0 || maxDiscount > 100) {
-                errors.push('Maximum discount percent must be between 0 and 100');
-            }
+        if (userData.email && !ZovatuUtils.validateEmail(userData.email)) {
+            errors.push('Invalid email address');
+        }
+
+        if (userData.phone && !ZovatuUtils.validatePhone(userData.phone)) {
+            errors.push('Invalid phone number');
+        }
+
+        // Check for duplicate username
+        const existingUsers = this.getAllUsers();
+        const duplicateUsername = existingUsers.find(user => 
+            user.username.toLowerCase() === userData.username.toLowerCase() &&
+            user.id !== userData.id
+        );
+
+        if (duplicateUsername) {
+            errors.push('Username already exists');
         }
 
         return errors;
     }
 
-    // Search salesmen
-    searchSalesmen(shopId, query) {
-        const salesmen = this.storage.getSalesmen(shopId);
+    // Export users
+    exportUsers(format = 'json') {
+        const users = this.getAllUsers();
+        
+        // Remove sensitive data
+        const exportUsers = users.map(user => ({
+            id: user.id,
+            username: user.username,
+            role: user.role,
+            name: user.name,
+            email: user.email,
+            phone: user.phone,
+            isActive: user.isActive,
+            createdAt: user.createdAt,
+            lastLogin: user.lastLogin,
+            loginCount: user.loginCount
+        }));
+
+        if (format === 'csv') {
+            return this.exportUsersCSV(exportUsers);
+        } else {
+            return this.exportUsersJSON(exportUsers);
+        }
+    }
+
+    // Export users as JSON
+    exportUsersJSON(users) {
+        const exportData = {
+            users,
+            exportDate: new Date().toISOString(),
+            totalUsers: users.length
+        };
+
+        const filename = `users_export_${ZovatuUtils.formatDate(new Date(), 'YYYY-MM-DD')}.json`;
+        const jsonString = ZovatuUtils.stringifyJSON(exportData);
+        
+        ZovatuUtils.downloadFile(jsonString, filename, 'application/json');
+        return true;
+    }
+
+    // Export users as CSV
+    exportUsersCSV(users) {
+        const headers = [
+            'Username', 'Name', 'Role', 'Email', 'Phone', 
+            'Status', 'Created Date', 'Last Login', 'Login Count'
+        ];
+
+        const csvData = [
+            headers.join(','),
+            ...users.map(user => [
+                `"${user.username}"`,
+                `"${user.name}"`,
+                `"${user.role}"`,
+                `"${user.email}"`,
+                `"${user.phone}"`,
+                user.isActive ? 'Active' : 'Inactive',
+                `"${ZovatuUtils.formatDate(user.createdAt)}"`,
+                user.lastLogin ? `"${ZovatuUtils.formatDate(user.lastLogin)}"` : 'Never',
+                user.loginCount || 0
+            ].join(','))
+        ].join('\n');
+
+        const filename = `users_export_${ZovatuUtils.formatDate(new Date(), 'YYYY-MM-DD')}.csv`;
+        
+        ZovatuUtils.downloadFile(csvData, filename, 'text/csv');
+        return true;
+    }
+
+    // Import users
+    importUsers(file, callback) {
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        
+        if (fileExtension === 'json') {
+            this.importUsersJSON(file, callback);
+        } else if (fileExtension === 'csv') {
+            this.importUsersCSV(file, callback);
+        } else {
+            callback(false, 'Unsupported file format. Please use JSON or CSV.');
+        }
+    }
+
+    // Import users from JSON
+    importUsersJSON(file, callback) {
+        ZovatuUtils.uploadFile(file, (data, file) => {
+            try {
+                const importData = JSON.parse(data);
+                const users = importData.users || importData;
+                
+                if (!Array.isArray(users)) {
+                    callback(false, 'Invalid file format');
+                    return;
+                }
+
+                let imported = 0;
+                let errors = 0;
+
+                users.forEach(userData => {
+                    const validationErrors = this.validateUserData(userData);
+                    
+                    if (validationErrors.length === 0) {
+                        const success = ZovatuStore.addUser({
+                            ...userData,
+                            id: ZovatuUtils.generateId('user_'),
+                            password: userData.password || 'password123', // Default password
+                            createdAt: new Date().toISOString(),
+                            updatedAt: new Date().toISOString()
+                        });
+                        
+                        if (success) {
+                            imported++;
+                        } else {
+                            errors++;
+                        }
+                    } else {
+                        errors++;
+                    }
+                });
+
+                callback(true, `Imported ${imported} users successfully. ${errors} errors.`);
+            } catch (error) {
+                callback(false, 'Invalid JSON file format');
+            }
+        });
+    }
+
+    // Import users from CSV
+    importUsersCSV(file, callback) {
+        ZovatuUtils.uploadFile(file, (data, file) => {
+            try {
+                const lines = data.split('\n');
+                const headers = lines[0].split(',').map(h => h.replace(/"/g, '').trim());
+                
+                let imported = 0;
+                let errors = 0;
+
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue;
+
+                    const values = line.split(',').map(v => v.replace(/"/g, '').trim());
+                    
+                    const userData = {
+                        username: values[0] || '',
+                        name: values[1] || '',
+                        role: values[2] || 'salesman',
+                        email: values[3] || '',
+                        phone: values[4] || '',
+                        password: 'password123', // Default password
+                        isActive: values[5] !== 'Inactive'
+                    };
+
+                    const validationErrors = this.validateUserData(userData);
+                    
+                    if (validationErrors.length === 0) {
+                        const success = ZovatuStore.addUser({
+                            ...userData,
+                            id: ZovatuUtils.generateId('user_'),
+                            createdAt: new Date().toISOString(),
+                            updatedAt: new Date().toISOString()
+                        });
+                        
+                        if (success) {
+                            imported++;
+                        } else {
+                            errors++;
+                        }
+                    } else {
+                        errors++;
+                    }
+                }
+
+                callback(true, `Imported ${imported} users successfully. ${errors} errors.`);
+            } catch (error) {
+                callback(false, 'Invalid CSV file format');
+            }
+        });
+    }
+
+    // Search users
+    searchUsers(query) {
+        const users = this.getAllUsers();
         const searchTerm = query.toLowerCase();
         
-        return salesmen.filter(salesman => 
-            salesman.name.toLowerCase().includes(searchTerm) ||
-            salesman.email.toLowerCase().includes(searchTerm) ||
-            (salesman.phone && salesman.phone.includes(searchTerm))
+        return users.filter(user => 
+            user.username.toLowerCase().includes(searchTerm) ||
+            user.name.toLowerCase().includes(searchTerm) ||
+            user.email.toLowerCase().includes(searchTerm) ||
+            user.role.toLowerCase().includes(searchTerm)
         );
-    }
-
-    // Get salesman performance for a period
-    getSalesmanPerformance(shopId, salesmanId, period = 'month') {
-        const invoices = this.storage.getInvoices(shopId);
-        const now = new Date();
-        let startDate;
-
-        switch (period) {
-            case 'day':
-                startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                break;
-            case 'week':
-                startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-                break;
-            case 'month':
-                startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-                break;
-            case 'year':
-                startDate = new Date(now.getFullYear(), 0, 1);
-                break;
-            default:
-                startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-        }
-
-        const periodInvoices = invoices.filter(invoice => 
-            invoice.salesman_id === salesmanId &&
-            new Date(invoice.date) >= startDate &&
-            !invoice.voided_at
-        );
-
-        const totalSales = periodInvoices.reduce((sum, invoice) => sum + (invoice.total_amount || 0), 0);
-        const averageOrderValue = periodInvoices.length > 0 ? totalSales / periodInvoices.length : 0;
-
-        // Daily breakdown
-        const dailyBreakdown = {};
-        periodInvoices.forEach(invoice => {
-            const date = new Date(invoice.date).toDateString();
-            if (!dailyBreakdown[date]) {
-                dailyBreakdown[date] = { sales: 0, count: 0 };
-            }
-            dailyBreakdown[date].sales += invoice.total_amount;
-            dailyBreakdown[date].count += 1;
-        });
-
-        return {
-            period,
-            totalInvoices: periodInvoices.length,
-            totalSales,
-            averageOrderValue,
-            dailyBreakdown,
-            startDate: startDate.toISOString(),
-            endDate: now.toISOString()
-        };
-    }
-
-    // Get top performing salesmen
-    getTopPerformers(shopId, period = 'month', limit = 10) {
-        const salesmen = this.getAllSalesmenWithStats(shopId);
-        
-        // Get performance for each salesman
-        const performanceData = salesmen.map(salesman => {
-            const performance = this.getSalesmanPerformance(shopId, salesman.id, period);
-            return {
-                ...salesman,
-                performance
-            };
-        });
-
-        // Sort by total sales in the period
-        return performanceData
-            .sort((a, b) => b.performance.totalSales - a.performance.totalSales)
-            .slice(0, limit);
-    }
-
-    // Record salesman login
-    recordLogin(shopId, salesmanId) {
-        return this.updateSalesman(shopId, salesmanId, {
-            stats: {
-                last_login: new Date().toISOString()
-            }
-        });
-    }
-
-    // Get salesman activity log
-    getSalesmanActivity(shopId, salesmanId, limit = 50) {
-        const invoices = this.storage.getInvoices(shopId);
-        const salesmanInvoices = invoices
-            .filter(invoice => invoice.salesman_id === salesmanId)
-            .sort((a, b) => new Date(b.date) - new Date(a.date))
-            .slice(0, limit);
-
-        return salesmanInvoices.map(invoice => ({
-            type: 'invoice',
-            action: invoice.voided_at ? 'voided' : 'created',
-            date: invoice.date,
-            details: {
-                invoice_number: invoice.invoice_number,
-                customer_name: invoice.customer_name,
-                total_amount: invoice.total_amount,
-                void_reason: invoice.void_reason
-            }
-        }));
-    }
-
-    // Export salesmen data
-    exportSalesmen(shopId, format = 'json') {
-        const salesmen = this.getAllSalesmenWithStats(shopId);
-        
-        if (format === 'csv') {
-            return this.convertSalesmenToCSV(salesmen);
-        }
-        
-        return {
-            salesmen,
-            exportDate: new Date().toISOString(),
-            shopId
-        };
-    }
-
-    // Convert salesmen to CSV
-    convertSalesmenToCSV(salesmen) {
-        const headers = [
-            'ID', 'Name', 'Email', 'Phone', 'Hire Date', 'Status', 
-            'Total Sales', 'Total Invoices', 'Total Customers', 'Average Order Value',
-            'Can View Invoices', 'Can Edit Invoices', 'Can Print Invoices', 
-            'Can Manage Products', 'Max Discount %'
-        ];
-        
-        const rows = salesmen.map(salesman => [
-            salesman.id,
-            salesman.name,
-            salesman.email,
-            salesman.phone,
-            new Date(salesman.hire_date).toLocaleDateString(),
-            salesman.is_active ? 'Active' : 'Inactive',
-            salesman.stats.total_sales,
-            salesman.stats.total_invoices,
-            salesman.stats.total_customers,
-            salesman.stats.average_order_value,
-            salesman.permissions.can_view_invoices ? 'Yes' : 'No',
-            salesman.permissions.can_edit_invoices ? 'Yes' : 'No',
-            salesman.permissions.can_print_invoices ? 'Yes' : 'No',
-            salesman.permissions.can_manage_products ? 'Yes' : 'No',
-            salesman.permissions.max_discount_percent
-        ]);
-        
-        return [headers, ...rows].map(row => 
-            row.map(field => `"${field}"`).join(',')
-        ).join('\n');
-    }
-
-    // Get permission templates
-    getPermissionTemplates() {
-        return {
-            'cashier': {
-                name: 'Cashier',
-                permissions: {
-                    can_view_invoices: true,
-                    can_edit_invoices: false,
-                    can_print_invoices: true,
-                    can_manage_products: false,
-                    can_view_reports: false,
-                    can_manage_customers: false,
-                    can_process_returns: false,
-                    can_apply_discounts: true,
-                    max_discount_percent: 5
-                }
-            },
-            'sales_associate': {
-                name: 'Sales Associate',
-                permissions: {
-                    can_view_invoices: true,
-                    can_edit_invoices: true,
-                    can_print_invoices: true,
-                    can_manage_products: true,
-                    can_view_reports: false,
-                    can_manage_customers: true,
-                    can_process_returns: true,
-                    can_apply_discounts: true,
-                    max_discount_percent: 10
-                }
-            },
-            'manager': {
-                name: 'Manager',
-                permissions: {
-                    can_view_invoices: true,
-                    can_edit_invoices: true,
-                    can_print_invoices: true,
-                    can_manage_products: true,
-                    can_view_reports: true,
-                    can_manage_customers: true,
-                    can_process_returns: true,
-                    can_apply_discounts: true,
-                    max_discount_percent: 25
-                }
-            }
-        };
-    }
-
-    // Apply permission template
-    applyPermissionTemplate(shopId, salesmanId, templateName) {
-        const templates = this.getPermissionTemplates();
-        const template = templates[templateName];
-        
-        if (!template) {
-            throw new Error('Invalid permission template');
-        }
-
-        return this.updatePermissions(shopId, salesmanId, template.permissions);
-    }
-
-    // Get salesmen summary for dashboard
-    getSalesmenSummary(shopId) {
-        const salesmen = this.getAllSalesmenWithStats(shopId);
-        const activeSalesmen = salesmen.filter(s => s.is_active);
-        
-        const totalSales = salesmen.reduce((sum, salesman) => sum + salesman.stats.total_sales, 0);
-        const totalInvoices = salesmen.reduce((sum, salesman) => sum + salesman.stats.total_invoices, 0);
-        
-        return {
-            totalSalesmen: salesmen.length,
-            activeSalesmen: activeSalesmen.length,
-            totalSales,
-            totalInvoices,
-            averagePerformance: activeSalesmen.length > 0 ? totalSales / activeSalesmen.length : 0,
-            topPerformer: salesmen.length > 0 ? 
-                salesmen.sort((a, b) => b.stats.total_sales - a.stats.total_sales)[0] : null
-        };
     }
 }
 
-// Create global users manager instance
-window.usersManager = new UsersManager();
+// Create global user manager instance
+const ZovatuUsers = new UserManager();
+
+// Export for use in other modules
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { UserManager, ZovatuUsers };
+}
 
